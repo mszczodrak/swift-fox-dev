@@ -1,0 +1,36 @@
+conf report { goaliCentralized(3000, 0) 
+			#broadcast()
+                        ctpF(0, 15, 15)
+                        #ctpF(0)
+                        fixed(16, 0, 0)
+                        none
+                        ieee802154(1, 1, 3, 3, 80)
+			#simpleAddrMac()
+                        fixed(16, 0, 0)
+                        simpleCC2420()}
+
+
+conf sleep { none  # Application 
+                        none         # Network
+                        none         # Network Addressing
+                        none         # QoI
+                        none         # Mac
+                        none         # Mac Addressing
+                        none         # Radio
+}
+
+conf policy { none none none none
+                simpleMac()
+                #ieee802154(1, 1, 3, 3, 80)
+                fixed(8, 0, 0)
+                simpleCC2420()}
+
+event wake_up {timer = 10sec}
+event stop_reporting {timer = 10sec}
+#event stop_reporting {timer = 20sec}
+
+from sleep goto report when wake_up
+from report goto sleep when stop_reporting
+
+start sleep
+

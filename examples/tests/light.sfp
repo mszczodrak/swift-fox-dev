@@ -1,0 +1,8 @@
+
+configuration count { ligt(1000)
+			dummyNet()
+			dummyMac()
+			dummyRadio()
+}
+start count
+

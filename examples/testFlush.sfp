@@ -1,0 +1,10 @@
+configuration count { counter(10, 29, 8) 
+			fixedPath(4, 29, 22, 15, 8)
+			fixed(16, 0, 0) 
+			nothing 
+			flush()
+			fixed(16, 0, 0) 
+			simpleCC2420()}
+
+start count
+

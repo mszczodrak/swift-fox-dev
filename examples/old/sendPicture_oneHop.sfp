@@ -1,0 +1,3 @@
+configuration hello { sendPicture broadcast fixed16bit nothing simpleMac fixed16bit simpleCC2420 } 
+start hello
+

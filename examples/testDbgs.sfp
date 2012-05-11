@@ -1,0 +1,9 @@
+configuration test { testRemoteDebug(1024) 
+			none none
+			none
+			none none
+			none
+			}
+
+start test
+

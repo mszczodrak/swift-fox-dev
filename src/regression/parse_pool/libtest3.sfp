@@ -1,0 +1,4 @@
+# Testing erroneous library definition (invalid identifier)
+configuration hello { blink nothing } 
+start hello
+

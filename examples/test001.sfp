@@ -1,0 +1,14 @@
+configuration count { ctp001(NODE, 114) 
+			ctp()
+			nothing 
+			nothing 
+			nothing 
+			nothing 
+			nothing}
+#			simpleCC2420(26, 31, ON)}
+			#hoppingCC2420(4, 100, 12, 0)}
+			#lpl(26, 2000, 200, 2200)}
+			#xlpl(80, 30000)}
+
+start count
+

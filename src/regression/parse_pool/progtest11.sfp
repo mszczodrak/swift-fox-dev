@@ -1,0 +1,8 @@
+# Testing erroneous program definition (missing goto keyword)
+configuration foo { nothing nothing }
+event-condition bar { timer = 8192 }
+
+from any foo when bar
+
+start foo
+

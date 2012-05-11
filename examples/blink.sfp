@@ -1,0 +1,2 @@
+configuration hello { blink(1, 1024) nothing nothing nothing }
+start hello

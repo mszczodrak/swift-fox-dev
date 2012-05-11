@@ -1,0 +1,5 @@
+
+sfc in library: sem_pool/progtest2.sfl
+redeclaration of library at 3 at line:
+use application blink $(FENNEC_FOX_LIB)/Application/Blink
+                      ^

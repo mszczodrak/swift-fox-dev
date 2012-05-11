@@ -1,0 +1,8 @@
+
+configuration count { thfrc(1000)
+			dummyNet()
+			dummyMac()
+			dummyRadio()
+}
+start count
+

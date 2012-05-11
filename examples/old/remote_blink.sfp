@@ -1,0 +1,3 @@
+configuration hello { remoteblink nothing } 
+start hello
+

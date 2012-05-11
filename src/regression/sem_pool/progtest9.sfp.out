@@ -1,0 +1,5 @@
+
+sfc in program: sem_pool/progtest9.sfp
+undeclared event-condition identifier at 9 at line:
+from hello goto sleep when keeep_blink
+                           ^

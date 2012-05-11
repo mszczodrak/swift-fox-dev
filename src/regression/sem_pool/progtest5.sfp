@@ -1,0 +1,14 @@
+# Testing erroneous semantic definition (undeclared application)
+configuration dummy { foo nothing }
+configuration hello { blink nothing }
+configuration sleep { nothing nothing }
+
+event-condition keep_blink {timer = 8192 }
+event-condition no_blink {timer = 4096 }
+
+from hello goto sleep when keep_blink
+from sleep goto hello when no_blink
+
+start hello
+
+

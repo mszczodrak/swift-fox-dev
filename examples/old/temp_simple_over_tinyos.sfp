@@ -1,0 +1,3 @@
+configuration hello { sendTemp simple nothing simpleMac tinyos } 
+start hello
+

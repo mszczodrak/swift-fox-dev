@@ -1,0 +1,4 @@
+configuration hello { counter() broadcast() fixed8bit(1) nothing simpleMac() fixed16bit(1) simpleCC2420()  }
+configuration hello1 { nothing nothing nothing nothing nothing nothing nothing   }
+start hello
+

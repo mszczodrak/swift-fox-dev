@@ -1,0 +1,4 @@
+# Testing erroneous program definition (invalid application)
+configuration hello { or nothing } 
+start hello
+

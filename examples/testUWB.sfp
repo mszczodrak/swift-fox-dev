@@ -1,0 +1,10 @@
+configuration count { counter(1024, 2, 1) 
+			broadcast()
+			fixed(16, 0, 0) 
+			nothing 
+			simpleAddrMac()
+			fixed(16, 0, 0) 
+			uwb01()}
+
+start count
+

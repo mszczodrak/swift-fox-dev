@@ -1,0 +1,3 @@
+configuration hello { sendPicture simple nothing simpleMac simpleCC2420 } 
+start hello
+

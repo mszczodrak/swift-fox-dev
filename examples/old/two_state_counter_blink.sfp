@@ -1,0 +1,12 @@
+configuration state1 { blink1(1024) nothing nothing  nothing  nothing  nothing nothing }
+#configuration state2 { counter oneHop fixed16bit nothing simpleAddrMac fixed16bit simpleCC2420 }
+configuration state2 { counter() ctp() fixed8bit() nothing simpleMac() fixed8bit() simpleCC2420() }
+
+event-condition short { timer = 10sec }
+event-condition delay { timer = 10sec }
+
+from state1 goto state2 when short
+from state2 goto state1 when delay
+
+start state1
+

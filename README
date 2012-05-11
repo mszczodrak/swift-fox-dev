@@ -1,0 +1,44 @@
+		SWIFT FOX README
+
+
+The doc/ directory contains the documentation of the Swift Fox 
+programming language. The latest version of each document is 
+stored into the corresponding PDF file. The final report is at
+report.pdf. To compile the tex files latex is required.
+
+The src/ directory contains the source code of the Swift Fox
+language. The subdirectory called examples/ contains samples
+of the Swift Fox code which compiles correctly. The subdirectory
+regression/ contains the Swift Fox test suit, and finally sf/
+has the Swift Fox compiler source code.
+
+INSTALLATION
+
+The following tools are necessary to compile Swift Fox:
+    1. lex (flex)
+    2. yacc (bison)
+    3. make
+    4. gcc
+
+Set the system environment variable $FENNEC_FOX_LIB
+to point to the location of the Fennec Fox platform.
+If you installed Fennec Fox, the environmental variable
+is already set.
+
+To compile the code goto src/sf and run 'make'
+$ cd src/sf/ ; make
+
+To install run 'make install'
+$ sudo make install
+
+This will install Swift Fox Compiler 'sfc' and
+Fennec Fox 'fennec' in /usr/local/bin
+
+In case you want to run the regression testing suite, move
+to the regression/ directory and run run 'make'
+$ cd regression/ ; make
+
+After that you can run the complete test suite by executing
+'make test', or by invoking 'test_lex', 'test_parse', 'text_sem'
+for testing only the corresponding part
+$ make test

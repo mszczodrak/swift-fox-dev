@@ -1,0 +1,8 @@
+
+configuration count { hum(1000)
+			dummyNet()
+			dummyMac()
+			dummyRadio()
+}
+start count
+

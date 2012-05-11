@@ -1,0 +1,4 @@
+# Testing erroneous library definition (missing use keyword)
+configuration hello { blink nothing } 
+start hello
+

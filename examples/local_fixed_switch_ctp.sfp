@@ -1,0 +1,24 @@
+configuration b1 { counter(1000, 500, 1, NODE, 2, 100)
+                        ctp(2)
+                        nothing
+                        nothing
+                        dummyMac()
+                        nothing
+                        cc2420(2, 26, 31, 0, 0, 10, 10, 1, 1)}
+
+
+configuration b3 { counter(3000, 100, 1, 1, 2, 100)
+                        #ctp(3)
+                        fixedPath(1, 2, 2, 2, 2, 2, 2, 2)
+                        nothing
+                        nothing
+                        dummyMac()
+                        nothing
+                        cc2420(2, 26, 31, 0, 0, 10, 10, 1, 1)}
+
+event-condition t1 {timer = 30000 @ 1}
+
+from b1 goto b3 when t1
+from b3 goto b1 when t1
+
+start b1

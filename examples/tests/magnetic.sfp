@@ -1,0 +1,8 @@
+
+configuration count { magn(1000)
+			dummyNet()
+			dummyMac()
+			dummyRadio()
+}
+start count
+

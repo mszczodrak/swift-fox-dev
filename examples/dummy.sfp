@@ -1,0 +1,7 @@
+configuration dummy { 	dummyApp()
+			dummyNet()
+			dummyMac() 
+			dummyRadio()}
+
+start dummy
+

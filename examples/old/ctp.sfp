@@ -1,0 +1,3 @@
+configuration emergency { counter ctp fixed16bit nothing simpleMac fixed16bit tinyos }
+start emergency
+

@@ -1,0 +1,12 @@
+# Standard Fennec Fox Applications
+use application blink $(FENNEC_FOX_LIB)/Application/SimpleBlink
+use application blink $(FENNEC_FOX_LIB)/Application/Blink
+use application collector $(FENNEC_FOX_LIB)/Application/DataCollector
+
+# Standard Fennec Fox Network Protocols
+use network ctp $(FENNEC_FOX_LIB)/Network/ctp
+
+# Events
+use source temperature $(FENNEC_FOX_LIB)/Events/Temperature
+use source timer $(FENNEC_FOX_LIB)/Events/Timer
+

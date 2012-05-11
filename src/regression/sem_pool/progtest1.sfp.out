@@ -1,0 +1,5 @@
+
+sfc in library: sem_pool/progtest1.sfl
+library already exists at 3 at line:
+use application blink $(FENNEC_FOX_LIB)/Application/SimpleBlink
+                      ^

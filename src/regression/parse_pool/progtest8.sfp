@@ -1,0 +1,5 @@
+# Testing erroneous program definition (invalid source)
+configuration foo { nothing nothing }
+event-condition bar { network = 8192 }
+start hello
+

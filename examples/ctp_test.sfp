@@ -1,0 +1,10 @@
+
+configuration count { counter(15000, 1, 1024, 22, 107, 1000) 
+			ctp(107)
+			nothing 
+			nothing 
+			dummyMac()
+			nothing 
+			cc2420(107, 26, 31, 0, 0, 10, 10, 1, 1, 1)}
+start count
+

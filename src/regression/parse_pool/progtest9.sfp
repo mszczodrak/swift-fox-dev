@@ -1,0 +1,5 @@
+# Testing erroneous program definition (invalid operator)
+configuration foo { nothing nothing }
+event-condition bar { timer == 8192 }
+start hello
+
