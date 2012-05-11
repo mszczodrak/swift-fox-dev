@@ -25,6 +25,12 @@
 #define TYPE_ADDRESS		7
 #define TYPE_TYPE		8
 
+#define TYPE_UINT8_T		20
+#define TYPE_UINT16_T		21
+#define TYPE_UINT32_T		22
+#define TYPE_FLOAT		23
+#define TYPE_DOUBLE		24
+
 #define PATH_SZ			256
 #define ARGC_MAX		2
 
@@ -65,7 +71,8 @@ struct symtab *find_sym(char *);
 
 struct paramtype {
         struct paramtype        *child;
-        char                    *type_name;
+	int			type;
+        char                    *name;
 };
 
 struct paramvalue {

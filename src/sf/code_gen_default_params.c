@@ -1,4 +1,5 @@
 #include "code_gen.h"
+#include "utils.h"
 
 void generateDefaultParams() {
 
@@ -27,7 +28,7 @@ void generateDefaultParams() {
     /* application default parameter values */
     for (pv = conftab[i].conf->app_params, pt = conftab[i].conf->app->lib->params, j = 0;  
 		pv != NULL; pv = pv->child, pt = pt->child, j++ ) {
-      fprintf(fp_defparmsH, "%s %s_%s_var%d = %s;\n", pt->type_name, conftab[i].conf->id->name,
+      fprintf(fp_defparmsH, "%s %s_%s_var%d = %s;\n", type_name(pt->type), conftab[i].conf->id->name,
                 		conftab[i].conf->app->lib->full_name, j, pv->value->name);
     }
     fprintf(fp_defparmsH, "\n"); 
@@ -51,7 +52,7 @@ void generateDefaultParams() {
     /* network default parameter values */
     for (pv = conftab[i].conf->net_params, pt = conftab[i].conf->net->lib->params, j = 0;
                 pv != NULL; pv = pv->child, pt = pt->child, j++ ) {
-      fprintf(fp_defparmsH, "%s %s_%s_var%d = %s;\n", pt->type_name, conftab[i].conf->id->name,
+      fprintf(fp_defparmsH, "%s %s_%s_var%d = %s;\n", type_name(pt->type), conftab[i].conf->id->name,
                                 conftab[i].conf->net->lib->full_name, j, pv->value->name);
     }
     fprintf(fp_defparmsH, "\n");
@@ -75,7 +76,7 @@ void generateDefaultParams() {
     /* mac default parameter values */
     for (pv = conftab[i].conf->mac_params, pt = conftab[i].conf->mac->lib->params, j = 0;
                 pv != NULL; pv = pv->child, pt = pt->child, j++ ) {
-      fprintf(fp_defparmsH, "%s %s_%s_var%d = %s;\n", pt->type_name, conftab[i].conf->id->name,
+      fprintf(fp_defparmsH, "%s %s_%s_var%d = %s;\n", type_name(pt->type), conftab[i].conf->id->name,
                                 conftab[i].conf->mac->lib->full_name, j, pv->value->name);
     }
     fprintf(fp_defparmsH, "\n");
@@ -99,7 +100,7 @@ void generateDefaultParams() {
     /* radio default parameter values */
     for (pv = conftab[i].conf->radio_params, pt = conftab[i].conf->radio->lib->params, j = 0;
                 pv != NULL; pv = pv->child, pt = pt->child, j++ ) {
-      fprintf(fp_defparmsH, "%s %s_%s_var%d = %s;\n", pt->type_name, conftab[i].conf->id->name,
+      fprintf(fp_defparmsH, "%s %s_%s_var%d = %s;\n", type_name(pt->type), conftab[i].conf->id->name,
                                 conftab[i].conf->radio->lib->full_name, j, pv->value->name);
     }
     fprintf(fp_defparmsH, "\n");

@@ -103,6 +103,7 @@ struct eventnodes *last_evens = NULL;
 %type <mtl>	next_module_type
 %type <parv>	parameters
 %type <parv>	next_parameter
+%type <ival>	param_type
 
 %%
 
@@ -755,39 +756,62 @@ type: APPLICATION { $$ = "application"; }
         ;
 
 
-module_types: IDENTIFIER next_module_type
+module_types: param_type IDENTIFIER next_module_type
 		{
 
-			struct symtab *sp = symlook($1->name);
-			if (sp == NULL)
-				yyerror("sp not found: %s\n", $1->name);
-
-
-                        $$              = calloc(1, sizeof(struct paramtype));
-                        $$->type_name   = $1->name;
-                        $$->child       = $2;
-		}
-	|
-		{
-			$$ = NULL;
-		}
-	;
-
-next_module_type: COMMA IDENTIFIER next_module_type
-		{
 			struct symtab *sp = symlook($2->name);
 			if (sp == NULL)
 				yyerror("sp not found: %s\n", $2->name);
 
+
                         $$              = calloc(1, sizeof(struct paramtype));
-                        $$->type_name   = $2->name;
-			$$->child	= $3;
+			$$->type	= $1;
+                        $$->name   = $2->name;
+                        $$->child       = $3;
 		}
 	|
 		{
 			$$ = NULL;
 		}
 	;
+
+next_module_type: COMMA param_type IDENTIFIER next_module_type
+		{
+			struct symtab *sp = symlook($3->name);
+			if (sp == NULL)
+				yyerror("sp not found: %s\n", $3->name);
+
+                        $$              = calloc(1, sizeof(struct paramtype));
+                        $$->type   	= $2;
+                        $$->name   	= $3->name;
+			$$->child	= $4;
+		}
+	|
+		{
+			$$ = NULL;
+		}
+	;
+
+
+param_type: IDENTIFIER
+		{
+			if (!strcmp($1->name, "uint8_t"))
+				$$ = TYPE_UINT8_T;
+
+			if (!strcmp($1->name, "uint16_t"))
+				$$ = TYPE_UINT16_T;
+
+			if (!strcmp($1->name, "uint32_t"))
+				$$ = TYPE_UINT32_T;
+
+			if (!strcmp($1->name, "float"))
+				$$ = TYPE_FLOAT;
+
+			if (!strcmp($1->name, "double"))
+				$$ = TYPE_DOUBLE;
+		}
+	;
+
 
 
 newlines: newlines newline

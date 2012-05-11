@@ -1,4 +1,5 @@
 #include "code_gen.h"
+#include "utils.h"
 
 void generateModules() {
 
@@ -23,19 +24,20 @@ void generateModules() {
       fprintf(fp_modulesH, "/* %s */\n", mp->lib->full_name);
 
       for(pt = mp->lib->params, i = 0; pt != NULL; pt = pt->child, i++) {
-        fprintf(fp_modulesH, "%s %s_var_%d;\n", pt->type_name, mp->lib->full_name, i);
+        fprintf(fp_modulesH, "%s %s;\n", type_name(pt->type), pt->name);
       }
 
+      fprintf(fp_modulesH, "\n");
       fprintf(fp_modulesH, "struct %s_params {\n", mp->lib->full_name);
 
       for(pt = mp->lib->params, i = 0; pt != NULL; pt = pt->child, i++) {
-        fprintf(fp_modulesH, "\t%s *var_%d;\n", pt->type_name, i);
+        fprintf(fp_modulesH, "\t%s *%s;\n", type_name(pt->type), pt->name);
       }
 
       fprintf(fp_modulesH, "};\n");
       fprintf(fp_modulesH, "struct %s_params %s_data = {\n", mp->lib->full_name, mp->lib->full_name);
       for(pt = mp->lib->params, i = 0; pt != NULL; pt = pt->child, i++) {
-        fprintf(fp_modulesH, "\t&%s_var_%d,\n", mp->lib->full_name, i);
+        fprintf(fp_modulesH, "\t&%s,\n", pt->name);
       }
 
       fprintf(fp_modulesH, "};\n\n");
