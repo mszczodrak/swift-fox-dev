@@ -237,10 +237,11 @@ void generateFennecEngineP() {
   fprintf(fp_engineM,"}\n\n");
   fprintf(fp_engineM,"implementation {\n\n");
   fprintf(fp_engineM,"  void ctrl_state_done(uint8_t status, uint8_t ctrl) @C() {\n");
-  fprintf(fp_engineM,"  if (ctrl == ON) {\n");
-  fprintf(fp_engineM,"    call EventsMgmt.start();");
-  fprintf(fp_engineM,"  } else {\n");
-  fprintf(fp_engineM,"    call EventsMgmt.stop();");
+  fprintf(fp_engineM,"    if (ctrl == ON) {\n");
+  fprintf(fp_engineM,"      call EventsMgmt.start();\n");
+  fprintf(fp_engineM,"    } else {\n");
+  fprintf(fp_engineM,"      call EventsMgmt.stop();\n");
+  fprintf(fp_engineM,"    }\n");
   fprintf(fp_engineM,"  }\n\n");
 
   fprintf(fp_engineM,"  void ctrl_module(uint16_t module_id, uint8_t ctrl) @C() {\n");
