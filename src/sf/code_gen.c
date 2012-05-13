@@ -9,6 +9,7 @@
 #include "sf.h"
 #include "code_gen.h"
 #include "y.tab.h"
+#include "utils.h"
 
 char *engineC = NULL;
 char *engineM = NULL;
@@ -66,6 +67,10 @@ void setFiles() {
 
   FILE *tmp = fopen(TEMP_CONF_FILE, "w");
   fclose(tmp);
+
+  /* check if sfc directory exists */
+  create_dir("Fennec/sfc");
+
 }
 
 void setFennecExtra() {
@@ -129,6 +134,9 @@ void finishCodeGeneration(int policy_counter) {
 
   generateFennecEngineP();
   generateEventP(event_counter);
+
+//  generateParams();
+//  generateGlobals();
 
   setFennecExtra();
 }

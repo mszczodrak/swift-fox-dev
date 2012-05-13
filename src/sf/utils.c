@@ -1,3 +1,7 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/stat.h>
 #include "utils.h"
 #include "sf.h"
 
@@ -21,5 +25,29 @@ char * type_name(int type_value) {
 
     default:
       return "";
+  }
+}
+
+char *get_full_path(char *ffsrc_relative) {
+  char *fennec_fox_lib = getenv("FENNEC_FOX_LIB");
+  char *tmp;
+
+  if (fennec_fox_lib == NULL) {
+    fprintf(stderr, "\n\nFENNEC_FOX_LIB is not set!\n");
+    exit(1);
+  }
+
+  tmp = malloc(strlen(ffsrc_relative) + strlen(fennec_fox_lib) + 2);
+  sprintf(tmp, "%s/%s", fennec_fox_lib, ffsrc_relative);
+  return tmp;
+}
+
+int create_dir(char *ffsrc_relative) {
+  struct stat st;
+  char *dirpath = get_full_path(ffsrc_relative);
+  if (stat(dirpath, &st) == 0) {
+    return 0;
+  } else {
+    return mkdir(dirpath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   }
 }

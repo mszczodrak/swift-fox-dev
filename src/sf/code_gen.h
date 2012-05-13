@@ -55,5 +55,8 @@ void generateEventC();
 void generateFennecEngineP();
 void generateEventP();
 
+void generateParams();
+void generateGlobals();
+
 char *relopToLetter(int i);
 #endif
