@@ -42,12 +42,32 @@ char *get_full_path(char *ffsrc_relative) {
   return tmp;
 }
 
+char *get_sfc_path(char *file1, char *file2) {
+  char *fennec_fox_lib = getenv("FENNEC_FOX_LIB");
+  char *tmp;
+
+  if (fennec_fox_lib == NULL) {
+    fprintf(stderr, "\n\nFENNEC_FOX_LIB is not set!\n");
+    exit(1);
+  }
+
+  tmp = malloc(strlen(fennec_fox_lib) + strlen("Fennec/sfc/") + 
+					strlen(file1) + strlen(file2) + 2);
+  sprintf(tmp, "%s/%sFennec/sfc/%s", fennec_fox_lib, file1, file2);
+  return tmp;
+}
+
+
+
+
 int create_dir(char *ffsrc_relative) {
   struct stat st;
   char *dirpath = get_full_path(ffsrc_relative);
   if (stat(dirpath, &st) == 0) {
+    free(dirpath);
     return 0;
   } else {
+    free(dirpath);
     return mkdir(dirpath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   }
 }

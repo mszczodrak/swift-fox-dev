@@ -20,9 +20,11 @@ all: sfc fennec
 
 sfc: lex.yy.o traverse.o utils.o sem_check.o code_gen_engine.o \
 	code_gen_caches.o code_gen_modules.o code_gen_default_params.o \
+	code_gen_params.o \
 	code_gen.o sf_driver.c
 	$(CC) y.tab.c lex.yy.o traverse.o utils.o sem_check.o code_gen_engine.o \
 	code_gen_caches.o code_gen_modules.o code_gen_default_params.o \
+	code_gen_params.o \
 	code_gen.o sf_driver.c $(LDFLAGS) -o sfc
 
 ley.yy.o: lex.yy.c

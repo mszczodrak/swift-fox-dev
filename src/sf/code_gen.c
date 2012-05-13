@@ -135,7 +135,7 @@ void finishCodeGeneration(int policy_counter) {
   generateFennecEngineP();
   generateEventP(event_counter);
 
-//  generateParams();
+  generateParams();
 //  generateGlobals();
 
   setFennecExtra();
