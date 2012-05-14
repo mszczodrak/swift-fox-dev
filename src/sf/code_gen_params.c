@@ -3,21 +3,23 @@
 
 void module_params_interface(struct modtab *mp) {
   char *full_path = get_sfc_path(mp->lib->full_name, "Params.nc");
+  printf("%s\n", full_path);
   
-  FILE *fp = open(full_path, "w");
-  //printf("%s\n", full_path);
+  FILE *fp = fopen(full_path, "w");
 
   if (fp == NULL) {
     fprintf(stderr, "You do not have a permission to write into file: %s\n", full_path);
     exit(1);
   }
 
+  close(fp);
+  free(full_path);
 }
 
 void module_params_c(struct modtab *mp) {
 
   char *full_path = get_sfc_path(mp->lib->full_name, "ParamsC.nc");
-  FILE *fp = open(full_path, "w");
+  FILE *fp = fopen(full_path, "w");
   //printf("%s\n", full_path);
 
   if (fp == NULL) {
@@ -25,12 +27,15 @@ void module_params_c(struct modtab *mp) {
     exit(1);
   }
 
+
+  close(fp);
+  free(full_path);
 }
 
 void module_params_h(struct modtab *mp) {
 
   char *full_path = get_sfc_path(mp->lib->full_name, "Params.h");
-  FILE *fp = open(full_path, "w");
+  FILE *fp = fopen(full_path, "w");
   //printf("%s\n", full_path);
 
   if (fp == NULL) {
@@ -39,6 +44,9 @@ void module_params_h(struct modtab *mp) {
   }
 
 
+
+  close(fp);
+  free(full_path);
 
 }
 
