@@ -26,7 +26,6 @@ char *eventM = NULL;
 
 char *modulesH = NULL;
 char *cachesH = NULL;
-char *defparmsH = NULL;
 
 char *fex = NULL;
 
@@ -63,10 +62,6 @@ void setFiles() {
   char *p_modulesH = "Fennec/modules.h";
   modulesH = malloc(strlen(p_modulesH)+strlen(fennec_fox_lib)+2);
   sprintf(modulesH, "%s/%s", fennec_fox_lib, p_modulesH);
-
-  char *p_defparmsH = "Fennec/defparms.h";
-  defparmsH = malloc(strlen(p_defparmsH)+strlen(fennec_fox_lib)+2);
-  sprintf(defparmsH, "%s/%s", fennec_fox_lib, p_defparmsH);
 
   char *p_fex = "support/sfc/fennec.extra";
   fex = malloc(strlen(p_fex)+strlen(fennec_fox_lib)+2);

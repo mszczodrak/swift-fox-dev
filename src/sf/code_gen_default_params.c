@@ -2,127 +2,142 @@
 #include "utils.h"
 
 void generateDefaultParams() {
+        char *full_path = get_sfc_path("", "defparms.h");
+        FILE *fp = fopen(full_path, "w");
+	struct paramvalue *pv;
+	struct paramtype *pt;
+	struct modtab *mp;
+	int i;
+	int j;
 
-  FILE *fp_defparmsH = fopen(defparmsH, "w");
-  struct paramvalue *pv;
-  struct paramtype *pt;
-  int i;
-  int j;
+        if (fp == NULL) {
+                fprintf(stderr, "You do not have a permission to write \
+                                                into file: %s\n", full_path);
+                exit(1);
+        }
 
+	fprintf(fp, "#ifndef _FF_DEFPARMS_H_\n");
+	fprintf(fp, "#define _FF_DEFPARMS_H_\n\n");
+	fprintf(fp, "#include <Fennec.h>\n");
+	fprintf(fp, "#include \"modules.h\"\n");
 
-  if (fp_defparmsH == NULL) {
-    fprintf(stderr, "You do not have a permission to write into file: %s\n", defparmsH);
-    exit(1);
-  }
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
+			fprintf(fp, "#include \"%sParams.h\"\n", 
+						mp->lib->full_name);
+		}
+	}
+	fprintf(fp, "\n");
 
-  fprintf(fp_defparmsH, "/* Swift Fox generated code for Fennec Fox defparms.h */\n");
-  fprintf(fp_defparmsH, "#ifndef _FF_DEFPARMS_H_\n");
-  fprintf(fp_defparmsH, "#define _FF_DEFPARMS_H_\n\n");
-  fprintf(fp_defparmsH, "#include <Fennec.h>\n");
-  fprintf(fp_defparmsH, "#include \"modules.h\"\n\n");
+	/* generate structure with default parameters for each module of a given configuration */
 
-  /* generate structure with default parameters for each module of a given configuration */
+	for( i = 1; i < conf_counter; i++ ) {
+	/* application default parameter values */
+		for (pv = conftab[i].conf->app_params, 
+			pt = conftab[i].conf->app->lib->params, j = 0;  pv != NULL; 
+						pv = pv->child, pt = pt->child, j++ ) {
+			fprintf(fp, "%s %s_%s_var%d = %s;\n", type_name(pt->type), 
+			conftab[i].conf->id->name, conftab[i].conf->app->lib->full_name,
+								j, pv->value->name);
+		}
+		fprintf(fp, "\n"); 
 
-  for( i = 1; i < conf_counter; i++ ) {
+		fprintf(fp, "struct %s_params %s_%s = {\n",
+        	        conftab[i].conf->app->lib->full_name, conftab[i].conf->id->name,
+                	conftab[i].conf->app->lib->full_name);
+	
+		for (pv = conftab[i].conf->app_params, j = 0; pv != NULL; j++ ) {
+			fprintf(fp, "\t&%s_%s_var%d", conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name, j);
+	
+			pv = pv->child;
+			if (pv == NULL)
+				fprintf(fp, "\n");
+			else
+				fprintf(fp, ",\n");
+			}
+			fprintf(fp, "};\n");
 
-    /* application default parameter values */
-    for (pv = conftab[i].conf->app_params, pt = conftab[i].conf->app->lib->params, j = 0;  
-		pv != NULL; pv = pv->child, pt = pt->child, j++ ) {
-      fprintf(fp_defparmsH, "%s %s_%s_var%d = %s;\n", type_name(pt->type), conftab[i].conf->id->name,
-                		conftab[i].conf->app->lib->full_name, j, pv->value->name);
-    }
-    fprintf(fp_defparmsH, "\n"); 
+		/* network default parameter values */
+		for (pv = conftab[i].conf->net_params, 
+			pt = conftab[i].conf->net->lib->params, j = 0; pv != NULL; 
+						pv = pv->child, pt = pt->child, j++ ) {
+			fprintf(fp, "%s %s_%s_var%d = %s;\n", type_name(pt->type), 
+			conftab[i].conf->id->name, conftab[i].conf->net->lib->full_name,
+								j, pv->value->name);
+		}
+		fprintf(fp, "\n");
 
-    fprintf(fp_defparmsH, "struct %s_params %s_%s = {\n",
-                conftab[i].conf->app->lib->full_name, conftab[i].conf->id->name,
-                conftab[i].conf->app->lib->full_name);
+		fprintf(fp, "struct %s_params %s_%s = {\n",
+			conftab[i].conf->net->lib->full_name, conftab[i].conf->id->name,
+			conftab[i].conf->net->lib->full_name);
 
-    for (pv = conftab[i].conf->app_params, j = 0; pv != NULL; j++ ) {
-      fprintf(fp_defparmsH, "\t&%s_%s_var%d", conftab[i].conf->id->name,
-      			          conftab[i].conf->app->lib->full_name, j);
+		for (pv = conftab[i].conf->net_params, j = 0; pv != NULL; j++ ) {
+			fprintf(fp, "\t&%s_%s_var%d", conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name, j);
 
-      pv = pv->child;
-      if (pv == NULL)
-        fprintf(fp_defparmsH, "\n");
-      else
-        fprintf(fp_defparmsH, ",\n");
-    }
-    fprintf(fp_defparmsH, "};\n");
+			pv = pv->child;
+			if (pv == NULL)
+				fprintf(fp, "\n");
+			else
+				fprintf(fp, ",\n");
+			}
+			fprintf(fp, "};\n");
 
-    /* network default parameter values */
-    for (pv = conftab[i].conf->net_params, pt = conftab[i].conf->net->lib->params, j = 0;
-                pv != NULL; pv = pv->child, pt = pt->child, j++ ) {
-      fprintf(fp_defparmsH, "%s %s_%s_var%d = %s;\n", type_name(pt->type), conftab[i].conf->id->name,
-                                conftab[i].conf->net->lib->full_name, j, pv->value->name);
-    }
-    fprintf(fp_defparmsH, "\n");
+		/* mac default parameter values */
+		for (pv = conftab[i].conf->mac_params, 
+			pt = conftab[i].conf->mac->lib->params, j = 0; pv != NULL;
+						pv = pv->child, pt = pt->child, j++ ) {
+			fprintf(fp, "%s %s_%s_var%d = %s;\n", type_name(pt->type),
+			conftab[i].conf->id->name, conftab[i].conf->mac->lib->full_name,
+								j, pv->value->name);
+		}
+		fprintf(fp, "\n");
 
-    fprintf(fp_defparmsH, "struct %s_params %s_%s = {\n",
-                conftab[i].conf->net->lib->full_name, conftab[i].conf->id->name,
-                conftab[i].conf->net->lib->full_name);
+		fprintf(fp, "struct %s_params %s_%s = {\n",
+			conftab[i].conf->mac->lib->full_name, conftab[i].conf->id->name,
+			conftab[i].conf->mac->lib->full_name);
 
-    for (pv = conftab[i].conf->net_params, j = 0; pv != NULL; j++ ) {
-      fprintf(fp_defparmsH, "\t&%s_%s_var%d", conftab[i].conf->id->name,
-                                  conftab[i].conf->net->lib->full_name, j);
+		for (pv = conftab[i].conf->mac_params, j = 0; pv != NULL; j++ ) {
+			fprintf(fp, "\t&%s_%s_var%d", conftab[i].conf->id->name,
+				conftab[i].conf->mac->lib->full_name, j);
 
-      pv = pv->child;
-      if (pv == NULL)
-        fprintf(fp_defparmsH, "\n");
-      else
-        fprintf(fp_defparmsH, ",\n");
-    }
-    fprintf(fp_defparmsH, "};\n");
+			pv = pv->child;
+			if (pv == NULL)
+				fprintf(fp, "\n");
+			else
+				fprintf(fp, ",\n");
+		}
+		fprintf(fp, "};\n");
 
-    /* mac default parameter values */
-    for (pv = conftab[i].conf->mac_params, pt = conftab[i].conf->mac->lib->params, j = 0;
-                pv != NULL; pv = pv->child, pt = pt->child, j++ ) {
-      fprintf(fp_defparmsH, "%s %s_%s_var%d = %s;\n", type_name(pt->type), conftab[i].conf->id->name,
-                                conftab[i].conf->mac->lib->full_name, j, pv->value->name);
-    }
-    fprintf(fp_defparmsH, "\n");
+		/* radio default parameter values */
+		for (pv = conftab[i].conf->radio_params, 
+			pt = conftab[i].conf->radio->lib->params, j = 0; pv != NULL;
+						pv = pv->child, pt = pt->child, j++ ) {
+			fprintf(fp, "%s %s_%s_var%d = %s;\n", type_name(pt->type), 
+			conftab[i].conf->id->name, 
+			conftab[i].conf->radio->lib->full_name, j, pv->value->name);
+		}
+		fprintf(fp, "\n");
 
-    fprintf(fp_defparmsH, "struct %s_params %s_%s = {\n",
-                conftab[i].conf->mac->lib->full_name, conftab[i].conf->id->name,
-                conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "struct %s_params %s_%s = {\n",
+			conftab[i].conf->radio->lib->full_name, conftab[i].conf->id->name,
+			conftab[i].conf->radio->lib->full_name);
 
-    for (pv = conftab[i].conf->mac_params, j = 0; pv != NULL; j++ ) {
-      fprintf(fp_defparmsH, "\t&%s_%s_var%d", conftab[i].conf->id->name,
-                                  conftab[i].conf->mac->lib->full_name, j);
+		for (pv = conftab[i].conf->radio_params, j = 0; pv != NULL; j++ ) {
+			fprintf(fp, "\t&%s_%s_var%d", conftab[i].conf->id->name,
+				conftab[i].conf->radio->lib->full_name, j);
 
-      pv = pv->child;
-      if (pv == NULL)
-        fprintf(fp_defparmsH, "\n");
-      else
-        fprintf(fp_defparmsH, ",\n");
-    }
-    fprintf(fp_defparmsH, "};\n");
+			pv = pv->child;
+			if (pv == NULL)
+				fprintf(fp, "\n");
+			else
+				fprintf(fp, ",\n");
+		}
+		fprintf(fp, "};\n");
+	}
 
-    /* radio default parameter values */
-    for (pv = conftab[i].conf->radio_params, pt = conftab[i].conf->radio->lib->params, j = 0;
-                pv != NULL; pv = pv->child, pt = pt->child, j++ ) {
-      fprintf(fp_defparmsH, "%s %s_%s_var%d = %s;\n", type_name(pt->type), conftab[i].conf->id->name,
-                                conftab[i].conf->radio->lib->full_name, j, pv->value->name);
-    }
-    fprintf(fp_defparmsH, "\n");
-
-    fprintf(fp_defparmsH, "struct %s_params %s_%s = {\n",
-                conftab[i].conf->radio->lib->full_name, conftab[i].conf->id->name,
-                conftab[i].conf->radio->lib->full_name);
-
-    for (pv = conftab[i].conf->radio_params, j = 0; pv != NULL; j++ ) {
-      fprintf(fp_defparmsH, "\t&%s_%s_var%d", conftab[i].conf->id->name,
-                                  conftab[i].conf->radio->lib->full_name, j);
-
-      pv = pv->child;
-      if (pv == NULL)
-        fprintf(fp_defparmsH, "\n");
-      else
-        fprintf(fp_defparmsH, ",\n");
-    }
-    fprintf(fp_defparmsH, "};\n");
-  }
-
-  fprintf(fp_defparmsH, "#endif\n\n");
-  fclose(fp_defparmsH);
-
+	fprintf(fp, "#endif\n\n");
+	fclose(fp);
+	free(full_path);
 }

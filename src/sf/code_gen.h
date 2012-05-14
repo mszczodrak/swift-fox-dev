@@ -23,7 +23,6 @@ extern char *eventsM;
 
 extern char *cachesH;
 extern char *modulesH;
-extern char *defparmsH;
 
 extern int conf_counter;
 extern int module_id_counter;
