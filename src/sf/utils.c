@@ -68,3 +68,24 @@ int create_dir(char *ffsrc_relative) {
   free(dirpath);
   return status;
 }
+
+char *relopToLetter(int i) {
+  switch(i) {
+    case LT:
+      return "LT";
+    case GT:
+      return "GT";
+    case LE:
+      return "LE";
+    case GE:
+      return "GE";
+    case NE:
+      return "NE";
+    case EQ:
+      return "EQ";
+    default:
+      fprintf(stderr, "Unknown RELOP operator\n");
+      exit(1);
+    }
+}
+

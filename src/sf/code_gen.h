@@ -21,9 +21,6 @@ extern char *engineM;
 extern char *eventsC;
 extern char *eventsM;
 
-extern char *cachesH;
-extern char *modulesH;
-
 extern int conf_counter;
 extern int module_id_counter;
 extern int event_scale_counter;
@@ -57,5 +54,4 @@ void generateEventP();
 void generateParams();
 void generateGlobals();
 
-char *relopToLetter(int i);
 #endif

@@ -19,7 +19,6 @@ void generateDefaultParams() {
 	fprintf(fp, "#ifndef _FF_DEFPARMS_H_\n");
 	fprintf(fp, "#define _FF_DEFPARMS_H_\n\n");
 	fprintf(fp, "#include <Fennec.h>\n");
-	fprintf(fp, "#include \"modules.h\"\n");
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0) {

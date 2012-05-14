@@ -1,124 +1,128 @@
 #include "code_gen.h"
+#include "utils.h"
 
 void generateCaches(int event_counter, int policy_counter) {
 
-  FILE *tmp_confs = fopen(TEMP_CONF_FILE, "r");
-  FILE *fp_cachesH = fopen(cachesH, "w");
-  struct symtab *sp;
-  int i;
+	FILE *tmp_confs = fopen(TEMP_CONF_FILE, "r");
 
-  if (fp_cachesH == NULL) {
-    fprintf(stderr, "You do not have a permission to write into file: %s\n", cachesH);
-    exit(1);
-  }
+	char *full_path = get_sfc_path("", "ff_caches.h");
+	FILE *fp = fopen(full_path, "w");
 
-  if (tmp_confs == NULL) {
-    fprintf(stderr, "You do not have a permission to write into file: %s\n", TEMP_CONF_FILE);
-    exit(1);
-  }
+	struct symtab *sp;
+	int i;
 
-  fprintf(fp_cachesH, "/* Swift Fox generated code for Fennec Fox caches.h */\n");
-  fprintf(fp_cachesH, "#ifndef __FF_CACHES_H__\n");
-  fprintf(fp_cachesH, "#define __FF_CACHES_H__\n\n");
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+					into file: %s\n", full_path);
+		exit(1);
+	}
 
-  fprintf(fp_cachesH, "#define NUMBER_OF_CONFIGURATIONS  %d\n", conf_counter);
-  fprintf(fp_cachesH, "#define INTERNAL_POLICY_CONFIGURATION_ID  %d\n\n", policy_conf_id);
-  fprintf(fp_cachesH, "#include <Fennec.h>\n");
-  fprintf(fp_cachesH, "#include \"defparms.h\"\n\n");
+	if (tmp_confs == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+					into file: %s\n", TEMP_CONF_FILE);
+		exit(1);
+	}
 
-  fprintf(fp_cachesH, "uint16_t active_state = %d;\n\n", active_state);
-  fprintf(fp_cachesH, "struct fennec_configuration configurations[NUMBER_OF_CONFIGURATIONS] = {\n");
-  fprintf(fp_cachesH, "\t{\n");
-  fprintf(fp_cachesH, "\t.application = 0,\n");
-  fprintf(fp_cachesH, "\t.network = 0,\n");
-  fprintf(fp_cachesH, "\t.mac = 0,\n");
-  fprintf(fp_cachesH, "\t.radio = 0,\n");
-  fprintf(fp_cachesH, "\t.level = 0\n");
-  fprintf(fp_cachesH, "\t}\n");
+	fprintf(fp, "/* Swift Fox generated code for Fennec Fox caches.h */\n");
+	fprintf(fp, "#ifndef __FF_CACHES_H__\n");
+	fprintf(fp, "#define __FF_CACHES_H__\n\n");
 
-  /* generate code specifying each configuration's definition */
+	fprintf(fp, "#define NUMBER_OF_CONFIGURATIONS  %d\n", conf_counter);
+	fprintf(fp, "#define INTERNAL_POLICY_CONFIGURATION_ID  %d\n\n", policy_conf_id);
+	fprintf(fp, "#include <Fennec.h>\n");
+	fprintf(fp, "#include \"defparms.h\"\n\n");
 
-  for( i = 1; i < conf_counter; i++ ) {
-    fprintf(fp_cachesH, "\t,\n");
-    fprintf(fp_cachesH, "\t{\n");
+	fprintf(fp, "uint16_t active_state = %d;\n\n", active_state);
+	fprintf(fp, "struct fennec_configuration configurations[NUMBER_OF_CONFIGURATIONS] = {\n");
+	fprintf(fp, "\t{\n");
+	fprintf(fp, "\t.application = 0,\n");
+	fprintf(fp, "\t.network = 0,\n");
+	fprintf(fp, "\t.mac = 0,\n");
+	fprintf(fp, "\t.radio = 0,\n");
+	fprintf(fp, "\t.level = 0\n");
+	fprintf(fp, "\t}\n");
+
+	/* generate code specifying each configuration's definition */
+
+	for( i = 1; i < conf_counter; i++ ) {
+		fprintf(fp, "\t,\n");
+		fprintf(fp, "\t{\n");
     
-    fprintf(fp_cachesH, "\t.application = %d,\n", conftab[i].conf->app->id);
-    fprintf(fp_cachesH, "\t.network = %d,\n", conftab[i].conf->net->id);
-    fprintf(fp_cachesH, "\t.mac = %d,\n", conftab[i].conf->mac->id);
-    fprintf(fp_cachesH, "\t.radio = %d,\n", conftab[i].conf->radio->id);
-    if (conftab[i].conf->level == UNKNOWN) {
-      fprintf(fp_cachesH, "\t.level = F_MINIMUM_STATE_LEVEL\n");
-    } else {
-      fprintf(fp_cachesH, "\t.level = %d\n", conftab[i].conf->level);
-    }
-    fprintf(fp_cachesH, "\t}\n");
-  }
+		fprintf(fp, "\t.application = %d,\n", conftab[i].conf->app->id);
+		fprintf(fp, "\t.network = %d,\n", conftab[i].conf->net->id);
+		fprintf(fp, "\t.mac = %d,\n", conftab[i].conf->mac->id);
+		fprintf(fp, "\t.radio = %d,\n", conftab[i].conf->radio->id);
+		if (conftab[i].conf->level == UNKNOWN) {
+			fprintf(fp, "\t.level = F_MINIMUM_STATE_LEVEL\n");
+		} else {
+			fprintf(fp, "\t.level = %d\n", conftab[i].conf->level);
+		}
+		fprintf(fp, "\t}\n");
+	}
 
-  fprintf(fp_cachesH, "};\n\n");
-
-
-  fprintf(fp_cachesH, "struct default_params defs[NUMBER_OF_CONFIGURATIONS] = {\n");
-  fprintf(fp_cachesH, "\t{\n");
-  fprintf(fp_cachesH, "\t.application = NULL,\n");
-  fprintf(fp_cachesH, "\t.network = NULL,\n");
-  fprintf(fp_cachesH, "\t.mac = NULL,\n");
-  fprintf(fp_cachesH, "\t.radio = NULL\n");
-  fprintf(fp_cachesH, "\t}\n");
+	fprintf(fp, "};\n\n");
 
 
-  for( i = 1; i < conf_counter; i++ ) {
-    fprintf(fp_cachesH, "\t,\n");
-    fprintf(fp_cachesH, "\t{\n");
-    fprintf(fp_cachesH, "\t.application = &%s_%s,\n", conftab[i].conf->id->name, conftab[i].conf->app->lib->full_name);
-    fprintf(fp_cachesH, "\t.network = &%s_%s,\n", conftab[i].conf->id->name, conftab[i].conf->net->lib->full_name);
-    fprintf(fp_cachesH, "\t.mac = &%s_%s,\n", conftab[i].conf->id->name, conftab[i].conf->mac->lib->full_name);
-    fprintf(fp_cachesH, "\t.radio = &%s_%s\n", conftab[i].conf->id->name, conftab[i].conf->radio->lib->full_name);
-    fprintf(fp_cachesH, "\t}\n");
-  }
+	fprintf(fp, "struct default_params defs[NUMBER_OF_CONFIGURATIONS] = {\n");
+	fprintf(fp, "\t{\n");
+	fprintf(fp, "\t.application = NULL,\n");
+	fprintf(fp, "\t.network = NULL,\n");
+	fprintf(fp, "\t.mac = NULL,\n");
+	fprintf(fp, "\t.radio = NULL\n");
+	fprintf(fp, "\t}\n");
 
-  fprintf(fp_cachesH, "};\n\n");
+	for( i = 1; i < conf_counter; i++ ) {
+		fprintf(fp, "\t,\n");
+		fprintf(fp, "\t{\n");
+		fprintf(fp, "\t.application = &%s_%s,\n", conftab[i].conf->id->name, conftab[i].conf->app->lib->full_name);
+		fprintf(fp, "\t.network = &%s_%s,\n", conftab[i].conf->id->name, conftab[i].conf->net->lib->full_name);
+		fprintf(fp, "\t.mac = &%s_%s,\n", conftab[i].conf->id->name, conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\t.radio = &%s_%s\n", conftab[i].conf->id->name, conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "\t}\n");
+	}
 
-  fprintf(fp_cachesH, "char* eventsScales[%d] = {\"\"", event_scale_counter);
+	fprintf(fp, "};\n\n");
 
-  int event_scale_id = 1;
+	fprintf(fp, "char* eventsScales[%d] = {\"\"", event_scale_counter);
 
-  for(event_scale_id = 1; event_scale_id < event_scale_counter; event_scale_id++) {
-    for(sp = symtab; sp < &symtab[NSYMS]; sp++) {
-      if (sp != NULL && sp->type != NULL && !strcmp(sp->type, "event_scale") && sp->value == event_scale_id) {
-        fprintf(fp_cachesH, ", \"%s\"", sp->name);
-      }
-    }
-  }
-  fprintf(fp_cachesH, "};\n\n");
+	int event_scale_id = 1;
+
+	for(event_scale_id = 1; event_scale_id < event_scale_counter; event_scale_id++) {
+		for(sp = symtab; sp < &symtab[NSYMS]; sp++) {
+			if (sp != NULL && sp->type != NULL && !strcmp(sp->type, "event_scale") && sp->value == event_scale_id) {
+				fprintf(fp, ", \"%s\"", sp->name);
+			}
+		}
+	}
+	fprintf(fp, "};\n\n");
 
 
+	fprintf(fp, "struct fennec_event eventsTable[%d] = {\n\n", event_counter);
 
-  fprintf(fp_cachesH, "struct fennec_event eventsTable[%d] = {\n\n", event_counter);
+	for ( i = 0; i < event_counter; i++) {
+		fprintf(fp, "\t{\n");
+		fprintf(fp, "\t.operation = %d,\n", evtab[i].op);
+		fprintf(fp, "\t.value = %d,\n", evtab[i].value);
 
-  for ( i = 0; i < event_counter; i++) {
-    fprintf(fp_cachesH, "\t{\n");
-    fprintf(fp_cachesH, "\t.operation = %d,\n", evtab[i].op);
-    fprintf(fp_cachesH, "\t.value = %d,\n", evtab[i].value);
-
-    if (evtab[i].scale == NULL) {
-      fprintf(fp_cachesH, "\t.scale = eventsScales[0],\n");
-    } else {
-      fprintf(fp_cachesH, "\t.scale = eventsScales[%d],\n", evtab[i].scale->value);
-    }
-    if (evtab[i].addr == UNKNOWN) {
-      fprintf(fp_cachesH, "\t.addr = TOS_NODE_ID,\n");
-    } else {
-      fprintf(fp_cachesH, "\t.addr = %d\n", evtab[i].addr);
-    }
-    fprintf(fp_cachesH, "\t},\n");
-  }
+		if (evtab[i].scale == NULL) {
+			fprintf(fp, "\t.scale = eventsScales[0],\n");
+		} else {
+			fprintf(fp, "\t.scale = eventsScales[%d],\n", evtab[i].scale->value);
+		}
+		if (evtab[i].addr == UNKNOWN) {
+			fprintf(fp, "\t.addr = TOS_NODE_ID,\n");
+		} else {
+			fprintf(fp, "\t.addr = %d\n", evtab[i].addr);
+		}
+		fprintf(fp, "\t},\n");
+	}
 
 /*
   struct evtab *ev;
   for(ev = evtab; ev < &evtab[NEVS]; ev++) {
     if (ev->name) {
 
-      fprintf(fp_cachesH, "\t}\n");
+      fprintf(fp, "\t}\n");
 
       fprintf(tmp_confs, "      eventsTable[%d].operation = %s;\n", ev->num-1, relopToLetter(ev->op));
       fprintf(tmp_confs, "      eventsTable[%d].value = %d;\n", ev->num-1, ev->value);
@@ -133,54 +137,54 @@ void generateCaches(int event_counter, int policy_counter) {
       } else {
         fprintf(tmp_confs, "      eventsTable[%d].addr = %d;\n\n", ev->num-1, ev->addr);
       }
-      fprintf(fp_cachesH, "\t{\n");
-      fprintf(fp_cachesH, "\t,\n");
+      fprintf(fp, "\t{\n");
+      fprintf(fp, "\t,\n");
 
     } else {
       break;
     }
   }
 */
-  fprintf(fp_cachesH, "};\n\n");
+  fprintf(fp, "};\n\n");
 
 
-  fprintf(fp_cachesH, "nx_struct fennec_policy policies[%d];\n\n", policy_counter);
-  fprintf(fp_cachesH, "bool control_unit_support;\n\n");
-  fprintf(fp_cachesH, "module_t get_protocol(layer_t layer, conf_t conf);\n\n");
-  fprintf(fp_cachesH, "nxle_uint16_t event_mask;\n\n");
+  fprintf(fp, "nx_struct fennec_policy policies[%d];\n\n", policy_counter);
+  fprintf(fp, "bool control_unit_support;\n\n");
+  fprintf(fp, "module_t get_protocol(layer_t layer, conf_t conf);\n\n");
+  fprintf(fp, "nxle_uint16_t event_mask;\n\n");
 
-  fprintf(fp_cachesH, "void checkEvent() {\n");
+  fprintf(fp, "void checkEvent() {\n");
 
   if (policy_counter > 0) {
-  	fprintf(fp_cachesH, "    uint8_t i;\n");
-	fprintf(fp_cachesH, "    for( i=0; i < %d; i++ ) {\n", policy_counter);
-	fprintf(fp_cachesH, "      if (((policies[i].src_conf == ANY) || (policies[i].src_conf == active_state))\n");
-	fprintf(fp_cachesH, "         && (policies[i].event_mask == event_mask)) {\n");
-	fprintf(fp_cachesH, "        signal PolicyCache.newConf( policies[i].dst_conf );\n");
-	fprintf(fp_cachesH, "      }\n");
-	fprintf(fp_cachesH, "    }\n");
+  	fprintf(fp, "    uint8_t i;\n");
+	fprintf(fp, "    for( i=0; i < %d; i++ ) {\n", policy_counter);
+	fprintf(fp, "      if (((policies[i].src_conf == ANY) || (policies[i].src_conf == active_state))\n");
+	fprintf(fp, "         && (policies[i].event_mask == event_mask)) {\n");
+	fprintf(fp, "        signal PolicyCache.newConf( policies[i].dst_conf );\n");
+	fprintf(fp, "      }\n");
+	fprintf(fp, "    }\n");
   }
-  fprintf(fp_cachesH, "}\n\n");
+  fprintf(fp, "}\n\n");
 
-  fprintf(fp_cachesH, "bool eventStatus(uint16_t event_num) {\n");
+  fprintf(fp, "bool eventStatus(uint16_t event_num) {\n");
 
   if (policy_counter > 0) {
-    fprintf(fp_cachesH, "    uint8_t i;\n");
-    fprintf(fp_cachesH, "    for( i=0; i < %d; i++ ){\n", policy_counter);
-    fprintf(fp_cachesH, "      if (((policies[i].src_conf == ANY) || (policies[i].src_conf == active_state)) &&\n");
-    fprintf(fp_cachesH, "                                       (policies[i].event_mask & (1 << event_num))) {\n");
-    fprintf(fp_cachesH, "        return 1;\n");
-    fprintf(fp_cachesH, "      }\n");
-    fprintf(fp_cachesH, "    }\n");
-    fprintf(fp_cachesH, "    return 0;\n");
+    fprintf(fp, "    uint8_t i;\n");
+    fprintf(fp, "    for( i=0; i < %d; i++ ){\n", policy_counter);
+    fprintf(fp, "      if (((policies[i].src_conf == ANY) || (policies[i].src_conf == active_state)) &&\n");
+    fprintf(fp, "                                       (policies[i].event_mask & (1 << event_num))) {\n");
+    fprintf(fp, "        return 1;\n");
+    fprintf(fp, "      }\n");
+    fprintf(fp, "    }\n");
+    fprintf(fp, "    return 0;\n");
   } else {
-    fprintf(fp_cachesH, "    return 0;\n");
+    fprintf(fp, "    return 0;\n");
   }
 
-  fprintf(fp_cachesH, "}\n\n");
-  fprintf(fp_cachesH, "#endif\n\n");
+  fprintf(fp, "}\n\n");
+  fprintf(fp, "#endif\n\n");
 
-  fclose(fp_cachesH);
+  fclose(fp);
   fclose(tmp_confs);
 }
 

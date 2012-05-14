@@ -74,56 +74,13 @@ void module_params_h(struct modtab *mp) {
 
 void generateParams() {
 	struct modtab *mp;
-	FILE *fp = fopen(modulesH, "w");
-	struct paramtype *pt;
-	int i;
-
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
 			module_params_interface(mp);
 			module_params_c(mp);
 			module_params_h(mp);
-
-/*
-      for(pt = mp->lib->params, i = 0; pt != NULL; pt = pt->child, i++) {
-        fprintf(fp, "%s %s;\n", type_name(pt->type), pt->name);
-      }
-
-      fprintf(fp, "\n");
-      fprintf(fp, "struct %s_params {\n", mp->lib->full_name);
-
-      for(pt = mp->lib->params, i = 0; pt != NULL; pt = pt->child, i++) {
-        fprintf(fp, "\t%s *%s;\n", type_name(pt->type), pt->name);
-      }
-
-      fprintf(fp, "};\n");
-      fprintf(fp, "struct %s_params %s_data = {\n", mp->lib->full_name, mp->lib->full_name);
-      for(pt = mp->lib->params, i = 0; pt != NULL; pt = pt->child, i++) {
-        fprintf(fp, "\t&%s,\n", pt->name);
-      }
-
-      fprintf(fp, "};\n\n");
-*/
-
 		}
 	}
-
-/*
-  fprintf(fp, "\n\n");
-  fprintf(fp, "void *modules_structs[%d] = {\n", module_id_counter);
-  fprintf(fp, "\tNULL");
-
-  for(i = 0; i < module_id_counter; i++) {
-    for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-      if (mp->lib != NULL && mp->lib->path && mp->id == i) {
-        fprintf(fp, ",\n\t&%s_data", mp->lib->full_name);
-        break;
-      }
-    }
-  }
-
-  fprintf(fp, "\n};\n\n");
-*/
 }
 
 

@@ -3,7 +3,7 @@
 
 void generateModules() {
 
-
+/*
   struct modtab *mp;
   FILE *fp_modulesH = fopen(modulesH, "w");
   struct paramtype *pt;
@@ -14,14 +14,12 @@ void generateModules() {
     exit(1);
   }
 
-  fprintf(fp_modulesH, "/* Swift Fox generated code for Fennec Fox modules.h */\n\n");
   fprintf(fp_modulesH, "#ifndef _FF_MODULES_H_\n");
   fprintf(fp_modulesH, "#define _FF_MODULES_H_\n\n");
   
 
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
-      fprintf(fp_modulesH, "/* %s */\n", mp->lib->full_name);
 
       for(pt = mp->lib->params, i = 0; pt != NULL; pt = pt->child, i++) {
         fprintf(fp_modulesH, "%s %s;\n", type_name(pt->type), pt->name);
@@ -60,7 +58,7 @@ void generateModules() {
 
   fprintf(fp_modulesH, "\n};\n\n");
   fprintf(fp_modulesH, "#endif\n");
-
+*/
 }
 
 

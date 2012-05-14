@@ -12,20 +12,11 @@
 #include "utils.h"
 
 
-#include <stdio.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
-
 char *engineC = NULL;
 char *engineM = NULL;
 
 char *eventC = NULL;
 char *eventM = NULL;
-
-char *modulesH = NULL;
-char *cachesH = NULL;
 
 char *fex = NULL;
 
@@ -55,14 +46,6 @@ void setFiles() {
   eventM = malloc(strlen(p_eventM)+strlen(fennec_fox_lib)+2);
   sprintf(eventM, "%s/%s", fennec_fox_lib, p_eventM);
 
-  char *p_cachesH = "Fennec/caches.h";
-  cachesH = malloc(strlen(p_cachesH)+strlen(fennec_fox_lib)+2);
-  sprintf(cachesH, "%s/%s", fennec_fox_lib, p_cachesH);
-	
-  char *p_modulesH = "Fennec/modules.h";
-  modulesH = malloc(strlen(p_modulesH)+strlen(fennec_fox_lib)+2);
-  sprintf(modulesH, "%s/%s", fennec_fox_lib, p_modulesH);
-
   char *p_fex = "support/sfc/fennec.extra";
   fex = malloc(strlen(p_fex)+strlen(fennec_fox_lib)+2);
   sprintf(fex, "%s/%s", fennec_fox_lib, p_fex);
@@ -82,7 +65,6 @@ void setFennecExtra() {
   }
 
   fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/interfaces\n");
-  //fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/chips\n");
   fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/system\n");
   fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/Fennec\n");
   fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/Fennec/sfc\n");
@@ -133,7 +115,7 @@ void finishCodeGeneration(int policy_counter) {
 
 
   generateCaches(event_counter, policy_counter);
-  generateModules();
+//  generateModules();
   generateDefaultParams();
 
   generateFennecEngineC();
@@ -259,22 +241,3 @@ void generateEventP(int event_counter) {
   fclose(fp_eventM);
 }
 
-char *relopToLetter(int i) {
-  switch(i) {
-    case LT:
-      return "LT";
-    case GT:
-      return "GT";
-    case LE:
-      return "LE";
-    case GE:
-      return "GE";
-    case NE:
-      return "NE";
-    case EQ:
-      return "EQ";
-    default:
-      fprintf(stderr, "Unknown RELOP operator\n");
-      exit(1);
-    }
-}
