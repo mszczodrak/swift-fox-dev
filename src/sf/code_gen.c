@@ -75,11 +75,6 @@ void setFiles() {
   FILE *tmp = fopen(TEMP_CONF_FILE, "w");
   fclose(tmp);
 
-  /* check if sfc directory exists */
-  if (create_dir("Fennec/sfc")) {
-    fprintf(stderr, "Cannot create directory %s\n", "Fennec/sfc");
-    exit(1);
-  }
 }
 
 void setFennecExtra() {
@@ -95,6 +90,7 @@ void setFennecExtra() {
   //fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/chips\n");
   fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/system\n");
   fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/Fennec\n");
+  fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/Fennec/sfc\n");
   fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/ControlUnit\n");
   fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/Events\n");
   fprintf(fp_fe, "include $(FENNEC_FOX_LIB)/Sensors/sensors.extra\n");
@@ -134,6 +130,13 @@ void finishCodeGeneration(int policy_counter) {
   }
 
 
+  /* check if sfc directory exists */
+  if (create_dir("Fennec/sfc")) {
+    fprintf(stderr, "Cannot create directory %s\n", "Fennec/sfc");
+    exit(1);
+  }
+
+
   generateCaches(event_counter, policy_counter);
   generateModules();
   generateDefaultParams();
@@ -145,7 +148,7 @@ void finishCodeGeneration(int policy_counter) {
   generateEventP(event_counter);
 
   generateParams();
-//  generateGlobals();
+  generateGlobals();
 
   setFennecExtra();
 }
