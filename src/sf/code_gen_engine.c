@@ -30,6 +30,8 @@ void generateFennecEngineC() {
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
       fprintf(fp_engineC, "  components %s;\n", mp->lib->full_name);
+      fprintf(fp_engineC, "  components %sParamsC;\n", mp->lib->full_name);
+      fprintf(fp_engineC, "  %s.%sParams -> %sParamsC;\n", mp->lib->full_name, mp->lib->full_name, mp->lib->full_name);
       fprintf(fp_engineC, "  FennecEngineP.%sControl -> %s;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp_engineC, "  FennecEngineP.%sNetworkAMSend <- %s.NetworkAMSend;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp_engineC, "  FennecEngineP.%sNetworkReceive <- %s.NetworkReceive;\n", mp->lib->full_name, mp->lib->full_name);
@@ -48,6 +50,8 @@ void generateFennecEngineC() {
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
       fprintf(fp_engineC, "\n  components %s as %s;\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp_engineC, "  components %sParamsC;\n", mp->lib->full_name);
+      fprintf(fp_engineC, "  %s.%sParams -> %sParamsC;\n", mp->lib->full_name, mp->lib->full_name, mp->lib->full_name);
       fprintf(fp_engineC, "  FennecEngineP.%sControl -> %s;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp_engineC, "  FennecEngineP.%sNetworkAMSend -> %s.NetworkAMSend;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp_engineC, "  FennecEngineP.%sNetworkReceive -> %s.NetworkReceive;\n", mp->lib->full_name, mp->lib->full_name);
@@ -84,6 +88,8 @@ void generateFennecEngineC() {
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
       fprintf(fp_engineC, "\n  components %s as %s;\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp_engineC, "  components %sParamsC;\n", mp->lib->full_name);
+      fprintf(fp_engineC, "  %s.%sParams -> %sParamsC;\n", mp->lib->full_name, mp->lib->full_name, mp->lib->full_name);
       fprintf(fp_engineC, "  FennecEngineP.%sControl -> %s;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp_engineC, "  FennecEngineP.%sMacAMSend -> %s.MacAMSend;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp_engineC, "  FennecEngineP.%sMacReceive -> %s.MacReceive;\n", mp->lib->full_name, mp->lib->full_name);
@@ -107,6 +113,8 @@ void generateFennecEngineC() {
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
       fprintf(fp_engineC, "\n  components %s as %s;\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp_engineC, "  components %sParamsC;\n", mp->lib->full_name);
+      fprintf(fp_engineC, "  %s.%sParams -> %sParamsC;\n", mp->lib->full_name, mp->lib->full_name, mp->lib->full_name);
       fprintf(fp_engineC, "  FennecEngineP.%sControl -> %s;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp_engineC, "  FennecEngineP.%sRadioAMSend -> %s.RadioAMSend;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp_engineC, "  FennecEngineP.%sRadioReceive -> %s.RadioReceive;\n", mp->lib->full_name, mp->lib->full_name);
