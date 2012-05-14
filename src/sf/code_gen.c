@@ -11,6 +11,13 @@
 #include "y.tab.h"
 #include "utils.h"
 
+
+#include <stdio.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+
 char *engineC = NULL;
 char *engineM = NULL;
 
@@ -69,8 +76,10 @@ void setFiles() {
   fclose(tmp);
 
   /* check if sfc directory exists */
-  create_dir("Fennec/sfc");
-
+  if (create_dir("Fennec/sfc")) {
+    fprintf(stderr, "Cannot create directory %s\n", "Fennec/sfc");
+    exit(1);
+  }
 }
 
 void setFennecExtra() {

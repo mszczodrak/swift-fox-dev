@@ -63,11 +63,10 @@ char *get_sfc_path(char *file1, char *file2) {
 int create_dir(char *ffsrc_relative) {
   struct stat st;
   char *dirpath = get_full_path(ffsrc_relative);
-  if (stat(dirpath, &st) == 0) {
-    free(dirpath);
-    return 0;
-  } else {
-    free(dirpath);
-    return mkdir(dirpath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+  int status = 0;
+  if (stat(dirpath, &st) != 0) {
+    status = mkdir(dirpath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   }
+  free(dirpath);
+  return status;
 }
