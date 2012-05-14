@@ -53,11 +53,9 @@ char *get_sfc_path(char *file1, char *file2) {
 
   tmp = malloc(strlen(fennec_fox_lib) + strlen("Fennec/sfc/") + 
 					strlen(file1) + strlen(file2) + 2);
-  sprintf(tmp, "%s/%sFennec/sfc/%s", fennec_fox_lib, file1, file2);
+  sprintf(tmp, "%s/Fennec/sfc/%s%s", fennec_fox_lib, file1, file2);
   return tmp;
 }
-
-
 
 
 int create_dir(char *ffsrc_relative) {
