@@ -182,48 +182,32 @@ void generateCaches(int event_counter, int policy_counter) {
 
   fclose(fp_cachesH);
   fclose(tmp_confs);
-
 }
 
 
 void generateConfiguration(struct confnode* c) {
 
-  int conf_num = c->counter;
+	int conf_num = c->counter;
 
-//  if (!strcmp(c->app->type, "keyword")) {
-//    conftab[conf_num].app = NULL;
-//  } else {
-    if (c->app->lib->id == 0) {
-      c->app->lib->used = 1;
-    }
-    conftab[conf_num].conf = c;
-//  }
+	if (c->app->lib->id == 0) {
+		c->app->lib->used = 1;
+	}
+	conftab[conf_num].conf = c;
 
-//  if (!strcmp(c->net->type, "keyword")) {
-//    conftab[conf_num].net = NULL;
-//  } else {
-    if (c->net->lib->id == 0) {
-      c->net->lib->used = 1;
-    } 
-    conftab[conf_num].conf = c;
-//  }
+	if (c->net->lib->id == 0) {
+		c->net->lib->used = 1;
+	} 
+	conftab[conf_num].conf = c;
 
-//  if (!strcmp(c->mac->type, "keyword")) {
-//    conftab[conf_num].mac = NULL;
-//  } else {
-    if (c->mac->lib->id == 0) {
-      c->mac->lib->used = 1;
-    } 
-    conftab[conf_num].conf = c;
-//  }
+	if (c->mac->lib->id == 0) {
+		c->mac->lib->used = 1;
+	} 
+	conftab[conf_num].conf = c;
 
-//  if (!strcmp(c->radio->type, "keyword")) {
-//    conftab[conf_num].radio = NULL;
-//  } else {
-    if (c->radio->lib->id == 0) {
-      c->radio->lib->used = 1;
-    } 
-    conftab[conf_num].conf = c;
+	if (c->radio->lib->id == 0) {
+		c->radio->lib->used = 1;
+	} 
+	conftab[conf_num].conf = c;
 //  }
 //  if (c->level == UNKNOWN) {
 //    conftab[conf_num].level = F_MINIMUM_STATE_LEVEL;
