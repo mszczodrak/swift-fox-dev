@@ -33,6 +33,15 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "#include <Fennec.h>\n");
 	fprintf(fp, "#include \"ff_defaults.h\"\n\n");
 
+        for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+                if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
+                        fprintf(fp, "#include \"%sParams.h\"\n",
+                                                mp->lib->full_name);
+                }
+        }
+        fprintf(fp, "\n");
+
+
 	fprintf(fp, "uint16_t active_state = %d;\n\n", active_state);
 	fprintf(fp, "struct fennec_configuration configurations[NUMBER_OF_CONFIGURATIONS] = {\n");
 	fprintf(fp, "\t{\n");
@@ -63,22 +72,69 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	fprintf(fp, "};\n\n");
 
-
-	fprintf(fp, "struct default_params defs[NUMBER_OF_CONFIGURATIONS] = {\n");
+	fprintf(fp, "struct default_params defaults[NUMBER_OF_CONFIGURATIONS] = {\n");
 	fprintf(fp, "\t{\n");
-	fprintf(fp, "\t.application = NULL,\n");
-	fprintf(fp, "\t.network = NULL,\n");
-	fprintf(fp, "\t.mac = NULL,\n");
-	fprintf(fp, "\t.radio = NULL\n");
+	fprintf(fp, "\t\t.application_cache = NULL,\n");
+	fprintf(fp, "\t\t.network_cache = NULL,\n");
+	fprintf(fp, "\t\t.mac_cache = NULL,\n");
+	fprintf(fp, "\t\t.radio_cache = NULL\n");
 	fprintf(fp, "\t}\n");
 
 	for( i = 1; i < conf_counter; i++ ) {
 		fprintf(fp, "\t,\n");
 		fprintf(fp, "\t{\n");
-		fprintf(fp, "\t.application = &%s_%s,\n", conftab[i].conf->id->name, conftab[i].conf->app->lib->full_name);
-		fprintf(fp, "\t.network = &%s_%s,\n", conftab[i].conf->id->name, conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\t.mac = &%s_%s,\n", conftab[i].conf->id->name, conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\t.radio = &%s_%s\n", conftab[i].conf->id->name, conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "\t\t.application_cache = &%s_%s,\n", 
+					conftab[i].conf->id->name, 
+					conftab[i].conf->app->lib->full_name);
+		for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+			if (mp->lib != NULL && mp->lib->path && mp->id == conftab[i].conf->app->id) {
+				fprintf(fp, "\t\t.application_default_params = &%s_%s,\n",
+				conftab[i].conf->id->name, mp->lib->full_name);
+				fprintf(fp, "\t\t.application_default_size = sizeof(struct %s_params),\n", 
+						 	mp->lib->full_name);
+				break;
+			}
+		}
+
+		fprintf(fp, "\t\t.network_cache = &%s_%s,\n", 
+					conftab[i].conf->id->name, 
+					conftab[i].conf->net->lib->full_name);
+                for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+                        if (mp->lib != NULL && mp->lib->path && mp->id == conftab[i].conf->net->id) {
+                                fprintf(fp, "\t\t.network_default_params = &%s_%s,\n",
+                                conftab[i].conf->id->name, mp->lib->full_name);
+                                fprintf(fp, "\t\t.network_default_size = sizeof(struct %s_params),\n",
+                                                 	mp->lib->full_name);
+                                break;
+                        }
+                }
+
+		fprintf(fp, "\t\t.mac_cache = &%s_%s,\n", 
+					conftab[i].conf->id->name, 
+					conftab[i].conf->mac->lib->full_name);
+                for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+                        if (mp->lib != NULL && mp->lib->path && mp->id == conftab[i].conf->mac->id) {
+                                fprintf(fp, "\t\t.mac_default_params = &%s_%s,\n",
+                                conftab[i].conf->id->name, mp->lib->full_name);
+                                fprintf(fp, "\t\t.mac_default_size = sizeof(struct %s_params),\n",
+                                                 	mp->lib->full_name);
+                                break;
+                        }
+                }
+
+		fprintf(fp, "\t\t.radio_cache = &%s_%s,\n", 
+					conftab[i].conf->id->name, 
+					conftab[i].conf->radio->lib->full_name);
+                for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+                        if (mp->lib != NULL && mp->lib->path && mp->id == conftab[i].conf->radio->id) {
+                                fprintf(fp, "\t\t.radio_default_params = &%s_%s,\n",
+                                conftab[i].conf->id->name, mp->lib->full_name);
+                                fprintf(fp, "\t\t.radio_default_size = sizeof(struct %s_params)\n",
+                                	                 mp->lib->full_name);
+                                break;
+                        }
+                }
+
 		fprintf(fp, "\t}\n");
 	}
 
@@ -96,21 +152,6 @@ void generateCaches(int event_counter, int policy_counter) {
 		}
 	}
 	fprintf(fp, "};\n\n");
-
-	fprintf(fp, "\n\n");
-	fprintf(fp, "void *modules_structs[%d] = {\n", module_id_counter);
-	fprintf(fp, "\tNULL");
-
-	for(i = 0; i < module_id_counter; i++) {
-		for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-			if (mp->lib != NULL && mp->lib->path && mp->id == i) {
-				fprintf(fp, ",\n\t&%s_data", mp->lib->full_name);
-				break;
-			}
-		}
-	}
-	fprintf(fp, "\n};\n\n");
-
 
 
 	fprintf(fp, "struct fennec_event eventsTable[%d] = {\n\n", event_counter);
