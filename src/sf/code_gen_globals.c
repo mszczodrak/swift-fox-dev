@@ -3,7 +3,7 @@
 
 
 void generateGlobals() {
-	char *full_path = get_sfc_path("", "globals.h");
+	char *full_path = get_sfc_path("", "ff_globals.h");
 	FILE *fp = fopen(full_path, "w");
 //	struct paramtype *pt;
 //	int i;

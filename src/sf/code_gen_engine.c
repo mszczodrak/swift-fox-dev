@@ -3,7 +3,7 @@
 
 void generateFennecEngineC() {
 
-        char *full_path = get_sfc_path("", "FennecEngineC");
+        char *full_path = get_sfc_path("", "FennecEngineC.nc");
         FILE *fp = fopen(full_path, "w");
 
 	struct modtab *mp;
@@ -130,7 +130,6 @@ void generateFennecEngineC() {
     }
   }
 
-
 	fprintf(fp, "\n}\n");
 	fclose(fp);
 	free(full_path);
@@ -138,7 +137,7 @@ void generateFennecEngineC() {
 
 void generateFennecEngineP() {
 
-        char *full_path = get_sfc_path("", "FennecEngineP");
+        char *full_path = get_sfc_path("", "FennecEngineP.nc");
         FILE *fp = fopen(full_path, "w");
 
         struct modtab *mp;

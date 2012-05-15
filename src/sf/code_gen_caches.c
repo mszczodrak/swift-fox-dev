@@ -9,6 +9,7 @@ void generateCaches(int event_counter, int policy_counter) {
 	FILE *fp = fopen(full_path, "w");
 
 	struct symtab *sp;
+	struct modtab *mp;
 	int i;
 
 	if (fp == NULL) {
@@ -95,6 +96,21 @@ void generateCaches(int event_counter, int policy_counter) {
 		}
 	}
 	fprintf(fp, "};\n\n");
+
+	fprintf(fp, "\n\n");
+	fprintf(fp, "void *modules_structs[%d] = {\n", module_id_counter);
+	fprintf(fp, "\tNULL");
+
+	for(i = 0; i < module_id_counter; i++) {
+		for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+			if (mp->lib != NULL && mp->lib->path && mp->id == i) {
+				fprintf(fp, ",\n\t&%s_data", mp->lib->full_name);
+				break;
+			}
+		}
+	}
+	fprintf(fp, "\n};\n\n");
+
 
 
 	fprintf(fp, "struct fennec_event eventsTable[%d] = {\n\n", event_counter);
