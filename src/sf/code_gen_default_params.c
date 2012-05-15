@@ -2,7 +2,7 @@
 #include "utils.h"
 
 void generateDefaultParams() {
-        char *full_path = get_sfc_path("", "defparms.h");
+        char *full_path = get_sfc_path("", "ff_defaults.h");
         FILE *fp = fopen(full_path, "w");
 	struct paramvalue *pv;
 	struct paramtype *pt;
@@ -16,8 +16,8 @@ void generateDefaultParams() {
                 exit(1);
         }
 
-	fprintf(fp, "#ifndef _FF_DEFPARMS_H_\n");
-	fprintf(fp, "#define _FF_DEFPARMS_H_\n\n");
+	fprintf(fp, "#ifndef _FF_DEFAULTS_H_\n");
+	fprintf(fp, "#define _FF_DEFAULTS_H_\n\n");
 	fprintf(fp, "#include <Fennec.h>\n");
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {

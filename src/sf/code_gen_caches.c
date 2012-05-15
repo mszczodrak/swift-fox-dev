@@ -30,7 +30,7 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "#define NUMBER_OF_CONFIGURATIONS  %d\n", conf_counter);
 	fprintf(fp, "#define INTERNAL_POLICY_CONFIGURATION_ID  %d\n\n", policy_conf_id);
 	fprintf(fp, "#include <Fennec.h>\n");
-	fprintf(fp, "#include \"defparms.h\"\n\n");
+	fprintf(fp, "#include \"ff_defaults.h\"\n\n");
 
 	fprintf(fp, "uint16_t active_state = %d;\n\n", active_state);
 	fprintf(fp, "struct fennec_configuration configurations[NUMBER_OF_CONFIGURATIONS] = {\n");

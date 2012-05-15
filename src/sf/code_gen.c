@@ -32,13 +32,6 @@ void setFiles() {
     exit(1);
   }
 
-  char *p_engineC = "Fennec/FennecEngineC.nc";		
-  char *p_engineM = "Fennec/FennecEngineP.nc";		
-  engineC = malloc(strlen(p_engineC)+strlen(fennec_fox_lib)+2);
-  sprintf(engineC, "%s/%s", fennec_fox_lib, p_engineC);
-  engineM = malloc(strlen(p_engineM)+strlen(fennec_fox_lib)+2);
-  sprintf(engineM, "%s/%s", fennec_fox_lib, p_engineM);
-
   char *p_eventC = "Events/EventsC.nc";
   char *p_eventM = "Events/EventsP.nc";
   eventC = malloc(strlen(p_eventC)+strlen(fennec_fox_lib)+2);

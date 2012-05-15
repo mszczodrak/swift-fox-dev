@@ -15,9 +15,6 @@
 #include "sf.h"
 #include "traverse.h"
 
-extern char *engineC;
-extern char *engineM;
-
 extern char *eventsC;
 extern char *eventsM;
 
