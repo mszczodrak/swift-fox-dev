@@ -1,12 +1,12 @@
-configuration dummy { 	blink( 7, 1024 )
-			dummyNet()
-			dummyMac() 
-			dummyRadio()}
+configuration state1 { 	blink( 7, 1024 )
+			nullNet()
+			nullMac() 
+			nullRadio()}
 
-configuration dummy2 { 	blink( 1, 2048)
-			dummyNet()
-			dummyMac() 
-			dummyRadio()}
+configuration state2 { 	blink( 1, 2048)
+			nullNet()
+			nullMac() 
+			nullRadio()}
 
 
 #event-condition t1 {timer = 10sec @ 2}
@@ -15,5 +15,5 @@ configuration dummy2 { 	blink( 1, 2048)
 #from b1 goto b0 when t1
 
 
-start dummy
+start state1
 

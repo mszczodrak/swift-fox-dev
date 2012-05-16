@@ -13,6 +13,8 @@ void module_params_interface(struct modtab *mp) {
 	}
 
 	fprintf(fp, "interface %sParams {\n", (mp->lib->full_name));
+	fprintf(fp, "\tevent void receive_status(uint16_t status_flag);\n");
+	fprintf(fp, "\tcommand void send_status(uint16_t status_flag);\n");
 
         for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
                 fprintf(fp, "\tcommand %s get_%s();\n", 
@@ -46,6 +48,9 @@ void module_params_c(struct modtab *mp) {
         fprintf(fp, "}\n\n");
 
         fprintf(fp, "implementation {\n\n");
+	fprintf(fp, "  command void %sParams.send_status(uint16_t status_flag) {\n", 
+							mp->lib->full_name);
+        fprintf(fp, "}\n\n");
 
 	for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
 		fprintf(fp, "  command %s %sParams.get_%s() {\n",
