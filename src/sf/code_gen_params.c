@@ -48,17 +48,21 @@ void module_params_c(struct modtab *mp) {
         fprintf(fp, "}\n\n");
 
         fprintf(fp, "implementation {\n\n");
-	fprintf(fp, "  command void %sParams.send_status(uint16_t status_flag) {\n", 
+	fprintf(fp, "\tcommand void %sParams.send_status(uint16_t status_flag) {\n", 
 							mp->lib->full_name);
-        fprintf(fp, "}\n\n");
+        fprintf(fp, "\t}\n\n");
 
 	for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
-		fprintf(fp, "  command %s %sParams.get_%s() {\n",
+		fprintf(fp, "\tcommand %s %sParams.get_%s() {\n",
 			type_name(pt->type), mp->lib->full_name, pt->name);
-		fprintf(fp, "  }\n\n");
-		fprintf(fp, "  command error_t %sParams.set_%s(%s new_%s) {\n",
+		fprintf(fp, "\t\treturn *%s_data.%s;\n", mp->lib->full_name, pt->name);
+		fprintf(fp, "\t}\n\n");
+		fprintf(fp, "\tcommand error_t %sParams.set_%s(%s new_%s) {\n",
 			mp->lib->full_name, pt->name, type_name(pt->type), pt->name);
-		fprintf(fp, "  }\n\n");
+		fprintf(fp, "\t\t*%s_data.%s = new_%s;\n",
+					mp->lib->full_name, pt->name, pt->name);
+		fprintf(fp, "\t\treturn SUCCESS;\n");
+		fprintf(fp, "\t}\n\n");
         }
 
         fprintf(fp, "}\n\n");
