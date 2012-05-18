@@ -701,8 +701,8 @@ definition: USE type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_types CLOS
 			/* differentiate based on the definition type */
 			if (!strcmp($3->type, "application")) {
 				/* application */
-			        char *full_name =  malloc(strlen($4->name)+strlen("AppC")+1);
-			        sprintf(full_name, "%sAppC", $4->name);
+			        char *full_name =  malloc(strlen($4->name)+strlen("App")+1);
+			        sprintf(full_name, "%sApp", $4->name);
 				$4->full_name = full_name;
 				$4->type = TYPE_APPLICATION;
 				$4->used = 0;
@@ -710,8 +710,8 @@ definition: USE type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_types CLOS
 			}
 			if (!strcmp($3->type, "network")) {
 				/* network */
-			        char *full_name =  malloc(strlen($4->name)+strlen("NetC")+1);
-			        sprintf(full_name, "%sNetC", $4->name);
+			        char *full_name =  malloc(strlen($4->name)+strlen("Net")+1);
+			        sprintf(full_name, "%sNet", $4->name);
 				$4->full_name = full_name;
 				$4->type = TYPE_NETWORK;
 				$4->used = 0;
@@ -719,8 +719,8 @@ definition: USE type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_types CLOS
 			}
                         if (!strcmp($3->type, "mac")) {
                                 /* mac */
-			        char *full_name =  malloc(strlen($4->name)+strlen("MacC")+1);
-			        sprintf(full_name, "%sMacC", $4->name);
+			        char *full_name =  malloc(strlen($4->name)+strlen("Mac")+1);
+			        sprintf(full_name, "%sMac", $4->name);
 				$4->full_name = full_name;
                                 $4->type = TYPE_MAC;
 				$4->used = 0;
@@ -728,8 +728,8 @@ definition: USE type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_types CLOS
                         }
                         if (!strcmp($3->type, "radio")) {
                                 /* radio */
-			        char *full_name =  malloc(strlen($4->name)+strlen("RadioC")+1);
-			        sprintf(full_name, "%sRadioC", $4->name);
+			        char *full_name =  malloc(strlen($4->name)+strlen("Radio")+1);
+			        sprintf(full_name, "%sRadio", $4->name);
 				$4->full_name = full_name;
                                 $4->type = TYPE_RADIO;
 				$4->used = 0;

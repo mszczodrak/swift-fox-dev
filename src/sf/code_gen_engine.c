@@ -33,7 +33,7 @@ void generateFennecEngineC() {
 
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp, "  components %s;\n", mp->lib->full_name);
+      fprintf(fp, "  components %sC as %s;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  components %sParamsC;\n", mp->lib->full_name);
       fprintf(fp, "  %s.%sParams -> %sParamsC;\n", mp->lib->full_name, mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sControl -> %s;\n", mp->lib->full_name, mp->lib->full_name);
@@ -53,7 +53,7 @@ void generateFennecEngineC() {
 
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp, "\n  components %s as %s;\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp, "  components %sC as %s;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  components %sParamsC;\n", mp->lib->full_name);
       fprintf(fp, "  %s.%sParams -> %sParamsC;\n", mp->lib->full_name, mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sControl -> %s;\n", mp->lib->full_name, mp->lib->full_name);
@@ -91,7 +91,7 @@ void generateFennecEngineC() {
 
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp, "\n  components %s as %s;\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp, "  components %sC as %s;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  components %sParamsC;\n", mp->lib->full_name);
       fprintf(fp, "  %s.%sParams -> %sParamsC;\n", mp->lib->full_name, mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sControl -> %s;\n", mp->lib->full_name, mp->lib->full_name);
@@ -116,7 +116,7 @@ void generateFennecEngineC() {
 
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp, "\n  components %s as %s;\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp, "  components %sC as %s;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  components %sParamsC;\n", mp->lib->full_name);
       fprintf(fp, "  %s.%sParams -> %sParamsC;\n", mp->lib->full_name, mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sControl -> %s;\n", mp->lib->full_name, mp->lib->full_name);
