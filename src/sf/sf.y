@@ -666,7 +666,7 @@ definitions: definitions definition
         |
         ;
 
-definition: USE type IDENTIFIER PATH OPEN_PARENTHESIS module_types CLOSE_PARENTHESIS
+definition: USE type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_types CLOSE_PARENTHESIS
 		{
 			/* iterator */
 			char *p = NULL;
@@ -685,7 +685,7 @@ definition: USE type IDENTIFIER PATH OPEN_PARENTHESIS module_types CLOSE_PARENTH
 			$3->lib = $4;
 
 			/* set params for the library */
-			$4->params = $6;
+			$4->params = $7;
 
                         /* extract the name from the path */
                         if ((p = rindex($4->path, '/')) == NULL)
@@ -775,16 +775,16 @@ module_types: param_type IDENTIFIER next_module_type
 		}
 	;
 
-next_module_type: COMMA param_type IDENTIFIER next_module_type
+next_module_type: newlines COMMA newlines param_type IDENTIFIER next_module_type
 		{
-			struct symtab *sp = symlook($3->name);
+			struct symtab *sp = symlook($5->name);
 			if (sp == NULL)
-				yyerror("sp not found: %s\n", $3->name);
+				yyerror("sp not found: %s\n", $5->name);
 
                         $$              = calloc(1, sizeof(struct paramtype));
-                        $$->type   	= $2;
-                        $$->name   	= $3->name;
-			$$->child	= $4;
+                        $$->type   	= $4;
+                        $$->name   	= $5->name;
+			$$->child	= $6;
 		}
 	|
 		{
