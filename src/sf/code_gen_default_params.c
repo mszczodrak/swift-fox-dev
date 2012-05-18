@@ -28,6 +28,7 @@ void generateDefaultParams() {
 	}
 	fprintf(fp, "\n");
 
+	printf("defaults_pppp\n");
 	/* generate structure with default parameters for each module of a given configuration */
 
 	for( i = 1; i < conf_counter; i++ ) {
@@ -35,9 +36,19 @@ void generateDefaultParams() {
 		for (pv = conftab[i].conf->app_params, 
 			pt = conftab[i].conf->app->lib->params, j = 0;  pv != NULL; 
 						pv = pv->child, pt = pt->child, j++ ) {
+
+			if ((pv == NULL) ^ (pt == NULL)) {
+				fprintf(stderr, "Error: Number of arguments does not match library definition for %s\n",
+						conftab[i].conf->app->lib->name);
+				exit(1);
+			}
+
 			fprintf(fp, "%s %s_%s_var%d = %s;\n", type_name(pt->type), 
 			conftab[i].conf->id->name, conftab[i].conf->app->lib->full_name,
 								j, pv->value->name);
+
+			
+
 		}
 		fprintf(fp, "\n"); 
 
@@ -57,10 +68,18 @@ void generateDefaultParams() {
 			}
 			fprintf(fp, "};\n");
 
+	printf("defaults_pppp _3\n");
 		/* network default parameter values */
 		for (pv = conftab[i].conf->net_params, 
 			pt = conftab[i].conf->net->lib->params, j = 0; pv != NULL; 
 						pv = pv->child, pt = pt->child, j++ ) {
+
+                        if ((pv == NULL) ^ (pt == NULL)) {
+                                fprintf(stderr, "Error: Number of arguments does not match library definition for %s\n",
+                                                conftab[i].conf->net->lib->name);
+                                exit(1);
+                        }
+
 			fprintf(fp, "%s %s_%s_var%d = %s;\n", type_name(pt->type), 
 			conftab[i].conf->id->name, conftab[i].conf->net->lib->full_name,
 								j, pv->value->name);
@@ -87,6 +106,12 @@ void generateDefaultParams() {
 		for (pv = conftab[i].conf->mac_params, 
 			pt = conftab[i].conf->mac->lib->params, j = 0; pv != NULL;
 						pv = pv->child, pt = pt->child, j++ ) {
+                        if ((pv == NULL) ^ (pt == NULL)) {
+                                fprintf(stderr, "Error: Number of arguments does not match library definition for %s\n",
+                                                conftab[i].conf->mac->lib->name);
+                                exit(1);
+                        }
+
 			fprintf(fp, "%s %s_%s_var%d = %s;\n", type_name(pt->type),
 			conftab[i].conf->id->name, conftab[i].conf->mac->lib->full_name,
 								j, pv->value->name);
@@ -113,6 +138,13 @@ void generateDefaultParams() {
 		for (pv = conftab[i].conf->radio_params, 
 			pt = conftab[i].conf->radio->lib->params, j = 0; pv != NULL;
 						pv = pv->child, pt = pt->child, j++ ) {
+
+                        if ((pv == NULL) ^ (pt == NULL)) {
+                                fprintf(stderr, "Error: Number of arguments does not match library definition for %s\n",
+                                                conftab[i].conf->radio->lib->name);
+                                exit(1);
+                        }
+
 			fprintf(fp, "%s %s_%s_var%d = %s;\n", type_name(pt->type), 
 			conftab[i].conf->id->name, 
 			conftab[i].conf->radio->lib->full_name, j, pv->value->name);
