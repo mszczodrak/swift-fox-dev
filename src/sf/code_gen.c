@@ -108,7 +108,6 @@ void finishCodeGeneration(int policy_counter) {
 
 
   generateCaches(event_counter, policy_counter);
-//  generateModules();
   generateDefaultParams();
 
   generateFennecEngineC();
