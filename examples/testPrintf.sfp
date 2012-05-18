@@ -1,9 +1,0 @@
-configuration test { testPrintf() 
-			none none
-			none
-			none none
-			none
-			}
-
-start test
-
