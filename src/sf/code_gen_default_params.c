@@ -28,7 +28,6 @@ void generateDefaultParams() {
 	}
 	fprintf(fp, "\n");
 
-	printf("defaults_pppp\n");
 	/* generate structure with default parameters for each module of a given configuration */
 
 	for( i = 1; i < conf_counter; i++ ) {
@@ -68,7 +67,6 @@ void generateDefaultParams() {
 			}
 			fprintf(fp, "};\n");
 
-	printf("defaults_pppp _3\n");
 		/* network default parameter values */
 		for (pv = conftab[i].conf->net_params, 
 			pt = conftab[i].conf->net->lib->params, j = 0; pv != NULL; 

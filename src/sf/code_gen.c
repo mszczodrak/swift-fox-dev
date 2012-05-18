@@ -107,25 +107,18 @@ void finishCodeGeneration(int policy_counter) {
     exit(1);
   }
 
- printf("the_finish\n");
-
   generateCaches(event_counter, policy_counter);
- printf("the_finish\n");
   generateDefaultParams();
 
- printf("the_finish\n");
   generateFennecEngineC();
   generateEventC();
 
- printf("the_finish\n");
   generateFennecEngineP();
   generateEventP(event_counter);
 
- printf("the_finish\n");
   generateParams();
   generateGlobals();
 
- printf("the_finish\n");
   setFennecExtra();
 }
 

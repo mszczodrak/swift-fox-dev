@@ -300,7 +300,6 @@ conf_level: LEVEL CONSTANT
 
 module: IDENTIFIER OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS
 		{
-			printf("hello id () %s\n", $1->name);
 			$$ = proc_module($1->name);
 			$$->params = $3;
 		}		
