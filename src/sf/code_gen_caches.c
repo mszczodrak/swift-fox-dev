@@ -30,6 +30,7 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	fprintf(fp, "#define NUMBER_OF_CONFIGURATIONS  %d\n", conf_counter);
 	fprintf(fp, "#define INTERNAL_POLICY_CONFIGURATION_ID  %d\n\n", policy_conf_id);
+	fprintf(fp, "#define NUMBER_OF_POLICIES  %d\n\n", policy_counter);
 	fprintf(fp, "#include <Fennec.h>\n");
 	fprintf(fp, "#include \"ff_defaults.h\"\n\n");
 
@@ -221,38 +222,7 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	fprintf(fp, "nx_struct fennec_policy policies[%d];\n\n", policy_counter);
 	fprintf(fp, "bool control_unit_support;\n\n");
-	fprintf(fp, "module_t get_protocol(layer_t layer, conf_t conf);\n\n");
 	fprintf(fp, "nxle_uint16_t event_mask;\n\n");
-
-	fprintf(fp, "void checkEvent() {\n");
-
-	if (policy_counter > 0) {
-		fprintf(fp, "    uint8_t i;\n");
-		fprintf(fp, "    for( i=0; i < %d; i++ ) {\n", policy_counter);
-		fprintf(fp, "      if (((policies[i].src_conf == ANY) || (policies[i].src_conf == active_state))\n");
-		fprintf(fp, "         && (policies[i].event_mask == event_mask)) {\n");
-		fprintf(fp, "        signal PolicyCache.newConf( policies[i].dst_conf );\n");
-		fprintf(fp, "      }\n");
-		fprintf(fp, "    }\n");
-	}
-	fprintf(fp, "}\n\n");
-
-	fprintf(fp, "bool eventStatus(uint16_t event_num) {\n");
-
-	if (policy_counter > 0) {
-		fprintf(fp, "    uint8_t i;\n");
-		fprintf(fp, "    for( i=0; i < %d; i++ ){\n", policy_counter);
-		fprintf(fp, "      if (((policies[i].src_conf == ANY) || (policies[i].src_conf == active_state)) &&\n");
-		fprintf(fp, "                                       (policies[i].event_mask & (1 << event_num))) {\n");
-		fprintf(fp, "        return 1;\n");
-		fprintf(fp, "      }\n");
-		fprintf(fp, "    }\n");
-		fprintf(fp, "    return 0;\n");
-	} else {
-		fprintf(fp, "    return 0;\n");
-	}
-
-	fprintf(fp, "}\n\n");
 	fprintf(fp, "#endif\n\n");
 
 	fclose(fp);
