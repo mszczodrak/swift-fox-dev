@@ -9,7 +9,7 @@ configuration state2 { 	blink( 1, 2048)
 			nullRadio()}
 
 
-#event-condition t1 {timer = 10sec @ 2}
+event-condition t1 {timer = 10sec @ 2}
 
 #from b0 goto b1 when t1
 #from b1 goto b0 when t1

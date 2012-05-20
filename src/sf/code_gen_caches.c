@@ -153,95 +153,110 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "};\n\n");
 
 
-	fprintf(fp, "struct fennec_event eventsTable[%d] = {\n\n", event_counter);
+	fprintf(fp, "struct fennec_event eventsTable[%d] = {\n", event_counter);
 
-	for ( i = 0; i < event_counter; i++) {
+	for ( i = 0; ; ) {
 		fprintf(fp, "\t{\n");
 		fprintf(fp, "\t.operation = %d,\n", evtab[i].op);
 		fprintf(fp, "\t.value = %d,\n", evtab[i].value);
 
 		if (evtab[i].scale == NULL) {
-			fprintf(fp, "\t.scale = eventsScales[0],\n");
+			fprintf(fp, "\t.scale = 0,\n");
 		} else {
-			fprintf(fp, "\t.scale = eventsScales[%d],\n", evtab[i].scale->value);
+			fprintf(fp, "\t.scale = %d,\n", evtab[i].scale->value);
 		}
+
 		if (evtab[i].addr == UNKNOWN) {
 			fprintf(fp, "\t.addr = TOS_NODE_ID,\n");
 		} else {
 			fprintf(fp, "\t.addr = %d\n", evtab[i].addr);
 		}
-		fprintf(fp, "\t},\n");
+		if (++i < event_counter) {
+			fprintf(fp, "\t},\n");
+		} else {
+			fprintf(fp, "\t}\n");
+			break;
+		}
 	}
 
+
 /*
-  struct evtab *ev;
-  for(ev = evtab; ev < &evtab[NEVS]; ev++) {
-    if (ev->name) {
+	struct evtab *ev;
+	for(ev = evtab; ev < &evtab[NEVS]; ev++) {
+		if (ev->name) {
 
-      fprintf(fp, "\t}\n");
+			fprintf(fp, "\t}\n");
 
-      fprintf(tmp_confs, "      eventsTable[%d].operation = %s;\n", ev->num-1, relopToLetter(ev->op));
-      fprintf(tmp_confs, "      eventsTable[%d].value = %d;\n", ev->num-1, ev->value);
+			fprintf(tmp_confs, "      eventsTable[%d].operation = %s;\n", 
+							ev->num-1, relopToLetter(ev->op));
+			fprintf(tmp_confs, "      eventsTable[%d].value = %d;\n", 
+							ev->num-1, ev->value);
 
-      if (ev->scale == NULL) {
-        fprintf(tmp_confs, "      eventsTable[%d].scale = eventsScales[0];\n", ev->num-1);
-      } else {
-        fprintf(tmp_confs, "      eventsTable[%d].scale = eventsScales[%d];\n", ev->num-1, ev->scale->value);
-      }
-      if (ev->addr == UNKNOWN) {
-        fprintf(tmp_confs, "      eventsTable[%d].addr = TOS_NODE_ID;\n\n", ev->num-1);
-      } else {
-        fprintf(tmp_confs, "      eventsTable[%d].addr = %d;\n\n", ev->num-1, ev->addr);
-      }
-      fprintf(fp, "\t{\n");
-      fprintf(fp, "\t,\n");
+			if (ev->scale == NULL) {
+				fprintf(tmp_confs, "      eventsTable[%d].scale = eventsScales[0];\n", 
+							ev->num-1);
+			} else {
+				fprintf(tmp_confs, "      eventsTable[%d].scale = eventsScales[%d];\n", 
+							ev->num-1, ev->scale->value);
+			}
 
-    } else {
-      break;
-    }
-  }
+			if (ev->addr == UNKNOWN) {
+				fprintf(tmp_confs, "      eventsTable[%d].addr = TOS_NODE_ID;\n\n", 
+							ev->num-1);
+			} else {
+				fprintf(tmp_confs, "      eventsTable[%d].addr = %d;\n\n", 
+							ev->num-1, ev->addr);
+			}
+			fprintf(fp, "\t{\n");
+			fprintf(fp, "\t,\n");
+
+		} else {
+			break;
+		}
+	}
 */
-  fprintf(fp, "};\n\n");
+
+	fprintf(fp, "};\n\n");
 
 
-  fprintf(fp, "nx_struct fennec_policy policies[%d];\n\n", policy_counter);
-  fprintf(fp, "bool control_unit_support;\n\n");
-  fprintf(fp, "module_t get_protocol(layer_t layer, conf_t conf);\n\n");
-  fprintf(fp, "nxle_uint16_t event_mask;\n\n");
+	fprintf(fp, "nx_struct fennec_policy policies[%d];\n\n", policy_counter);
+	fprintf(fp, "bool control_unit_support;\n\n");
+	fprintf(fp, "module_t get_protocol(layer_t layer, conf_t conf);\n\n");
+	fprintf(fp, "nxle_uint16_t event_mask;\n\n");
 
-  fprintf(fp, "void checkEvent() {\n");
+	fprintf(fp, "void checkEvent() {\n");
 
-  if (policy_counter > 0) {
-  	fprintf(fp, "    uint8_t i;\n");
-	fprintf(fp, "    for( i=0; i < %d; i++ ) {\n", policy_counter);
-	fprintf(fp, "      if (((policies[i].src_conf == ANY) || (policies[i].src_conf == active_state))\n");
-	fprintf(fp, "         && (policies[i].event_mask == event_mask)) {\n");
-	fprintf(fp, "        signal PolicyCache.newConf( policies[i].dst_conf );\n");
-	fprintf(fp, "      }\n");
-	fprintf(fp, "    }\n");
-  }
-  fprintf(fp, "}\n\n");
+	if (policy_counter > 0) {
+		fprintf(fp, "    uint8_t i;\n");
+		fprintf(fp, "    for( i=0; i < %d; i++ ) {\n", policy_counter);
+		fprintf(fp, "      if (((policies[i].src_conf == ANY) || (policies[i].src_conf == active_state))\n");
+		fprintf(fp, "         && (policies[i].event_mask == event_mask)) {\n");
+		fprintf(fp, "        signal PolicyCache.newConf( policies[i].dst_conf );\n");
+		fprintf(fp, "      }\n");
+		fprintf(fp, "    }\n");
+	}
+	fprintf(fp, "}\n\n");
 
-  fprintf(fp, "bool eventStatus(uint16_t event_num) {\n");
+	fprintf(fp, "bool eventStatus(uint16_t event_num) {\n");
 
-  if (policy_counter > 0) {
-    fprintf(fp, "    uint8_t i;\n");
-    fprintf(fp, "    for( i=0; i < %d; i++ ){\n", policy_counter);
-    fprintf(fp, "      if (((policies[i].src_conf == ANY) || (policies[i].src_conf == active_state)) &&\n");
-    fprintf(fp, "                                       (policies[i].event_mask & (1 << event_num))) {\n");
-    fprintf(fp, "        return 1;\n");
-    fprintf(fp, "      }\n");
-    fprintf(fp, "    }\n");
-    fprintf(fp, "    return 0;\n");
-  } else {
-    fprintf(fp, "    return 0;\n");
-  }
+	if (policy_counter > 0) {
+		fprintf(fp, "    uint8_t i;\n");
+		fprintf(fp, "    for( i=0; i < %d; i++ ){\n", policy_counter);
+		fprintf(fp, "      if (((policies[i].src_conf == ANY) || (policies[i].src_conf == active_state)) &&\n");
+		fprintf(fp, "                                       (policies[i].event_mask & (1 << event_num))) {\n");
+		fprintf(fp, "        return 1;\n");
+		fprintf(fp, "      }\n");
+		fprintf(fp, "    }\n");
+		fprintf(fp, "    return 0;\n");
+	} else {
+		fprintf(fp, "    return 0;\n");
+	}
 
-  fprintf(fp, "}\n\n");
-  fprintf(fp, "#endif\n\n");
+	fprintf(fp, "}\n\n");
+	fprintf(fp, "#endif\n\n");
 
-  fclose(fp);
-  fclose(tmp_confs);
+	fclose(fp);
+	fclose(tmp_confs);
 }
 
 
@@ -283,29 +298,36 @@ void generateEvent() {
 
 void generatePolicy(struct policy* p) {
 
-  FILE *tmp_confs = fopen(TEMP_CONF_FILE, "a");
+	FILE *tmp_confs = fopen(TEMP_CONF_FILE, "a");
 
-  if (tmp_confs == NULL) {
-    fprintf(stderr, "You do not have a permission to write into file: %s\n", TEMP_CONF_FILE);
-    exit(1);
-  }
+	if (tmp_confs == NULL) {
+		fprintf(stderr, "You do not have a permission to write into file: %s\n", 
+				TEMP_CONF_FILE);
+		exit(1);
+	}
 
-  int policy_num = p->counter;
+	int policy_num = p->counter;
 
-  fprintf(tmp_confs, "      policies[%d].src_conf = %d;\n", policy_num, p->from->value);
-  fprintf(tmp_confs, "      policies[%d].event_mask = %d;\n", policy_num, p->mask_l);
-  fprintf(tmp_confs, "      policies[%d].dst_conf = %d;\n\n", policy_num, p->to->value);
+	fprintf(tmp_confs, "      policies[%d].src_conf = %d;\n", 
+						policy_num, p->from->value);
+	fprintf(tmp_confs, "      policies[%d].event_mask = %d;\n", 
+						policy_num, p->mask_l);
+	fprintf(tmp_confs, "      policies[%d].dst_conf = %d;\n\n", 
+						policy_num, p->to->value);
 
-  if (p->mask_r > -1) {
-    ++policy_num;
-    fprintf(tmp_confs, "      policies[%d].src_conf = %d;\n", policy_num, p->from->value);
-    fprintf(tmp_confs, "      policies[%d].event_mask = %d;\n", policy_num, p->mask_r);
-    fprintf(tmp_confs, "      policies[%d].dst_conf = %d;\n\n", policy_num, p->to->value);
-  }
+	if (p->mask_r > -1) {
+		++policy_num;
+		fprintf(tmp_confs, "      policies[%d].src_conf = %d;\n", 
+						policy_num, p->from->value);
+		fprintf(tmp_confs, "      policies[%d].event_mask = %d;\n", 
+						policy_num, p->mask_r);
+		fprintf(tmp_confs, "      policies[%d].dst_conf = %d;\n\n", 
+						policy_num, p->to->value);
+	}
 
-  fclose(tmp_confs);
+	fclose(tmp_confs);
 }
 
 void generateInitial(struct initnode *i) {
-  active_state = i->init;
+	active_state = i->init;
 }
