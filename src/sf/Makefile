@@ -6,7 +6,7 @@ CFLAGS+=-I$(FENNEC_FOX_LIB)/Fennec/ -DSWIFT_FOX
 LDFLAGS=-ly -ll
 SRCS=traverse.o utils.o sem_check.o code_gen_engine.o \
         code_gen_caches.o code_gen_default_params.o \
-        code_gen_params.o code_gen_globals.o code_gen.o
+	code_gen_events.o code_gen_params.o code_gen_globals.o code_gen.o
 
 prefix=/usr/local
 exec_prefix=$(prefix)

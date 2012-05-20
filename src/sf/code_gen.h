@@ -15,9 +15,6 @@
 #include "sf.h"
 #include "traverse.h"
 
-extern char *eventsC;
-extern char *eventsM;
-
 extern int conf_counter;
 extern int module_id_counter;
 extern int event_scale_counter;
