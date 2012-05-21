@@ -158,19 +158,19 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	for ( i = 0; ; ) {
 		fprintf(fp, "\t{\n");
-		fprintf(fp, "\t.operation = %d,\n", evtab[i].op);
-		fprintf(fp, "\t.value = %d,\n", evtab[i].value);
+		fprintf(fp, "\t\t.operation = %s,\n", relopToLetter(evtab[i].op));
+		fprintf(fp, "\t\t.value = %d,\n", evtab[i].value);
 
 		if (evtab[i].scale == NULL) {
-			fprintf(fp, "\t.scale = 0,\n");
+			fprintf(fp, "\t\t.scale = 0,\n");
 		} else {
-			fprintf(fp, "\t.scale = %d,\n", evtab[i].scale->value);
+			fprintf(fp, "\t\t.scale = %d,\n", evtab[i].scale->value);
 		}
 
 		if (evtab[i].addr == UNKNOWN) {
-			fprintf(fp, "\t.addr = TOS_NODE_ID,\n");
+			fprintf(fp, "\t\t.addr = TOS_NODE_ID,\n");
 		} else {
-			fprintf(fp, "\t.addr = %d\n", evtab[i].addr);
+			fprintf(fp, "\t\t.addr = %d\n", evtab[i].addr);
 		}
 		if (++i < event_counter) {
 			fprintf(fp, "\t},\n");
