@@ -221,7 +221,7 @@ traverse_policy(struct policy* p, int f) {
 			break;
         
        		case TREE_GENERATE_CODE:
-			generatePolicy(p);
+			proc_policy(p);
 			break;
 
        		default:

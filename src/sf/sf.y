@@ -495,15 +495,19 @@ policy: FROM from_configurations GOTO IDENTIFIER WHEN when_events newlines
 			$$->mask_l	= $6;
 			$$->counter	= policy_counter;
 
+			if (proc_policy($$)) {
+				fprintf(stderr, "Failed to store policy\n");
+				exit(1);
+			}
 			++policy_counter;
 		}
 
+/*
+
 	|	FROM from_configurations GOTO IDENTIFIER WHEN when_events OR when_events newlines
                 {
-                        /* policy node */
                         $$              = calloc(1, sizeof(struct policy));
 
-                        /* link child nodes */
                         $$->from        = $2;
                         $$->to          = $4;
 
@@ -516,6 +520,7 @@ policy: FROM from_configurations GOTO IDENTIFIER WHEN when_events newlines
                         ++policy_counter;
                         ++policy_counter;
                 }
+*/
 
 	;
 
@@ -1010,6 +1015,19 @@ proc_module(char *s) {
         }
         yyerror("modtab is full");
 }
+
+/* store policy */
+int
+proc_policy(struct policy *p) {
+
+	poltab[policy_counter].policy_num = policy_counter;
+	poltab[policy_counter].src_conf = &p->from->value;
+	poltab[policy_counter].event_mask = &p->mask_r;
+	poltab[policy_counter].dst_conf = &p->to->value;
+
+	return 0;	
+}
+
 
 /* library lookup */
 struct libtab*

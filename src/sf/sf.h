@@ -15,6 +15,7 @@
 #define NLIBS 			256
 #define NEVS 			256
 #define NCONFS			256
+#define NPOLS			256
 
 #define TYPE_APPLICATION	1
 #define TYPE_NETWORK		2
@@ -198,5 +199,15 @@ struct program {
 	struct policies		*defpol;
 	struct initnode		*init;
 };
+
+
+struct poltab {
+        int                     policy_num;
+        int                     *src_conf;
+        int                     *event_mask;
+        int                     *dst_conf;
+} poltab[NPOLS];
+
+int proc_policy(struct policy *p);
 
 #endif

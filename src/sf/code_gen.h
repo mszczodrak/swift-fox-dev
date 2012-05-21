@@ -36,7 +36,6 @@ void generateDefaultParams();
 
 void generateEvent();
 
-void generatePolicy(struct policy* p);
 void generateInitial(struct initnode *i);
 
 void generateFennecEngineC();
