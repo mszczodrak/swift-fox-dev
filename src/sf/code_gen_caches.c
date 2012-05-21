@@ -222,11 +222,11 @@ void generateCaches(int event_counter, int policy_counter) {
 
 
         fprintf(fp, "nx_struct fennec_policy policies[%d] = {\n", policy_counter);
-	for(i = 0; i < policy_counter; i++) {
+	for(i = 0;  ; ) {
 		pp = &poltab[i];
 		if (pp->src_conf != NULL && pp->event_mask != NULL && 
 							pp->dst_conf != NULL) {
-//                        fprintf(fp, "\t}\n");
+			fprintf(fp, "\t}\n");
 //                      fprintf(fp, "\t\tpolicies[%d].src_conf = %d;\n",
 //                                      pp->policy_num, *pp->src_conf);
 //                      fprintf(fp, "\t\tpolicies[%d].event_mask = %d;\n",
@@ -234,10 +234,11 @@ void generateCaches(int event_counter, int policy_counter) {
 //                      fprintf(fp, "\t\tpolicies[%d].dst_conf = %d;\n\n",
 //                                      pp->policy_num, *pp->dst_conf);
 
-//                      if (++i < policy_counter) {
-//                              fprintf(fp, "\t},\n");
-//                      } else {
-//                              fprintf(fp, "\t}\n");
+			if (++i < policy_counter) {
+				fprintf(fp, "\t},\n");
+			} else {
+				fprintf(fp, "\t}\n");
+				break;
 		}
 	}
 
