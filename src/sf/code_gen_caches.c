@@ -46,11 +46,11 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "uint16_t active_state = %d;\n\n", active_state);
 	fprintf(fp, "struct fennec_configuration configurations[NUMBER_OF_CONFIGURATIONS] = {\n");
 	fprintf(fp, "\t{\n");
-	fprintf(fp, "\t.application = 0,\n");
-	fprintf(fp, "\t.network = 0,\n");
-	fprintf(fp, "\t.mac = 0,\n");
-	fprintf(fp, "\t.radio = 0,\n");
-	fprintf(fp, "\t.level = 0\n");
+	fprintf(fp, "\t\t.application = 0,\n");
+	fprintf(fp, "\t\t.network = 0,\n");
+	fprintf(fp, "\t\t.mac = 0,\n");
+	fprintf(fp, "\t\t.radio = 0,\n");
+	fprintf(fp, "\t\t.level = 0\n");
 	fprintf(fp, "\t}\n");
 
 	/* generate code specifying each configuration's definition */
@@ -59,14 +59,14 @@ void generateCaches(int event_counter, int policy_counter) {
 		fprintf(fp, "\t,\n");
 		fprintf(fp, "\t{\n");
     
-		fprintf(fp, "\t.application = %d,\n", conftab[i].conf->app->id);
-		fprintf(fp, "\t.network = %d,\n", conftab[i].conf->net->id);
-		fprintf(fp, "\t.mac = %d,\n", conftab[i].conf->mac->id);
-		fprintf(fp, "\t.radio = %d,\n", conftab[i].conf->radio->id);
+		fprintf(fp, "\t\t.application = %d,\n", conftab[i].conf->app->id);
+		fprintf(fp, "\t\t.network = %d,\n", conftab[i].conf->net->id);
+		fprintf(fp, "\t\t.mac = %d,\n", conftab[i].conf->mac->id);
+		fprintf(fp, "\t\t.radio = %d,\n", conftab[i].conf->radio->id);
 		if (conftab[i].conf->level == UNKNOWN) {
-			fprintf(fp, "\t.level = F_MINIMUM_STATE_LEVEL\n");
+			fprintf(fp, "\t\t.level = F_MINIMUM_STATE_LEVEL\n");
 		} else {
-			fprintf(fp, "\t.level = %d\n", conftab[i].conf->level);
+			fprintf(fp, "\t\t.level = %d\n", conftab[i].conf->level);
 		}
 		fprintf(fp, "\t}\n");
 	}
