@@ -10,6 +10,7 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	struct symtab *sp;
 	struct modtab *mp;
+	struct poltab *pp;
 	int i;
 
 	if (fp == NULL) {
@@ -220,6 +221,29 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "};\n\n");
 
 
+        fprintf(fp, "nx_struct fennec_policy policies[%d] = {\n", policy_counter);
+	for(i = 0; i < policy_counter; i++) {
+		pp = &poltab[i];
+		if (pp->src_conf != NULL && pp->event_mask != NULL && 
+							pp->dst_conf != NULL) {
+//                        fprintf(fp, "\t}\n");
+//                      fprintf(fp, "\t\tpolicies[%d].src_conf = %d;\n",
+//                                      pp->policy_num, *pp->src_conf);
+//                      fprintf(fp, "\t\tpolicies[%d].event_mask = %d;\n",
+//                                      pp->policy_num, *pp->event_mask);
+//                      fprintf(fp, "\t\tpolicies[%d].dst_conf = %d;\n\n",
+//                                      pp->policy_num, *pp->dst_conf);
+
+//                      if (++i < policy_counter) {
+//                              fprintf(fp, "\t},\n");
+//                      } else {
+//                              fprintf(fp, "\t}\n");
+		}
+	}
+
+
+
+
 	fprintf(fp, "nx_struct fennec_policy policies[%d];\n\n", policy_counter);
 	fprintf(fp, "bool control_unit_support;\n\n");
 	fprintf(fp, "nxle_uint16_t event_mask;\n\n");
@@ -264,38 +288,6 @@ void generateConfiguration(struct confnode* c) {
 
 void generateEvent() {
 
-}
-
-void generatePolicy(struct policy* p) {
-
-	FILE *tmp_confs = fopen(TEMP_CONF_FILE, "a");
-
-	if (tmp_confs == NULL) {
-		fprintf(stderr, "You do not have a permission to write into file: %s\n", 
-				TEMP_CONF_FILE);
-		exit(1);
-	}
-
-	int policy_num = p->counter;
-
-	fprintf(tmp_confs, "      policies[%d].src_conf = %d;\n", 
-						policy_num, p->from->value);
-	fprintf(tmp_confs, "      policies[%d].event_mask = %d;\n", 
-						policy_num, p->mask_l);
-	fprintf(tmp_confs, "      policies[%d].dst_conf = %d;\n\n", 
-						policy_num, p->to->value);
-
-	if (p->mask_r > -1) {
-		++policy_num;
-		fprintf(tmp_confs, "      policies[%d].src_conf = %d;\n", 
-						policy_num, p->from->value);
-		fprintf(tmp_confs, "      policies[%d].event_mask = %d;\n", 
-						policy_num, p->mask_r);
-		fprintf(tmp_confs, "      policies[%d].dst_conf = %d;\n\n", 
-						policy_num, p->to->value);
-	}
-
-	fclose(tmp_confs);
 }
 
 void generateInitial(struct initnode *i) {
