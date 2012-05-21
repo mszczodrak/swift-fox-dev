@@ -221,18 +221,15 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "};\n\n");
 
 
-        fprintf(fp, "nx_struct fennec_policy policies[%d] = {\n", policy_counter);
+        fprintf(fp, "struct fennec_policy policies[%d] = {\n", policy_counter);
 	for(i = 0;  ; ) {
 		pp = &poltab[i];
 		if (pp->src_conf != NULL && pp->event_mask != NULL && 
 							pp->dst_conf != NULL) {
-			fprintf(fp, "\t}\n");
-//                      fprintf(fp, "\t\tpolicies[%d].src_conf = %d;\n",
-//                                      pp->policy_num, *pp->src_conf);
-//                      fprintf(fp, "\t\tpolicies[%d].event_mask = %d;\n",
-//                                      pp->policy_num, *pp->event_mask);
-//                      fprintf(fp, "\t\tpolicies[%d].dst_conf = %d;\n\n",
-//                                      pp->policy_num, *pp->dst_conf);
+			fprintf(fp, "\t{\n");
+			fprintf(fp, "\t\t.src_conf = %d,\n", *pp->src_conf);
+			fprintf(fp, "\t\t.event_mask = %d,\n", *pp->event_mask);
+			fprintf(fp, "\t\t.dst_conf = %d\n\n", *pp->dst_conf);
 
 			if (++i < policy_counter) {
 				fprintf(fp, "\t},\n");
@@ -243,11 +240,9 @@ void generateCaches(int event_counter, int policy_counter) {
 		}
 	}
 
-	fprintf(fp, "}\n");
+	fprintf(fp, "};\n\n");
 
 
-
-	fprintf(fp, "nx_struct fennec_policy policies[%d];\n\n", policy_counter);
 	fprintf(fp, "bool control_unit_support;\n\n");
 	fprintf(fp, "nxle_uint16_t event_mask;\n\n");
 	fprintf(fp, "#endif\n\n");
