@@ -239,9 +239,11 @@ void generateCaches(int event_counter, int policy_counter) {
 			} else {
 				fprintf(fp, "\t}\n");
 				break;
+			}
 		}
 	}
 
+	fprintf(fp, "}\n");
 
 
 
