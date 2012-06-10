@@ -161,6 +161,7 @@ struct eventnodes {
 
 struct variable {
 	struct variables	*parent;
+	int			type;
 	struct symtab		*var_type;
 	struct symtab		*name;
 };

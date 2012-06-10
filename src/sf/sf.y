@@ -152,7 +152,7 @@ program: global_variables defined_configurations defined_events policies virtual
 global_variables: global_variables global_variable
                 {
 			/* global_variable set */
-			$$ 		= calloc(1, sizeof(struct variable));
+			$$ 		= calloc(1, sizeof(struct variables));
 
 			/* link the child nodes */
 			if ($1 != NULL)
@@ -176,6 +176,11 @@ global_variable:  param_type IDENTIFIER newlines
 			//printf("var %s\n", $1);
 
 			$$		= calloc(1, sizeof(struct variable));
+			$$->type 	= $1;
+			$$->name	= $2;
+		
+			printf("hello type %d\n", $$->type);
+			printf("hello type %s\n", $$->name->name);
 			
 			//$2->type	= "global_variable_type";
 			//$3->type	= "global_variable_name";
