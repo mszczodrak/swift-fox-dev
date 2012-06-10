@@ -51,8 +51,8 @@ struct eventnodes *last_evens = NULL;
 	struct policies		*pols;
 	struct initnode		*initp;
 	struct program		*prog;
-	struct sharedvariable	*shvar;
-	struct sharedvariables	*shvars;
+	struct variable	*shvar;
+	struct variables	*shvars;
 	struct paramtype	*mtl;
 	struct paramvalue	*parv;
 }
@@ -85,8 +85,8 @@ struct eventnodes *last_evens = NULL;
 %type <confsp>	defined_configurations
 %type <evep>	event_condition
 %type <evesp>	defined_events
-%type <shvars>	variable_definitions
-%type <shvar>	variable_definition
+%type <shvars>	global_variables
+%type <shvar>	global_variable
 %type <pol>	policy;
 %type <pols>	policies;
 %type <initp>	initial_configuration
@@ -128,7 +128,7 @@ swiftfox: library program
 		}
 	;
 
-program: variable_definitions defined_configurations defined_events policies virtual_networks initial_configuration 
+program: global_variables defined_configurations defined_events policies virtual_networks initial_configuration 
 		{
 			/* root node */
 			$$		= calloc(1, sizeof(struct program));
@@ -149,10 +149,10 @@ program: variable_definitions defined_configurations defined_events policies vir
 	;
 
 
-variable_definitions: variable_definitions variable_definition
+global_variables: global_variables global_variable
                 {
-			/* variable_definition set */
-			$$ 		= calloc(1, sizeof(struct sharedvariable));
+			/* global_variable set */
+			$$ 		= calloc(1, sizeof(struct variable));
 
 			/* link the child nodes */
 			if ($1 != NULL)
@@ -160,8 +160,8 @@ variable_definitions: variable_definitions variable_definition
 
 			$2->parent	= $$;
 
-			$$->shvars	= $1;
-			$$->shvar		= $2;
+			$$->vars	= $1;
+			$$->var		= $2;
 		}
         |       
 		{
@@ -170,14 +170,15 @@ variable_definitions: variable_definitions variable_definition
         ;
 
 
-variable_definition:  param_type IDENTIFIER newlines
+global_variable:  param_type IDENTIFIER newlines
 		{
+			printf("hello\n");
 			//printf("var %s\n", $1);
 
-			//$$		= calloc(1, sizeof(struct sharedvariable));
+			$$		= calloc(1, sizeof(struct variable));
 			
-			//$2->type	= "variable_definition_type";
-			//$3->type	= "variable_definition_name";
+			//$2->type	= "global_variable_type";
+			//$3->type	= "global_variable_name";
 
 			//$$->var_type	= $2;
 			//$$->name	= $3;
@@ -244,37 +245,29 @@ configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module ne
 
 			/* set ids */
 			
-//			if (strcmp($6->type, "keyword")) {
-				if ($6->id == 0) {
-					$6->id = module_id_counter;
-					$6->conf = $$;
-					++module_id_counter;
-				}
-//			}
+			if ($6->id == 0) {
+				$6->id = module_id_counter;
+				$6->conf = $$;
+				++module_id_counter;
+			}
 
-//			if (strcmp($8->type, "keyword")) {
-				if ($8->id == 0) {
-					$8->id = module_id_counter;
-					$8->conf = $$;
-					++module_id_counter;
-				}
-//			}
+			if ($8->id == 0) {
+				$8->id = module_id_counter;
+				$8->conf = $$;
+				++module_id_counter;
+			}
 
-//			if (strcmp($10->type, "keyword")) {
-				if ($10->id == 0) {
-					$10->id = module_id_counter;
-					$10->conf = $$;
-					++module_id_counter;
-				}
-//			}
+			if ($10->id == 0) {
+				$10->id = module_id_counter;
+				$10->conf = $$;
+				++module_id_counter;
+			}
 
-//			if (strcmp($12->type, "keyword")) {
-				if ($12->id == 0) {
-					$12->id = module_id_counter;
-					$12->conf = $$;
-					++module_id_counter;
-				}
-//			}
+			if ($12->id == 0) {
+				$12->id = module_id_counter;
+				$12->conf = $$;
+				++module_id_counter;
+			}
 
 			/* link child nodes */
 			$$->app			= $6;
@@ -802,6 +795,8 @@ next_module_type: newlines COMMA newlines param_type IDENTIFIER next_module_type
 
 param_type: IDENTIFIER
 		{
+			$$ = 0;
+
 			if (!strcmp($1->name, "uint8_t"))
 				$$ = TYPE_UINT8_T;
 
@@ -816,6 +811,7 @@ param_type: IDENTIFIER
 
 			if (!strcmp($1->name, "double"))
 				$$ = TYPE_DOUBLE;
+
 		}
 	;
 

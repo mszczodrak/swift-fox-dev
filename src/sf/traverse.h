@@ -9,8 +9,8 @@
 #include "sf.h"
 
 void traverse_program(struct program* p, int f, int policy_counter);
-void traverse_shared_variables(struct sharedvariables* sh, int f);
-void traverse_shared_variable(struct sharedvariable* sh, int f);
+void traverse_variables(struct variables* sh, int f);
+void traverse_variable(struct variable* sh, int f);
 void traverse_confnodes(struct confnodes* c, int f);
 void traverse_confnode(struct confnode* c, int f);
 void traverse_eventnodes(struct eventnodes* e, int f);

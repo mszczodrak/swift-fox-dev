@@ -159,17 +159,17 @@ struct eventnodes {
         struct eventnode	*even;
 };
 
-struct sharedvariable {
-	struct sharedvariables	*parent;
+struct variable {
+	struct variables	*parent;
 	struct symtab		*var_type;
 	struct symtab		*name;
 };
 
 
-struct sharedvariables {
-	struct sharedvariables	*parent;
-	struct sharedvariables	*shvars;
-	struct sharedvariable	*shvar;
+struct variables {
+	struct variables	*parent;
+	struct variables	*vars;
+	struct variable		*var;
 };
 
 struct policy {
@@ -193,7 +193,7 @@ struct initnode {
 };
 
 struct program {
-	struct sharedvariables	*shvars;
+	struct variables	*vars;
 	struct confnodes	*defcon;
 	struct eventnodes	*defeve;
 	struct policies		*defpol;

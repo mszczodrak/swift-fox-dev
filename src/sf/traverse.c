@@ -36,7 +36,7 @@ traverse_program(struct program* p, int f, int policy_counter){
 			/* traversal for code generation */
 			case TREE_GENERATE_CODE:
 				setFiles();
-				traverse_shared_variables(p->shvars, f);
+				traverse_variables(p->vars, f);
 				traverse_confnodes(p->defcon, f);
 				traverse_eventnodes(p->defeve, f);
 				traverse_policies(p->defpol, f);
@@ -52,22 +52,22 @@ traverse_program(struct program* p, int f, int policy_counter){
 
 /* shared variables traversal */
 void
-traverse_shared_variables(struct sharedvariables* sh, int f) {
+traverse_variables(struct variables* sh, int f) {
         if (sh != NULL){
                 switch (f) {
                         case TREE_TRAVERSE:
-                                traverse_shared_variables(sh->shvars, f);
-                                traverse_shared_variable(sh->shvar, f);
+                                traverse_variables(sh->vars, f);
+                                traverse_variable(sh->var, f);
                                 break;
 
                         case TREE_CHECK_SEMANTIC:
-                                traverse_shared_variables(sh->shvars, f);
-                                traverse_shared_variable(sh->shvar, f);
+                                traverse_variables(sh->vars, f);
+                                traverse_variable(sh->var, f);
                                 break;
 
                         case TREE_GENERATE_CODE:
-                                traverse_shared_variables(sh->shvars, f);
-                                traverse_shared_variable(sh->shvar, f);
+                                traverse_variables(sh->vars, f);
+                                traverse_variable(sh->var, f);
                                 break;
 
                         default:
@@ -77,7 +77,7 @@ traverse_shared_variables(struct sharedvariables* sh, int f) {
 }
 
 void
-traverse_shared_variable(struct sharedvariable* sh, int f) {
+traverse_variable(struct variable* sh, int f) {
         switch (f) {
                 case TREE_TRAVERSE:
                         break;

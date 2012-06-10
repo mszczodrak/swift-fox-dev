@@ -1,4 +1,4 @@
-uint8_t www
+uint98_t www
 
 configuration empty { nullApp() nullNet() nullMac() nullRadio()  }
 start empty
