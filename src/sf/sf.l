@@ -37,6 +37,7 @@ numtype		(C|F|msec|sec|min|hr)
 constant	({number}{numtype}?|ON|OFF)
 env_const	\$\(({letter}|{digit}|_)*\)
 path		(http:\/\/|\.|\/|{env_const})({letter}|{digit}|\.|\/|_|-|~)*
+variable_line	[uint8_t]
 comment		#.*
 
 %%
@@ -297,6 +298,13 @@ not		{
 			yylval.symp = symlook(yytext);
 #endif
 			return CONSTANT;		}
+
+{variable_line}	{
+#ifndef __DEBUG__
+			tokenpos += yyleng;
+			yylval.str = yytext;
+#endif
+			return VARIABLE_LINE;		}
 
 virtual-network	{
 			return VIRTUAL_NETWORK;		}

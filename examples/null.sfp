@@ -1,3 +1,5 @@
+uint8_t www
+
 configuration empty { nullApp() nullNet() nullMac() nullRadio()  }
 start empty
 

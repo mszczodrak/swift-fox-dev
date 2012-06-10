@@ -1,7 +1,7 @@
 %{
-/* Swift Fox Compiler v0.3
- * Authors: Marcin Szczodrak and Vasileios P. Kemerlis
- * Date: May 9, 2010
+/* Swift Fox Compiler
+ * Authors: Marcin Szczodrak
+ * Date: 6/9/2012
  */
 
 #include <stdlib.h>
@@ -69,6 +69,7 @@ struct eventnodes *last_evens = NULL;
 
 %token <symp>	CONSTANT
 %token <symp>	IDENTIFIER
+%token <str>	VARIABLE_LINE
 %token <libp>	PATH
 %token <ival>	RELOP
 %token <ival>	AND
@@ -84,8 +85,8 @@ struct eventnodes *last_evens = NULL;
 %type <confsp>	defined_configurations
 %type <evep>	event_condition
 %type <evesp>	defined_events
-%type <shvars>	shared_variables
-%type <shvar>	shared_variable
+%type <shvars>	variable_definitions
+%type <shvar>	variable_definition
 %type <pol>	policy;
 %type <pols>	policies;
 %type <initp>	initial_configuration
@@ -127,7 +128,7 @@ swiftfox: library program
 		}
 	;
 
-program: shared_variables defined_configurations defined_events policies virtual_networks initial_configuration 
+program: variable_definitions defined_configurations defined_events policies virtual_networks initial_configuration 
 		{
 			/* root node */
 			$$		= calloc(1, sizeof(struct program));
@@ -148,9 +149,9 @@ program: shared_variables defined_configurations defined_events policies virtual
 	;
 
 
-shared_variables: shared_variables shared_variable
+variable_definitions: variable_definitions variable_definition
                 {
-			/* shared_variable set */
+			/* variable_definition set */
 			$$ 		= calloc(1, sizeof(struct sharedvariable));
 
 			/* link the child nodes */
@@ -169,15 +170,17 @@ shared_variables: shared_variables shared_variable
         ;
 
 
-shared_variable: SHARED IDENTIFIER IDENTIFIER newlines
+variable_definition:  param_type IDENTIFIER newlines
 		{
-			$$		= calloc(1, sizeof(struct sharedvariable));
-			
-			$2->type	= "shared_variable_type";
-			$3->type	= "shared_variable_name";
+			//printf("var %s\n", $1);
 
-			$$->var_type	= $2;
-			$$->name	= $3;
+			//$$		= calloc(1, sizeof(struct sharedvariable));
+			
+			//$2->type	= "variable_definition_type";
+			//$3->type	= "variable_definition_name";
+
+			//$$->var_type	= $2;
+			//$$->name	= $3;
 		}
 
 
