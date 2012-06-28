@@ -51,8 +51,8 @@ struct eventnodes *last_evens = NULL;
 	struct policies		*pols;
 	struct initnode		*initp;
 	struct program		*prog;
-	struct variable	*shvar;
-	struct variables	*shvars;
+	struct variable		*var;
+	struct variables	*vars;
 	struct paramtype	*mtl;
 	struct paramvalue	*parv;
 }
@@ -85,8 +85,8 @@ struct eventnodes *last_evens = NULL;
 %type <confsp>	defined_configurations
 %type <evep>	event_condition
 %type <evesp>	defined_events
-%type <shvars>	global_variables
-%type <shvar>	global_variable
+%type <vars>	global_variables
+%type <var>	global_variable
 %type <pol>	policy;
 %type <pols>	policies;
 %type <initp>	initial_configuration
