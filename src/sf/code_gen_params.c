@@ -86,7 +86,7 @@ void module_params_h(struct modtab *mp) {
 	fprintf(fp, "#define _FF_MODULE_%s_H_\n\n", mp->lib->full_name);
 
 	for(pt = mp->lib->params; pt != NULL; pt = pt->child) {
-        	fprintf(fp, "%s %s;\n", type_name(pt->type), pt->name);
+        	fprintf(fp, "%s %s_%s;\n", type_name(pt->type), mp->lib->full_name, pt->name);
 	}
 
 	fprintf(fp, "\n");
@@ -101,7 +101,7 @@ void module_params_h(struct modtab *mp) {
 
 	fprintf(fp, "struct %s_params %s_data = {\n", mp->lib->full_name, mp->lib->full_name);
 	for(pt = mp->lib->params; pt != NULL; pt = pt->child) {
-		fprintf(fp, "\t&%s,\n", pt->name);
+		fprintf(fp, "\t&%s_%s,\n", mp->lib->full_name, pt->name);
 	}
 	fprintf(fp, "};\n\n");
 
