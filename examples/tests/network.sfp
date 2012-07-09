@@ -1,9 +1,8 @@
 
 configuration count { counter(1, 1024, NODE, 101) 
-			#nullNet()
 			ctp(101)
 			nullMac()
-			#nullRadio()}
-			cc2420(101, 26, 31, 0, 0, 10, 10, 1, 1, 1)}
+			cc2420(101, 26, 31, 0, 0, 10, 10, 1, 1, 1) 
+			}
 start count
 
