@@ -1,7 +1,4 @@
-configuration test { testPrintf() 
-			none none
-			none
-			}
+configuration test { printf() nullNet() nullMac() nullRadio() }
 
 start test
 

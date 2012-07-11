@@ -34,7 +34,7 @@ identifier	({letter}|_)({letter}|{digit}|_)*
 module_param	{digit}|,|{whitespace}|{fixed_keys}
 modules		{identifier}\({module_param}*\)
 numtype		(C|F|msec|sec|min|hr)
-constant	({number}{numtype}?|ON|OFF)
+constant	{digit}|{number}{numtype}?|ON|OFF
 env_const	\$\(({letter}|{digit}|_)*\)
 path		(http:\/\/|\.|\/|{env_const})({letter}|{digit}|\.|\/|_|-|~)*
 comment		#.*
