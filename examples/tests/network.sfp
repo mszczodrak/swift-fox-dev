@@ -1,9 +1,8 @@
 
-configuration count { counter(1, 1024, NODE, 101) 
-			ctp(101)
+configuration count { counter(1, 1024, NODE, 1) 
+			ctp(1)
 			nullMac()
-			cc2420(101, 26, 31, 0, 0, 10, 10, 1, 1, 1) 
-			#cc2420(1, 1, 1) 
+			cc2420(1, 26, 31, 0, 0, 10, 10, 1, 1, 1) 
 			}
 start count
 
