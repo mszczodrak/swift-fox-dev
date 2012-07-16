@@ -97,8 +97,7 @@ void generateCaches(int event_counter, int policy_counter) {
 			}
 		}
 
-		fprintf(fp, "\t\t.network_cache = &%s_%s,\n", 
-					conftab[i].conf->id->name, 
+		fprintf(fp, "\t\t.network_cache = &%s_data,\n", 
 					conftab[i].conf->net->lib->full_name);
                 for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
                         if (mp->lib != NULL && mp->lib->path && mp->id == conftab[i].conf->net->id) {
@@ -110,8 +109,7 @@ void generateCaches(int event_counter, int policy_counter) {
                         }
                 }
 
-		fprintf(fp, "\t\t.mac_cache = &%s_%s,\n", 
-					conftab[i].conf->id->name, 
+		fprintf(fp, "\t\t.mac_cache = &%s_data,\n", 
 					conftab[i].conf->mac->lib->full_name);
                 for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
                         if (mp->lib != NULL && mp->lib->path && mp->id == conftab[i].conf->mac->id) {
@@ -123,8 +121,7 @@ void generateCaches(int event_counter, int policy_counter) {
                         }
                 }
 
-		fprintf(fp, "\t\t.radio_cache = &%s_%s,\n", 
-					conftab[i].conf->id->name, 
+		fprintf(fp, "\t\t.radio_cache = &%s_data,\n", 
 					conftab[i].conf->radio->lib->full_name);
                 for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
                         if (mp->lib != NULL && mp->lib->path && mp->id == conftab[i].conf->radio->id) {
