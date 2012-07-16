@@ -33,6 +33,8 @@ int module_id_counter = 1;
 int active_state;
 
 struct eventnodes *last_evens = NULL;
+int file_status;
+char *file_name;
 
 %}
 
@@ -833,7 +835,7 @@ newline: LF
 
 char program_file[PATH_SZ];
 char library_file[PATH_SZ];
-int done = 0;
+char fennec_library_file[PATH_SZ];
 
 extern FILE *yyin;
 extern char *yytext;
@@ -851,25 +853,27 @@ start_parser(int argc, char *argv[]) {
 	/* init */
 	(void)memset(program_file, 0, PATH_SZ);
 	(void)memset(library_file, 0, PATH_SZ);
-	(void)snprintf(library_file, PATH_SZ, "%s.sfl", argv[1]);
+	(void)memset(fennec_library_file, 0, PATH_SZ);
+
 	(void)snprintf(program_file, PATH_SZ, "%s.sfp", argv[1]);
+	(void)snprintf(library_file, PATH_SZ, "%s.sfl", argv[1]);
+	(void)snprintf(fennec_library_file, PATH_SZ, "%s/%s", 
+			getenv("FENNEC_FOX_LIB"), STD_FENNEC_FOX_LIB);
+
+	/* cleanup */	
+	(void)atexit(gc);
+
+	initialize();
 	
 	/* process libraries */
 	lineno = 1;
 	tokenpos = 0;
 	
-	/* cleanup */	
-	(void)atexit(gc);
-
-	/* open the specific library file */
-	yyin = fopen(library_file, "r");
-
 	/* try fennec fox standart libray located at ($FENNEC_FOX_LIB)/STD_FENNEC_FOX_LIB */
-	if (!yyin) {
-		(void)snprintf(library_file, PATH_SZ, "%s/%s", getenv("FENNEC_FOX_LIB"), STD_FENNEC_FOX_LIB);
-		yyin = fopen(library_file, "r");
-	}
-   
+	yyin = fopen(fennec_library_file, "r");
+	file_status = 1;
+	file_name = fennec_library_file;
+
 	if (!yyin) {
 		/* failed */
 		(void)fprintf(stderr, 
@@ -880,12 +884,10 @@ start_parser(int argc, char *argv[]) {
 
 	/* main loop */
 	do {
-		initialize();
 		yyparse();
 
 	} while(!feof(yyin));
 
-	/* byeZzz */
 	return 0;
 }
 
@@ -893,10 +895,7 @@ start_parser(int argc, char *argv[]) {
 yyerror(char *errmsg) {
 	
 	/* error in program */
-	if (done) 
-		(void)fprintf(stderr, "\nsfc in program: %s\n", program_file);
-	else 
-		(void)fprintf(stderr, "\nsfc in library: %s\n", library_file);
+	(void)fprintf(stderr, "\nsfc in program: %s\n", file_name);
 
 	/* line */
         (void)fprintf(stderr, "%s at line %d, position %d:\n", errmsg, lineno, 
@@ -912,25 +911,42 @@ yyerror(char *errmsg) {
 int
 yywrap(void) {
 	/* finish; done with library and program */
-	if (done)
-		return 1;
-	else {
-		/* re-init */
-		lineno		= 1;
-		tokenpos	= 0;
+	printf("file status is %d\n", file_status);
 
-		/* open the program file */
-	       	yyin		= fopen(program_file, "r");
-        	if (!yyin) {
-			/* failed */
-			(void)fprintf(stderr, 
-				"%s: no such file or directory\n",
-				program_file);
-	                exit(1);
-        	}
+	switch(file_status) {
+		case 1:
+	        	/* open the specific library file */
+		        yyin 		= fopen(library_file, "r");
+			file_status 	= 2;
+			file_name 	= library_file;
 
-		/* done with the library */
-		done = 1;
+			if (yyin) {
+				/* re-init */
+				lineno		= 1;
+				tokenpos	= 0;
+				break;
+			}
+
+		case 2:
+			/* re-init */
+			lineno		= 1;
+			tokenpos	= 0;
+
+			/* open the program file */
+		       	yyin		= fopen(program_file, "r");
+			file_status 	= 3;
+			file_name 	= program_file;
+        		if (!yyin) {
+				/* failed */
+				(void)fprintf(stderr, 
+					"%s: no such file or directory\n",
+					program_file);
+		                exit(1);
+	        	}	
+			break;
+
+		case 3:
+			return 1;
 	}
 
 	/* default */
