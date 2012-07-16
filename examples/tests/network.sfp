@@ -1,6 +1,7 @@
 
-configuration count { counter(1, 1024, NODE, 1) 
-			ctp(1)
+configuration count { counter(1, 1024, 2, 1) 
+			nullNet()
+#			ctp(1)
 			nullMac()
 			cc2420(1, 26, 31, 0, 0, 10, 10, 1, 1, 1) 
 			}

@@ -31,41 +31,25 @@ void generateDefaultParams() {
 	/* generate structure with default parameters for each module of a given configuration */
 
 	for( i = 1; i < conf_counter; i++ ) {
-	/* application default parameter values */
-		for (pv = conftab[i].conf->app_params, 
-			pt = conftab[i].conf->app->lib->params, j = 0;  pv != NULL; 
-						pv = pv->child, pt = pt->child, j++ ) {
-
-			if ((pv == NULL) ^ (pt == NULL)) {
-				fprintf(stderr, "Error: Number of arguments does not match library definition for %s\n",
-						conftab[i].conf->app->lib->name);
-				exit(1);
-			}
-
-			fprintf(fp, "%s %s_%s_var%d = %s;\n", type_name(pt->type), 
-			conftab[i].conf->id->name, conftab[i].conf->app->lib->full_name,
-								j, pv->value->name);
-
-			
-
-		}
-		fprintf(fp, "\n"); 
-
+		/* application default parameter values */
 		fprintf(fp, "struct %s_params %s_%s = {\n",
         	        conftab[i].conf->app->lib->full_name, conftab[i].conf->id->name,
                 	conftab[i].conf->app->lib->full_name);
-	
-		for (pv = conftab[i].conf->app_params, j = 0; pv != NULL; j++ ) {
-			fprintf(fp, "\t&%s_%s_var%d", conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->full_name, j);
-	
-			pv = pv->child;
-			if (pv == NULL)
-				fprintf(fp, "\n");
-			else
-				fprintf(fp, ",\n");
-			}
-			fprintf(fp, "};\n");
+
+
+                for (pv = conftab[i].conf->app_params; pv != NULL; ) {
+                        fprintf(fp, "\t%s", pv->value->name);
+
+                        pv = pv->child;
+                        if (pv == NULL)
+                                fprintf(fp, "\n");
+                        else
+                                fprintf(fp, ",\n");
+                }
+                fprintf(fp, "};\n");
+
+
+
 
 		/* network default parameter values */
 		for (pv = conftab[i].conf->net_params, 
@@ -97,8 +81,9 @@ void generateDefaultParams() {
 				fprintf(fp, "\n");
 			else
 				fprintf(fp, ",\n");
-			}
-			fprintf(fp, "};\n");
+		}
+		fprintf(fp, "};\n");
+
 
 		/* mac default parameter values */
 		for (pv = conftab[i].conf->mac_params, 
