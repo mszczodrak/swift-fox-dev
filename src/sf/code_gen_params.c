@@ -55,11 +55,11 @@ void module_params_c(struct modtab *mp) {
 	for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
 		fprintf(fp, "\tcommand %s %sParams.get_%s() {\n",
 			type_name(pt->type), mp->lib->full_name, pt->name);
-		fprintf(fp, "\t\treturn *%s_data.%s;\n", mp->lib->full_name, pt->name);
+		fprintf(fp, "\t\treturn %s_data.%s;\n", mp->lib->full_name, pt->name);
 		fprintf(fp, "\t}\n\n");
 		fprintf(fp, "\tcommand error_t %sParams.set_%s(%s new_%s) {\n",
 			mp->lib->full_name, pt->name, type_name(pt->type), pt->name);
-		fprintf(fp, "\t\t*%s_data.%s = new_%s;\n",
+		fprintf(fp, "\t\t%s_data.%s = new_%s;\n",
 					mp->lib->full_name, pt->name, pt->name);
 		fprintf(fp, "\t\treturn SUCCESS;\n");
 		fprintf(fp, "\t}\n\n");
@@ -85,25 +85,20 @@ void module_params_h(struct modtab *mp) {
 	fprintf(fp, "#ifndef _FF_MODULE_%s_H_\n", mp->lib->full_name);
 	fprintf(fp, "#define _FF_MODULE_%s_H_\n\n", mp->lib->full_name);
 
-	for(pt = mp->lib->params; pt != NULL; pt = pt->child) {
-        	fprintf(fp, "%s %s_%s;\n", type_name(pt->type), mp->lib->full_name, pt->name);
-	}
-
-	fprintf(fp, "\n");
+//	for(pt = mp->lib->params; pt != NULL; pt = pt->child) {
+//        	fprintf(fp, "%s %s_%s;\n", type_name(pt->type), mp->lib->full_name, pt->name);
+//	}
+//	fprintf(fp, "\n");
 
 	fprintf(fp, "struct %s_params {\n", mp->lib->full_name);
 
 	for(pt = mp->lib->params; pt != NULL; pt = pt->child) {
-		fprintf(fp, "\t%s *%s;\n", type_name(pt->type), pt->name);
+		fprintf(fp, "\t%s %s;\n", type_name(pt->type), pt->name);
 	}
 
 	fprintf(fp, "};\n\n");
 
-	fprintf(fp, "struct %s_params %s_data = {\n", mp->lib->full_name, mp->lib->full_name);
-	for(pt = mp->lib->params; pt != NULL; pt = pt->child) {
-		fprintf(fp, "\t&%s_%s,\n", mp->lib->full_name, pt->name);
-	}
-	fprintf(fp, "};\n\n");
+	fprintf(fp, "struct %s_params %s_data;\n", mp->lib->full_name, mp->lib->full_name);
 
 	fprintf(fp, "#endif\n");
 
