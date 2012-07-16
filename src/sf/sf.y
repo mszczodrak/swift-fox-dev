@@ -911,8 +911,6 @@ yyerror(char *errmsg) {
 int
 yywrap(void) {
 	/* finish; done with library and program */
-	printf("file status is %d\n", file_status);
-
 	switch(file_status) {
 		case 1:
 	        	/* open the specific library file */
