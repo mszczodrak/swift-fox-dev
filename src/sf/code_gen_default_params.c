@@ -5,10 +5,8 @@ void generateDefaultParams() {
         char *full_path = get_sfc_path("", "ff_defaults.h");
         FILE *fp = fopen(full_path, "w");
 	struct paramvalue *pv;
-	struct paramtype *pt;
 	struct modtab *mp;
 	int i;
-	int j;
 
         if (fp == NULL) {
                 fprintf(stderr, "You do not have a permission to write \
