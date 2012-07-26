@@ -1,7 +1,11 @@
 
-configuration test { nullApp()
+configuration test { 	nullApp()
 			nullNet()
-			link(2, 1024)
-			cc2420(2, 26, 31, 0, 0, 10, 10, 1, 1, 1)}
+			link(10, 200)
+			# Mac test params:
+			# *src: mote id that sends hello beacon messages
+			# *delay_ms: frequency at which messages are sent
+			# 		(unit milliseconds).
+			cc2420(10, 26, 31, 0, 0, 0, 0, 0, 0, 0)}
 start test
 
