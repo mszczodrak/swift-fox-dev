@@ -1,0 +1,7 @@
+
+configuration test { nullApp()
+			nullNet()
+			link(2, 1024)
+			cc2420(2, 26, 31, 0, 0, 10, 10, 1, 1, 1)}
+start test
+
