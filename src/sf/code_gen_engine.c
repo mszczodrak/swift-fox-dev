@@ -112,8 +112,8 @@ void generateFennecEngineC() {
 
 //      fprintf(fp, "  FennecEngineP.%sResource <- %s.Resource;\n\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sRadioConfig <- %s.RadioConfig;\n\n", mp->lib->full_name, mp->lib->full_name);
-//      fprintf(fp, "  FennecEngineP.%sRadioPower <- %s.RadioPower;\n\n", mp->lib->full_name, mp->lib->full_name);
-//      fprintf(fp, "  FennecEngineP.%sRead <- %s.Read;\n\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp, "  FennecEngineP.%sRadioPower <- %s.RadioPower;\n\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp, "  FennecEngineP.%sReadRssi <- %s.ReadRssi;\n\n", mp->lib->full_name, mp->lib->full_name);
     }
   }
 
@@ -135,8 +135,8 @@ void generateFennecEngineC() {
 
 //      fprintf(fp, "  FennecEngineP.%sResource -> %s.Resource;\n\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sRadioConfig -> %s.RadioConfig;\n\n", mp->lib->full_name, mp->lib->full_name);
-//      fprintf(fp, "  FennecEngineP.%sRadioPower -> %s.RadioPower;\n\n", mp->lib->full_name, mp->lib->full_name);
-//      fprintf(fp, "  FennecEngineP.%sRead -> %s.Read;\n\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp, "  FennecEngineP.%sRadioPower -> %s.RadioPower;\n\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp, "  FennecEngineP.%sReadRssi -> %s.ReadRssi;\n\n", mp->lib->full_name, mp->lib->full_name);
     }
   }
 
@@ -243,8 +243,8 @@ void generateFennecEngineP() {
 
 //      fprintf(fp, "  provides interface Resource as %sResource;\n\n", mp->lib->full_name);
       fprintf(fp, "  provides interface RadioConfig as %sRadioConfig;\n\n", mp->lib->full_name);
-//      fprintf(fp, "  provides interface RadioPower as %sRadioPower;\n\n", mp->lib->full_name);
-//      fprintf(fp, "  provides interface Read as %sRead;\n\n", mp->lib->full_name);
+      fprintf(fp, "  provides interface RadioPower as %sRadioPower;\n\n", mp->lib->full_name);
+      fprintf(fp, "  provides interface Read<uint16_t> as %sReadRssi;\n\n", mp->lib->full_name);
     }
   }
 
@@ -264,8 +264,8 @@ void generateFennecEngineP() {
 
 //      fprintf(fp, "  uses interface Resource as %sResource;\n\n", mp->lib->full_name);
       fprintf(fp, "  uses interface RadioConfig as %sRadioConfig;\n\n", mp->lib->full_name);
-//      fprintf(fp, "  uses interface RadioPower as %sRadioPower;\n\n", mp->lib->full_name);
-//      fprintf(fp, "  uses interface Read as %sRead;\n\n", mp->lib->full_name);
+      fprintf(fp, "  uses interface RadioPower as %sRadioPower;\n\n", mp->lib->full_name);
+      fprintf(fp, "  uses interface Read<uint16_t> as %sReadRssi;\n\n", mp->lib->full_name);
     }
   }
 
@@ -1179,6 +1179,110 @@ void generateFennecEngineP() {
 
 
 
+  fprintf(fp,"  error_t RadioPower_startVReg(uint16_t module_id, uint8_t to_layer) {\n");
+//  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioPower.startVReg();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  error_t RadioPower_stopVReg(uint16_t module_id, uint8_t to_layer) {\n");
+//  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioPower.stopVReg();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  error_t RadioPower_startOscillator(uint16_t module_id, uint8_t to_layer) {\n");
+//  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioPower.startOscillator();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  error_t RadioPower_stopOscillator(uint16_t module_id, uint8_t to_layer) {\n");
+//  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioPower.stopOscillator();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  error_t RadioPower_rxOn(uint16_t module_id, uint8_t to_layer) {\n");
+//  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioPower.rxOn();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  error_t RadioPower_rfOff(uint16_t module_id, uint8_t to_layer) {\n");
+//  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioPower.rfOff();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  error_t ReadRssi_read(uint16_t module_id, uint8_t to_layer) {\n");
+//  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sReadRssi.read();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
 
 
 
@@ -1323,6 +1427,96 @@ void generateFennecEngineP() {
 //  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
+
+
+
+  fprintf(fp,"  void startVRegDone(uint16_t module_id, uint8_t to_layer) {\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+
+/*
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
+    }
+  }
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
+    }
+  }
+*/
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sRadioPower.startVRegDone();\n\n", mp->lib->full_name);
+    }
+  }
+//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
+//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  void startOscillatorDone(uint16_t module_id, uint8_t to_layer) {\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+
+/*
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
+    }
+  }
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
+    }
+  }
+*/
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sRadioPower.startOscillatorDone();\n\n", mp->lib->full_name);
+    }
+  }
+//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
+//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  void readRssiDone(uint16_t module_id, uint8_t to_layer, error_t error, uint16_t rssi) {\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+
+/*
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
+    }
+  }
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
+    }
+  }
+*/
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sReadRssi.readDone(error, rssi);\n\n", mp->lib->full_name);
+    }
+  }
+//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
+//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
 
 
 
@@ -1735,6 +1929,30 @@ void generateFennecEngineP() {
       fprintf(fp, "  }\n\n");
 
 
+      fprintf(fp, "  async command error_t %sRadioPower.startVReg() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioPower_startVReg(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async command error_t %sRadioPower.stopVReg() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioPower_stopVReg(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async command error_t %sRadioPower.startOscillator() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioPower_startOscillator(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async command error_t %sRadioPower.stopOscillator() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioPower_stopOscillator(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async command error_t %sRadioPower.rxOn() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioPower_rxOn(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async command error_t %sRadioPower.rfOff() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioPower_rfOff(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+
+      fprintf(fp, "  command error_t %sReadRssi.read() {\n", mp->lib->full_name);
+      fprintf(fp, "    return ReadRssi_read(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+
+
 
 
     }
@@ -1762,8 +1980,20 @@ void generateFennecEngineP() {
       fprintf(fp, "  event void %sRadioStatus.status(uint8_t layer, uint8_t status_flag) {\n", mp->lib->full_name);
       fprintf(fp, "    return status(%d, F_MAC, layer, status_flag);\n", mp->id);
       fprintf(fp, "  }\n\n");
+
       fprintf(fp, "  event void %sRadioConfig.syncDone(error_t error) {\n", mp->lib->full_name);
       fprintf(fp, "    return syncDone(%d, F_MAC, error);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+
+      fprintf(fp, "  async event void %sRadioPower.startVRegDone() {\n", mp->lib->full_name);
+      fprintf(fp, "    return startVRegDone(%d, F_MAC);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async event void %sRadioPower.startOscillatorDone() {\n", mp->lib->full_name);
+      fprintf(fp, "    return startOscillatorDone(%d, F_MAC);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+
+      fprintf(fp, "  event void %sReadRssi.readDone(error_t error, uint16_t rssi) {\n", mp->lib->full_name);
+      fprintf(fp, "    return readRssiDone(%d, F_MAC, error, rssi);\n", mp->id);
       fprintf(fp, "  }\n\n");
 
     }
