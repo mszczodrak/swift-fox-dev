@@ -110,7 +110,7 @@ void generateFennecEngineC() {
       fprintf(fp, "  FennecEngineP.%sRadioPacketAcknowledgements <- %s.RadioPacketAcknowledgements;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sRadioStatus <- %s.RadioStatus;\n\n", mp->lib->full_name, mp->lib->full_name);
 
-//      fprintf(fp, "  FennecEngineP.%sResource <- %s.Resource;\n\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp, "  FennecEngineP.%sRadioResource <- %s.RadioResource;\n\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sRadioConfig <- %s.RadioConfig;\n\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sRadioPower <- %s.RadioPower;\n\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sReadRssi <- %s.ReadRssi;\n\n", mp->lib->full_name, mp->lib->full_name);
@@ -133,7 +133,7 @@ void generateFennecEngineC() {
       fprintf(fp, "  FennecEngineP.%sRadioPacketAcknowledgements -> %s.RadioPacketAcknowledgements;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sRadioStatus -> %s.RadioStatus;\n\n", mp->lib->full_name, mp->lib->full_name);
 
-//      fprintf(fp, "  FennecEngineP.%sResource -> %s.Resource;\n\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp, "  FennecEngineP.%sRadioResource -> %s.RadioResource;\n\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sRadioConfig -> %s.RadioConfig;\n\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sRadioPower -> %s.RadioPower;\n\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sReadRssi -> %s.ReadRssi;\n\n", mp->lib->full_name, mp->lib->full_name);
@@ -241,7 +241,7 @@ void generateFennecEngineP() {
       fprintf(fp, "  provides interface PacketAcknowledgements as %sRadioPacketAcknowledgements;\n", mp->lib->full_name);
       fprintf(fp, "  provides interface ModuleStatus as %sRadioStatus;\n\n", mp->lib->full_name);
 
-//      fprintf(fp, "  provides interface Resource as %sResource;\n\n", mp->lib->full_name);
+      fprintf(fp, "  provides interface Resource as %sRadioResource;\n\n", mp->lib->full_name);
       fprintf(fp, "  provides interface RadioConfig as %sRadioConfig;\n\n", mp->lib->full_name);
       fprintf(fp, "  provides interface RadioPower as %sRadioPower;\n\n", mp->lib->full_name);
       fprintf(fp, "  provides interface Read<uint16_t> as %sReadRssi;\n\n", mp->lib->full_name);
@@ -262,7 +262,7 @@ void generateFennecEngineP() {
       fprintf(fp, "  uses interface PacketAcknowledgements as %sRadioPacketAcknowledgements;\n", mp->lib->full_name);
       fprintf(fp, "  uses interface ModuleStatus as %sRadioStatus;\n\n", mp->lib->full_name);
 
-//      fprintf(fp, "  uses interface Resource as %sResource;\n\n", mp->lib->full_name);
+      fprintf(fp, "  uses interface Resource as %sRadioResource;\n\n", mp->lib->full_name);
       fprintf(fp, "  uses interface RadioConfig as %sRadioConfig;\n\n", mp->lib->full_name);
       fprintf(fp, "  uses interface RadioPower as %sRadioPower;\n\n", mp->lib->full_name);
       fprintf(fp, "  uses interface Read<uint16_t> as %sReadRssi;\n\n", mp->lib->full_name);
@@ -1285,6 +1285,68 @@ void generateFennecEngineP() {
 
 
 
+  fprintf(fp,"  error_t RadioResource_request(uint16_t module_id, uint8_t to_layer) {\n");
+//  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioResource.request();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return FAIL;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  error_t RadioResource_immediateRequest(uint16_t module_id, uint8_t to_layer) {\n");
+//  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioResource.immediateRequest();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  error_t RadioResource_release(uint16_t module_id, uint8_t to_layer) {\n");
+//  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioResource.release();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  bool RadioResource_isOwner(uint16_t module_id, uint8_t to_layer) {\n");
+//  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioResource.isOwner();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+
+
 
 
   fprintf(fp,"  void sendDone(uint16_t module_id, uint8_t to_layer, message_t* msg, error_t error) {\n");
@@ -1515,6 +1577,43 @@ void generateFennecEngineP() {
 //  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
+
+
+
+  fprintf(fp,"  void granted(uint16_t module_id, uint8_t to_layer) {\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+
+/*
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
+    }
+  }
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
+    }
+  }
+*/
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sRadioResource.granted();\n\n", mp->lib->full_name);
+    }
+  }
+//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
+//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+
+
+
+
+
 
 
 
@@ -1952,6 +2051,19 @@ void generateFennecEngineP() {
       fprintf(fp, "    return ReadRssi_read(%d, F_RADIO);\n", mp->id);
       fprintf(fp, "  }\n\n");
 
+      fprintf(fp, "  async command error_t %sRadioResource.request() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioResource_request(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async command error_t %sRadioResource.immediateRequest() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioResource_immediateRequest(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async command error_t %sRadioResource.release() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioResource_release(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async command error_t %sRadioResource.isOwner() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioResource_isOwner(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+
 
 
 
@@ -1995,6 +2107,11 @@ void generateFennecEngineP() {
       fprintf(fp, "  event void %sReadRssi.readDone(error_t error, uint16_t rssi) {\n", mp->lib->full_name);
       fprintf(fp, "    return readRssiDone(%d, F_MAC, error, rssi);\n", mp->id);
       fprintf(fp, "  }\n\n");
+
+      fprintf(fp, "  event void %sRadioResource.granted() {\n", mp->lib->full_name);
+      fprintf(fp, "    return granted(%d, F_MAC);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+
 
     }
   }
