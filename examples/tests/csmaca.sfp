@@ -1,0 +1,9 @@
+
+configuration count { counter(1, 1024, 1, 2) 
+			nullNet()
+			csmaca(2, 26, 31, 0, 0, 10, 10, 1, 1, 1) 
+			cc2420(2, 26, 31, 0, 0, 10, 10, 1, 1, 1) 
+#			nullRadio()
+			}
+start count
+
