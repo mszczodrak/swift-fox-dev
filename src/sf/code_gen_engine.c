@@ -1011,6 +1011,7 @@ void generateFennecEngineP() {
   fprintf(fp,"  }\n\n");
 
 
+/*
   fprintf(fp,"  ieee_eui64_t RadioConfig_getExtAddr(uint16_t module_id, uint8_t to_layer) {\n");
 //  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
   fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
@@ -1024,7 +1025,7 @@ void generateFennecEngineP() {
   fprintf(fp,"        return (ieee_eui64_t) 0;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
+*/
 
   fprintf(fp,"  uint16_t RadioConfig_getShortAddr(uint16_t module_id, uint8_t to_layer) {\n");
 //  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
@@ -1101,18 +1102,17 @@ void generateFennecEngineP() {
   fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void RadioConfig_isAddressRecognitionEnabled(uint16_t module_id, uint8_t to_layer) {\n");
+  fprintf(fp,"  bool RadioConfig_isAddressRecognitionEnabled(uint16_t module_id, uint8_t to_layer) {\n");
 //  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
   fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
       fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        call %sRadioConfig.isAddressRecognitionEnabled();\n", mp->lib->full_name);
-      fprintf(fp,"        return;\n\n");
+      fprintf(fp,"        return call %sRadioConfig.isAddressRecognitionEnabled();\n\n", mp->lib->full_name);
     }
   }
   fprintf(fp,"      default:\n");
-  fprintf(fp,"        return;\n");
+  fprintf(fp,"        return 0;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
 
@@ -1138,8 +1138,7 @@ void generateFennecEngineP() {
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
       fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        call %sRadioConfig.setAutoAck(enableAutoAck, hwAutoAck);\n", mp->lib->full_name);
-      fprintf(fp,"        return;\n\n");
+      fprintf(fp,"        return call %sRadioConfig.setAutoAck(enableAutoAck, hwAutoAck);\n\n", mp->lib->full_name);
     }
   }
   fprintf(fp,"      default:\n");
@@ -1295,6 +1294,36 @@ void generateFennecEngineP() {
   fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  void syncDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+
+/*
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
+    }
+  }
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
+    }
+  }
+*/
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sRadioConfig.syncDone(error);\n\n", mp->lib->full_name);
+    }
+  }
+//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
+//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
 
 
   /* Interfaces with Applications */
@@ -1669,9 +1698,11 @@ void generateFennecEngineP() {
       fprintf(fp, "  command void %sRadioConfig.setChannel(uint8_t channel) {\n", mp->lib->full_name);
       fprintf(fp, "    return RadioConfig_setChannel(%d, F_RADIO, channel);\n", mp->id);
       fprintf(fp, "  }\n\n");
+/*
       fprintf(fp, "  command ieee_eui64_t %sRadioConfig.getExtAddr() {\n", mp->lib->full_name);
       fprintf(fp, "    return RadioConfig_getExtAddr(%d, F_RADIO);\n", mp->id);
       fprintf(fp, "  }\n\n");
+*/
       fprintf(fp, "  async command uint16_t %sRadioConfig.getShortAddr() {\n", mp->lib->full_name);
       fprintf(fp, "    return RadioConfig_getShortAddr(%d, F_RADIO);\n", mp->id);
       fprintf(fp, "  }\n\n");
@@ -1731,6 +1762,10 @@ void generateFennecEngineP() {
       fprintf(fp, "  event void %sRadioStatus.status(uint8_t layer, uint8_t status_flag) {\n", mp->lib->full_name);
       fprintf(fp, "    return status(%d, F_MAC, layer, status_flag);\n", mp->id);
       fprintf(fp, "  }\n\n");
+      fprintf(fp, "  event void %sRadioConfig.syncDone(error_t error) {\n", mp->lib->full_name);
+      fprintf(fp, "    return syncDone(%d, F_MAC, error);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+
     }
   }
 
