@@ -109,6 +109,11 @@ void generateFennecEngineC() {
       fprintf(fp, "  FennecEngineP.%sRadioAMPacket <- %s.RadioAMPacket;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sRadioPacketAcknowledgements <- %s.RadioPacketAcknowledgements;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sRadioStatus <- %s.RadioStatus;\n\n", mp->lib->full_name, mp->lib->full_name);
+
+//      fprintf(fp, "  FennecEngineP.%sResource <- %s.Resource;\n\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp, "  FennecEngineP.%sRadioConfig <- %s.RadioConfig;\n\n", mp->lib->full_name, mp->lib->full_name);
+//      fprintf(fp, "  FennecEngineP.%sRadioPower <- %s.RadioPower;\n\n", mp->lib->full_name, mp->lib->full_name);
+//      fprintf(fp, "  FennecEngineP.%sRead <- %s.Read;\n\n", mp->lib->full_name, mp->lib->full_name);
     }
   }
 
@@ -127,6 +132,11 @@ void generateFennecEngineC() {
       fprintf(fp, "  FennecEngineP.%sRadioAMPacket -> %s.RadioAMPacket;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sRadioPacketAcknowledgements -> %s.RadioPacketAcknowledgements;\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sRadioStatus -> %s.RadioStatus;\n\n", mp->lib->full_name, mp->lib->full_name);
+
+//      fprintf(fp, "  FennecEngineP.%sResource -> %s.Resource;\n\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp, "  FennecEngineP.%sRadioConfig -> %s.RadioConfig;\n\n", mp->lib->full_name, mp->lib->full_name);
+//      fprintf(fp, "  FennecEngineP.%sRadioPower -> %s.RadioPower;\n\n", mp->lib->full_name, mp->lib->full_name);
+//      fprintf(fp, "  FennecEngineP.%sRead -> %s.Read;\n\n", mp->lib->full_name, mp->lib->full_name);
     }
   }
 
@@ -230,6 +240,11 @@ void generateFennecEngineP() {
       fprintf(fp, "  provides interface AMPacket as %sRadioAMPacket;\n", mp->lib->full_name);
       fprintf(fp, "  provides interface PacketAcknowledgements as %sRadioPacketAcknowledgements;\n", mp->lib->full_name);
       fprintf(fp, "  provides interface ModuleStatus as %sRadioStatus;\n\n", mp->lib->full_name);
+
+//      fprintf(fp, "  provides interface Resource as %sResource;\n\n", mp->lib->full_name);
+      fprintf(fp, "  provides interface RadioConfig as %sRadioConfig;\n\n", mp->lib->full_name);
+//      fprintf(fp, "  provides interface RadioPower as %sRadioPower;\n\n", mp->lib->full_name);
+//      fprintf(fp, "  provides interface Read as %sRead;\n\n", mp->lib->full_name);
     }
   }
 
@@ -246,6 +261,11 @@ void generateFennecEngineP() {
       fprintf(fp, "  uses interface AMPacket as %sRadioAMPacket;\n", mp->lib->full_name);
       fprintf(fp, "  uses interface PacketAcknowledgements as %sRadioPacketAcknowledgements;\n", mp->lib->full_name);
       fprintf(fp, "  uses interface ModuleStatus as %sRadioStatus;\n\n", mp->lib->full_name);
+
+//      fprintf(fp, "  uses interface Resource as %sResource;\n\n", mp->lib->full_name);
+      fprintf(fp, "  uses interface RadioConfig as %sRadioConfig;\n\n", mp->lib->full_name);
+//      fprintf(fp, "  uses interface RadioPower as %sRadioPower;\n\n", mp->lib->full_name);
+//      fprintf(fp, "  uses interface Read as %sRead;\n\n", mp->lib->full_name);
     }
   }
 
@@ -940,6 +960,228 @@ void generateFennecEngineP() {
   fprintf(fp,"  }\n\n");
 
 
+
+
+
+
+  /* Radio Only Interfaces */
+
+  fprintf(fp,"  error_t RadioConfig_sync() {\n");
+  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioConfig.sync();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  uint8_t RadioConfig_getChannel() {\n");
+  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioConfig.getChannel();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  void RadioConfig_setChannel(uint8_t channel) {\n");
+  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioConfig.setChannelchannel();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  uint16_t_t RadioConfig_getExtAddr() {\n");
+  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioConfig.getExtAddr();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  uint16_t RadioConfig_getShortAddr() {\n");
+  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioConfig.getShortAddr();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  void RadioConfig_setShortAddr(uint16_t address) {\n");
+  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioConfig.setShortAddr(address);\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  uint16_t RadioConfig_getPanAddr() {\n");
+  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioConfig.getPanAddr();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  void RadioConfig_setPanAddr() {\n");
+  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioConfig.setPanAddr();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  void RadioConfig_setAddressRecognition(bool enableAddressRecognition, bool useHwAddressRecognition) {\n");
+  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioConfig.setAddressRecognition(enableAddressRecognition, useHwAddressRecognition);\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  async void RadioConfig_isAddressRecognitionEnabled() {\n");
+  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioConfig.isAddressRecognitionEnabled();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  async bool RadioConfig_isHwAddressRecognitionDefault() {\n");
+  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioConfig.isHwAddressRecognitionDefault();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  void RadioConfig_setAutoAck(bool enableAutoAck, bool hwAutoAck) {\n");
+  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioConfig.setAutoAck(enableAutoAck, hwAutoAck);\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  async bool RadioConfig_isHwAutoAckDefault() {\n");
+  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioConfig.isHwAutoAckDeault();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  async bool RadioConfig_isAutoAckEnabled() {\n");
+  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return call %sRadioConfig.isAutoAckEnabled();\n\n", mp->lib->full_name);
+    }
+  }
+  fprintf(fp,"      default:\n");
+  fprintf(fp,"        return 0;\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+
+
+
+
+
+
   fprintf(fp,"  void sendDone(uint16_t module_id, uint8_t to_layer, message_t* msg, error_t error) {\n");
   fprintf(fp,"    switch( get_module_id(get_state_id(), msg->conf, to_layer) ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -1414,6 +1656,54 @@ void generateFennecEngineP() {
       fprintf(fp, "  async command bool %sRadioPacketAcknowledgements.wasAcked(message_t* msg) {\n", mp->lib->full_name);
       fprintf(fp, "    return PacketAcknowledgements_wasAcked(%d, F_RADIO, msg);\n", mp->id);
       fprintf(fp, "  }\n\n");
+
+
+      fprintf(fp, "  command error_t %sRadioConfig.sync() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioConfig_sync(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  command uint16_t %sRadioConfig.getChannel() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioConfig_getChannel(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  command void %sRadioConfig.setChannel(uint16_t channel) {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioConfig_setChannel(%d, F_RADIO, channel);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  command ieee_eui64_t %sRadioConfig.getExtAddr() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioConfig_getExtAddr(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async command uint16_t %sRadioConfig.getShortAddr() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioConfig_getShortAddr(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  command void %sRadioConfig.setShortAddr(uint16_t address) {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioConfig_setShortAddr(%d, F_RADIO, address);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async command uint16_t %sRadioConfig.getPanAddr() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioConfig_getPanAddr(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  command void %sRadioConfig.setPanAddr(uint16_t address) {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioConfig_setPanAddr(%d, F_RADIO, address);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  command void %sRadioConfig.setAddressRecognition(bool enableAddressRecognition, bool useHwAddressRecognition) {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioConfig_setAddressRecognition(%d, F_RADIO, enableAddressRecognition, useHwAddressRecognition);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async command bool %sRadioConfig.isAddressRecognitionEnabled() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioConfig_isAddressRecognitionEnabled(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async command bool %sRadioConfig.isHwAddressRecognitionDefault() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioConfig_isHwAddressRecognitionDefault(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  command void %sRadioConfig.setAutoAck(bool enableAutoAck, bool hwAutoAck) {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioConfig_setAutoAck(%d, F_RADIO, enableAutoAck, hwAutoAck);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async command bool %sRadioConfig.isAutoAckEnabled() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioConfig_isAutoAckEnabled(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+      fprintf(fp, "  async command bool %sRadioConfig.isHwAutoAckDefault() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioConfig_isHwAutoAckDefault(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+
+
+
+
     }
   }
 
