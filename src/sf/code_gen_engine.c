@@ -119,6 +119,7 @@ void generateFennecEngineC() {
       fprintf(fp, "  FennecEngineP.%sPacketIndicator <- %s.PacketIndicator;\n\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sEnergyIndicator <- %s.EnergyIndicator;\n\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sByteIndicator <- %s.ByteIndicator;\n\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp, "  FennecEngineP.%sRadioControl <- %s.RadioControl;\n\n", mp->lib->full_name, mp->lib->full_name);
     }
   }
 
@@ -147,6 +148,7 @@ void generateFennecEngineC() {
       fprintf(fp, "  FennecEngineP.%sPacketIndicator -> %s.PacketIndicator;\n\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sEnergyIndicator -> %s.EnergyIndicator;\n\n", mp->lib->full_name, mp->lib->full_name);
       fprintf(fp, "  FennecEngineP.%sByteIndicator -> %s.ByteIndicator;\n\n", mp->lib->full_name, mp->lib->full_name);
+      fprintf(fp, "  FennecEngineP.%sRadioControl -> %s.RadioControl;\n\n", mp->lib->full_name, mp->lib->full_name);
     }
   }
 
@@ -261,6 +263,8 @@ void generateFennecEngineP() {
       fprintf(fp, "  provides interface ReceiveIndicator as %sPacketIndicator;\n\n", mp->lib->full_name);
       fprintf(fp, "  provides interface ReceiveIndicator as %sEnergyIndicator;\n\n", mp->lib->full_name);
       fprintf(fp, "  provides interface ReceiveIndicator as %sByteIndicator;\n\n", mp->lib->full_name);
+
+      fprintf(fp, "  provides interface StdControl as %sRadioControl;\n\n", mp->lib->full_name);
     }
   }
 
@@ -287,6 +291,8 @@ void generateFennecEngineP() {
       fprintf(fp, "  uses interface ReceiveIndicator as %sPacketIndicator;\n\n", mp->lib->full_name);
       fprintf(fp, "  uses interface ReceiveIndicator as %sEnergyIndicator;\n\n", mp->lib->full_name);
       fprintf(fp, "  uses interface ReceiveIndicator as %sByteIndicator;\n\n", mp->lib->full_name);
+
+      fprintf(fp, "  uses interface StdControl as %sRadioControl;\n\n", mp->lib->full_name);
     }
   }
 
@@ -1367,32 +1373,32 @@ void generateFennecEngineP() {
 
 
 
-  fprintf(fp,"  void RadioTransmit_start(uint16_t module_id, uint8_t to_layer) {\n");
+  fprintf(fp,"  error_t RadioControl_start(uint16_t module_id, uint8_t to_layer) {\n");
 //  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
   fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
       fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioTransmit.start();\n\n", mp->lib->full_name);
+      fprintf(fp,"        return call %sRadioControl.start();\n\n", mp->lib->full_name);
     }
   }
   fprintf(fp,"      default:\n");
-  fprintf(fp,"        return;\n");
+  fprintf(fp,"        return FAIL;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void RadioTransmit_stop(uint16_t module_id, uint8_t to_layer) {\n");
+  fprintf(fp,"  error_t RadioControl_stop(uint16_t module_id, uint8_t to_layer) {\n");
 //  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
   fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
       fprintf(fp,"      case %d:\n", mp->id); 
-      fprintf(fp,"        return call %sRadioTransmit.stop();\n\n", mp->lib->full_name);
+      fprintf(fp,"        return call %sRadioControl.stop();\n\n", mp->lib->full_name);
     } 
   }   
   fprintf(fp,"      default:\n");
-  fprintf(fp,"        return;\n");
+  fprintf(fp,"        return FAIL;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
 
@@ -2262,12 +2268,13 @@ void generateFennecEngineP() {
       fprintf(fp, "    return RadioResource_isOwner(%d, F_RADIO);\n", mp->id);
       fprintf(fp, "  }\n\n");
 
-      fprintf(fp, "  command void %sRadioTransmit.start() {\n", mp->lib->full_name);
-      fprintf(fp, "    return RadioTransmit_start(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  command error_t %sRadioControl.start() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioControl_start(%d, F_RADIO);\n", mp->id);
       fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command void %sRadioTransmit.stop() {\n", mp->lib->full_name);
-      fprintf(fp, "    return RadioTransmit_stop(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  command error_t %sRadioControl.stop() {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioControl_stop(%d, F_RADIO);\n", mp->id);
       fprintf(fp, "  }\n\n");
+
       fprintf(fp, "  command void %sRadioTransmit.cancel() {\n", mp->lib->full_name);
       fprintf(fp, "    return RadioTransmit_cancel(%d, F_RADIO);\n", mp->id);
       fprintf(fp, "  }\n\n");
