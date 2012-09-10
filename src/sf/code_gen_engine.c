@@ -2275,23 +2275,23 @@ void generateFennecEngineP() {
       fprintf(fp, "    return RadioControl_stop(%d, F_RADIO);\n", mp->id);
       fprintf(fp, "  }\n\n");
 
-      fprintf(fp, "  command void %sRadioTransmit.cancel() {\n", mp->lib->full_name);
+      fprintf(fp, "  async command void %sRadioTransmit.cancel() {\n", mp->lib->full_name);
       fprintf(fp, "    return RadioTransmit_cancel(%d, F_RADIO);\n", mp->id);
       fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command error_t %sRadioTransmit.load(message_t* msg) {\n", mp->lib->full_name);
+      fprintf(fp, "  async command error_t %sRadioTransmit.load(message_t* msg) {\n", mp->lib->full_name);
       fprintf(fp, "    return RadioTransmit_load(%d, F_RADIO, msg);\n", mp->id);
       fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command error_t %sRadioTransmit.send(message_t* msg, bool useCca) {\n", mp->lib->full_name);
+      fprintf(fp, "  async command error_t %sRadioTransmit.send(message_t* msg, bool useCca) {\n", mp->lib->full_name);
       fprintf(fp, "    return RadioTransmit_send(%d, F_RADIO, msg, useCca);\n", mp->id);
       fprintf(fp, "  }\n\n");
 
-      fprintf(fp, "  command bool %sPacketIndicator.isReceiving() {\n", mp->lib->full_name);
+      fprintf(fp, "  async command bool %sPacketIndicator.isReceiving() {\n", mp->lib->full_name);
       fprintf(fp, "    return PacketIndicator_isReceiving(%d, F_RADIO);\n", mp->id);
       fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command bool %sEnergyIndicator.isReceiving() {\n", mp->lib->full_name);
+      fprintf(fp, "  async command bool %sEnergyIndicator.isReceiving() {\n", mp->lib->full_name);
       fprintf(fp, "    return EnergyIndicator_isReceiving(%d, F_RADIO);\n", mp->id);
       fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command bool %sByteIndicator.isReceiving() {\n", mp->lib->full_name);
+      fprintf(fp, "  async command bool %sByteIndicator.isReceiving() {\n", mp->lib->full_name);
       fprintf(fp, "    return ByteIndicator_isReceiving(%d, F_RADIO);\n", mp->id);
       fprintf(fp, "  }\n\n");
 
@@ -2341,10 +2341,10 @@ void generateFennecEngineP() {
       fprintf(fp, "    return granted(%d, F_MAC);\n", mp->id);
       fprintf(fp, "  }\n\n");
 
-      fprintf(fp, "  event void %sRadioTransmit.loadDone(message_t* msg, error_t error) {\n", mp->lib->full_name);
+      fprintf(fp, "  async event void %sRadioTransmit.loadDone(message_t* msg, error_t error) {\n", mp->lib->full_name);
       fprintf(fp, "    return transmitLoadDone(%d, F_MAC, msg, error);\n", mp->id);
       fprintf(fp, "  }\n\n");
-      fprintf(fp, "  event void %sRadioTransmit.sendDone(error_t error) {\n", mp->lib->full_name);
+      fprintf(fp, "  async event void %sRadioTransmit.sendDone(error_t error) {\n", mp->lib->full_name);
       fprintf(fp, "    return transmitSendDone(%d, F_MAC, error);\n", mp->id);
       fprintf(fp, "  }\n\n");
 
