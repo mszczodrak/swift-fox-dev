@@ -2,8 +2,8 @@
 configuration count { nullApp()
 			nullNet()
 			tdma()
-			cc2420(2, 26, 31, 200, 200, 10, 10, 1, 1, 1) 
-#			nullRadio()
+#			cc2420(2, 26, 31, 200, 200, 10, 10, 1, 1, 1) 
+			nullRadio()
 			}
 start count
 

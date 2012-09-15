@@ -1,0 +1,10 @@
+
+configuration count { counter(15, 1024, NODE, 2) 
+			ftsp()
+#			nullNet()
+			csmaca(2, 26, 31, 200, 200, 10, 10, 1, 1, 1) 
+			cc2420(2, 26, 31, 200, 200, 10, 10, 1, 1, 1) 
+#			nullRadio()
+			}
+start count
+
