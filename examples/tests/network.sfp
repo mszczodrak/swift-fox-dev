@@ -2,7 +2,7 @@
 configuration count { counter(1, 1024, NODE, 2) 
 			#nullNet()
 			ctp(2)
-			nullMac()
+			csmaca(2, 26, 31, 200, 200, 10, 10, 1, 1, 1)
 			cc2420(2, 26, 31, 0, 0, 10, 10, 1, 1, 1) 
 			}
 start count
