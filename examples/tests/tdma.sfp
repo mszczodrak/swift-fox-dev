@@ -1,5 +1,6 @@
 
-configuration count { counter(10, 1024, NODE, 2)
+configuration count { #counter(10, 1024, NODE, 2)
+			nullApp()
 			nullNet()
 			tdma(2, 26, 31, 0, 0, 10, 10, 1, 1, 1) 
 			cc2420(2, 26, 31, 0, 0, 10, 10, 1, 1, 1) 
