@@ -249,7 +249,7 @@ void generateFennecEngineP() {
       fprintf(fp, "  provides interface ReceiveIndicator as %sPacketIndicator;\n", mp->lib->full_name);
       fprintf(fp, "  provides interface ReceiveIndicator as %sEnergyIndicator;\n", mp->lib->full_name);
       fprintf(fp, "  provides interface ReceiveIndicator as %sByteIndicator;\n", mp->lib->full_name);
-      fprintf(fp, "  provides interface StdControl as %sRadioControl;\n", mp->lib->full_name);
+      fprintf(fp, "  provides interface SplitControl as %sRadioControl;\n", mp->lib->full_name);
     }
   }
 
@@ -269,7 +269,7 @@ void generateFennecEngineP() {
       fprintf(fp, "  uses interface ReceiveIndicator as %sPacketIndicator;\n", mp->lib->full_name);
       fprintf(fp, "  uses interface ReceiveIndicator as %sEnergyIndicator;\n", mp->lib->full_name);
       fprintf(fp, "  uses interface ReceiveIndicator as %sByteIndicator;\n", mp->lib->full_name);
-      fprintf(fp, "  uses interface StdControl as %sRadioControl;\n", mp->lib->full_name);
+      fprintf(fp, "  uses interface SplitControl as %sRadioControl;\n", mp->lib->full_name);
     }
   }
 
@@ -1797,6 +1797,63 @@ void generateFennecEngineP() {
 
 
 
+  fprintf(fp,"  void radioControlStartDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+
+/*
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
+    }
+  }
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
+    }
+  }
+*/
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sRadioControl.startDone(error);\n\n", mp->lib->full_name);
+    }
+  }
+//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
+//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
+
+  fprintf(fp,"  void radioControlStopDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
+  fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
+
+/*
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
+    }
+  }
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
+    }
+  }
+*/
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        return signal %sRadioControl.stopDone(error);\n\n", mp->lib->full_name);
+    }
+  }
+//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
+//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
+  fprintf(fp,"    }\n");
+  fprintf(fp,"  }\n\n");
+
 
 
 
@@ -2329,6 +2386,14 @@ void generateFennecEngineP() {
       fprintf(fp, "  }\n\n");
       fprintf(fp, "  async event void %sRadioTransmit.sendDone(error_t error) {\n", mp->lib->full_name);
       fprintf(fp, "    return transmitSendDone(%d, F_MAC, error);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+
+      fprintf(fp, "  event void %sRadioControl.startDone(error_t error) {\n", mp->lib->full_name);
+      fprintf(fp, "    return radioControlStartDone(%d, F_MAC, error);\n", mp->id);
+      fprintf(fp, "  }\n\n");
+
+      fprintf(fp, "  event void %sRadioControl.stopDone(error_t error) {\n", mp->lib->full_name);
+      fprintf(fp, "    return radioControlStopDone(%d, F_MAC, error);\n", mp->id);
       fprintf(fp, "  }\n\n");
 
     }

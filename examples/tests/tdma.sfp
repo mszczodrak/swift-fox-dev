@@ -2,8 +2,9 @@
 configuration count { #counter(10, 1024, NODE, 2)
 			nullApp()
 			nullNet()
-			tdma(2, 1000, 5, 1, 1, 10, 10, 1, 1, 1) 
-			cc2420(2, 26, 31, 0, 0, 10, 10, 1, 1, 1) 
+			tdma(2, 1000, 4, 4, 5, 10, 10, 1, 1, 1) 
+			nullRadio()
+#			cc2420(2, 26, 31, 0, 0, 10, 10, 1, 1, 1) 
 			}
 start count
 
