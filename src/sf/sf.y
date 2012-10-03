@@ -460,9 +460,7 @@ policy: FROM from_configurations GOTO IDENTIFIER WHEN when_events newlines
 			$$->from	= $2;
 			$$->to		= $4;
 
-			$$->mask_l	= 0;
-			$$->mask_r	= -1;
-			$$->mask_l	= $6;
+			$$->mask_r	= $6;
 			$$->counter	= policy_counter;
 
 			if (proc_policy($$)) {
@@ -471,28 +469,6 @@ policy: FROM from_configurations GOTO IDENTIFIER WHEN when_events newlines
 			}
 			++policy_counter;
 		}
-
-/*
-
-	|	FROM from_configurations GOTO IDENTIFIER WHEN when_events OR when_events newlines
-                {
-                        $$              = calloc(1, sizeof(struct policy));
-
-                        $$->from        = $2;
-                        $$->to          = $4;
-
-                        $$->mask_l        = 0;
-                        $$->mask_r        = 0;
-                        $$->mask_l        = $6;
-                        $$->mask_r        = $8;
-                        $$->counter     = policy_counter;
-
-                        ++policy_counter;
-                        ++policy_counter;
-                }
-*/
-
-	;
 
 from_configurations: IDENTIFIER 	
 		{

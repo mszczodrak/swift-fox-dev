@@ -22,6 +22,4 @@ event-condition t2 {timer = 10 TYPE_SECOND @ 2}
 from red goto blue when t1
 from blue goto red when t2
 
-
-
 start red

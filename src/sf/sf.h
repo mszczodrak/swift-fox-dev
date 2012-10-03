@@ -177,7 +177,6 @@ struct policy {
 	struct policies		*parent;
 	struct symtab		*from;
 	struct symtab		*to;
-	int 			mask_l;
 	int 			mask_r;
 	int 			counter;
 };
