@@ -70,7 +70,7 @@ int create_dir(char *ffsrc_relative) {
 }
 
 char *relopToLetter(int i) {
-  printf("relopToLetter: %d\n", i);
+//  printf("relopToLetter: %d\n", i);
   switch(i) {
     case LT:
       return "LT";

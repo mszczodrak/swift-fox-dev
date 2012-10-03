@@ -25,7 +25,6 @@ int event_counter	= 1;
 int policy_counter	= 0;
 int virtual_counter 	= 0;
 int event_id_counter	= 0;
-int event_scale_counter = 1;
 FILE *fcode		= NULL;
 
 int module_id_counter = 1;
@@ -101,7 +100,6 @@ char *file_name;
 %type <symp>	configuration_ids
 %type <symp> 	conf_level
 %type <symp> 	event_location
-%type <symp> 	event_scale
 %type <mtl>	module_types
 %type <mtl>	next_module_type
 %type <parv>	parameters
@@ -388,7 +386,7 @@ defined_events: defined_events event_condition
 		}	
 	;
 
-event_condition: EVENT_CONDITION IDENTIFIER OPEN_BRACE IDENTIFIER RELOP CONSTANT event_scale event_location CLOSE_BRACE newlines
+event_condition: EVENT_CONDITION IDENTIFIER OPEN_BRACE IDENTIFIER RELOP CONSTANT IDENTIFIER event_location CLOSE_BRACE newlines
 		{
 			/* event-condition node */
 			$2->value	= event_counter;
@@ -405,23 +403,11 @@ event_condition: EVENT_CONDITION IDENTIFIER OPEN_BRACE IDENTIFIER RELOP CONSTANT
 			$$->cst		= $6;
 			$$->cst->value	= editConst($6);
 
-
 			struct evtab *ev= evlook($2->name);
                         ev->num 	= event_counter;
                         ev->op		= $5;
                         ev->value 	= $$->cst->value;
-
-			if ($7 != NULL) {
-				if ($7->type == NULL) {
-					$7->value = event_scale_counter;
-					$7->type = "event_scale";
-					event_scale_counter++;
-				}
-
-				ev->scale	= $7;
-			} else {
-				ev->scale	= NULL;
-			}
+			ev->scale	= $7;
 
                         /* event location */
                         if ($8 == NULL) {
@@ -444,25 +430,6 @@ event_location: AT CONSTANT
                         $$ = NULL;
                 }                       
         ;
-
-
-event_scale: IDENTIFIER
-		{
-			$$ = $1;
-			/*
-			if ($1 != NULL && $1->type != NULL) {
-				$1->value = event_scale_counter;
-				$1->type = "event_scale";
-				event_scale_counter++;
-			}
-			*/
-		}
-	|
-		{
-			$$ = NULL;
-		}
-	;
-
 
 
 policies: policies policy 
@@ -1160,49 +1127,6 @@ editConst(struct symtab *entry ) {
 	/* default */
 	entry->type = strdup("number");
 	return v;
-
-	for (; isdigit(*sp); sp++);
-	
-	/* set the type accordingly */
-
-	/* sec */
-        if (!strcmp(sp, "sec")) {
-		entry->type = strdup("timer");
-                v *= SEC_CONV;
-		return v;
-	}
-	
-	/* min */
-        if (!strcmp(sp, "min")) {
-		entry->type = strdup("timer");
-                v *= MIN_CONV;
-		return v;
-	}
-	
-	/* hr */
-        if (!strcmp(sp, "hr")) {
-		entry->type = strdup("timer");
-                v = HR_CONV;
-		return v;
-	}
-	
-	/* Celsius */
-	if (!strcmp(sp, "C")) {
-		entry->type = strdup("temperature");
-		return v;
-	}
-	
-	/* Fahrenheit */
-	if (!strcmp(sp, "F")) {
-		entry->type = strdup("temperature");
-                v = (v - 32) * 5 / 9 ;
-		return v;
-	}
-	
-	/* default */
-	entry->type = strdup("number");
-
-        return v;
 }
 
 printTable() {

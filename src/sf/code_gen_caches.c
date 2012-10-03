@@ -8,7 +8,7 @@ void generateCaches(int event_counter, int policy_counter) {
 	char *full_path = get_sfc_path("", "ff_caches.h");
 	FILE *fp = fopen(full_path, "w");
 
-	struct symtab *sp;
+//	struct symtab *sp;
 	struct modtab *mp;
 	struct poltab *pp;
 	int i;
@@ -138,22 +138,7 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	fprintf(fp, "};\n\n");
 
-	fprintf(fp, "char* eventsScales[%d] = {\"\"", event_scale_counter);
-
-	int event_scale_id = 1;
-
-	for(event_scale_id = 1; event_scale_id < event_scale_counter; event_scale_id++) {
-		for(sp = symtab; sp < &symtab[NSYMS]; sp++) {
-			if (sp != NULL && sp->type != NULL && !strcmp(sp->type, "event_scale") && sp->value == event_scale_id) {
-				fprintf(fp, ", \"%s\"", sp->name);
-			}
-		}
-	}
-	fprintf(fp, "};\n\n");
-
-
 	fprintf(fp, "struct fennec_event eventsTable[%d] = {\n", event_counter);
-
 
 	for ( i = 0; i < event_counter; ) {
 
@@ -162,9 +147,9 @@ void generateCaches(int event_counter, int policy_counter) {
 		fprintf(fp, "\t\t.value = %d,\n", evtab[i].value);
 
 		if (evtab[i].scale == NULL) {
-			fprintf(fp, "\t\t.scale = 0,\n");
+			fprintf(fp, "\t\t.scale = TYPE_NODE,\n");
 		} else {
-			fprintf(fp, "\t\t.scale = %d,\n", evtab[i].scale->value);
+			fprintf(fp, "\t\t.scale = %s,\n", evtab[i].scale->name);
 		}
 
 		if (evtab[i].addr == UNKNOWN) {
@@ -178,42 +163,6 @@ void generateCaches(int event_counter, int policy_counter) {
 			fprintf(fp, "\t}\n");
 		}
 	}
-
-/*
-	struct evtab *ev;
-	for(ev = evtab; ev < &evtab[NEVS]; ev++) {
-		if (ev->name) {
-
-			fprintf(fp, "\t}\n");
-
-			fprintf(tmp_confs, "      eventsTable[%d].operation = %s;\n", 
-							ev->num-1, relopToLetter(ev->op));
-			fprintf(tmp_confs, "      eventsTable[%d].value = %d;\n", 
-							ev->num-1, ev->value);
-
-			if (ev->scale == NULL) {
-				fprintf(tmp_confs, "      eventsTable[%d].scale = eventsScales[0];\n", 
-							ev->num-1);
-			} else {
-				fprintf(tmp_confs, "      eventsTable[%d].scale = eventsScales[%d];\n", 
-							ev->num-1, ev->scale->value);
-			}
-
-			if (ev->addr == UNKNOWN) {
-				fprintf(tmp_confs, "      eventsTable[%d].addr = TOS_NODE_ID;\n\n", 
-							ev->num-1);
-			} else {
-				fprintf(tmp_confs, "      eventsTable[%d].addr = %d;\n\n", 
-							ev->num-1, ev->addr);
-			}
-			fprintf(fp, "\t{\n");
-			fprintf(fp, "\t,\n");
-
-		} else {
-			break;
-		}
-	}
-*/
 
 	fprintf(fp, "};\n\n");
 

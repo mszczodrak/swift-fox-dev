@@ -16,8 +16,8 @@ configuration blue { blink(4, 1024)
                         # channel, power, ack, crc
 }
 
-event-condition t1 {timer = 10 sec @ 2}
-event-condition t2 {timer = 10 sec @ 2}
+event-condition t1 {timer = 10 TYPE_SECOND @ 2}
+event-condition t2 {timer = 10 TYPE_SECOND @ 2}
 
 from red goto blue when t1
 from blue goto red when t2
