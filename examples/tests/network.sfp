@@ -2,8 +2,11 @@
 configuration count { counter(1, 1024, NODE, 2) 
 			#nullNet()
 			ctp(2)
-			csmaca(2, 26, 31, 200, 200, 10, 10, 1, 1, 1)
-			cc2420(2, 26, 31, 0, 0, 10, 10, 1, 1, 1) 
+                        csmaca(2, 200, 10, 10, 1, 1, 1)
+                        # always ON, delay_after_receive, backoff, min_backoff
+                        # ack, cca, crc
+                        cc2420(26, 31, 1, 1)
+                        # channel, power, ack, crc
 			}
 start count
 

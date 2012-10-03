@@ -2,7 +2,7 @@
 configuration count { #counter(10, 1024, NODE, 2)
 			nullApp()
 			nullNet()
-			tdma(2, 100, 5, 3, 30, 4000, 10, 10, 1, 1, 1) 
+			tdma(2, 100, 30, 3000, 10, 10, 1, 1, 1)
 			cc2420(26, 31, 1, 1) 
 			# channel, power, ack, crc
 			}
