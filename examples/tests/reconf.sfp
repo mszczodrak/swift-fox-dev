@@ -1,6 +1,6 @@
 configuration control { ControlUnit()
-			nullNet()
-			nullMac()
+			cuNet()
+			cuMac()
                         cc2420(26, 31, 1, 1)
 }
 			
