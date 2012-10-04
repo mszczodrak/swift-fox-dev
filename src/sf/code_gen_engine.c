@@ -82,18 +82,6 @@ void generateFennecEngineC() {
     		}
   	}
 
-  /* ControlUnit is wired at the Network Layer, thou it is not expected to provide any service to any application */
-
-  fprintf(fp, "  /* Here we wire the ControlUnit */\n\n");
-  fprintf(fp, "  components ControlUnitC;\n");
-  fprintf(fp, "  FennecEngineP.ControlUnit_MacAMSend <- ControlUnitC.MacAMSend;\n");
-  fprintf(fp, "  FennecEngineP.ControlUnit_MacReceive <- ControlUnitC.MacReceive;\n");
-  fprintf(fp, "  FennecEngineP.ControlUnit_MacSnoop <- ControlUnitC.MacSnoop;\n");
-  fprintf(fp, "  FennecEngineP.ControlUnit_MacAMPacket <- ControlUnitC.MacAMPacket;\n");
-  fprintf(fp, "  FennecEngineP.ControlUnit_MacPacket <- ControlUnitC.MacPacket;\n");
-  fprintf(fp, "  FennecEngineP.ControlUnit_MacPacketAcknowledgements <- ControlUnitC.MacPacketAcknowledgements;\n");
-  fprintf(fp, "  FennecEngineP.ControlUnit_MacStatus <- ControlUnitC.MacStatus;\n\n");
-
   fprintf(fp, "  /* Defined and linked mac */\n\n");
 
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -212,18 +200,6 @@ void generateFennecEngineP() {
       fprintf(fp, "  provides interface ModuleStatus as %sMacStatus;\n\n", mp->lib->full_name);
     }
   }
-
-  /* ControlUnit is wired at the Network Layer, thou it is not expected to provide any service to any application */
-
-  fprintf(fp, "  /* Here we wire the ControlUnit */\n\n");
-  fprintf(fp, "  provides interface AMSend as ControlUnit_MacAMSend;\n");
-  fprintf(fp, "  provides interface Receive as ControlUnit_MacReceive;\n");
-  fprintf(fp, "  provides interface Receive as ControlUnit_MacSnoop;\n");
-  fprintf(fp, "  provides interface Packet as ControlUnit_MacPacket;\n");
-  fprintf(fp, "  provides interface AMPacket as ControlUnit_MacAMPacket;\n");
-  fprintf(fp, "  provides interface PacketAcknowledgements as ControlUnit_MacPacketAcknowledgements;\n");
-  fprintf(fp, "  provides interface ModuleStatus as ControlUnit_MacStatus;\n\n");
-
 
   fprintf(fp, "  /* MAC Modules */\n\n");
 
@@ -1489,16 +1465,6 @@ void generateFennecEngineP() {
       fprintf(fp,"        return;\n\n");
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        signal %sRadioAMSend.sendDone(msg, error);\n", mp->lib->full_name);
-//      fprintf(fp,"        return;\n\n");
-//    }
-//  }
-  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
-  fprintf(fp,"        signal ControlUnit_MacAMSend.sendDone(msg, error);\n");
-  fprintf(fp,"        return;\n\n");
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return;\n");
   fprintf(fp,"    }\n\n");
@@ -1524,8 +1490,6 @@ void generateFennecEngineP() {
       fprintf(fp,"        return signal %sRadioReceive.receive(msg, payload, len);\n\n", mp->lib->full_name);
     }
   }
-  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
-  fprintf(fp,"        return signal ControlUnit_MacReceive.receive(msg, payload, len);\n\n");
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return msg;\n\n");
   fprintf(fp,"      }\n");
@@ -1546,14 +1510,6 @@ void generateFennecEngineP() {
       fprintf(fp,"        return signal %sMacSnoop.receive(msg, payload, len);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return signal %sRadioSnoop.receive(msg, payload, len);\n\n", mp->lib->full_name);
-//    }
-//  }
-  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
-  fprintf(fp,"        return signal ControlUnit_MacSnoop.receive(msg, payload, len);\n\n");
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return msg;\n\n");
   fprintf(fp,"    }\n");
@@ -1580,125 +1536,54 @@ void generateFennecEngineP() {
       fprintf(fp,"        return signal %sRadioStatus.status(layer, status_flag);\n\n", mp->lib->full_name);
     }
   }
-  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
-  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
 
 
   fprintf(fp,"  void syncDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
   fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
-
-/*
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-*/
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
       fprintf(fp,"      case %d:\n", mp->id);
       fprintf(fp,"        return signal %sRadioConfig.syncDone(error);\n\n", mp->lib->full_name);
     }
   }
-//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
-//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
 
 
-
   fprintf(fp,"  void startVRegDone(uint16_t module_id, uint8_t to_layer) {\n");
   fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
-
-/*
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-*/
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
       fprintf(fp,"      case %d:\n", mp->id);
       fprintf(fp,"        return signal %sRadioPower.startVRegDone();\n\n", mp->lib->full_name);
     }
   }
-//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
-//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
 
 
   fprintf(fp,"  void startOscillatorDone(uint16_t module_id, uint8_t to_layer) {\n");
   fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
-
-/*
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-*/
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
       fprintf(fp,"      case %d:\n", mp->id);
       fprintf(fp,"        return signal %sRadioPower.startOscillatorDone();\n\n", mp->lib->full_name);
     }
   }
-//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
-//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
 
 
   fprintf(fp,"  void readRssiDone(uint16_t module_id, uint8_t to_layer, error_t error, uint16_t rssi) {\n");
   fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
-
-/*
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-*/
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
       fprintf(fp,"      case %d:\n", mp->id);
       fprintf(fp,"        return signal %sReadRssi.readDone(error, rssi);\n\n", mp->lib->full_name);
     }
   }
-//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
-//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
 
@@ -1706,155 +1591,62 @@ void generateFennecEngineP() {
 
   fprintf(fp,"  void granted(uint16_t module_id, uint8_t to_layer) {\n");
   fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
-
-/*
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-*/
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
       fprintf(fp,"      case %d:\n", mp->id);
       fprintf(fp,"        return signal %sRadioResource.granted();\n\n", mp->lib->full_name);
     }
   }
-//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
-//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
 
 
   fprintf(fp,"  void transmitLoadDone(uint16_t module_id, uint8_t to_layer, message_t *msg, error_t error) {\n");
   fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
-
-/*
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-*/
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
       fprintf(fp,"      case %d:\n", mp->id);
       fprintf(fp,"        return signal %sRadioTransmit.loadDone(msg, error);\n\n", mp->lib->full_name);
     }
   }
-//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
-//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
 
 
-
-
-
   fprintf(fp,"  void transmitSendDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
   fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
-
-/*
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-*/
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
       fprintf(fp,"      case %d:\n", mp->id);
       fprintf(fp,"        return signal %sRadioTransmit.sendDone(error);\n\n", mp->lib->full_name);
     }
   }
-//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
-//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
 
 
-
-
-
   fprintf(fp,"  void radioControlStartDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
   fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
-
-/*
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-*/
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
       fprintf(fp,"      case %d:\n", mp->id);
       fprintf(fp,"        return signal %sRadioControl.startDone(error);\n\n", mp->lib->full_name);
     }
   }
-//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
-//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
 
 
   fprintf(fp,"  void radioControlStopDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
   fprintf(fp,"    switch( get_module_id(get_state_id(), get_conf_id(), to_layer) ) {\n");
-
-/*
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sNetworkStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sMacStatus.status(error);\n\n", mp->lib->full_name);
-    }
-  }
-*/
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
       fprintf(fp,"      case %d:\n", mp->id);
       fprintf(fp,"        return signal %sRadioControl.stopDone(error);\n\n", mp->lib->full_name);
     }
   }
-//  fprintf(fp,"      case POLICY_CONFIGURATION:\n");
-//  fprintf(fp,"        return signal ControlUnit_MacStatus.status(layer, status_flag);\n\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
-
 
 
   /* Interfaces with Applications */
@@ -2034,97 +1826,6 @@ void generateFennecEngineP() {
       fprintf(fp, "  }\n\n");
     }
   }
-
-  /* ControlUnit is wired at the Network Layer, thou it is not expected to provide any service to any application */
-  fprintf(fp, "  command error_t ControlUnit_MacAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return AMSend_send(POLICY_CONFIGURATION, F_MAC, addr, msg, len);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command error_t ControlUnit_MacAMSend.cancel(message_t* msg) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return AMSend_cancel(POLICY_CONFIGURATION, F_MAC, msg);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command uint8_t ControlUnit_MacAMSend.maxPayloadLength() {\n");
-  fprintf(fp, "    return AMSend_maxPayloadLength(POLICY_CONFIGURATION, F_MAC);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command void* ControlUnit_MacAMSend.getPayload(message_t* msg, uint8_t len) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return AMSend_getPayload(POLICY_CONFIGURATION, F_MAC, msg, len);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command am_addr_t ControlUnit_MacAMPacket.address() {\n");
-  fprintf(fp, "    return AMPacket_address(POLICY_CONFIGURATION, F_MAC);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command am_addr_t ControlUnit_MacAMPacket.destination(message_t* msg) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return AMPacket_destination(POLICY_CONFIGURATION, F_MAC, msg);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command am_addr_t ControlUnit_MacAMPacket.source(message_t* msg) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return AMPacket_source(POLICY_CONFIGURATION, F_MAC, msg);\n");
-  fprintf(fp, "  }\n");
-  fprintf(fp, "  command void ControlUnit_MacAMPacket.setDestination(message_t* msg, am_addr_t addr) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return AMPacket_setDestination(POLICY_CONFIGURATION, F_MAC, msg, addr);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command void ControlUnit_MacAMPacket.setSource(message_t* msg, am_addr_t addr) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return AMPacket_setSource(POLICY_CONFIGURATION, F_MAC, msg, addr);\n");
-  fprintf(fp, "  }\n");
-  fprintf(fp, "  command bool ControlUnit_MacAMPacket.isForMe(message_t* msg) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return AMPacket_isForMe(POLICY_CONFIGURATION, F_MAC, msg);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command am_id_t ControlUnit_MacAMPacket.type(message_t* msg) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return AMPacket_type(POLICY_CONFIGURATION, F_MAC, msg);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command void ControlUnit_MacAMPacket.setType(message_t* msg, am_id_t t) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return AMPacket_setType(POLICY_CONFIGURATION, F_MAC, msg, t);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command am_group_t ControlUnit_MacAMPacket.group(message_t* msg) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return AMPacket_group(POLICY_CONFIGURATION, F_MAC, msg);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command void ControlUnit_MacAMPacket.setGroup(message_t* msg, am_group_t grp) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return AMPacket_setGroup(POLICY_CONFIGURATION, F_MAC, msg, grp);\n");
-  fprintf(fp, "  }\n");
-  fprintf(fp, "  command am_group_t ControlUnit_MacAMPacket.localGroup() {\n");
-  fprintf(fp, "    return AMPacket_localGroup(POLICY_CONFIGURATION, F_MAC);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command void ControlUnit_MacPacket.clear(message_t* msg) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return Packet_clear(POLICY_CONFIGURATION, F_MAC, msg);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command uint8_t ControlUnit_MacPacket.payloadLength(message_t* msg) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return Packet_payloadLength(POLICY_CONFIGURATION, F_MAC, msg);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command void ControlUnit_MacPacket.setPayloadLength(message_t* msg, uint8_t len) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return Packet_setPayloadLength(POLICY_CONFIGURATION, F_MAC, msg, len);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command uint8_t ControlUnit_MacPacket.maxPayloadLength() {\n");
-  fprintf(fp, "    return Packet_maxPayloadLength(POLICY_CONFIGURATION, F_MAC);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  command void* ControlUnit_MacPacket.getPayload(message_t* msg, uint8_t len) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return Packet_getPayload(POLICY_CONFIGURATION, F_MAC, msg, len);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  async command error_t ControlUnit_MacPacketAcknowledgements.requestAck( message_t* msg ) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return PacketAcknowledgements_requestAck(POLICY_CONFIGURATION, F_MAC, msg);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  async command error_t ControlUnit_MacPacketAcknowledgements.noAck( message_t* msg ) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return PacketAcknowledgements_noAck(POLICY_CONFIGURATION, F_MAC, msg);\n");
-  fprintf(fp, "  }\n\n");
-  fprintf(fp, "  async command bool ControlUnit_MacPacketAcknowledgements.wasAcked(message_t* msg) {\n");
-  fprintf(fp, "    msg->conf = POLICY_CONFIGURATION;\n");
-  fprintf(fp, "    return PacketAcknowledgements_wasAcked(POLICY_CONFIGURATION, F_MAC, msg);\n");
-  fprintf(fp, "  }\n\n");
-
 
 
   /* Interfaces with Macs */

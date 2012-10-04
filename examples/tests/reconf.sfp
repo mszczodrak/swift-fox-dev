@@ -1,3 +1,10 @@
+configuration control { ControlUnit()
+			nullNet()
+			nullMac()
+                        cc2420(26, 31, 1, 1)
+}
+			
+
 configuration red { blink(1, 1024)
 			nullNet() 
                         #csmaca(2, 0, 10, 10, 1, 1, 1)
