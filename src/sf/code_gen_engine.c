@@ -1198,13 +1198,13 @@ void generateFennecEngineP() {
   fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void RadioTransmit_cancel(uint16_t module_id, uint8_t to_layer) {\n");
+  fprintf(fp,"  void RadioTransmit_cancel(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
 //  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
   fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
       fprintf(fp,"      case %d:\n", mp->id); 
-      fprintf(fp,"        return call %sRadioTransmit.cancel();\n\n", mp->lib->full_name);
+      fprintf(fp,"        return call %sRadioTransmit.cancel(msg);\n\n", mp->lib->full_name);
     } 
   }   
   fprintf(fp,"      default:\n");
@@ -1455,12 +1455,12 @@ void generateFennecEngineP() {
   fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void transmitSendDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+  fprintf(fp,"  void transmitSendDone(uint16_t module_id, uint8_t to_layer, message_t *msg, error_t error) {\n");
+  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
       fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sRadioTransmit.sendDone(error);\n\n", mp->lib->full_name);
+      fprintf(fp,"        return signal %sRadioTransmit.sendDone(msg, error);\n\n", mp->lib->full_name);
     }
   }
   fprintf(fp,"    }\n");
@@ -1854,8 +1854,8 @@ void generateFennecEngineP() {
       fprintf(fp, "    return RadioControl_stop(%d, F_RADIO);\n", mp->id);
       fprintf(fp, "  }\n\n");
 
-      fprintf(fp, "  async command void %sRadioTransmit.cancel() {\n", mp->lib->full_name);
-      fprintf(fp, "    return RadioTransmit_cancel(%d, F_RADIO);\n", mp->id);
+      fprintf(fp, "  async command void %sRadioTransmit.cancel(message_t *msg) {\n", mp->lib->full_name);
+      fprintf(fp, "    return RadioTransmit_cancel(%d, F_RADIO, msg);\n", mp->id);
       fprintf(fp, "  }\n\n");
       fprintf(fp, "  async command error_t %sRadioTransmit.load(message_t* msg) {\n", mp->lib->full_name);
       fprintf(fp, "    return RadioTransmit_load(%d, F_RADIO, msg);\n", mp->id);
@@ -1927,8 +1927,8 @@ void generateFennecEngineP() {
       fprintf(fp, "  async event void %sRadioTransmit.loadDone(message_t* msg, error_t error) {\n", mp->lib->full_name);
       fprintf(fp, "    return transmitLoadDone(%d, F_MAC, msg, error);\n", mp->id);
       fprintf(fp, "  }\n\n");
-      fprintf(fp, "  async event void %sRadioTransmit.sendDone(error_t error) {\n", mp->lib->full_name);
-      fprintf(fp, "    return transmitSendDone(%d, F_MAC, error);\n", mp->id);
+      fprintf(fp, "  async event void %sRadioTransmit.sendDone(message_t *msg, error_t error) {\n", mp->lib->full_name);
+      fprintf(fp, "    return transmitSendDone(%d, F_MAC, msg, error);\n", mp->id);
       fprintf(fp, "  }\n\n");
 
       fprintf(fp, "  event void %sRadioControl.startDone(error_t error) {\n", mp->lib->full_name);
