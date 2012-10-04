@@ -7,28 +7,30 @@ configuration control { ControlUnit()
 
 configuration red { blink(1, 1024)
 			nullNet() 
-                        #csmaca(2, 0, 10, 10, 1, 1, 1)
-                        nullMac()
+                        csmaca(2, 0, 10, 10, 1, 1, 1)
+                        #nullMac()
 			#nullMac()
                         # always ON, delay_after_receive, backoff, min_backoff
                         # ack, cca, crc
-                        cc2420(26, 31, 1, 1)
+			nullRadio()
+                        #cc2420(26, 31, 1, 1)
                         # channel, power, ack, crc
 }
 
 configuration blue { blink(4, 1024)
 			nullNet() 
-			nullMac()
+			#nullMac()
 			#tdma(2, 100, 30, 3000, 10, 10, 1, 1, 1)
-                        #csmaca(2, 0, 10, 10, 1, 1, 1)
+                        csmaca(2, 0, 10, 10, 1, 1, 1)
                         # always ON, delay_after_receive, backoff, min_backoff
                         # ack, cca, crc
-                        cc2420(26, 31, 1, 1)
+			nullRadio()
+                        #cc2420(26, 31, 1, 1)
                         # channel, power, ack, crc
 }
 
 event-condition t1 {timer = 10 TYPE_SECOND @ 2}
-event-condition t2 {timer = 10 TYPE_SECOND @ 2}
+event-condition t2 {timer = 12 TYPE_SECOND @ 2}
 
 from red goto blue when t1
 from blue goto red when t2
