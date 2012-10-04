@@ -322,13 +322,6 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMSend.send(addr, msg, len);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMSend.send(addr, msg, len);\n\n", mp->lib->full_name);
-//    }
-//  }
-
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return FAIL;\n");
   fprintf(fp,"    }\n");
@@ -350,17 +343,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMSend.cancel(msg);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMSend.cancel(msg);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return FAIL;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  void* AMSend_getPayload(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
@@ -378,12 +364,6 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMSend.getPayload(msg, len);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMSend.getPayload(msg, len);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return NULL;\n");
   fprintf(fp,"    }\n");
@@ -404,17 +384,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMSend.maxPayloadLength();\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMSend.maxPayloadLength();\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return 0;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  am_addr_t AMPacket_address(uint16_t module_id, uint8_t to_layer) {\n");
@@ -431,12 +404,6 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMPacket.address();\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMPacket.address();\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return 0;\n");
   fprintf(fp,"    }\n");
@@ -458,17 +425,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMPacket.destination(msg);\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMPacket.destination(msg);\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return 0;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  am_addr_t AMPacket_source(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
@@ -486,17 +446,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMPacket.source(msg);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMPacket.source(msg);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return 0;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  void AMPacket_setDestination(uint16_t module_id, uint8_t to_layer, message_t *msg, am_addr_t addr) {\n");
@@ -514,17 +467,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMPacket.setDestination(msg, addr);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMPacket.setDestination(msg, addr);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  void AMPacket_setSource(uint16_t module_id, uint8_t to_layer, message_t *msg, am_addr_t addr) {\n");
@@ -542,17 +488,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMPacket.setSource(msg, addr);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMPacket.setSource(msg, addr);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  bool AMPacket_isForMe(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
@@ -570,12 +509,6 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMPacket.isForMe(msg);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMPacket.isForMe(msg);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return 0;\n");
   fprintf(fp,"    }\n");
@@ -597,17 +530,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMPacket.type(msg);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMPacket.type(msg);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return 0;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  void AMPacket_setType(uint16_t module_id, uint8_t to_layer, message_t *msg, am_id_t t) {\n");
@@ -625,12 +551,6 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMPacket.setType(msg, t);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMPacket.setType(msg, t);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return;\n");
   fprintf(fp,"    }\n");
@@ -652,12 +572,6 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMPacket.group(msg);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMPacket.group(msg);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return 0;\n");
   fprintf(fp,"    }\n");
@@ -679,17 +593,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMPacket.setGroup(msg, grp);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMPacket.setGroup(msg, grp);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  void* Packet_getPayload(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
@@ -707,17 +614,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacPacket.getPayload(msg, len);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioPacket.getPayload(msg, len);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return NULL;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  uint8_t Packet_maxPayloadLength(uint16_t module_id, uint8_t to_layer) {\n");
@@ -734,17 +634,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacPacket.maxPayloadLength();\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioPacket.maxPayloadLength();\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return 0;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  am_group_t AMPacket_localGroup(uint16_t module_id, uint8_t to_layer) {\n");
@@ -761,17 +654,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacAMPacket.localGroup();\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioAMPacket.localGroup();\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return 0;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  void Packet_clear(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
@@ -789,17 +675,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacPacket.clear(msg);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioPacket.clear(msg);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  uint8_t Packet_payloadLength(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
@@ -817,17 +696,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacPacket.payloadLength(msg);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioPacket.payloadLength(msg);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return 0;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  void Packet_setPayloadLength(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
@@ -845,17 +717,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacPacket.setPayloadLength(msg, len);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioPacket.setPayloadLength(msg, len);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  error_t PacketAcknowledgements_requestAck(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
@@ -873,17 +738,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacPacketAcknowledgements.requestAck(msg);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioPacketAcknowledgements.requestAck(msg);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return FAIL;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
 
 
   fprintf(fp,"  error_t PacketAcknowledgements_noAck(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
@@ -901,12 +759,6 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacPacketAcknowledgements.noAck(msg);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioPacketAcknowledgements.noAck(msg);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return FAIL;\n");
   fprintf(fp,"    }\n");
@@ -928,20 +780,10 @@ void generateFennecEngineP() {
       fprintf(fp,"        return call %sMacPacketAcknowledgements.wasAcked(msg);\n\n", mp->lib->full_name);
     }
   }
-//  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-//    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-//      fprintf(fp,"      case %d:\n", mp->id);
-//      fprintf(fp,"        return call %sRadioPacketAcknowledgements.wasAcked(msg);\n\n", mp->lib->full_name);
-//    }
-//  }
   fprintf(fp,"      default:\n");
   fprintf(fp,"        return 0;\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
-
-
-
-
 
 
   /* Radio Only Interfaces */
