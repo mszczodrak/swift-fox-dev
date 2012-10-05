@@ -4,35 +4,46 @@ configuration control { ControlUnit()
                         cc2420(26, 31, 1, 1)
 }
 			
-
 configuration red { blink(1, 1024)
 			nullNet() 
                         csmaca(2, 0, 10, 10, 1, 1, 1)
-                        #nullMac()
-			#nullMac()
-                        # always ON, delay_after_receive, backoff, min_backoff
-                        # ack, cca, crc
-			nullRadio()
-                        #cc2420(26, 31, 1, 1)
-                        # channel, power, ack, crc
+                        	# always ON, delay_after_receive, backoff
+				# min_backoff, ack, cca, crc
+                        cc2420(26, 31, 1, 1)
+                        	# channel, power, ack, crc
+}
+
+configuration yellow { blink(2, 1024)
+			nullNet() 
+			tdma(2, 100, 30, 3000, 10, 10, 1, 1, 1)
+                        cc2420(26, 31, 1, 1)
+				# channel, power, ack, crc
 }
 
 configuration blue { blink(4, 1024)
-			nullNet() 
-			#nullMac()
-			#tdma(2, 100, 30, 3000, 10, 10, 1, 1, 1)
-                        csmaca(2, 0, 10, 10, 1, 1, 1)
-                        # always ON, delay_after_receive, backoff, min_backoff
-                        # ack, cca, crc
+                        nullNet()
+                        csmaca(2, 200, 10, 10, 1, 1, 1)	# LPL with 200ms Duty-Cycle
+	                        # always ON, delay_after_receive, backoff,
+				# min_backoff, ack, cca, crc
+                        cc2420(26, 31, 1, 1)
+	                        # channel, power, ack, crc
+}
+
+configuration dark {nullApp()
+			nullNet()
+			nullMac()
 			nullRadio()
-                        #cc2420(26, 31, 1, 1)
-                        # channel, power, ack, crc
 }
 
 event-condition t1 {timer = 10 TYPE_SECOND @ 2}
 event-condition t2 {timer = 12 TYPE_SECOND @ 2}
+event-condition t3 {timer = 8 TYPE_SECOND @ 4}
+event-condition t4 {timer = 4 TYPE_SECOND @ 3}
 
 from red goto blue when t1
-from blue goto red when t2
+from blue goto yellow when t2
+from yellow goto dark when t3
+from dark goto red when t4
 
 start red
+
