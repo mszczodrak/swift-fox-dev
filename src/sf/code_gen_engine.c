@@ -25,9 +25,6 @@ void generateFennecEngineC() {
   	fprintf(fp, "  components new TimerMilliC() as Timer;\n");
   	fprintf(fp, "  FennecEngineP.Timer -> Timer;\n\n");
 
-  	fprintf(fp, "  components EventsC;\n");
-  	fprintf(fp, "  FennecEngineP.EventsMgmt-> EventsC.Mgmt;\n\n");
-
   	fprintf(fp, "  /* Defined and linked applications */\n\n");
 
   	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -160,7 +157,6 @@ void generateFennecEngineP() {
   	fprintf(fp, "  provides interface Module;\n\n");
 
   	fprintf(fp, "  uses interface Timer<TMilli>;\n");
-  	fprintf(fp, "  uses interface Mgmt as EventsMgmt;\n\n");
 
   	fprintf(fp, "  /* Application Modules */\n\n");
 
@@ -253,9 +249,9 @@ void generateFennecEngineP() {
   fprintf(fp,"implementation {\n\n");
   fprintf(fp,"  void ctrl_state_done(uint8_t status, uint8_t ctrl) @C() {\n");
   fprintf(fp,"    if (ctrl == ON) {\n");
-  fprintf(fp,"      call EventsMgmt.start();\n");
+  fprintf(fp,"      signal Mgmt.startDone(SUCCESS);\n");
   fprintf(fp,"    } else {\n");
-  fprintf(fp,"      call EventsMgmt.stop();\n");
+  fprintf(fp,"      signal Mgmt.stopDone(SUCCESS);\n");
   fprintf(fp,"    }\n");
   fprintf(fp,"  }\n\n");
 
@@ -297,15 +293,6 @@ void generateFennecEngineP() {
   fprintf(fp,"    ctrl_state(OFF);\n");
   fprintf(fp,"    return SUCCESS;\n");
   fprintf(fp,"  }\n\n");
-
-  fprintf(fp,"  event void EventsMgmt.startDone(error_t err) {\n");
-  fprintf(fp,"    signal Mgmt.startDone(SUCCESS);\n");
-  fprintf(fp,"  }\n\n");
-
-  fprintf(fp,"  event void EventsMgmt.stopDone(error_t err) {\n");
-  fprintf(fp,"    signal Mgmt.stopDone(SUCCESS);\n");
-  fprintf(fp,"  }\n\n");
-
 
   fprintf(fp,"  error_t AMSend_send(uint16_t module_id, uint8_t to_layer, am_addr_t addr, message_t* msg, uint8_t len) {\n");
   fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
