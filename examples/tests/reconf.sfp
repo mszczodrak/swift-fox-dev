@@ -37,9 +37,9 @@ configuration dark {nullApp()
 }
 
 event-condition t1 {timer = 10 TYPE_SECOND @ 2}
-event-condition t2 {timer = 12 TYPE_SECOND @ 2}
-event-condition t3 {timer = 8 TYPE_SECOND @ 2}
-event-condition t4 {timer = 4 TYPE_SECOND @ 2}
+event-condition t2 {timer = 50 TYPE_SECOND @ 2}
+event-condition t3 {timer = 50 TYPE_SECOND @ 2}
+event-condition t4 {timer = 20 TYPE_SECOND @ 2}
 
 from red goto yellow when t1
 from yellow goto blue when t2

@@ -1458,6 +1458,16 @@ void generateFennecEngineP() {
 
 
   fprintf(fp,"  void radioControlStartDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
+  /* Let Control Unit MAC know about the radio status */
+  fprintf(fp,"    switch( configurations[POLICY_CONF_ID].mac ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        signal %sRadioControl.startDone(error);\n", mp->lib->full_name);
+      fprintf(fp,"        break;\n\n");
+    }
+  }
+  fprintf(fp,"    }\n");
   fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
@@ -1470,6 +1480,16 @@ void generateFennecEngineP() {
 
 
   fprintf(fp,"  void radioControlStopDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
+  /* Let Control Unit MAC know about the radio status */
+  fprintf(fp,"    switch( configurations[POLICY_CONF_ID].mac ) {\n");
+  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+      fprintf(fp,"      case %d:\n", mp->id);
+      fprintf(fp,"        signal %sRadioControl.stopDone(error);\n", mp->lib->full_name);
+      fprintf(fp,"        break;\n\n");
+    }
+  }
+  fprintf(fp,"    }\n");
   fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
