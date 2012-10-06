@@ -1,6 +1,7 @@
 configuration control { ControlUnit()
 			cuNet()
 			cuMac(10, 10, 1, 1, 1)
+			#cuMac(2, 200, 10, 10, 1, 1, 1)
                         cc2420(26, 31, 1, 1)
 }
 			
