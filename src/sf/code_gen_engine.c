@@ -1300,6 +1300,9 @@ void generateFennecEngineP() {
   fprintf(fp,"  }\n\n");
 
   fprintf(fp,"  message_t* receive(uint16_t module_id, uint8_t to_layer, message_t* msg, void* payload, uint8_t len) {\n");
+  fprintf(fp,"    if (to_layer == F_RADIO) check_configuration(msg->conf);\n");
+
+
   fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
