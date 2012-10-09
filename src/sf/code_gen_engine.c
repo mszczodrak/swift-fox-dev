@@ -25,6 +25,9 @@ void generateFennecEngineC() {
   	fprintf(fp, "  components new TimerMilliC() as Timer;\n");
   	fprintf(fp, "  FennecEngineP.Timer -> Timer;\n\n");
 
+  	fprintf(fp, "  components new TimerMilliC() as RadioActivityTimer;\n");
+  	fprintf(fp, "  FennecEngineP.RadioActivityTimer -> RadioActivityTimer;\n\n");
+
   	fprintf(fp, "  /* Defined and linked applications */\n\n");
 
   	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -152,11 +155,13 @@ void generateFennecEngineP() {
   	fprintf(fp, "#include <Fennec.h>\n");
   	fprintf(fp, "#include \"engine.h\"\n");
   	fprintf(fp, "#define MODULE_RESPONSE_DELAY    200\n\n");
+  	fprintf(fp, "#define RADIO_STOP_DELAY         200\n\n");
   	fprintf(fp, "module FennecEngineP {\n\n");
   	fprintf(fp, "  provides interface Mgmt;\n");
   	fprintf(fp, "  provides interface Module;\n\n");
 
   	fprintf(fp, "  uses interface Timer<TMilli>;\n");
+  	fprintf(fp, "  uses interface Timer <TMilli> as RadioActivityTimer;\n");
 
   	fprintf(fp, "  /* Application Modules */\n\n");
 
@@ -247,6 +252,9 @@ void generateFennecEngineP() {
 
   fprintf(fp,"}\n\n");
   fprintf(fp,"implementation {\n\n");
+
+  fprintf(fp,"  bool pending_radio_stop = 0;\n\n");
+
   fprintf(fp,"  void ctrl_state_done(uint8_t status, uint8_t ctrl) @C() {\n");
   fprintf(fp,"    if (ctrl == ON) {\n");
   fprintf(fp,"      signal Mgmt.startDone(SUCCESS);\n");
@@ -280,16 +288,28 @@ void generateFennecEngineP() {
   fprintf(fp,"    ctrl_module_done(0);\n");
   fprintf(fp,"  }\n\n");
 
+  fprintf(fp,"  task void set_radio_active() {\n");
+  fprintf(fp,"    call RadioActivityTimer.startOneShot(RADIO_STOP_DELAY);\n");
+  fprintf(fp,"  }\n\n");
+
   fprintf(fp,"  event void Timer.fired() {\n");
   fprintf(fp,"    ctrl_module_done(1);\n");
   fprintf(fp,"  }\n\n");
 
+  fprintf(fp,"  event void RadioActivityTimer.fired() {\n");
+//  fprintf(fp,"    ctrl_module_done(1);\n");
+  fprintf(fp,"  }\n\n");
+
+
   fprintf(fp,"  command error_t Mgmt.start() {\n");
+  fprintf(fp,"    pending_radio_stop = 0;\n");
   fprintf(fp,"    ctrl_state(ON);\n");
   fprintf(fp,"    return SUCCESS;\n");
   fprintf(fp,"  }\n\n");
 
   fprintf(fp,"  command error_t Mgmt.stop() {\n");
+  fprintf(fp,"    pending_radio_stop = 0;\n");
+  fprintf(fp,"    call RadioActivityTimer.stop();\n");
   fprintf(fp,"    ctrl_state(OFF);\n");
   fprintf(fp,"    return SUCCESS;\n");
   fprintf(fp,"  }\n\n");
@@ -1201,12 +1221,15 @@ void generateFennecEngineP() {
 
 
   fprintf(fp,"  error_t RadioTransmit_load(uint16_t module_id, uint8_t to_layer, message_t* msg) {\n");
+  fprintf(fp,"    error_t err;\n");
   fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
   fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
       fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioTransmit.load(msg);\n\n", mp->lib->full_name);
+      fprintf(fp,"        err = call %sRadioTransmit.load(msg);\n", mp->lib->full_name);
+      fprintf(fp,"        if (err == SUCCESS) post set_radio_active();\n");
+      fprintf(fp,"        return err;\n\n");
     }
   }
   fprintf(fp,"      default:\n");
@@ -1216,12 +1239,15 @@ void generateFennecEngineP() {
 
 
   fprintf(fp,"  error_t RadioTransmit_send(uint16_t module_id, uint8_t to_layer, message_t* msg, bool useCca) {\n");
+  fprintf(fp,"    error_t err;\n");
   fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
   fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
       fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioTransmit.send(msg, useCca);\n\n", mp->lib->full_name);
+      fprintf(fp,"        err = call %sRadioTransmit.send(msg, useCca);\n\n", mp->lib->full_name);
+      fprintf(fp,"        if (err == SUCCESS) post set_radio_active();\n");
+      fprintf(fp,"        return err;\n\n");
     }
   }
   fprintf(fp,"      default:\n");
