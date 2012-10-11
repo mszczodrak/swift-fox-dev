@@ -155,7 +155,7 @@ void generateFennecEngineP() {
   	fprintf(fp, "#include <Fennec.h>\n");
   	fprintf(fp, "#include \"engine.h\"\n");
   	fprintf(fp, "#define MODULE_RESPONSE_DELAY    200\n\n");
-  	fprintf(fp, "#define RADIO_STOP_DELAY         200\n\n");
+  	fprintf(fp, "#define RADIO_STOP_DELAY         100\n\n");
   	fprintf(fp, "module FennecEngineP {\n\n");
   	fprintf(fp, "  provides interface Mgmt;\n");
   	fprintf(fp, "  provides interface Module;\n\n");
