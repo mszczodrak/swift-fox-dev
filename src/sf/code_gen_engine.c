@@ -308,8 +308,10 @@ void generateFennecEngineP() {
   fprintf(fp,"  }\n\n");
 
   fprintf(fp,"  command error_t Mgmt.stop() {\n");
-  fprintf(fp,"    pending_radio_stop = 0;\n");
   fprintf(fp,"    call RadioActivityTimer.stop();\n");
+  fprintf(fp,"    if (pending_radio_stop == 1) {\n");
+  fprintf(fp,"      signal RadioActivityTimer.fired();\n");
+  fprintf(fp,"    }\n");
   fprintf(fp,"    ctrl_state(OFF);\n");
   fprintf(fp,"    return SUCCESS;\n");
   fprintf(fp,"  }\n\n");
