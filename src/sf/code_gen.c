@@ -45,7 +45,7 @@ void setFennecExtra() {
   fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/Fennec/sfc\n");
   fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/ControlUnit\n");
   fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/Events\n");
-  fprintf(fp_fe, "include $(FENNEC_FOX_LIB)/Sensors/sensors.extra\n");
+  fprintf(fp_fe, "include $(FENNEC_FOX_LIB)/sensors/sensors.extra\n");
   fprintf(fp_fe, "include $(FENNEC_FOX_LIB)/libs/libs.extra\n");
 
   struct modtab *mp;
