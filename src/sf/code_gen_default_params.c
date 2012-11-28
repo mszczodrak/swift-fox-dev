@@ -1,6 +1,11 @@
 #include "code_gen.h"
 #include "utils.h"
 
+/*
+ * creates ff_defaults.h file
+ * the file stores default parameters for application module
+ */
+
 void generateDefaultParams() {
         char *full_path = get_sfc_path("", "ff_defaults.h");
         FILE *fp = fopen(full_path, "w");
