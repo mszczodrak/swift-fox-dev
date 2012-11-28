@@ -734,6 +734,7 @@ default_value: RELOP CONSTANT
 			$$		= calloc(1, sizeof(struct defvalue));
 			$$->def_value	= $2;
 			$$->def_valid	= 1;
+			printf("VVVV %s\n", $2->name);
 		}
 	|
 		{

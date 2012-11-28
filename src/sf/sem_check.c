@@ -218,24 +218,22 @@ checkConfigurationModules(struct confnode *c) {
 
 	struct modtab *mp;
 	struct paramvalue *mod_par_val;
-	struct paramvalue *def_val;
 	struct paramtype *par_type;
 
 	/* check application module params */
 
 	mp = c->app;
 	mod_par_val = c->app_params;
-	def_val = mp->params;
 	par_type = mp->lib->params;
 
 	printf("Module: %s\n", mp->lib->name);
 
-	/* default values are available */
+	/* check if there are too many parameters */
 	for(; mod_par_val != NULL; mod_par_val = mod_par_val->child) {
 		/* check if there are more passed parameters then
 		 * there are defined variables 
 		 */
-		if ((par_type == NULL) & (mod_par_val != NULL)) {
+		if ((par_type == NULL) && (mod_par_val != NULL)) {
 			printf("Too many params!!\n");
 			break;
 		}
@@ -244,24 +242,27 @@ checkConfigurationModules(struct confnode *c) {
 			printf("Module type: %s\n", par_type->name);
 		}
 
-
-
-
-
-		if (def_val != NULL)
-			def_val = def_val->child;
-
 		if (par_type != NULL)
 			par_type = par_type->child;
 	}
-		
+
+	/* check if parameters are missing */
+	if ((mod_par_val == NULL) && (par_type != NULL)) {
+		printf("Missing parameters\n");
+
+		if (par_type->def_val->def_valid) {
+		} else {
+			printf("Defaults are not defined\n");
+
+		}
+
+	}
 
 
 	/* check network module params */
 
 	mp = c->net;
 	mod_par_val = c->net_params;
-	def_val = mp->params;
 	par_type = mp->lib->params;
 
 
@@ -269,7 +270,6 @@ checkConfigurationModules(struct confnode *c) {
 
 	mp = c->mac;
 	mod_par_val = c->mac_params;
-	def_val = mp->params;
 	par_type = mp->lib->params;
 
 
@@ -277,7 +277,6 @@ checkConfigurationModules(struct confnode *c) {
 
 	mp = c->radio;
 	mod_par_val = c->radio_params;
-	def_val = mp->params;
 	par_type = mp->lib->params;
 
 }
