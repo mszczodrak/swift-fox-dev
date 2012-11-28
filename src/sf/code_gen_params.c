@@ -109,7 +109,7 @@ void module_params_h(struct modtab *mp) {
 void generateParams() {
 	struct modtab *mp;
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->used == 1) {
 			module_params_interface(mp);
 			module_params_c(mp);
 			module_params_h(mp);
