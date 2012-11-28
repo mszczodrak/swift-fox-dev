@@ -8,7 +8,6 @@ void generateCaches(int event_counter, int policy_counter) {
 	char *full_path = get_sfc_path("", "ff_caches.h");
 	FILE *fp = fopen(full_path, "w");
 
-//	struct symtab *sp;
 	struct modtab *mp;
 	struct poltab *pp;
 	int i;
@@ -227,9 +226,6 @@ void generateConfiguration(struct confnode* c) {
 //  }
 }
 
-void generateEvent() {
-
-}
 
 void generateInitial(struct initnode *i) {
 	active_state = i->init;

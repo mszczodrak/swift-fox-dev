@@ -73,6 +73,7 @@ struct symtab *find_sym(char *);
 struct paramtype {
         struct paramtype        *child;
 	int			type;
+	struct symtab		*def_val;
         char                    *name;
 };
 

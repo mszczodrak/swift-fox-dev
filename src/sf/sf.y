@@ -105,6 +105,7 @@ char *file_name;
 %type <parv>	parameters
 %type <parv>	next_parameter
 %type <ival>	param_type
+%type <symp>	default_value
 
 %%
 
@@ -706,7 +707,7 @@ type: APPLICATION { $$ = "application"; }
         ;
 
 
-module_types: param_type IDENTIFIER next_module_type
+module_types: param_type IDENTIFIER default_value next_module_type
 		{
 
 			struct symtab *sp = symlook($2->name);
@@ -717,7 +718,8 @@ module_types: param_type IDENTIFIER next_module_type
                         $$              = calloc(1, sizeof(struct paramtype));
 			$$->type	= $1;
                         $$->name   = $2->name;
-                        $$->child       = $3;
+			$$->def_val	= $3;
+                        $$->child       = $4;
 		}
 	|
 		{
@@ -725,7 +727,20 @@ module_types: param_type IDENTIFIER next_module_type
 		}
 	;
 
-next_module_type: newlines COMMA newlines param_type IDENTIFIER next_module_type
+default_value: RELOP CONSTANT
+		{
+			$$ = $2;
+		}
+	|
+		{
+			$$ = 0;
+		}
+	;
+
+
+
+
+next_module_type: newlines COMMA newlines param_type IDENTIFIER default_value next_module_type
 		{
 			struct symtab *sp = symlook($5->name);
 			if (sp == NULL)
@@ -734,7 +749,8 @@ next_module_type: newlines COMMA newlines param_type IDENTIFIER next_module_type
                         $$              = calloc(1, sizeof(struct paramtype));
                         $$->type   	= $4;
                         $$->name   	= $5->name;
-			$$->child	= $6;
+			$$->def_val	= $6;
+			$$->child	= $7;
 		}
 	|
 		{

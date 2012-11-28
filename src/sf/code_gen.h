@@ -34,8 +34,6 @@ void generateModules();
 
 void generateDefaultParams();
 
-void generateEvent();
-
 void generateInitial(struct initnode *i);
 
 void generateFennecEngineC();
