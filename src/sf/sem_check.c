@@ -217,22 +217,52 @@ void
 checkConfigurationModules(struct confnode *c) {
 
 	struct modtab *mp;
-	struct paramvalue *parval;
+	struct paramvalue *mod_par_val;
 	struct paramvalue *def_val;
 	struct paramtype *par_type;
 
 	/* check application module params */
 
 	mp = c->app;
-	parval = c->app_params;
+	mod_par_val = c->app_params;
 	def_val = mp->params;
 	par_type = mp->lib->params;
+
+	printf("Module: %s\n", mp->lib->name);
+
+	/* default values are available */
+	for(; mod_par_val != NULL ;
+		mod_par_val = mod_par_val->child) {
+
+		/* check if there are more passed parameters then
+		 * there are defined variables 
+		 */
+		if ((par_type == NULL) & (mod_par_val != NULL)) {
+			printf("Too many params!!\n");
+			break;
+		}
+
+		if (par_type != NULL) {
+			printf("Module type: %s\n", par_type->name);
+		}
+
+
+
+
+
+		if (def_val != NULL)
+			def_val = def_val->child;
+
+		if (par_type != NULL)
+			par_type = par_type->child;
+	}
+		
 
 
 	/* check network module params */
 
 	mp = c->net;
-	parval = c->net_params;
+	mod_par_val = c->net_params;
 	def_val = mp->params;
 	par_type = mp->lib->params;
 
@@ -240,7 +270,7 @@ checkConfigurationModules(struct confnode *c) {
 	/* check mac module params */
 
 	mp = c->mac;
-	parval = c->mac_params;
+	mod_par_val = c->mac_params;
 	def_val = mp->params;
 	par_type = mp->lib->params;
 
@@ -248,7 +278,7 @@ checkConfigurationModules(struct confnode *c) {
 	/* check radio module params */
 
 	mp = c->radio;
-	parval = c->radio_params;
+	mod_par_val = c->radio_params;
 	def_val = mp->params;
 	par_type = mp->lib->params;
 
