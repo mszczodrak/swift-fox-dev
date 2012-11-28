@@ -212,72 +212,66 @@ radio_err:
         exit(1);
 }
 
+
+
+void
+checkSingleModule(struct confnode *c, struct modtab *mp, 
+		struct paramvalue *mod_par_val, struct paramtype *par_type) {
+
+        /* check if there are too many parameters */
+        for(; mod_par_val != NULL; mod_par_val = mod_par_val->child) {
+                /* check if there are more passed parameters then
+                 * there are defined variables 
+                 */
+                if ((par_type == NULL) && (mod_par_val != NULL)) {
+		        (void)fprintf(stderr, "error: Too many parameters in configuration %s in module %s\n",
+        	                c->id->name, mp->lib->name);
+			/* terminate */
+			exit(1);
+                        break;
+                }
+
+//                if (par_type != NULL) {
+//                        printf("Module type: %s\n", par_type->name);
+//                }
+
+                if (par_type != NULL)
+                        par_type = par_type->child;
+        }
+
+        /* check if parameters are missing */
+        if ((mod_par_val == NULL) && (par_type != NULL)) {
+                if (par_type->def_val->def_valid) {
+			/* TODO: add warning message? */
+
+                } else {
+		        (void)fprintf(stderr, "error: Missing parameters in "
+				"configuration %s in module %s - default "
+					"values are not defined\n",
+        	                c->id->name, mp->lib->name);
+			/* terminate */
+			exit(1);
+                }
+
+        }
+}
+
+
 /* semantic check for modules passed to configuration */
 void 
 checkConfigurationModules(struct confnode *c) {
 
-	struct modtab *mp;
-	struct paramvalue *mod_par_val;
-	struct paramtype *par_type;
-
 	/* check application module params */
-
-	mp = c->app;
-	mod_par_val = c->app_params;
-	par_type = mp->lib->params;
-
-	printf("Module: %s\n", mp->lib->name);
-
-	/* check if there are too many parameters */
-	for(; mod_par_val != NULL; mod_par_val = mod_par_val->child) {
-		/* check if there are more passed parameters then
-		 * there are defined variables 
-		 */
-		if ((par_type == NULL) && (mod_par_val != NULL)) {
-			printf("Too many params!!\n");
-			break;
-		}
-
-		if (par_type != NULL) {
-			printf("Module type: %s\n", par_type->name);
-		}
-
-		if (par_type != NULL)
-			par_type = par_type->child;
-	}
-
-	/* check if parameters are missing */
-	if ((mod_par_val == NULL) && (par_type != NULL)) {
-		printf("Missing parameters\n");
-
-		if (par_type->def_val->def_valid) {
-		} else {
-			printf("Defaults are not defined\n");
-
-		}
-
-	}
-
+	checkSingleModule(c, c->app, c->app_params, c->app->lib->params);
 
 	/* check network module params */
-
-	mp = c->net;
-	mod_par_val = c->net_params;
-	par_type = mp->lib->params;
-
+	checkSingleModule(c, c->net, c->net_params, c->net->lib->params);
 
 	/* check mac module params */
-
-	mp = c->mac;
-	mod_par_val = c->mac_params;
-	par_type = mp->lib->params;
-
+	checkSingleModule(c, c->mac, c->mac_params, c->mac->lib->params);
 
 	/* check radio module params */
-
-	mp = c->radio;
-	mod_par_val = c->radio_params;
-	par_type = mp->lib->params;
+	checkSingleModule(c, c->radio, c->radio_params, c->radio->lib->params);
 
 }
 
