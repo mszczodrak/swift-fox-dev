@@ -231,9 +231,7 @@ checkConfigurationModules(struct confnode *c) {
 	printf("Module: %s\n", mp->lib->name);
 
 	/* default values are available */
-	for(; mod_par_val != NULL ;
-		mod_par_val = mod_par_val->child) {
-
+	for(; mod_par_val != NULL; mod_par_val = mod_par_val->child) {
 		/* check if there are more passed parameters then
 		 * there are defined variables 
 		 */
