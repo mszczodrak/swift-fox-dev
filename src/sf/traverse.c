@@ -129,6 +129,7 @@ traverse_confnode(struct confnode* c, int f) {
 
 		case TREE_CHECK_SEMANTIC:
 			checkConfiguration(c);
+			checkConfigurationModules(c);
 			break;
         
 		case TREE_GENERATE_CODE:

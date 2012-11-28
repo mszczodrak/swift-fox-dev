@@ -212,6 +212,48 @@ radio_err:
         exit(1);
 }
 
+/* semantic check for modules passed to configuration */
+void 
+checkConfigurationModules(struct confnode *c) {
+
+	struct modtab *mp;
+	struct paramvalue *parval;
+	struct paramvalue *def_val;
+	struct paramtype *par_type;
+
+	/* check application module params */
+
+	mp = c->app;
+	parval = c->app_params;
+	def_val = mp->params;
+	par_type = mp->lib->params;
+
+
+	/* check network module params */
+
+	mp = c->net;
+	parval = c->net_params;
+	def_val = mp->params;
+	par_type = mp->lib->params;
+
+
+	/* check mac module params */
+
+	mp = c->mac;
+	parval = c->mac_params;
+	def_val = mp->params;
+	par_type = mp->lib->params;
+
+
+	/* check radio module params */
+
+	mp = c->radio;
+	parval = c->radio_params;
+	def_val = mp->params;
+	par_type = mp->lib->params;
+
+}
+
 /* semantic checks for the event-condition nodes */
 void
 checkEventCondition(struct eventnode *e) {

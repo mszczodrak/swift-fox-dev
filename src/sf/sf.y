@@ -56,6 +56,7 @@ char *file_name;
 	struct variables	*vars;
 	struct paramtype	*mtl;
 	struct paramvalue	*parv;
+	struct defvalue		*defv;
 }
 
 %token CONFIGURATION COMMA EVENT_CONDITION 
@@ -105,7 +106,7 @@ char *file_name;
 %type <parv>	parameters
 %type <parv>	next_parameter
 %type <ival>	param_type
-%type <symp>	default_value
+%type <defv>	default_value
 
 %%
 
@@ -717,7 +718,7 @@ module_types: param_type IDENTIFIER default_value next_module_type
 
                         $$              = calloc(1, sizeof(struct paramtype));
 			$$->type	= $1;
-                        $$->name   = $2->name;
+                        $$->name   	= $2->name;
 			$$->def_val	= $3;
                         $$->child       = $4;
 		}
@@ -727,17 +728,20 @@ module_types: param_type IDENTIFIER default_value next_module_type
 		}
 	;
 
+
 default_value: RELOP CONSTANT
 		{
-			$$ = $2;
+			$$		= calloc(1, sizeof(struct defvalue));
+			$$->def_value	= $2;
+			$$->def_valid	= 1;
 		}
 	|
 		{
-			$$ = 0;
+			$$		= calloc(1, sizeof(struct defvalue));
+			$$->def_value	= NULL;
+			$$->def_valid	= 0;
 		}
 	;
-
-
 
 
 next_module_type: newlines COMMA newlines param_type IDENTIFIER default_value next_module_type

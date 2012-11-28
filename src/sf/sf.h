@@ -70,10 +70,15 @@ struct symtab {
 struct symtab *symlook(char *);
 struct symtab *find_sym(char *);
 
+struct defvalue {
+	struct symtab		*def_value;
+	int 			def_valid;
+};
+
 struct paramtype {
         struct paramtype        *child;
 	int			type;
-	struct symtab		*def_val;
+	struct defvalue		*def_val;
         char                    *name;
 };
 

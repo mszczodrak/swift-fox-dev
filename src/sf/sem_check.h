@@ -18,6 +18,7 @@
 void init_sem_conf(void);
 void init_sem_evt(void);
 void checkConfiguration(struct confnode *c);
+void checkConfigurationModules(struct confnode *c);
 void checkEventCondition(struct eventnode *e);
 void checkPolicy(struct policy *p);
 void checkInitial(struct initnode *i);
