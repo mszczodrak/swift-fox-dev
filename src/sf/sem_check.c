@@ -212,18 +212,16 @@ radio_err:
         exit(1);
 }
 
-
-
 void
 checkSingleModule(struct confnode *c, struct modtab *mp, 
-		struct paramvalue *mod_par_val, struct paramtype *par_type) {
+		struct paramvalue **mod_par_val, struct paramtype *par_type) {
 
         /* check if there are too many parameters */
-        for(; mod_par_val != NULL; mod_par_val = mod_par_val->child) {
+        for(; *mod_par_val != NULL; mod_par_val = &(*mod_par_val)->child) {
                 /* check if there are more passed parameters then
                  * there are defined variables 
                  */
-                if ((par_type == NULL) && (mod_par_val != NULL)) {
+                if ((par_type == NULL) && (*mod_par_val != NULL)) {
 		        (void)fprintf(stderr, "error: Too many parameters in configuration %s in module %s\n",
         	                c->id->name, mp->lib->name);
 			/* terminate */
@@ -231,20 +229,24 @@ checkSingleModule(struct confnode *c, struct modtab *mp,
                         break;
                 }
 
-//                if (par_type != NULL) {
-//                        printf("Module type: %s\n", par_type->name);
-//                }
-
                 if (par_type != NULL)
                         par_type = par_type->child;
         }
 
         /* check if parameters are missing */
-        if ((mod_par_val == NULL) && (par_type != NULL)) {
+        for (; (*mod_par_val == NULL) && (par_type != NULL); 
+		par_type = par_type->child, mod_par_val = &(*mod_par_val)->child) {
                 if (par_type->def_val->def_valid) {
 			/* TODO: add warning message? */
-
+			//printf("adding default param\n");
+			/* extend module's parameter list with the 
+			 * default values */
+			*mod_par_val = calloc(1, sizeof(struct paramvalue));
+			(*mod_par_val)->value = par_type->def_val->def_value;
+			(*mod_par_val)->child = NULL;
                 } else {
+			/* parameters are missing and there are no default
+			 * values defined to fill the missing ones */
 		        (void)fprintf(stderr, "error: Missing parameters in "
 				"configuration %s in module %s - default "
 					"values are not defined\n",
@@ -252,26 +254,24 @@ checkSingleModule(struct confnode *c, struct modtab *mp,
 			/* terminate */
 			exit(1);
                 }
-
         }
 }
-
 
 /* semantic check for modules passed to configuration */
 void 
 checkConfigurationModules(struct confnode *c) {
 
 	/* check application module params */
-	checkSingleModule(c, c->app, c->app_params, c->app->lib->params);
+	checkSingleModule(c, c->app, &(c->app_params), c->app->lib->params);
 
 	/* check network module params */
-	checkSingleModule(c, c->net, c->net_params, c->net->lib->params);
+	checkSingleModule(c, c->net, &(c->net_params), c->net->lib->params);
 
 	/* check mac module params */
-	checkSingleModule(c, c->mac, c->mac_params, c->mac->lib->params);
+	checkSingleModule(c, c->mac, &(c->mac_params), c->mac->lib->params);
 
 	/* check radio module params */
-	checkSingleModule(c, c->radio, c->radio_params, c->radio->lib->params);
+	checkSingleModule(c, c->radio, &(c->radio_params), c->radio->lib->params);
 
 }
 
