@@ -734,7 +734,6 @@ default_value: RELOP CONSTANT
 			$$		= calloc(1, sizeof(struct defvalue));
 			$$->def_value	= $2;
 			$$->def_valid	= 1;
-			printf("VVVV %s\n", $2->name);
 		}
 	|
 		{
@@ -1127,8 +1126,7 @@ editConst(struct symtab *entry ) {
 }
 
 printTable() {
-
-       struct symtab *sp;
+	struct symtab *sp;
 	printf("\n");
         for(sp = symtab; sp < &symtab[NSYMS]; sp++) {
                 /* is it already here? */
