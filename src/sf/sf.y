@@ -29,9 +29,14 @@ FILE *fcode		= NULL;
 int module_id_counter = 1;
 
 int active_state;
-const char *conf_state_name = "control";
-const int conf_state_id = 1;
+char *conf_state_name = "control";
+int conf_state_id = 1;
 int conf_state_redefined = 0;
+
+char *conf_state_app = "cuApp";
+char *conf_state_net = "cuNet";
+char *conf_state_mac = "cuMac";
+char *conf_state_radio = "cc2420";
 
 int conf_counter	= 2;
 
@@ -282,6 +287,7 @@ configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module ne
 			$$->mac_params		= $10->params;
 			$$->radio		= $12;
 			$$->radio_params	= $12->params;
+
 			if (!strcmp($2->name, conf_state_name)) {
 				printf("Conf state\n");
 				$2->value	= conf_state_id;

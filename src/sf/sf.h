@@ -53,9 +53,14 @@
 
 extern char *ffmodules;
 extern int active_state;
-extern const char *conf_state_name;
-extern const int conf_state_id;
+extern char *conf_state_name;
+extern int conf_state_id;
 extern int conf_state_redefined;
+
+extern char *conf_state_app;
+extern char *conf_state_net;
+extern char *conf_state_mac;
+extern char *conf_state_radio;
 
 
 int lineno;

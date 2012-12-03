@@ -426,6 +426,54 @@ conf_err:
 
 void
 checkControlState(void) {
-	printf("Checking control state\n");
 
+	if (conf_state_redefined) {
+		printf("Conf redefined\n");
+		return;
+	}
+
+	printf("Defining control state\n");
+
+	struct confnode *c = calloc(1, sizeof(struct confnode));
+
+	if (c == NULL) {
+		fprintf(stderr, "Failed to calloc in 'checkControlState\n");
+		exit(1);
+	}
+	
+	c->app = proc_module(conf_state_app);
+	if (c->app == NULL) {
+		fprintf(stderr, "%s is missing\n", conf_state_app);
+		exit(1);
+	}
+	c->app->params = NULL;
+	c->app->lib->used = 1;
+
+	c->net = proc_module(conf_state_net);
+	if (c->net == NULL) {
+		fprintf(stderr, "%s is missing\n", conf_state_net);
+		exit(1);
+	}
+	c->net->params = NULL;
+	c->net->lib->used = 1;
+
+	c->mac = proc_module(conf_state_mac);
+	if (c->mac == NULL) {
+		fprintf(stderr, "%s is missing\n", conf_state_mac);
+		exit(1);
+	}
+	c->mac->params = NULL;
+	c->mac->lib->used = 1;
+
+	c->radio = proc_module(conf_state_radio);
+	if (c->radio == NULL) {
+		fprintf(stderr, "%s is missing\n", conf_state_radio);
+		exit(1);
+	}
+	c->radio->params = NULL;
+	c->radio->lib->used = 1;
+
+	conftab[conf_state_id].conf = c;
+
+	printf("Defining done\n");
 }
