@@ -289,12 +289,10 @@ configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module ne
 			$$->radio_params	= $12->params;
 
 			if (!strcmp($2->name, conf_state_name)) {
-				printf("Conf state\n");
 				$2->value	= conf_state_id;
 				$$->counter	= conf_state_id;
 				conf_state_redefined = 1;
 			} else {
-				printf("not conf state\n");
 				$2->value	= conf_counter;
 				$$->counter	= conf_counter;
 				++conf_counter;

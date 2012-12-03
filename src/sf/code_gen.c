@@ -65,41 +65,40 @@ void setFennecExtra() {
 }
 
 void finishCodeGeneration(int policy_counter) {
-  int conf_counter = 0;
-  int event_counter = 0;
-  struct symtab *sp;
+	int conf_counter = 0;
+	int event_counter = 0;
+	struct symtab *sp;
+
+	for(sp = symtab; sp < &symtab[NSYMS]; sp++) {
+		if (sp->name && sp->type != NULL) {
+			if (!strcmp(sp->type, "event_id")) {
+				event_counter++;
+			}
+			if (!strcmp(sp->type, "configuration_id")) {
+				conf_counter++;
+			}
+		}
+	}
 
 
-  for(sp = symtab; sp < &symtab[NSYMS]; sp++) {
-    if (sp->name && sp->type != NULL) {
-      if (!strcmp(sp->type, "event_id")) {
-        event_counter++;
-      }
-      if (!strcmp(sp->type, "configuration_id")) {
-        conf_counter++;
-      }
-    }
-  }
+	/* check if sfc directory exists */
+	if (create_dir("Fennec/sfc")) {
+		fprintf(stderr, "Cannot create directory %s\n", "Fennec/sfc");
+		exit(1);
+	}
 
+	generateCaches(event_counter, policy_counter);
+	generateDefaultParams();
 
-  /* check if sfc directory exists */
-  if (create_dir("Fennec/sfc")) {
-    fprintf(stderr, "Cannot create directory %s\n", "Fennec/sfc");
-    exit(1);
-  }
+	generateFennecEngineC();
+	generateEventC();
 
-  generateCaches(event_counter, policy_counter);
-  generateDefaultParams();
+	generateFennecEngineP();
+	generateEventP(event_counter);
 
-  generateFennecEngineC();
-  generateEventC();
+	generateParams();
+	generateGlobals();
 
-  generateFennecEngineP();
-  generateEventP(event_counter);
-
-  generateParams();
-  generateGlobals();
-
-  setFennecExtra();
+	setFennecExtra();
 }
 

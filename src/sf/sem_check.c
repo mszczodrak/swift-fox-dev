@@ -428,11 +428,8 @@ void
 checkControlState(void) {
 
 	if (conf_state_redefined) {
-		printf("Conf redefined\n");
 		return;
 	}
-
-	printf("Defining control state\n");
 
 	struct confnode *c = calloc(1, sizeof(struct confnode));
 
@@ -441,6 +438,14 @@ checkControlState(void) {
 		exit(1);
 	}
 	
+	if (find_sym(conf_state_name) != NULL) {
+		fprintf(stderr, "Found control state, but should not\n");
+		exit(1);
+	}
+
+	c->id = symlook(conf_state_name);
+	c->id->type = "configuration_ud";
+
 	c->app = proc_module(conf_state_app);
 	if (c->app == NULL) {
 		fprintf(stderr, "%s is missing\n", conf_state_app);
@@ -474,6 +479,4 @@ checkControlState(void) {
 	c->radio->lib->used = 1;
 
 	conftab[conf_state_id].conf = c;
-
-	printf("Defining done\n");
 }

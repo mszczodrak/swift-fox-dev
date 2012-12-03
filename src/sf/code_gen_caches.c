@@ -86,6 +86,7 @@ void generateCaches(int event_counter, int policy_counter) {
 		fprintf(fp, "\t{\n");
 		fprintf(fp, "\t\t.application_cache = &%s_data,\n", 
 					conftab[i].conf->app->lib->full_name);
+
 		for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 			if (mp->lib != NULL && mp->lib->path && mp->id == conftab[i].conf->app->id) {
 				fprintf(fp, "\t\t.application_default_params = &%s_%s,\n",
