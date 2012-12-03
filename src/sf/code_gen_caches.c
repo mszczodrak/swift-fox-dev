@@ -29,8 +29,8 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "#define __FF_CACHES_H__\n\n");
 
 	fprintf(fp, "#define NUMBER_OF_CONFIGURATIONS  %d\n", conf_counter);
-	fprintf(fp, "#define INTERNAL_POLICY_CONFIGURATION_ID  %d\n\n", policy_conf_id);
-	fprintf(fp, "#define NUMBER_OF_POLICIES  %d\n\n", policy_counter);
+	fprintf(fp, "#define NUMBER_OF_POLICIES  %d\n", policy_counter);
+	fprintf(fp, "#define POLICY_CONF_ID  %d\n\n", conf_state_id);
 	fprintf(fp, "#include <Fennec.h>\n");
 	fprintf(fp, "#include \"ff_defaults.h\"\n\n");
 

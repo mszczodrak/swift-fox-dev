@@ -20,7 +20,6 @@ void initialize(void);
 void gc(void);
 void checkForRemotePath(struct libtab*);
 
-int conf_counter	= 1;
 int event_counter	= 1;
 int policy_counter	= 0;
 int virtual_counter 	= 0;
@@ -30,6 +29,10 @@ FILE *fcode		= NULL;
 int module_id_counter = 1;
 
 int active_state;
+const char *conf_state_name = "control";
+const int conf_state_id = 1;
+
+int conf_counter	= 2;
 
 struct eventnodes *last_evens = NULL;
 int file_status;
@@ -236,13 +239,6 @@ configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module ne
 			$2->type	= "configuration_id";
 			$$->id		= $2;
 	
-			if (strcmp($2->name, "policy") == 0) {
-				policy_conf_id = conf_counter;
-			}
-
-			$2->value	= conf_counter;
-			$$->counter	= conf_counter;
-
 			/* level */
 			if ($3 == NULL) {
 				$$->level	= UNKNOWN;
@@ -285,7 +281,16 @@ configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module ne
 			$$->mac_params		= $10->params;
 			$$->radio		= $12;
 			$$->radio_params	= $12->params;
-			++conf_counter;
+			if (!strcmp($2->name, conf_state_name)) {
+				printf("Conf state\n");
+				$2->value	= conf_state_id;
+				$$->counter	= conf_state_id;
+			} else {
+				printf("not conf state\n");
+				$2->value	= conf_counter;
+				$$->counter	= conf_counter;
+				++conf_counter;
+			}
 		}
 	;
 

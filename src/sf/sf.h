@@ -53,7 +53,9 @@
 
 extern char *ffmodules;
 extern int active_state;
-extern int policy_conf_id;
+extern const char *conf_state_name;
+extern const int conf_state_id;
+
 
 int lineno;
 char linebuf[BUF_SZ];

@@ -10,7 +10,6 @@
 char *fex = NULL;
 
 FILE* tmp_confs = NULL;
-int policy_conf_id = -1;
 
 void setFiles() {
 
