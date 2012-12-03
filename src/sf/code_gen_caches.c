@@ -196,34 +196,22 @@ void generateCaches(int event_counter, int policy_counter) {
 
 void generateConfiguration(struct confnode* c) {
 
-	int conf_num = c->counter;
-
 	if (c->app->lib->id == 0) {
 		c->app->lib->used = 1;
 	}
-	conftab[conf_num].conf = c;
 
 	if (c->net->lib->id == 0) {
 		c->net->lib->used = 1;
 	} 
-	conftab[conf_num].conf = c;
 
 	if (c->mac->lib->id == 0) {
 		c->mac->lib->used = 1;
 	} 
-	conftab[conf_num].conf = c;
 
 	if (c->radio->lib->id == 0) {
 		c->radio->lib->used = 1;
 	} 
-	conftab[conf_num].conf = c;
-//  }
-//  if (c->level == UNKNOWN) {
-//    conftab[conf_num].level = F_MINIMUM_STATE_LEVEL;
-//    conftab[conf_num].level = 0;
-//  } else {
-//    conftab[conf_num].level = c->level;
-//  }
+	conftab[c->counter].conf = c;
 }
 
 

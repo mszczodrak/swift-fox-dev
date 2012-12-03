@@ -31,6 +31,7 @@ int module_id_counter = 1;
 int active_state;
 const char *conf_state_name = "control";
 const int conf_state_id = 1;
+int conf_state_redefined = 0;
 
 int conf_counter	= 2;
 
@@ -285,6 +286,7 @@ configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module ne
 				printf("Conf state\n");
 				$2->value	= conf_state_id;
 				$$->counter	= conf_state_id;
+				conf_state_redefined = 1;
 			} else {
 				printf("not conf state\n");
 				$2->value	= conf_counter;

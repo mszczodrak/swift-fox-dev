@@ -55,6 +55,7 @@ extern char *ffmodules;
 extern int active_state;
 extern const char *conf_state_name;
 extern const int conf_state_id;
+extern int conf_state_redefined;
 
 
 int lineno;
