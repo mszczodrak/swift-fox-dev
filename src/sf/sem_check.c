@@ -99,9 +99,6 @@ checkConfiguration(struct confnode* c) {
 			goto net_err;
 	}
 	
-	/* success */	
-	return;
-
 	/* check for undeclared mac */
 	if (c->mac == NULL || c->mac->type == NULL || c->mac->lib == NULL)
 		goto mac_err;
@@ -124,9 +121,6 @@ checkConfiguration(struct confnode* c) {
                 if (!found)
                         goto mac_err;
         }
-
-        /* success */
-        return;
 
 	/* check for undeclared network */
 	if (c->radio == NULL || c->radio->type == NULL || c->radio->lib == NULL)
@@ -428,4 +422,10 @@ conf_err:
 			i->id->name);
 	/* terminate */
 	exit(1);
+}
+
+void
+checkControlState(void) {
+	printf("Checking control state\n");
+
 }

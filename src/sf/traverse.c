@@ -78,20 +78,20 @@ traverse_variables(struct variables* sh, int f) {
 
 void
 traverse_variable(struct variable* sh, int f) {
-        switch (f) {
-                case TREE_TRAVERSE:
-                        break;
+	switch (f) {
+	case TREE_TRAVERSE:
+		break;
 
-                case TREE_CHECK_SEMANTIC:
-                        break;
+	case TREE_CHECK_SEMANTIC:
+		break;
 
-                case TREE_GENERATE_CODE:
-        //                generateSharedVariable(sh);
-                        break;
+	case TREE_GENERATE_CODE:
+	//                generateSharedVariable(sh);
+		break;
 
-                default:
-                        break;
-        }
+	default:
+		break;
+	}
 }
 
 
@@ -100,25 +100,35 @@ void
 traverse_confnodes(struct confnodes* c, int f) {	
 	if (c != NULL){
 		switch (f) {
-			case TREE_TRAVERSE:
-				traverse_confnodes(c->confs, f);
-				traverse_confnode(c->conf, f);
-				break;
+		case TREE_TRAVERSE:
+			traverse_confnodes(c->confs, f);
+			traverse_confnode(c->conf, f);
+			break;
 
-			case TREE_CHECK_SEMANTIC:
-				traverse_confnodes(c->confs, f);
-				traverse_confnode(c->conf, f);
-				break;
+		case TREE_CHECK_SEMANTIC:
+			traverse_confnodes(c->confs, f);
+			traverse_confnode(c->conf, f);
+			break;
 
-			case TREE_GENERATE_CODE:
-				traverse_confnodes(c->confs, f);
-				traverse_confnode(c->conf, f);
-				break;
+		case TREE_GENERATE_CODE:
+			traverse_confnodes(c->confs, f);
+			traverse_confnode(c->conf, f);
+			break;
 			
-			default:
-				break;
+		default:
+			break;
 		}
-	} 
+	} else {
+		switch(f) {
+		case TREE_CHECK_SEMANTIC:
+			checkControlState();	
+			break;
+
+		default:
+			break;
+		}
+
+	}
 }
 
 void
