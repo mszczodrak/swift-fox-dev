@@ -34,9 +34,9 @@ for PROG in `ls $POOL_DIR/$SF_EXT`; do
 
 	# check for expected behavior
 	diff $EXP_OUT $TMP_OUT >> /dev/null
-	if (( $? == 0 )); then
-	       echo "Success";
-	else
-		echo "Failed ($PROG)"
-	fi
+        if (( $? == 0 )); then
+               echo -e "\E[32mSuccess\033[0m";
+        else
+                echo -e "\E[31mFailed ($PROG)\033[0m"
+        fi
 done
