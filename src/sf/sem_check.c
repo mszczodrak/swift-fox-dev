@@ -216,8 +216,9 @@ checkSingleModule(struct confnode *c, struct modtab *mp,
                  * there are defined variables 
                  */
                 if ((par_type == NULL) && (*mod_par_val != NULL)) {
-		        (void)fprintf(stderr, "error: Too many parameters in configuration %s in module %s\n",
-        	                c->id->name, mp->lib->name);
+		        (void)fprintf(stderr, "error: Too many parameters in "
+			"configuration %s in module %s defined as %s\n",
+        	                c->id->name, mp->lib->name, mp->lib->def);
 			/* terminate */
 			exit(1);
                         break;
@@ -242,9 +243,9 @@ checkSingleModule(struct confnode *c, struct modtab *mp,
 			/* parameters are missing and there are no default
 			 * values defined to fill the missing ones */
 		        (void)fprintf(stderr, "error: Missing parameters in "
-				"configuration %s in module %s - default "
+			"configuration %s in module %s defined as %s - default "
 					"values are not defined\n",
-        	                c->id->name, mp->lib->name);
+        	                c->id->name, mp->lib->name, mp->lib->def);
 			/* terminate */
 			exit(1);
                 }
@@ -266,7 +267,6 @@ checkConfigurationModules(struct confnode *c) {
 
 	/* check radio module params */
 	checkSingleModule(c, c->radio, &(c->radio_params), c->radio->lib->params);
-
 }
 
 /* semantic checks for the event-condition nodes */
@@ -479,4 +479,8 @@ checkControlState(void) {
 	c->radio->lib->used = 1;
 
 	conftab[conf_state_id].conf = c;
+
+	/* done with creating control default control state*/
+	checkConfiguration(c);
+	checkConfigurationModules(c);
 }
