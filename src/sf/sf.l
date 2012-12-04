@@ -155,11 +155,6 @@ network		{
 			tokenpos += yyleng;
 #endif
 			return NETWORK;			}
-qoi         {
-#ifndef __DEBUG__
-                        tokenpos += yyleng;
-#endif
-                        return QOI;                 }
 mac         {
 #ifndef __DEBUG__
                         tokenpos += yyleng;

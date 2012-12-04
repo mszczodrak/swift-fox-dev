@@ -19,5 +19,16 @@ enum TOKEN_NAME {
 	USE,						/* 21 */
 	WHEN,						/* 22 */
 	AND,						/* 23 */
-	OR 						/* 24 */
+	OR, 						/* 24 */
+	AT,						/* 25 */
+	LEVEL,						/* 26 */
+	SHARED,						/* 27 */
+	MAC,						/* 28 */
+	RADIO,						/* 29 */
+	ADDRESS,					/* 30 */
+	OPEN_PARENTHESIS,				/* 31 */
+	CLOSE_PARENTHESIS,				/* 32 */
+	OPEN_SQUARE_BRACE,				/* 33 */
+	CLOSE_SQUARE_BRACE,				/* 34 */
+	VIRTUAL_NETWORK					/* 35 */
 };

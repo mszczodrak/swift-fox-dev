@@ -20,7 +20,6 @@
 #define TYPE_APPLICATION	1
 #define TYPE_NETWORK		2
 #define TYPE_EVENT		3
-#define TYPE_QOI		4
 #define TYPE_MAC		5
 #define TYPE_RADIO		6
 #define TYPE_ADDRESS		7
