@@ -1,7 +1,7 @@
 #!/bin/bash
-# Swift	Fox Compiler v0 .1
-# Authors: Vasileios P. Kemerlis
-# Date: April 20, 2010
+# Swift	Fox Compiler v0 .2
+# Authors: Vasileios P. Kemerlis, Marcin Szczodrak
+# Date: December 4, 2012
 
 # pool with lexer input
 POOL_DIR="lex_pool"

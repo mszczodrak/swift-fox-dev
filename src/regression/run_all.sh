@@ -1,4 +1,7 @@
 #!/bin/bash
+# Swift Fox Compiler v0 .2
+# Authors: Vasileios P. Kemerlis, Marcin Szczodrak
+# Date: December 4, 2012
 
 LEX_TEST="./test_lex"
 PARSE_TEST="./test_parse"
