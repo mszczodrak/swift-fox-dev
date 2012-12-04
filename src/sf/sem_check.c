@@ -4,6 +4,7 @@
  */
 
 #include "sem_check.h"
+#include "code_gen.h"
 
 /* map configurations to names */
 struct symtab *map_conf_id[NSYMS];
@@ -425,6 +426,24 @@ conf_err:
 }
 
 void
+addConfModule(struct confnode *c, struct modtab **m, struct paramvalue **p, char *module_name ) {
+        *m = proc_module(module_name);
+        if (m == NULL) {
+                fprintf(stderr, "%s is missing\n", module_name);
+                exit(1);
+        }
+        (*m)->params = NULL;
+        (*m)->lib->used = 1;
+        *p = NULL;
+        if ((*m)->id == 0) {
+                (*m)->id = module_id_counter;
+                (*m)->conf = c;
+                ++module_id_counter;
+        }
+}
+
+
+void
 checkControlState(void) {
 
 	if (conf_state_redefined) {
@@ -446,37 +465,10 @@ checkControlState(void) {
 	c->id = symlook(conf_state_name);
 	c->id->type = "configuration_ud";
 
-	c->app = proc_module(conf_state_app);
-	if (c->app == NULL) {
-		fprintf(stderr, "%s is missing\n", conf_state_app);
-		exit(1);
-	}
-	c->app->params = NULL;
-	c->app->lib->used = 1;
-
-	c->net = proc_module(conf_state_net);
-	if (c->net == NULL) {
-		fprintf(stderr, "%s is missing\n", conf_state_net);
-		exit(1);
-	}
-	c->net->params = NULL;
-	c->net->lib->used = 1;
-
-	c->mac = proc_module(conf_state_mac);
-	if (c->mac == NULL) {
-		fprintf(stderr, "%s is missing\n", conf_state_mac);
-		exit(1);
-	}
-	c->mac->params = NULL;
-	c->mac->lib->used = 1;
-
-	c->radio = proc_module(conf_state_radio);
-	if (c->radio == NULL) {
-		fprintf(stderr, "%s is missing\n", conf_state_radio);
-		exit(1);
-	}
-	c->radio->params = NULL;
-	c->radio->lib->used = 1;
+	addConfModule(c, &c->app, &c->app_params, conf_state_app);
+	addConfModule(c, &c->net, &c->net_params, conf_state_net);
+	addConfModule(c, &c->mac, &c->mac_params, conf_state_mac);
+	addConfModule(c, &c->radio, &c->radio_params, conf_state_radio);
 
 	conftab[conf_state_id].conf = c;
 
