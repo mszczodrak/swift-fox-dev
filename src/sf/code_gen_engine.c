@@ -1,3 +1,21 @@
+/*  
+    Swift Fox Compiler
+    Copyright (C) 2009-2012 Marcin Szczodrak
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "code_gen.h"
 #include "utils.h"
 
@@ -1730,78 +1748,6 @@ void generateFennecEngineP() {
       fprintf(fp, "  event void %sMacStatus.status(uint8_t layer, uint8_t status_flag) {\n", mp->lib->full_name);
       fprintf(fp, "    return status(%d, F_NETWORK, layer, status_flag);\n", mp->id);
       fprintf(fp, "  }\n\n");
-
-/*
-      fprintf(fp, "  command error_t %sRadioAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMSend_send(%d, F_RADIO, addr, msg, len);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command error_t %sRadioAMSend.cancel(message_t* msg) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMSend_cancel(%d, F_RADIO, msg);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command uint8_t %sRadioAMSend.maxPayloadLength() {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMSend_maxPayloadLength(%d, F_RADIO);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command void* %sRadioAMSend.getPayload(message_t* msg, uint8_t len) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMSend_getPayload(%d, F_RADIO, msg, len);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command am_addr_t %sRadioAMPacket.address() {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMPacket_address(%d, F_RADIO);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command am_addr_t %sRadioAMPacket.destination(message_t* msg) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMPacket_destination(%d, F_RADIO, msg);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command am_addr_t %sRadioAMPacket.source(message_t* msg) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMPacket_source(%d, F_RADIO, msg);\n", mp->id);
-      fprintf(fp, "  }\n");
-      fprintf(fp, "  command void %sRadioAMPacket.setDestination(message_t* msg, am_addr_t addr) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMPacket_setDestination(%d, F_RADIO, msg, addr);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command void %sRadioAMPacket.setSource(message_t* msg, am_addr_t addr) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMPacket_setSource(%d, F_RADIO, msg, addr);\n", mp->id);
-      fprintf(fp, "  }\n");
-      fprintf(fp, "  command bool %sRadioAMPacket.isForMe(message_t* msg) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMPacket_isForMe(%d, F_RADIO, msg);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command am_id_t %sRadioAMPacket.type(message_t* msg) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMPacket_type(%d, F_RADIO, msg);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command void %sRadioAMPacket.setType(message_t* msg, am_id_t t) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMPacket_setType(%d, F_RADIO, msg, t);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command am_group_t %sRadioAMPacket.group(message_t* msg) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMPacket_group(%d, F_RADIO, msg);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command void %sRadioAMPacket.setGroup(message_t* msg, am_group_t grp) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMPacket_setGroup(%d, F_RADIO, msg, grp);\n", mp->id);
-      fprintf(fp, "  }\n");
-      fprintf(fp, "  command am_group_t %sRadioAMPacket.localGroup() {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMPacket_localGroup(%d, F_RADIO);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command void %sRadioPacket.clear(message_t* msg) {\n", mp->lib->full_name);
-      fprintf(fp, "    return Packet_clear(%d, F_RADIO, msg);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command uint8_t %sRadioPacket.payloadLength(message_t* msg) {\n", mp->lib->full_name);
-      fprintf(fp, "    return Packet_payloadLength(%d, F_RADIO, msg);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command void %sRadioPacket.setPayloadLength(message_t* msg, uint8_t len) {\n", mp->lib->full_name);
-      fprintf(fp, "    return Packet_setPayloadLength(%d, F_RADIO, msg, len);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command uint8_t %sRadioPacket.maxPayloadLength() {\n", mp->lib->full_name);
-      fprintf(fp, "    return Packet_maxPayloadLength(%d, F_RADIO);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command void* %sRadioPacket.getPayload(message_t* msg, uint8_t len) {\n", mp->lib->full_name);
-      fprintf(fp, "    return Packet_getPayload(%d, F_RADIO, msg, len);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  async command error_t %sRadioPacketAcknowledgements.requestAck( message_t* msg ) {\n", mp->lib->full_name);
-      fprintf(fp, "    return PacketAcknowledgements_requestAck(%d, F_RADIO, msg);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  async command error_t %sRadioPacketAcknowledgements.noAck( message_t* msg ) {\n", mp->lib->full_name);
-      fprintf(fp, "    return PacketAcknowledgements_noAck(%d, F_RADIO, msg);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  async command bool %sRadioPacketAcknowledgements.wasAcked(message_t* msg) {\n", mp->lib->full_name);
-      fprintf(fp, "    return PacketAcknowledgements_wasAcked(%d, F_RADIO, msg);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-*/
 
       fprintf(fp, "  command error_t %sRadioConfig.sync() {\n", mp->lib->full_name);
       fprintf(fp, "    return RadioConfig_sync(%d, F_RADIO);\n", mp->id);
