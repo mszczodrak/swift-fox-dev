@@ -1,4 +1,4 @@
 # Testing erroneous library definition (invalid identifier)
-configuration hello { blink nothing } 
+configuration hello { blink none none none } 
 start hello
 

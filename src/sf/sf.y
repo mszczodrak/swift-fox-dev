@@ -43,6 +43,7 @@ int conf_counter	= 2;
 struct eventnodes *last_evens = NULL;
 int file_status;
 char *file_name;
+char error_location[10];
 
 %}
 
@@ -845,6 +846,7 @@ start_parser(int argc, char *argv[]) {
 	
 	/* try fennec fox standart libray located at ($FENNEC_FOX_LIB)/STD_FENNEC_FOX_LIB */
 	yyin = fopen(fennec_library_file, "r");
+	strcpy(error_location, "fennec library");
 	file_status = 1;
 	file_name = fennec_library_file;
 
@@ -869,7 +871,7 @@ start_parser(int argc, char *argv[]) {
 yyerror(char *errmsg) {
 	
 	/* error in program */
-	(void)fprintf(stderr, "\nsfc in program: %s\n", file_name);
+	(void)fprintf(stderr, "\nsfc in %s %s\n", error_location, file_name);
 
 	/* line */
         (void)fprintf(stderr, "%s at line %d, position %d:\n", errmsg, lineno, 
@@ -889,6 +891,7 @@ yywrap(void) {
 		case 1:
 	        	/* open the specific library file */
 		        yyin 		= fopen(library_file, "r");
+			strcpy(error_location, "library");
 			file_status 	= 2;
 			file_name 	= library_file;
 
@@ -906,6 +909,7 @@ yywrap(void) {
 
 			/* open the program file */
 		       	yyin		= fopen(program_file, "r");
+			strcpy(error_location, "program");
 			file_status 	= 3;
 			file_name 	= program_file;
         		if (!yyin) {

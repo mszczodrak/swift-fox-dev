@@ -1,5 +1,5 @@
 
-sfc in program: parse_pool/libtest1.sfl
+sfc in library parse_pool/libtest1.sfl
 syntax error at line 2, position 1:
 application blink $(FENNEC_FOX_LIB)/Application/SimpleBlink
 ^
