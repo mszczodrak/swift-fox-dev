@@ -1,5 +1,5 @@
 # Testing erroneous program definition (invalid source)
-configuration foo { nothing nothing }
-event-condition bar { network = 8192 }
+configuration hello { nullApp() nullNet() nullMac() nullRadio() }
+event-condition bar { network = 8192 TYPE_SECOND }
 start hello
 

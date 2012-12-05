@@ -1,4 +1,2 @@
 # Testing erroneous program definition 
-use application blink $(FENNEC_FOX_LIB)/Application/SimpleBlink
-use source temperature $(FENNEC_FOX_LIB)/Events/Temperature
-use source timer $(FENNEC_FOX_LIB)/Events/Timer
+use application test_blink $(FENNEC_FOX_LIB)/Application/SimpleBlink ()

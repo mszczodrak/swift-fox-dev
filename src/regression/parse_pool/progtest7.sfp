@@ -1,5 +1,5 @@
 # Testing erroneous program definition (missing event-condition keyword)
-configuration foo { nothing nothing }
-bar { timer = 8192 }
+configuration hello { nullApp() nullNet() nullMac() nullRadio() }
+bar { timer = 8192 TYPE_SECOND }
 start hello
 
