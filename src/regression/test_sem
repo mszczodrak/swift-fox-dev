@@ -8,7 +8,7 @@ POOL_DIR="sem_pool"
 # Swift Fox extensions
 SF_EXT="*.sfp"
 # regression test suite
-REG_TEXT="../sf/sfc"
+REG_TEXT="/usr/local/bin/sfc"
 # temporary output
 TMP_OUT="/tmp/real_out.sfp"
 

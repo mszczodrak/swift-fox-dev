@@ -1,7 +1,7 @@
 # Testing erroneous semantic definition (path redeclaration)
-configuration dummy { nothing nothing }
-configuration hello { blink nothing }
-configuration sleep { nothing nothing }
+configuration dummy { none none none none }
+configuration hello { blink none none none }
+configuration sleep { none none none none }
 
 event-condition keep_blink {timer = 8192 }
 event-condition no_blink {timer = 4096 }

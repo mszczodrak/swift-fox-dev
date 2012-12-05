@@ -8,7 +8,7 @@ POOL_DIR="parse_pool"
 # Swift Fox extensions
 SF_EXT="*.sfp"
 # regression test suite
-REG_TEXT="../sf/sfc"
+REG_TEXT="/usr/local/bin/sfc"
 # temporary output
 TMP_OUT="/tmp/real_out.sfp"
 
@@ -25,7 +25,7 @@ for PROG in `ls $POOL_DIR/$SF_EXT`; do
 
 	# call the regression test suite
 	$REG_TEXT ${PROG:0:${#PROG}-4} 2> $TMP_OUT
-	
+
 	# verbose
 	count=$((++count));
 	echo -n "    [$count]"
@@ -33,6 +33,8 @@ for PROG in `ls $POOL_DIR/$SF_EXT`; do
 	echo -n ": ";
 
 	# check for expected behavior
+	cat $EXP_OUT
+	cat $TMP_OUT
 	diff $EXP_OUT $TMP_OUT >> /dev/null
         if (( $? == 0 )); then
                echo -e "\E[32mSuccess\033[0m";
