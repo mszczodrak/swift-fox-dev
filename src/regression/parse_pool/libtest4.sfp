@@ -1,4 +1,4 @@
 # Testing erroneous library definition (missing () for parameters to modules)
-configuration hello { blink none none none } 
-start hello
+configuration empty { nullApp() nullNet() nullMac() nullRadio()  }
+start empty
 
