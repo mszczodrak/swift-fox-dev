@@ -160,48 +160,28 @@ conf_err:
 	exit(1);
 
 app_err:
-	/* undeclared application */
-	if (c->app != NULL && c->app->lib != NULL && c->app->lib->name != NULL)
-		(void)fprintf(stderr, "error: undeclared application %s\n",
-				c->app->lib->name);
-	else
-		(void)fprintf(stderr, "error: undeclared application in configuration %s\n",
-				c->id->name);
+	(void)fprintf(stderr, "error: undeclared application in configuration %s\n",
+			c->id->name);
 
 	/* terminate */
 	exit(1);
 
 net_err:
-	/* undeclared network */
-	if (c->net != NULL && c->net->lib != NULL && c->net->lib->name != NULL)
-		(void)fprintf(stderr, "error: undeclared network %s\n",
-				c->net->lib->name);
-	else
-		(void)fprintf(stderr, "error: undeclared network in configuration %s\n",
-				c->id->name);
+	(void)fprintf(stderr, "error: undeclared network in configuration %s\n",
+			c->id->name);
 	/* terminate */
 	exit(1);
 
 mac_err:
-        /* undeclared mac */
-	if (c->mac != NULL && c->mac->lib != NULL && c->mac->lib->name != NULL)
-        	(void)fprintf(stderr, "error: undeclared mac %s\n",
-                	        c->mac->lib->name);
-	else
-		(void)fprintf(stderr, "error: undeclared mac in configuration %s\n",
-				c->id->name);
+	(void)fprintf(stderr, "error: undeclared mac in configuration %s\n",
+			c->id->name);
 
         /* terminate */
         exit(1);
 
 radio_err:
-        /* undeclared radio */
-	if (c->radio != NULL && c->radio->lib != NULL && c->radio->lib->name != NULL)
-	        (void)fprintf(stderr, "error: undeclared radio %s\n",
-        	                c->radio->lib->name);
-	else
-		(void)fprintf(stderr, "error: undeclared radio in configuration %s\n",
-				c->id->name);
+	(void)fprintf(stderr, "error: undeclared radio in configuration %s\n",
+			c->id->name);
 
         /* terminate */
         exit(1);
