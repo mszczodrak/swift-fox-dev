@@ -33,8 +33,6 @@ for PROG in `ls $POOL_DIR/$SF_EXT`; do
 	echo -n ": ";
 
 	# check for expected behavior
-	cat $EXP_OUT
-	cat $TMP_OUT
 	diff $EXP_OUT $TMP_OUT >> /dev/null
         if (( $? == 0 )); then
                echo -e "\E[32mSuccess\033[0m";
