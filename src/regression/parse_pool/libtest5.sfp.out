@@ -1,0 +1,6 @@
+
+
+sfc in library libtest5.sfl
+syntax error at line 2, position 83:
+use application test_blink $(FENNEC_FOX_LIB)/Application/SimpleBlink (uint8_t foo=, uint16_t bar)
+                                                                                  ^
