@@ -43,7 +43,7 @@ int conf_counter	= 2;
 struct eventnodes *last_evens = NULL;
 int file_status;
 char *file_name;
-char error_location[10];
+char *error_location;
 
 %}
 
@@ -834,6 +834,14 @@ start_parser(int argc, char *argv[]) {
 	(void)snprintf(library_file, PATH_SZ, "%s.sfl", argv[1]);
 	(void)snprintf(fennec_library_file, PATH_SZ, "%s/%s", 
 			getenv("FENNEC_FOX_LIB"), STD_FENNEC_FOX_LIB);
+
+
+	if ((error_location = malloc(strlen("fennec_library") + 1)) == NULL) {
+		/* failed */
+		(void)fprintf(stderr, 
+			"Cannot allocate memory for error_location\n");
+		exit(1);
+	}
 
 	/* cleanup */	
 	(void)atexit(gc);
