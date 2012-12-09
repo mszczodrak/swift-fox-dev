@@ -59,6 +59,7 @@ char *file_name;
 char *error_location;
 
 void yyerror(char *errmsg);
+int yylex(void);
 
 %}
 
