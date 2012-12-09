@@ -1,0 +1,6 @@
+swift-fox-compiler-*
+COPYING
+INSTALL
+.deps
+config.*
+Makefile.in
