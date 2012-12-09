@@ -33,10 +33,10 @@ am__make_dryrun = \
     esac; \
     test $$am__dry = yes; \
   }
-pkgdatadir = $(datadir)/full-package-name
-pkgincludedir = $(includedir)/full-package-name
-pkglibdir = $(libdir)/full-package-name
-pkglibexecdir = $(libexecdir)/full-package-name
+pkgdatadir = $(datadir)/swift-fox-compiler
+pkgincludedir = $(includedir)/swift-fox-compiler
+pkglibdir = $(libdir)/swift-fox-compiler
+pkglibexecdir = $(libexecdir)/swift-fox-compiler
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 install_sh_DATA = $(install_sh) -c -m 644
 install_sh_PROGRAM = $(install_sh) -c
@@ -71,10 +71,10 @@ am_fennec_OBJECTS = fennec.$(OBJEXT)
 fennec_OBJECTS = $(am_fennec_OBJECTS)
 fennec_LDADD = $(LDADD)
 am_sfc_OBJECTS = sf_driver.$(OBJEXT) traverse.$(OBJEXT) \
-	utils.$(OBJEXT) sem_check.$(OBJEXT) code_gen_engine.$(OBJEXT) \
+	sem_check.$(OBJEXT) code_gen_engine.$(OBJEXT) \
 	code_gen_caches.$(OBJEXT) code_gen_default_params.$(OBJEXT) \
 	code_gen_events.$(OBJEXT) code_gen_params.$(OBJEXT) \
-	code_gen_globals.$(OBJEXT) code_gen.$(OBJEXT)
+	code_gen_globals.$(OBJEXT) code_gen.$(OBJEXT) utils.$(OBJEXT)
 sfc_OBJECTS = $(am_sfc_OBJECTS)
 sfc_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.
@@ -144,18 +144,18 @@ LTLIBOBJS =
 MAKEINFO = ${SHELL} /home/marcin/github/swift-fox-dev/src/sf/missing --run makeinfo
 MKDIR_P = /bin/mkdir -p
 OBJEXT = o
-PACKAGE = full-package-name
-PACKAGE_BUGREPORT = BUG-REPORT-ADDRESS
-PACKAGE_NAME = FULL-PACKAGE-NAME
-PACKAGE_STRING = FULL-PACKAGE-NAME VERSION
-PACKAGE_TARNAME = full-package-name
+PACKAGE = swift-fox-compiler
+PACKAGE_BUGREPORT = marcin@ieee.org
+PACKAGE_NAME = Swift Fox Compiler
+PACKAGE_STRING = Swift Fox Compiler 0.79
+PACKAGE_TARNAME = swift-fox-compiler
 PACKAGE_URL = 
-PACKAGE_VERSION = VERSION
+PACKAGE_VERSION = 0.79
 PATH_SEPARATOR = :
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = 
-VERSION = VERSION
+VERSION = 0.79
 YACC = bison -y
 YFLAGS = 
 abs_builddir = /home/marcin/github/swift-fox-dev/src/sf
@@ -195,7 +195,6 @@ psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .
-subdirs =  full-package-name-VERSION
 sysconfdir = ${prefix}/etc
 target_alias = 
 top_build_prefix = 
@@ -205,9 +204,10 @@ PARSER = sf.y sf.l
 AM_YFLAGS = -d
 BUILT_SOURCES = sf.h
 AM_CFLAGS = -g -O3 -Wall
-sfc_SOURCES = sf.h traverse.h sf_driver.c traverse.c utils.c sem_check.c code_gen_engine.c \
+sfc_SOURCES = sf.h traverse.h sem_check.h code_gen.h utils.h \
+	sf_driver.c traverse.c sem_check.c code_gen_engine.c \
         code_gen_caches.c code_gen_default_params.c \
-        code_gen_events.c code_gen_params.c code_gen_globals.c code_gen.c
+        code_gen_events.c code_gen_params.c code_gen_globals.c code_gen.c utils.c
 
 fennec_SOURCES = fennec.c
 all: $(BUILT_SOURCES) config.h

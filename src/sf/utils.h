@@ -19,7 +19,7 @@
 #ifndef _SF_UTILS_H_
 #define _SF_UTILS_H_
 
-#include "y.tab.h"
+#include "sf.h"
 
 char * type_name(int type_value);
 char *get_full_path(char *ffsrc_relative);
