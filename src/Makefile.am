@@ -1,3 +1,6 @@
+BUILT_SOURCES = parser.h
+AM_YFLAGS = -d
+
 AM_CFLAGS= -g -O3 -Wall
 
 bin_PROGRAMS=sfc fennec
