@@ -23,5 +23,5 @@ main(int argc, char *argv[] ) {
 
 
 	/* Invoke the parser */
-       	start_parser(argc, argv);
+	return start_parser(argc, argv);
 }

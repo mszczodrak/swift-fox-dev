@@ -33,10 +33,10 @@ am__make_dryrun = \
     esac; \
     test $$am__dry = yes; \
   }
-pkgdatadir = $(datadir)/swift-fox-compiler
-pkgincludedir = $(includedir)/swift-fox-compiler
-pkglibdir = $(libdir)/swift-fox-compiler
-pkglibexecdir = $(libexecdir)/swift-fox-compiler
+pkgdatadir = $(datadir)/full-package-name
+pkgincludedir = $(includedir)/full-package-name
+pkglibdir = $(libdir)/full-package-name
+pkglibexecdir = $(libexecdir)/full-package-name
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 install_sh_DATA = $(install_sh) -c -m 644
 install_sh_PROGRAM = $(install_sh) -c
@@ -49,7 +49,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = fennec$(EXEEXT)
+bin_PROGRAMS = sfc$(EXEEXT) fennec$(EXEEXT)
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
@@ -70,6 +70,13 @@ PROGRAMS = $(bin_PROGRAMS)
 am_fennec_OBJECTS = fennec.$(OBJEXT)
 fennec_OBJECTS = $(am_fennec_OBJECTS)
 fennec_LDADD = $(LDADD)
+am_sfc_OBJECTS = sf_driver.$(OBJEXT) traverse.$(OBJEXT) \
+	utils.$(OBJEXT) sem_check.$(OBJEXT) code_gen_engine.$(OBJEXT) \
+	code_gen_caches.$(OBJEXT) code_gen_default_params.$(OBJEXT) \
+	code_gen_events.$(OBJEXT) code_gen_params.$(OBJEXT) \
+	code_gen_globals.$(OBJEXT) code_gen.$(OBJEXT)
+sfc_OBJECTS = $(am_sfc_OBJECTS)
+sfc_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -78,8 +85,8 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(fennec_SOURCES)
-DIST_SOURCES = $(fennec_SOURCES)
+SOURCES = $(fennec_SOURCES) $(sfc_SOURCES)
+DIST_SOURCES = $(fennec_SOURCES) $(sfc_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -128,24 +135,29 @@ INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LDFLAGS = 
+LEX = flex
+LEXLIB = -lfl
+LEX_OUTPUT_ROOT = lex.yy
 LIBOBJS = 
 LIBS = 
 LTLIBOBJS = 
 MAKEINFO = ${SHELL} /home/marcin/github/swift-fox-dev/src/sf/missing --run makeinfo
 MKDIR_P = /bin/mkdir -p
 OBJEXT = o
-PACKAGE = swift-fox-compiler
-PACKAGE_BUGREPORT = marcin@ieee.org
-PACKAGE_NAME = Swift Fox Compiler
-PACKAGE_STRING = Swift Fox Compiler 0.8
-PACKAGE_TARNAME = swift-fox-compiler
+PACKAGE = full-package-name
+PACKAGE_BUGREPORT = BUG-REPORT-ADDRESS
+PACKAGE_NAME = FULL-PACKAGE-NAME
+PACKAGE_STRING = FULL-PACKAGE-NAME VERSION
+PACKAGE_TARNAME = full-package-name
 PACKAGE_URL = 
-PACKAGE_VERSION = 0.8
+PACKAGE_VERSION = VERSION
 PATH_SEPARATOR = :
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = 
-VERSION = 0.8
+VERSION = VERSION
+YACC = bison -y
+YFLAGS = 
 abs_builddir = /home/marcin/github/swift-fox-dev/src/sf
 abs_srcdir = /home/marcin/github/swift-fox-dev/src/sf
 abs_top_builddir = /home/marcin/github/swift-fox-dev/src/sf
@@ -183,13 +195,22 @@ psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .
+subdirs =  full-package-name-VERSION
 sysconfdir = ${prefix}/etc
 target_alias = 
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
+PARSER = sf.y sf.l
+AM_YFLAGS = -d
+BUILT_SOURCES = sf.h
+AM_CFLAGS = -g -O3 -Wall
+sfc_SOURCES = sf.h traverse.h sf_driver.c traverse.c utils.c sem_check.c code_gen_engine.c \
+        code_gen_caches.c code_gen_default_params.c \
+        code_gen_events.c code_gen_params.c code_gen_globals.c code_gen.c
+
 fennec_SOURCES = fennec.c
-all: config.h
+all: $(BUILT_SOURCES) config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
@@ -286,6 +307,9 @@ clean-binPROGRAMS:
 fennec$(EXEEXT): $(fennec_OBJECTS) $(fennec_DEPENDENCIES) $(EXTRA_fennec_DEPENDENCIES) 
 	@rm -f fennec$(EXEEXT)
 	$(LINK) $(fennec_OBJECTS) $(fennec_LDADD) $(LIBS)
+sfc$(EXEEXT): $(sfc_OBJECTS) $(sfc_DEPENDENCIES) $(EXTRA_sfc_DEPENDENCIES) 
+	@rm -f sfc$(EXEEXT)
+	$(LINK) $(sfc_OBJECTS) $(sfc_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -293,7 +317,18 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+include ./$(DEPDIR)/code_gen.Po
+include ./$(DEPDIR)/code_gen_caches.Po
+include ./$(DEPDIR)/code_gen_default_params.Po
+include ./$(DEPDIR)/code_gen_engine.Po
+include ./$(DEPDIR)/code_gen_events.Po
+include ./$(DEPDIR)/code_gen_globals.Po
+include ./$(DEPDIR)/code_gen_params.Po
 include ./$(DEPDIR)/fennec.Po
+include ./$(DEPDIR)/sem_check.Po
+include ./$(DEPDIR)/sf_driver.Po
+include ./$(DEPDIR)/traverse.Po
+include ./$(DEPDIR)/utils.Po
 
 .c.o:
 	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -524,13 +559,15 @@ distcleancheck: distclean
 	       $(distcleancheck_listfiles) ; \
 	       exit 1; } >&2
 check-am: all-am
-check: check-am
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-am
 all-am: Makefile $(PROGRAMS) config.h
 installdirs:
 	for dir in "$(DESTDIR)$(bindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -560,6 +597,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
@@ -632,7 +670,7 @@ ps-am:
 
 uninstall-am: uninstall-binPROGRAMS
 
-.MAKE: all install-am install-strip
+.MAKE: all check install install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am am--refresh check check-am clean \
 	clean-binPROGRAMS clean-generic ctags dist dist-all dist-bzip2 \

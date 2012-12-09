@@ -61,6 +61,7 @@ extern char *conf_state_net;
 extern char *conf_state_mac;
 extern char *conf_state_radio;
 
+int start_parser(int argc, char *argv[]);
 
 int lineno;
 char linebuf[BUF_SZ];

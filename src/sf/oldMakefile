@@ -27,17 +27,8 @@ sfc: lex.yy.o $(SRCS) sf_driver.c
 ley.yy.o: lex.yy.c
 	$(CC) $(CFLAGS) lex.yy.c
 
-#traverse.o: traverse.c
-#	$(CC) $(CFLAGS) traverse.c
-
 sem_check.o: sem_check.c sem_check.h
 	$(CC) $(CFLAGS) sem_check.c
-
-#code_gen_engine.o: code_gen_engine.c
-#	$(CC) $(CFLAGS) code_gen_engine.c
-
-#code_gen.o: code_gen.c
-#	$(CC) $(CFLAGS) code_gen.c
 
 lex.yy.c: y.tab.c sf.l
 	$(LEX) sf.l
