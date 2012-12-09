@@ -1,4 +1,5 @@
-/*
+/** \file
+
     Swift Fox Compiler
     Copyright (C) 2009-2012 Marcin Szczodrak
 
@@ -23,11 +24,12 @@
 #include "parser.h"
 #include "utils.h"
 
-
 char *fex = NULL;
 
 FILE* tmp_confs = NULL;
 
+/** Prepares files before generating the compiler's output.
+*/
 void setFiles() {
 
 	char *fennec_fox_lib = getenv("FENNEC_FOX_LIB");
@@ -45,6 +47,8 @@ void setFiles() {
 	fclose(tmp);
 }
 
+/** Fill the content of the fennec.extra file.
+*/
 void setFennecExtra() {
 
 	FILE *fp_fe = fopen(fex, "w");
@@ -82,6 +86,12 @@ void setFennecExtra() {
 	fclose(fp_fe);
 }
 
+/** Finishes code generation. It is the last step after the semantic tarversal.
+At this point, all the information for code generation is collected and the 
+code can be generated.
+
+\param policy_counter number of policies found in Swift Fox program.
+*/
 void finishCodeGeneration(int policy_counter) {
 	int conf_counter = 0;
 	int event_counter = 0;

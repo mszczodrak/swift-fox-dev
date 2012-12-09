@@ -1,4 +1,5 @@
-/*  
+/** \file
+
     Swift Fox Compiler
     Copyright (C) 2009-2012 Marcin Szczodrak
 
@@ -19,6 +20,11 @@
 #include "code_gen.h"
 #include "utils.h"
 
+/** Generates SF output file ff_caches.h.
+
+\param event_counter number of events found in Swift Fox program
+\param policy_counter number of policies found in Swift Fox program
+*/
 void generateCaches(int event_counter, int policy_counter) {
 
 	FILE *tmp_confs = fopen(TEMP_CONF_FILE, "r");
@@ -212,7 +218,12 @@ void generateCaches(int event_counter, int policy_counter) {
 	fclose(tmp_confs);
 }
 
+/** Prepares SF configuration for the output. Each configuration's
+module is marked as used and the configuration is added to the 
+conftab list of all configurations.
 
+\param c pointer to configuration structure
+*/
 void generateConfiguration(struct confnode* c) {
 
 	if (c->app->lib->id == 0) {
@@ -233,7 +244,10 @@ void generateConfiguration(struct confnode* c) {
 	conftab[c->counter].conf = c;
 }
 
+/** Marks the initial state.
 
+\param i pointer to the initial state structure
+*/
 void generateInitial(struct initnode *i) {
 	active_state = i->init;
 }

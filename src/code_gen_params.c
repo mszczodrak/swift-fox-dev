@@ -1,4 +1,4 @@
-/*  
+/** \file
     Swift Fox Compiler
     Copyright (C) 2009-2012 Marcin Szczodrak
 
