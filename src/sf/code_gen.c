@@ -1,3 +1,20 @@
+/*
+    Swift Fox Compiler
+    Copyright (C) 2009-2012 Marcin Szczodrak
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -13,55 +30,56 @@ FILE* tmp_confs = NULL;
 
 void setFiles() {
 
-  char *fennec_fox_lib = getenv("FENNEC_FOX_LIB");
+	char *fennec_fox_lib = getenv("FENNEC_FOX_LIB");
 
-  if (fennec_fox_lib == NULL) {
-    fprintf(stderr, "\n\nFENNEC_FOX_LIB is not set!\n");
-    exit(1);
-  }
+	if (fennec_fox_lib == NULL) {
+		fprintf(stderr, "\n\nFENNEC_FOX_LIB is not set!\n");
+		exit(1);
+	}
 
-  char *p_fex = "support/sfc/fennec.extra";
-  fex = malloc(strlen(p_fex)+strlen(fennec_fox_lib)+2);
-  sprintf(fex, "%s/%s", fennec_fox_lib, p_fex);
+	char *p_fex = "support/sfc/fennec.extra";
+	fex = malloc(strlen(p_fex)+strlen(fennec_fox_lib)+2);
+	sprintf(fex, "%s/%s", fennec_fox_lib, p_fex);
 
-  FILE *tmp = fopen(TEMP_CONF_FILE, "w");
-  fclose(tmp);
-
+	FILE *tmp = fopen(TEMP_CONF_FILE, "w");
+	fclose(tmp);
 }
 
 void setFennecExtra() {
 
-  FILE *fp_fe = fopen(fex, "w");
+	FILE *fp_fe = fopen(fex, "w");
 
-  if (fp_fe == NULL) {
-    fprintf(stderr, "You do not have a permission to write into file: %s\n", fex);
-    exit(1);
-  }
+	if (fp_fe == NULL) {
+		fprintf(stderr, "You do not have a permission to write into"
+							" file: %s\n", fex);
+		exit(1);
+	}
 
-  fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/interfaces\n");
-  fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/system\n");
-  fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/Fennec\n");
-  fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/Fennec/sfc\n");
-  fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/ControlUnit\n");
-  fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/Events\n");
-  fprintf(fp_fe, "include $(FENNEC_FOX_LIB)/sensors/sensors.extra\n");
-  fprintf(fp_fe, "include $(FENNEC_FOX_LIB)/libs/libs.extra\n");
+	fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/interfaces\n");
+	fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/system\n");
+	fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/Fennec\n");
+	fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/Fennec/sfc\n");
+	fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/ControlUnit\n");
+	fprintf(fp_fe, "CFLAGS+=-I$(FENNEC_FOX_LIB)/Events\n");
+	fprintf(fp_fe, "include $(FENNEC_FOX_LIB)/sensors/sensors.extra\n");
+	fprintf(fp_fe, "include $(FENNEC_FOX_LIB)/libs/libs.extra\n");
 
-  struct modtab *mp;
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->conf != NULL && mp->conf->counter > 0) {
-      fprintf(fp_fe, "CFLAGS+=-I%s\n", mp->lib->path);
-    }
-  }
+	struct modtab *mp;
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->conf != NULL && 
+							mp->conf->counter > 0) {
+			fprintf(fp_fe, "CFLAGS+=-I%s\n", mp->lib->path);
+		}
+	}
 
-  struct libtab *lp;
-  for(lp = libtab; lp < &libtab[NSYMS]; lp++) {
-    if (lp->path && lp->used == 1) {
-      fprintf(fp_fe, "CFLAGS+=-I%s\n", lp->path);
-    }
-  }
+	struct libtab *lp;
+	for(lp = libtab; lp < &libtab[NSYMS]; lp++) {
+		if (lp->path && lp->used == 1) {
+			fprintf(fp_fe, "CFLAGS+=-I%s\n", lp->path);
+		}
+	}
 
-  fclose(fp_fe);
+	fclose(fp_fe);
 }
 
 void finishCodeGeneration(int policy_counter) {

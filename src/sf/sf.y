@@ -1,8 +1,21 @@
 %{
-/* Swift Fox Compiler
- * Authors: Marcin Szczodrak
- * Date: 6/9/2012
- */
+/*  
+    Swift Fox Compiler
+    Copyright (C) 2009-2012 Marcin Szczodrak
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -43,7 +56,7 @@ int conf_counter	= 2;
 struct eventnodes *last_evens = NULL;
 int file_status;
 char *file_name;
-char error_location[10];
+char *error_location;
 
 %}
 
@@ -834,6 +847,14 @@ start_parser(int argc, char *argv[]) {
 	(void)snprintf(library_file, PATH_SZ, "%s.sfl", argv[1]);
 	(void)snprintf(fennec_library_file, PATH_SZ, "%s/%s", 
 			getenv("FENNEC_FOX_LIB"), STD_FENNEC_FOX_LIB);
+
+
+	if ((error_location = malloc(strlen("fennec_library") + 1)) == NULL) {
+		/* failed */
+		(void)fprintf(stderr, 
+			"Cannot allocate memory for error_location\n");
+		exit(1);
+	}
 
 	/* cleanup */	
 	(void)atexit(gc);
