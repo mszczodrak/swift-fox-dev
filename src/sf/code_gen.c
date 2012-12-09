@@ -20,7 +20,7 @@
 #include <string.h>
 #include "sf.h"
 #include "code_gen.h"
-#include "y.tab.h"
+#include "parser.h"
 #include "utils.h"
 
 

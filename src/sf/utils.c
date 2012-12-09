@@ -22,6 +22,7 @@
 #include <sys/stat.h>
 #include "utils.h"
 #include "sf.h"
+#include "parser.h"
 
 
 char * type_name(int type_value) {
