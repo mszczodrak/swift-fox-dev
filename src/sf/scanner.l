@@ -25,7 +25,7 @@
 #include <fcntl.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include "y.tab.h"
+#include "parser.h"
 #include "sf.h"
 
 #define YY_NO_INPUT

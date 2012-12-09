@@ -58,6 +58,8 @@ int file_status;
 char *file_name;
 char *error_location;
 
+void yyerror(char *errmsg);
+
 %}
 
 %union {
@@ -139,7 +141,7 @@ swiftfox: library program
 			/* printTable(); */
 			
 			/* root node for the constructed AST */
-			struct program *p = $2;
+			//struct program *p = $2;
 
 			/* traverse the AST for semantic checking */	
 			traverse_program($2,
@@ -337,7 +339,7 @@ parameters: IDENTIFIER next_parameter
                 {
                         struct symtab *sp = symlook($1->name);
                         if (sp == NULL)
-                                yyerror("sp not found: %s\n", $1->name);
+                                yyerror("symtab pointer not found");
 
                         /* paramvalue node */
                         $$              = calloc(1, sizeof(struct paramvalue));
@@ -348,7 +350,7 @@ parameters: IDENTIFIER next_parameter
                 {
                         struct symtab *sp = symlook($1->name);
                         if (sp == NULL)
-                                yyerror("sp not found: %s\n", $1->name);
+                                yyerror("symtab pointer not found");
 
                         /* pramvalue node */
                         $$              = calloc(1, sizeof(struct paramvalue));
@@ -366,7 +368,7 @@ next_parameter: COMMA IDENTIFIER next_parameter
                 {
                         struct symtab *sp = symlook($2->name);
                         if (sp == NULL)
-                                yyerror("sp not found: %s\n", $2->name);
+                                yyerror("symtab pointer not found");
 
                         /* paramvalue node */
                         $$              = calloc(1, sizeof(struct paramvalue));
@@ -377,7 +379,7 @@ next_parameter: COMMA IDENTIFIER next_parameter
 		{
                         struct symtab *sp = symlook($2->name);
                         if (sp == NULL)
-                                yyerror("sp not found: %s\n", $2->name);
+                                yyerror("symtab pointer not found");
 
                         /* pramvalue node */
                         $$              = calloc(1, sizeof(struct paramvalue));
@@ -738,7 +740,7 @@ module_types: param_type IDENTIFIER default_value next_module_type
 
 			struct symtab *sp = symlook($2->name);
 			if (sp == NULL)
-				yyerror("sp not found: %s\n", $2->name);
+                                yyerror("symtab pointer not found");
 
 
                         $$              = calloc(1, sizeof(struct paramtype));
@@ -773,7 +775,7 @@ next_module_type: newlines COMMA newlines param_type IDENTIFIER default_value ne
 		{
 			struct symtab *sp = symlook($5->name);
 			if (sp == NULL)
-				yyerror("sp not found: %s\n", $5->name);
+                                yyerror("symtab pointer not found");
 
                         $$              = calloc(1, sizeof(struct paramtype));
                         $$->type   	= $4;
@@ -889,6 +891,7 @@ start_parser(int argc, char *argv[]) {
 }
 
 /* error reporting */
+void
 yyerror(char *errmsg) {
 	
 	/* error in program */
@@ -982,6 +985,7 @@ symlook(char *s) {
 		/* otherwise continue to next */
 	}
 	yyerror("symtab is full");
+	return sp;
 }
 
 
@@ -1031,6 +1035,7 @@ proc_module(char *s) {
 		}
         }
         yyerror("modtab is full");
+	return mp;
 }
 
 /* store policy */
@@ -1070,6 +1075,7 @@ liblook(char *l) {
                 /* otherwise continue to next */
         }
         yyerror("libtab is full");
+	return lp;
 }
 
 /* event-condition lookup */
@@ -1094,6 +1100,7 @@ evlook(char *name) {
 
 	/* failed */
 	yyerror("evtab is full");
+	return ev;
 }
 
 /* initialize the keywords set */
@@ -1143,6 +1150,7 @@ negateOperator(int i) {
 			return NE;
 		default:
 			yyerror("unknown RELOP operator");
+			return -1;
 	}
 }
 
@@ -1161,7 +1169,7 @@ editConst(struct symtab *entry ) {
 	return v;
 }
 
-printTable() {
+void printTable() {
 	struct symtab *sp;
 	printf("\n");
         for(sp = symtab; sp < &symtab[NSYMS]; sp++) {
@@ -1190,7 +1198,7 @@ void
 gc(void) {
 	
 	/* cleanup */
-	(void)close(yyin);
+	(void)fclose(yyin);
 }
 
 /* check if the path is remote */
