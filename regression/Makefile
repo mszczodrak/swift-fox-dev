@@ -5,7 +5,7 @@ LEX_CFLAGS=-c -D__DEBUG__
 CFLAGS=-Wall -D__DEBUG__
 LDFLAGS=-ll
 
-LEX_DEF=../sf/sf.l
+LEX_DEF=../src/scanner.l
 TARGET=regtest_lex
 
 all: $(TARGET)
