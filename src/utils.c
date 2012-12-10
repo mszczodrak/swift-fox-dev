@@ -29,6 +29,7 @@
 converts type value (int) into string
 
 \param type_value constant representing a type
+
 \return string C-compliant type
 */
 char * type_name(int type_value) {
@@ -58,7 +59,9 @@ converts local path within Fennec Fox library to a complete path
 within the system
 
 \param ffsrc_relative string with local path
+
 \return tmp complete path
+
 */
 char *get_full_path(char *ffsrc_relative) {
 	char *fennec_fox_lib = getenv("FENNEC_FOX_LIB");
@@ -78,6 +81,7 @@ char *get_full_path(char *ffsrc_relative) {
 creates a path to a file located within Fennec Fox source directory
 
 \param file1 string with relative path withing Fennec Fox
+
 \param file2 name of a file
 
 \return tmp a complete path to file2
@@ -101,9 +105,9 @@ char *get_sfc_path(char *file1, char *file2) {
 /**
 creates directory within Fennec Fox
 
-/param ffsrc_relative string with a path within Fennec Fox source directory
+\param ffsrc_relative string with a path within Fennec Fox source directory
 
-/return status reporting successful creation of a directory
+\return status reporting successful creation of a directory
 */
 int create_dir(char *ffsrc_relative) {
 	struct stat st;
