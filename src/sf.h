@@ -80,7 +80,10 @@ int lineno;
 char linebuf[BUF_SZ];
 int tokenpos;
 
-/* Symbol Table */
+/**
+Symbol Table 
+stores all symbols passed from lexer
+*/
 struct symtab {
 	char			*name;
 	int			value;
