@@ -22,23 +22,40 @@
 #include "sem_check.h"
 #include "code_gen.h"
 
-/* AST traversal; main entry point */
+/** 
+AST (Abstract Syntax Tree) traversal; 
+main entry point 
+
+\param p pointer to a program structure 
+
+\param f type of traversar (TREE_TRAVERSE, TREE_CHECK_SEMANTIC, TREE_GENERATE_CODE)
+
+\param policy_counter number of policies
+*/
 void
 traverse_program(struct program* p, int f, int policy_counter){
 	if (p != NULL) {
 		switch (f) {
-			/* plain traversal */
+			/** 
+			plain traversal 
+			*/
 			case TREE_TRAVERSE:
 				traverse_confnodes(p->defcon, f);
 				traverse_eventnodes(p->defeve, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
 				break;
-			/* traversal for semantic checking */
+			/** 
+			traversal for semantic checking 
+			*/
 			case TREE_CHECK_SEMANTIC:
-				/* zero the mapping structure */
+				/** 
+				zero the mapping structure 
+				*/
 				init_sem_conf();
-				/* zero the mapping structure */
+				/** 
+				zero the mapping structure 
+				*/
 				init_sem_evt();
 				
 				traverse_confnodes(p->defcon, f);
@@ -46,7 +63,10 @@ traverse_program(struct program* p, int f, int policy_counter){
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
 				break;
-			/* traversal for code generation */
+
+			/**
+			traversal for code generation 
+			*/
 			case TREE_GENERATE_CODE:
 				setFiles();
 				traverse_variables(p->vars, f);
@@ -56,14 +76,22 @@ traverse_program(struct program* p, int f, int policy_counter){
 				traverse_initnode(p->init, f);
 				finishCodeGeneration(policy_counter);
 				break;
-			/* make the compiler happy */
+			/** 
+			make the compiler happy 
+			*/
 			default:
 				break;
 		}
 	}
 }
 
-/* shared variables traversal */
+/** 
+shared variables traversal 
+
+\param sh pointer to header of a list of variables
+
+\param f type of traversar (TREE_TRAVERSE, TREE_CHECK_SEMANTIC, TREE_GENERATE_CODE)
+*/
 void
 traverse_variables(struct variables* sh, int f) {
         if (sh != NULL){
@@ -89,6 +117,13 @@ traverse_variables(struct variables* sh, int f) {
         }
 }
 
+/** 
+inspects a single variable
+
+\param sh pointer to a variable structure
+
+\param f type of traversar (TREE_TRAVERSE, TREE_CHECK_SEMANTIC, TREE_GENERATE_CODE)
+*/
 void
 traverse_variable(struct variable* sh, int f) {
 	switch (f) {
@@ -108,7 +143,13 @@ traverse_variable(struct variable* sh, int f) {
 }
 
 
-/* configuration traversal */
+/** 
+configuration traversal
+
+\param c pointer to header of a list of configuration
+
+\param f type of traversar (TREE_TRAVERSE, TREE_CHECK_SEMANTIC, TREE_GENERATE_CODE)
+*/
 void
 traverse_confnodes(struct confnodes* c, int f) {	
 	if (c != NULL){
@@ -144,6 +185,13 @@ traverse_confnodes(struct confnodes* c, int f) {
 	}
 }
 
+/** 
+visit a single configuration
+
+\param c pointer to a configuration structure
+
+\param f type of traversar (TREE_TRAVERSE, TREE_CHECK_SEMANTIC, TREE_GENERATE_CODE)
+*/
 void
 traverse_confnode(struct confnode* c, int f) {	
 	switch (f) {
@@ -164,7 +212,13 @@ traverse_confnode(struct confnode* c, int f) {
 	}
 }
 
-/* event-condition traversal */
+/** 
+event-condition traversal
+
+\param e pointer to header of a list of events
+
+\param f type of traversar (TREE_TRAVERSE, TREE_CHECK_SEMANTIC, TREE_GENERATE_CODE)
+*/
 void
 traverse_eventnodes(struct eventnodes* e, int f) {
 	if (e != NULL){
@@ -189,7 +243,14 @@ traverse_eventnodes(struct eventnodes* e, int f) {
 		}
 	}
 }
+  
+/** 
+visit single event
 
+\param e pointer to an event structure
+
+\param f type of traversar (TREE_TRAVERSE, TREE_CHECK_SEMANTIC, TREE_GENERATE_CODE)
+*/
 void
 traverse_eventnode(struct eventnode* e, int f) {
 	switch (f) {
@@ -209,7 +270,14 @@ traverse_eventnode(struct eventnode* e, int f) {
 	}
 }
 
-/* policy traversal */
+
+/** 
+policy traversal
+
+\param p pointer to header of a list of policies
+
+\param f type of traversar (TREE_TRAVERSE, TREE_CHECK_SEMANTIC, TREE_GENERATE_CODE)
+*/
 void traverse_policies(struct policies* p, int f) {
 	if (p != NULL){
 		switch (f) {
@@ -234,6 +302,13 @@ void traverse_policies(struct policies* p, int f) {
 	}
 }
 
+/** 
+visit a policy definition
+
+\param p pointer to single policy structure
+
+\param f type of traversar (TREE_TRAVERSE, TREE_CHECK_SEMANTIC, TREE_GENERATE_CODE)
+*/
 void
 traverse_policy(struct policy* p, int f) {
 	switch (f) {
@@ -252,8 +327,13 @@ traverse_policy(struct policy* p, int f) {
 			break;
 	}
 }
+/** 
+initial node visit
 
-/* initial node traversal */
+\param i pointer to the initial state
+
+\param f type of traversar (TREE_TRAVERSE, TREE_CHECK_SEMANTIC, TREE_GENERATE_CODE)
+*/
 void
 traverse_initnode(struct initnode *i, int f) {
 	switch (f) {
