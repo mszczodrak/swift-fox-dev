@@ -175,45 +175,69 @@ struct confnodes {
 
 
 struct eventnode {
+	/** pointer to the parent event node */
 	struct eventnodes	*parent;
+	/** pointer to a symtab storing event's id */
 	struct symtab		*id;
+	/** pointer to a symtab with name of the event's source */
 	struct symtab		*src;
+	/** relation operator for the event */
 	int 			op;
+	/** event's counter */
 	int 			counter;
+	/** pointer to a symtab with ... */
 	struct symtab		*cst;
 };
 
 struct eventnodes {
+	/** pointer to parent event nodes */
 	struct eventnodes	*parent;
+	/** pointer to further events */
         struct eventnodes	*evens;
+	/** pointer to a particular event structure */
         struct eventnode	*even;
 };
 
 struct variable {
+	/** pointer to the structure with parent variables */
 	struct variables	*parent;
+	/** type of a variable encoded as intiger */
 	int			type;
+	/** pointer to a symtab storing type of the variable */
 	struct symtab		*var_type;
+	/** pointer to a symtab containing the variable's name */
 	struct symtab		*name;
 };
 
 
 struct variables {
-	struct variables	*parent;
+	/** pointer to previous variable */
+	struct variables	*parent;	
+	/** pointer to further variable */
 	struct variables	*vars;
+	/** pointer to the variable structure */
 	struct variable		*var;
 };
 
 struct policy {
+	/** pointer to parent policy */
 	struct policies		*parent;
+	/** pointer to a symtab with configuration that is the source of reconfiguration */
 	struct symtab		*from;
+	/** pointer to a symtab with configuration that is the destination of reconfiguration */
 	struct symtab		*to;
+	/** an event mast that must take place to trigger reconfiguration */
 	int 			mask_r;
+	/** policy counter, and this policy number */
 	int 			counter;
 };
 
 struct policies {
+	/** pointer to parent policies */
 	struct policies		*parent;
+	/** pointer to further policies */
 	struct policies		*pols;
+	/** pointer to a single policy structure */
 	struct policy 		*pol;
 };
 
