@@ -19,11 +19,10 @@
 #include "code_gen.h"
 #include "utils.h"
 
-/*
- * creates ff_defaults.h file
- * the file stores default parameters for application module
- */
-
+/**
+creates ff_defaults.h file
+the file stores default parameters for application module
+*/
 void generateDefaultParams() {
         char *full_path = get_sfc_path("", "ff_defaults.h");
         FILE *fp = fopen(full_path, "w");
@@ -49,10 +48,13 @@ void generateDefaultParams() {
 	}
 	fprintf(fp, "\n");
 
-	/* generate structure with default parameters for each module of a given configuration */
-
+	/** 
+	generate structure with default parameters for each module of a given configuration 
+	*/
 	for( i = 1; i < conf_counter; i++ ) {
-		/* application default parameter values */
+		/** 
+		application default parameter values 
+		*/
 		fprintf(fp, "struct %s_params %s_%s = {\n",
         	        conftab[i].conf->app->lib->full_name, conftab[i].conf->id->name,
                 	conftab[i].conf->app->lib->full_name);
@@ -68,7 +70,9 @@ void generateDefaultParams() {
                 }
                 fprintf(fp, "};\n");
 
-                /* network default parameter values */
+                /** 
+		network default parameter values 
+		*/
                 fprintf(fp, "struct %s_params %s_%s = {\n",
                         conftab[i].conf->net->lib->full_name, conftab[i].conf->id->name,
                         conftab[i].conf->net->lib->full_name);
@@ -84,7 +88,9 @@ void generateDefaultParams() {
                 }
                 fprintf(fp, "};\n");
 
-		/* mac default parameter values */
+		/** 
+		mac default parameter values 
+		*/
                 fprintf(fp, "struct %s_params %s_%s = {\n",
                         conftab[i].conf->mac->lib->full_name, conftab[i].conf->id->name,
                         conftab[i].conf->mac->lib->full_name);
@@ -100,7 +106,9 @@ void generateDefaultParams() {
                 }               
                 fprintf(fp, "};\n");
 
-		/* radio default parameter values */
+		/** 
+		radio default parameter values 
+		*/
                 fprintf(fp, "struct %s_params %s_%s = {\n",
                         conftab[i].conf->radio->lib->full_name, conftab[i].conf->id->name,
                         conftab[i].conf->radio->lib->full_name);

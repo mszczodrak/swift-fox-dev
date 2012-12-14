@@ -20,6 +20,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+/**
+implementation of the fennec 
+calls underlying TinyOS make 
+*/
 int main(int argc, char *argv[]) {
 
         char *fennec_fox_lib = getenv("FENNEC_FOX_LIB");

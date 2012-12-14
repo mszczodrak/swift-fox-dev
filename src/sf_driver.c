@@ -20,11 +20,15 @@
 #include <stdlib.h>
 #include "sf.h"
 
-/* day 0; time 0 */
+/** 
+the entry point to the sfc compiler
+*/
 int
 main(int argc, char *argv[] ) {
 
-	/* Argument checking */
+	/** 
+	argument checking 
+	*/
   	if (argc != ARGC_MAX) {
 
 		(void)fprintf(stderr, "%s: no input files\n\n", argv[0]);
@@ -35,6 +39,8 @@ main(int argc, char *argv[] ) {
        	}
 
 
-	/* Invoke the parser */
+	/** 
+	invoke the parser 
+	*/
 	return start_parser(argc, argv);
 }
