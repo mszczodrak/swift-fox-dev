@@ -19,13 +19,19 @@
 #include "sem_check.h"
 #include "code_gen.h"
 
-/* map configurations to names */
+/** 
+map configurations to names 
+*/
 struct symtab *map_conf_id[NSYMS];
 
-/* map event-conditions to names */
+/**
+ map event-conditions to names 
+*/
 struct symtab *map_evt_id[NSYMS];
 
-/* zero map_conf_id */
+/**
+zero map_conf_id 
+*/
 void
 init_sem_conf(void) {
 	/* clear */
@@ -34,7 +40,9 @@ init_sem_conf(void) {
 		sizeof(struct symtab *) * NSYMS);
 }
 
-/* zero map_evt_id */
+/** 
+zero map_evt_id 
+*/
 void
 init_sem_evt(void) {
 	/* clear */
@@ -43,7 +51,10 @@ init_sem_evt(void) {
 		sizeof(struct symtab *) * NSYMS);
 }
 
-/* semantic checks for the configuration nodes */
+/** 
+semantic checks for the configuration nodes 
+/param c pointer to confnode
+*/
 void
 checkConfiguration(struct confnode* c) {
 	/* iterators */
@@ -54,23 +65,30 @@ checkConfiguration(struct confnode* c) {
 	int found		= 0;
 
 	
-	/* traverse the previous configurations */
+	/** 
+	traverse the previous configurations 
+	*/
 	while ((i < NSYMS - 1) && (map_conf_id[i] != NULL)) {
-		/* check for redeclaration */
+		/** 
+		check for redeclaration 
+		*/
 		if (map_conf_id[i] == c->id)
 			goto conf_err;
 		/* next */
 		i++;
 	}
 
-	/* generate the mapping between name and configuration */
+	/** 
+	generate the mapping between name and configuration 
+	*/
 	map_conf_id[i] = c->id;
 	
-	/* check for undeclared application */
+	/** 
+	check for undeclared application 
+	*/
 	if (c->app == NULL || c->app->type == NULL || c->app->lib == NULL)
 		goto app_err;
 
-	/* check for undeclared applications */
 	if (strcmp(c->app->type, "keyword")) {
 		/* loop */
 		found = 0;
@@ -89,7 +107,9 @@ checkConfiguration(struct confnode* c) {
 			goto app_err;
 	}
 	
-	/* check for undeclared network */
+	/** 
+	check for undeclared network 
+	*/
 	if (c->net == NULL || c->net->type == NULL || c->net->lib == NULL)
 		goto net_err;
 	
@@ -113,7 +133,9 @@ checkConfiguration(struct confnode* c) {
 			goto net_err;
 	}
 	
-	/* check for undeclared mac */
+	/** 
+	check for undeclared mac 
+	*/
 	if (c->mac == NULL || c->mac->type == NULL || c->mac->lib == NULL)
 		goto mac_err;
 
@@ -136,7 +158,9 @@ checkConfiguration(struct confnode* c) {
                         goto mac_err;
         }
 
-	/* check for undeclared network */
+	/** 
+	check for undeclared network 
+	*/
 	if (c->radio == NULL || c->radio->type == NULL || c->radio->lib == NULL)
 		goto radio_err;
 
@@ -200,11 +224,21 @@ radio_err:
         exit(1);
 }
 
+/**
+checks if a module is valid
+
+/param c pointer to configuration that has this module
+/param mp pointer to module structure modtab
+/param mod_par_val pointer to structure with module parameter values
+/param par_type pointer to structure with module parameter tyles
+*/
 void
 checkSingleModule(struct confnode *c, struct modtab *mp, 
 		struct paramvalue **mod_par_val, struct paramtype *par_type) {
 
-        /* check if there are too many parameters */
+        /**
+	check if there are too many parameters 
+	*/
         for(; *mod_par_val != NULL; mod_par_val = &(*mod_par_val)->child) {
                 /* check if there are more passed parameters then
                  * there are defined variables 
@@ -222,7 +256,9 @@ checkSingleModule(struct confnode *c, struct modtab *mp,
                         par_type = par_type->child;
         }
 
-        /* check if parameters are missing */
+        /** 
+	check if parameters are missing 
+	*/
         for (; (*mod_par_val == NULL) && (par_type != NULL); 
 		par_type = par_type->child, mod_par_val = &(*mod_par_val)->child) {
                 if (par_type->def_val->def_valid) {
@@ -246,24 +282,40 @@ checkSingleModule(struct confnode *c, struct modtab *mp,
         }
 }
 
-/* semantic check for modules passed to configuration */
+/** 
+semantic check for modules passed to configuration 
+
+/param c pointer to configuration node
+*/
 void 
 checkConfigurationModules(struct confnode *c) {
 
-	/* check application module params */
+	/** 
+	check application module params 
+	*/
 	checkSingleModule(c, c->app, &(c->app_params), c->app->lib->params);
 
-	/* check network module params */
+	/** 
+	check network module params 
+	*/
 	checkSingleModule(c, c->net, &(c->net_params), c->net->lib->params);
 
-	/* check mac module params */
+	/** 
+	check mac module params 
+	*/
 	checkSingleModule(c, c->mac, &(c->mac_params), c->mac->lib->params);
 
-	/* check radio module params */
+	/** 
+	check radio module params 
+	*/
 	checkSingleModule(c, c->radio, &(c->radio_params), c->radio->lib->params);
 }
 
-/* semantic checks for the event-condition nodes */
+/** 
+semantic checks for the event-condition nodes 
+
+/param e pointer to event node
+*/
 void
 checkEventCondition(struct eventnode *e) {
 	/* iterators */
@@ -273,7 +325,9 @@ checkEventCondition(struct eventnode *e) {
 	/* flag */
 	int found		= 0;
 	
-	/* traverse the previous event-conditions */
+	/** 
+	traverse the previous event-conditions 
+	*/
 	while ((i < NSYMS - 1) && (map_evt_id[i] != NULL)) {
 		/* redeclaration */
 		if (map_evt_id[i] == e->id)
@@ -282,7 +336,9 @@ checkEventCondition(struct eventnode *e) {
 		i++;
 	}
 
-	/* generate the mapping between name and event-condition */
+	/** 
+	generate the mapping between name and event-condition 
+	*/
 	map_evt_id[i] = e->id;
 	
 	/* check for undeclared source */
@@ -321,7 +377,11 @@ src_err:
 	exit(1);
 }
 
-/* semantic checks for the policy nodes */
+/** 
+semantic checks for the policy nodes 
+
+/param p pointer to policy node
+*/
 void
 checkPolicy(struct policy *p) {
 	/* iterator */
@@ -330,7 +390,9 @@ checkPolicy(struct policy *p) {
 	/* flag */
 	int found		= 0;
 	
-	/* check the from configuration */
+	/** 
+	check the from configuration 
+	*/
 	if (strcmp(p->from->name, "any")) {	
 		/* loop */
 		found = 0;
@@ -383,7 +445,11 @@ to_conf_err:
 	exit(1);
 }
 
-/* semantic checks for the initial node */
+/** 
+semantic checks for the initial node 
+
+/param i pointer to initnode with the initial state
+*/
 void
 checkInitial(struct initnode *i) {
 
@@ -418,6 +484,15 @@ conf_err:
 	exit(1);
 }
 
+/**
+adds configuration module
+
+/param c pointer to configuration node
+/param m pointer to a pointer to module structure
+/param p pointer to a pointer to a parameter value structue
+/param module_name string with module name
+*/
+
 void
 addConfModule(struct confnode *c, struct modtab **m, struct paramvalue **p, char *module_name ) {
         *m = proc_module(module_name);
@@ -435,7 +510,9 @@ addConfModule(struct confnode *c, struct modtab **m, struct paramvalue **p, char
         }
 }
 
-
+/**
+checks control state
+*/
 void
 checkControlState(void) {
 
@@ -465,7 +542,15 @@ checkControlState(void) {
 
 	conftab[conf_state_id].conf = c;
 
-	/* done with creating control default control state*/
+	/** 
+	done with creating control default control state
+	*/
+	/**
+	check configuration
+	*/
 	checkConfiguration(c);
+	/**
+	check configuration module
+	*/
 	checkConfigurationModules(c);
 }
