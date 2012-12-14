@@ -1,11 +1,8 @@
 
-configuration count { counter(15, 1024, NODE, 2) 
-			ctp(2)
-#			nullNet()
-#			csmaca(2, 26, 31, 200, 200, 10, 10, 1, 1, 1) 
+configuration count { nullApp()
+			nullNet()
 			nullMac()
-			cape(2, 26, 31, 200, 200, 10, 10, 1, 1, 1) 
-#			nullRadio()
+			cape() 
 			}
 start count
 
