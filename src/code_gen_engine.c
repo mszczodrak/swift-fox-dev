@@ -1288,7 +1288,7 @@ void generateFennecEngineP() {
 			fprintf(fp,"      case %d:\n", mp->id);
 			fprintf(fp,"        ptr = call %sRadioSend.getPayload(msg, len);\n\n", mp->lib->full_name);
 			fprintf(fp,"        if (ptr == NULL) post set_radio_active();\n");
-			fprintf(fp,"        return NULL;\n\n");
+			fprintf(fp,"        return ptr;\n\n");
 		}
 	}
 	fprintf(fp,"      default:\n");
