@@ -1,5 +1,5 @@
 
-configuration count { counter(1, 1024, NODE, 2) 
+configuration count { counter(15, 1024, NODE, 2) 
 			#nullNet()
 			ctp(2)
                         csmaca(2, 200, 10, 10, 1, 1, 1)
