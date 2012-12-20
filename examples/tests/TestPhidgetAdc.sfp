@@ -1,5 +1,6 @@
 
-configuration tester { phidget_adc(300, 0, 2, 400, 7, 3, NODE) # Send to itself 
+configuration tester { phidget_adc(20000, 0, 2, 3000, 7, 3, NODE) # Send to itself 
+			# freq1 ch1 count1 freq2 ch2 count2 dest
 			nullNet()
 		      	#ctp(2)
                         csmaca(2, 0, 10, 10, 1, 1, 1)
