@@ -1,3 +1,9 @@
+configuration control { cuApp()
+                        cuNet()
+                        cuMac(10, 10, 1, 1, 1)
+                        cape()
+}
+
 
 configuration count { nullApp()
 			nullNet()
