@@ -1,0 +1,4 @@
+cp sfc-0.79.tar.gz sfc_0.79.orig.tar.gz
+tar zxvf sfc_0.79.orig.tar.gz
+cd sfc_0.79.orig.tar.gz
+dh_make -e marcin@ieee.org
