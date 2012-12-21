@@ -9,7 +9,7 @@ Homepage: http://smartcity.cs.columbia.edu/swiftfox/swiftfox_about.php
 #Vcs-Browser: http://git.debian.org/?p=collab-maint/sfc.git;a=summary
 
 Package: sfc
-Architecture: i386, amd64
+Architecture: i386 amd64 powerpc
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${flex:Depends}, ${bison:Depends}
 Description: Swift Fox Compiler (sfc) for low-power wireless networks
  Swift Fox compiler is written in C using Flex and Bison libraries. 
