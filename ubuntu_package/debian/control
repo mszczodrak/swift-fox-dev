@@ -1,15 +1,18 @@
 Source: sfc
 Section: unknown
-Priority: extra
+Priority: optional
 Maintainer: marcin <marcin@ieee.org>
 Build-Depends: debhelper (>= 8.0.0), autotools-dev
 Standards-Version: 3.9.3
-Homepage: <insert the upstream URL, if relevant>
+Homepage: http://smartcity.cs.columbia.edu/swiftfox/swiftfox_about.php
 #Vcs-Git: git://git.debian.org/collab-maint/sfc.git
 #Vcs-Browser: http://git.debian.org/?p=collab-maint/sfc.git;a=summary
 
 Package: sfc
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Architecture: i386, amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${flex:Depends}, ${bison:Depends}
+Description: Swift Fox Compiler (sfc) for low-power wireless networks
+ Swift Fox compiler is written in C using Flex and Bison libraries. 
+ Flex is a tool for generating lexical analyzers and it is an open 
+ version of lex. Bison is a parser generator and it is a GNU version 
+ of yacc. The generated output of the Swift Fox program is nesC code.
