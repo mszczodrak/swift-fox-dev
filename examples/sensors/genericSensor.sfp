@@ -1,0 +1,8 @@
+
+configuration tester { genericSensor(1000)
+			nullNet()
+			nullMac()
+			nullRadio()
+}
+start tester
+
