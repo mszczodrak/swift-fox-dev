@@ -1,4 +1,4 @@
-configuration hello { throughput(80, 10, NODE) 
+configuration hello { throughput(96, 12, NODE) 
                         nullNet()
                         nullMac()
                         nullRadio()
