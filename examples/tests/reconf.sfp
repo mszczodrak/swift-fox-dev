@@ -1,13 +1,6 @@
-configuration control { ControlUnit()
-			cuNet()
-			cuMac(10, 10, 1, 1, 1)
-			#cuMac(2, 200, 10, 10, 1, 1, 1)
-                        cc2420(26, 31, 1, 1)
-}
-			
 configuration red { blink(1, 1024)
-			nullNet() 
-                        csmaca(2, 0, 10, 10, 1, 1, 1)
+			ctp(1)
+                        csmaca(1, 0, 10, 10, 1, 1, 1)
                         	# always ON, delay_after_receive, backoff
 				# min_backoff, ack, cca, crc
                         cc2420(26, 31, 1, 1)
@@ -16,35 +9,15 @@ configuration red { blink(1, 1024)
 
 configuration yellow { blink(2, 1024)
 			nullNet() 
-			tdma(2, 100, 30, 3000, 10, 10, 1, 1, 1)
+			tdma(1, 30, 3000, 10, 10, 1, 1, 1)
                         cc2420(26, 31, 1, 1)
 				# channel, power, ack, crc
 }
 
-configuration blue { blink(4, 1024)
-                        nullNet()
-                        csmaca(2, 200, 10, 10, 1, 1, 1)	# LPL with 200ms Duty-Cycle
-	                        # always ON, delay_after_receive, backoff,
-				# min_backoff, ack, cca, crc
-                        cc2420(26, 31, 1, 1)
-	                        # channel, power, ack, crc
-}
-
-configuration dark {nullApp()
-			nullNet()
-			nullMac()
-			nullRadio()
-}
-
-event-condition t1 {timer = 10 TYPE_SECOND @ 2}
-event-condition t2 {timer = 50 TYPE_SECOND @ 2}
-event-condition t3 {timer = 50 TYPE_SECOND @ 2}
-event-condition t4 {timer = 20 TYPE_SECOND @ 2}
+event-condition t1 {timer = 10 TYPE_SECOND @ 1}
 
 from red goto yellow when t1
-from yellow goto blue when t2
-from blue goto dark when t3
-from dark goto red when t4
+from yellow goto red when t1
 
 start red
 
