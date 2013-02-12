@@ -5,6 +5,8 @@ autoscan
 
 # edit configure.scan to give the specs of the project (name, version, contact)
 # and add the line AM_INIT_AUTOMAKE to initialize Automake
+
+sed -e 's/AC_INIT.*/AC_INIT([Swift Fox Compiler], [0.79], [marcin@ieee.org], [sfc])/'	\
 sed -e 's/FULL-PACKAGE-NAME/SWIFT-FOX-COMPILER/'	\
 	-e 's/VERSION/0.79/'	\
 	-e 's/BUG-REPORT-ADDRESS/marcin@ieee.org/'	\
@@ -17,6 +19,8 @@ AM_PROG_YACC'	\
 	< configure.scan > configure.ac
 
 touch NEWS README AUTHORS ChangeLog
+
+rm configure.ac
 
 autoreconf -iv
 ./configure
