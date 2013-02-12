@@ -27,4 +27,30 @@ autoreconf -iv
 make distcheck
 
 
+# clean
+rm .deps
+COPYING
+INSTALL
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+config.h
+config.h.in
+config.log
+config.status
+configure
+depcomp
+install-sh
+missing
+parser.c
+parser.h
+scanner.c
+stamp-h1
+ylwrap
+autoscan.log
+configure.scan
+
+
+
 
