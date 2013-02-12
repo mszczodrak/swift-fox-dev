@@ -7,9 +7,6 @@ autoscan
 # and add the line AM_INIT_AUTOMAKE to initialize Automake
 
 sed -e 's/AC_INIT.*/AC_INIT([Swift Fox Compiler], [0.79], [marcin@ieee.org], [sfc])/'	\
-sed -e 's/FULL-PACKAGE-NAME/SWIFT-FOX-COMPILER/'	\
-	-e 's/VERSION/0.79/'	\
-	-e 's/BUG-REPORT-ADDRESS/marcin@ieee.org/'	\
 	-e '10i\
 AM_INIT_AUTOMAKE'	\
 	-e '11i\
@@ -28,28 +25,12 @@ make distcheck
 
 
 # clean
-rm .deps
-COPYING
-INSTALL
-Makefile
-Makefile.in
-aclocal.m4
-autom4te.cache/
-config.h
-config.h.in
-config.log
-config.status
-configure
-depcomp
-install-sh
-missing
-parser.c
-parser.h
-scanner.c
-stamp-h1
-ylwrap
-autoscan.log
-configure.scan
+rm -rf .deps autom4te.cache
+rm COPYING INSTALL Makefile Makefile.in aclocal.m4 config.h config.h.in \
+	config.log config.status configure depcomp install-sh missing \
+	stamp-h1 ylwrap autoscan.log configure.scan parser.c parser.h \
+	scanner.c
+
 
 
 
