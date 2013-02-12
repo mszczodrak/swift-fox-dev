@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# produce configure.scan
+autoscan
+
+# edit configure.scan to give the specs of the project (name, version, contact)
+# and add the line AM_INIT_AUTOMAKE to initialize Automake
+sed -e 's/FULL-PACKAGE-NAME/SWIFT-FOX-COMPILER/'	\
+	-e 's/VERSION/0.79/'	\
+	-e 's/BUG-REPORT-ADDRESS/marcin@ieee.org/'	\
+	-e '10i\
+AM_INIT_AUTOMAKE'	\
+	-e '11i\
+AM_PROG_LEX'	\
+	-e '12i\
+AM_PROG_YACC'	\
+	< configure.scan > configure.ac
+
+touch NEWS README AUTHORS ChangeLog
+
+autoreconf -iv
+./configure
+make distcheck
+
+
+
