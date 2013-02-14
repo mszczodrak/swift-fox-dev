@@ -21,27 +21,30 @@
 
 void generateFennecEngineC() {
 
-        char *full_path = get_sfc_path("", "FennecEngineC.nc");
-        FILE *fp = fopen(full_path, "w");
+	char *full_path = get_sfc_path("", "FennecEngineC.nc");
+	FILE *fp = fopen(full_path, "w");
 
 	struct modtab *mp;
 
-        if (fp == NULL) {
-                fprintf(stderr, "You do not have a permission to write into file: %s\n", full_path);
-                exit(1);
-        }
+	if (fp == NULL) {
+		printf(stderr, "You do not have a permission to write into file: %s\n", full_path);
+		exit(1);
+	}
 
 	fprintf(fp, "/* Swift Fox generated code for Fennec Fox Application configuration */\n");
-  	fprintf(fp, "\n#include <Fennec.h>\n\n");
-  	fprintf(fp, "configuration FennecEngineC {\n");
-  	fprintf(fp, "  provides interface Mgmt;\n");
-  	fprintf(fp, "}\n\n");
-  	fprintf(fp, "implementation {\n\n");
-  	fprintf(fp, "  components FennecEngineP;\n");
-  	fprintf(fp, "  Mgmt = FennecEngineP.Mgmt;\n");
+	fprintf(fp, "\n#include <Fennec.h>\n\n");
+	fprintf(fp, "configuration FennecEngineC {\n");
+	fprintf(fp, "  provides interface Mgmt;\n");
+	fprintf(fp, "}\n\n");
+	fprintf(fp, "implementation {\n\n");
+	fprintf(fp, "  components FennecEngineP;\n");
+	fprintf(fp, "  Mgmt = FennecEngineP.Mgmt;\n");
 
-  	fprintf(fp, "  components new TimerMilliC() as Timer;\n");
+	fprintf(fp, "  components new TimerMilliC() as Timer;\n");
   	fprintf(fp, "  FennecEngineP.Timer -> Timer;\n\n");
+
+	fprintf(fp, "  components LedsC;\n");
+  	fprintf(fp, "  FennecEngineP.Leds -> LedsC;\n\n");
 
   	fprintf(fp, "  components new TimerMilliC() as RadioActivityTimer;\n");
   	fprintf(fp, "  FennecEngineP.RadioActivityTimer -> RadioActivityTimer;\n\n");
@@ -182,8 +185,9 @@ void generateFennecEngineP() {
   	fprintf(fp, "  provides interface Mgmt;\n");
   	fprintf(fp, "  provides interface Module;\n\n");
 
+  	fprintf(fp, "  uses interface Leds;\n");
   	fprintf(fp, "  uses interface Timer<TMilli>;\n");
-  	fprintf(fp, "  uses interface Timer <TMilli> as RadioActivityTimer;\n");
+  	fprintf(fp, "  uses interface Timer<TMilli> as RadioActivityTimer;\n");
 
   	fprintf(fp, "  /* Application Modules */\n\n");
 
@@ -279,72 +283,70 @@ void generateFennecEngineP() {
   fprintf(fp,"}\n\n");
   fprintf(fp,"implementation {\n\n");
 
-  fprintf(fp,"  bool pending_radio_stop = 0;\n\n");
+fprintf(fp,"bool pending_radio_stop = 0;\n\n");
 
-  fprintf(fp,"  void ctrl_state_done(uint8_t status, uint8_t ctrl) @C() {\n");
-  fprintf(fp,"    if (ctrl == ON) {\n");
-  fprintf(fp,"      signal Mgmt.startDone(SUCCESS);\n");
-  fprintf(fp,"    } else {\n");
-  fprintf(fp,"      signal Mgmt.stopDone(SUCCESS);\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+fprintf(fp,"void ctrl_state_done(uint8_t status, uint8_t ctrl) @C() {\n");
+fprintf(fp,"\tif (ctrl == ON) {\n");
+fprintf(fp,"\t\tsignal Mgmt.startDone(SUCCESS);\n");
+fprintf(fp,"\t} else {\n");
+fprintf(fp,"\t\tsignal Mgmt.stopDone(SUCCESS);\n");
+fprintf(fp,"\t}\n");
+fprintf(fp,"}\n\n");
 
-  fprintf(fp,"  void ctrl_module(uint16_t module_id, uint8_t ctrl) @C() {\n");
-  fprintf(fp,"    switch(module_id) {\n\n");
+fprintf(fp,"bool ctrl_module(uint16_t module_id, uint8_t ctrl) @C() {\n");
+fprintf(fp,"\terror_t err = FAIL;\n");
+fprintf(fp,"\tswitch(module_id) {\n\n");
 
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
-      fprintf(fp, "      case %d:\n", mp->id);
-      fprintf(fp, "        if (ctrl) {\n");
-      fprintf(fp, "          call %sControl.start();\n", mp->lib->full_name);
-      fprintf(fp, "        } else {\n");
-      fprintf(fp, "          call %sControl.stop();\n", mp->lib->full_name);
-      fprintf(fp, "        }\n");
-      fprintf(fp, "        break;\n\n");
-    }
-  }
+for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+	if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
+		fprintf(fp, "\tcase %d:\n", mp->id);
+		fprintf(fp, "\t\terr =  ctrl ? call %sControl.start() : \n\t\t\tcall %sControl.stop();\n", 
+				mp->lib->full_name, mp->lib->full_name);
+		fprintf(fp, "\t\tbreak;\n\n");
+	}
+}
 
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"    call Timer.startOneShot(MODULE_RESPONSE_DELAY);\n");
-  fprintf(fp,"  }\n\n");
+fprintf(fp,"\t}\n");
+fprintf(fp,"\tcall Timer.startOneShot(MODULE_RESPONSE_DELAY);\n");
+fprintf(fp,"\treturn err;\n");
+fprintf(fp,"}\n\n");
 
-  fprintf(fp,"  task void configure_engine() {\n");
-  fprintf(fp,"    call Timer.stop();\n");
-  fprintf(fp,"    ctrl_module_done(0);\n");
-  fprintf(fp,"  }\n\n");
+fprintf(fp,"task void configure_engine() {\n");
+fprintf(fp,"\tcall Timer.stop();\n");
+fprintf(fp,"\tctrl_module_done(0);\n");
+fprintf(fp,"}\n\n");
 
-  fprintf(fp,"  task void set_radio_active() {\n");
-  fprintf(fp,"    call RadioActivityTimer.startOneShot(RADIO_STOP_DELAY);\n");
-  fprintf(fp,"  }\n\n");
+fprintf(fp,"task void set_radio_active() {\n");
+fprintf(fp,"\tcall RadioActivityTimer.startOneShot(RADIO_STOP_DELAY);\n");
+fprintf(fp,"}\n\n");
 
-  fprintf(fp,"  event void Timer.fired() {\n");
-  fprintf(fp,"    ctrl_module_done(1);\n");
-  fprintf(fp,"  }\n\n");
+fprintf(fp,"event void Timer.fired() {\n");
+fprintf(fp,"\tctrl_module_done(1);\n");
+fprintf(fp,"}\n\n");
 
-  fprintf(fp,"  event void RadioActivityTimer.fired() {\n");
+fprintf(fp,"event void RadioActivityTimer.fired() {\n");
 //  fprintf(fp,"    ctrl_module_done(1);\n");
-  fprintf(fp,"  }\n\n");
+fprintf(fp,"}\n\n");
 
 
-  fprintf(fp,"  command error_t Mgmt.start() {\n");
-  fprintf(fp,"    pending_radio_stop = 0;\n");
-  fprintf(fp,"    ctrl_state(ON);\n");
-  fprintf(fp,"    return SUCCESS;\n");
-  fprintf(fp,"  }\n\n");
+fprintf(fp,"command error_t Mgmt.start() {\n");
+fprintf(fp,"\tpending_radio_stop = 0;\n");
+fprintf(fp,"\tctrl_state(ON);\n");
+fprintf(fp,"\treturn SUCCESS;\n");
+fprintf(fp,"}\n\n");
 
-  fprintf(fp,"  command error_t Mgmt.stop() {\n");
-  fprintf(fp,"    call RadioActivityTimer.stop();\n");
-  fprintf(fp,"    if (pending_radio_stop == 1) {\n");
-  fprintf(fp,"      signal RadioActivityTimer.fired();\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"    ctrl_state(OFF);\n");
-  fprintf(fp,"    return SUCCESS;\n");
-  fprintf(fp,"  }\n\n");
+fprintf(fp,"  command error_t Mgmt.stop() {\n");
+fprintf(fp,"    call RadioActivityTimer.stop();\n");
+fprintf(fp,"    if (pending_radio_stop == 1) {\n");
+fprintf(fp,"      signal RadioActivityTimer.fired();\n");
+fprintf(fp,"    }\n");
+fprintf(fp,"    ctrl_state(OFF);\n");
+fprintf(fp,"    return SUCCESS;\n");
+fprintf(fp,"  }\n\n");
 
-  fprintf(fp,"  error_t AMSend_send(uint16_t module_id, uint8_t to_layer, am_addr_t addr, message_t* msg, uint8_t len) {\n");
-  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+fprintf(fp,"  error_t AMSend_send(uint16_t module_id, uint8_t to_layer, am_addr_t addr, message_t* msg, uint8_t len) {\n");
+fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
+fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
       fprintf(fp,"      case %d:\n", mp->id);

@@ -1,6 +1,6 @@
 /** \file
     Swift Fox Compiler
-    Copyright (C) 2009-2012 Marcin Szczodrak
+    Copyright (C) 2009-2013 Marcin Szczodrak
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -127,7 +127,7 @@ void module_params_h(struct modtab *mp) {
 void generateParams() {
 	struct modtab *mp;
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->used == 1) {
+		if ((mp->lib != NULL) && (mp->lib->path) && (mp->id > 0) && (mp->lib->used == 1)) {
 			module_params_interface(mp);
 			module_params_c(mp);
 			module_params_h(mp);
