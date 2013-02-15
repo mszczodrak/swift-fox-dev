@@ -34,11 +34,11 @@ void generateFennecEngineC() {
 	fprintf(fp, "/* Swift Fox generated code for Fennec Fox Application configuration */\n");
 	fprintf(fp, "\n#include <Fennec.h>\n\n");
 	fprintf(fp, "configuration FennecEngineC {\n");
-	fprintf(fp, "  provides interface Mgmt;\n");
+	fprintf(fp, "provides interface ModuleCtrl;\n");
 	fprintf(fp, "}\n\n");
 	fprintf(fp, "implementation {\n\n");
-	fprintf(fp, "  components FennecEngineP;\n");
-	fprintf(fp, "  Mgmt = FennecEngineP.Mgmt;\n");
+	fprintf(fp, "components FennecEngineP;\n");
+	fprintf(fp, "ModuleCtrl = FennecEngineP.ModuleCtrl;\n");
 
 	fprintf(fp, "  components new TimerMilliC() as Timer;\n");
   	fprintf(fp, "  FennecEngineP.Timer -> Timer;\n\n");
@@ -178,12 +178,11 @@ void generateFennecEngineP() {
 
 	fprintf(fp, "/* Swift Fox generated code for Fennec Fox Application module */\n");
   	fprintf(fp, "#include <Fennec.h>\n");
-  	fprintf(fp, "#include \"engine.h\"\n");
   	fprintf(fp, "#define MODULE_RESPONSE_DELAY    200\n\n");
   	fprintf(fp, "#define RADIO_STOP_DELAY         100\n\n");
   	fprintf(fp, "module FennecEngineP {\n\n");
-  	fprintf(fp, "  provides interface Mgmt;\n");
-  	fprintf(fp, "  provides interface Module;\n\n");
+  	fprintf(fp, "provides interface ModuleCtrl;\n");
+  	fprintf(fp, "provides interface Module;\n\n");
 
   	fprintf(fp, "  uses interface Leds;\n");
   	fprintf(fp, "  uses interface Timer<TMilli>;\n");
@@ -285,14 +284,6 @@ void generateFennecEngineP() {
 
 fprintf(fp,"bool pending_radio_stop = 0;\n\n");
 
-fprintf(fp,"void ctrl_state_done(uint8_t status, uint8_t ctrl) @C() {\n");
-fprintf(fp,"\tif (ctrl == ON) {\n");
-fprintf(fp,"\t\tsignal Mgmt.startDone(SUCCESS);\n");
-fprintf(fp,"\t} else {\n");
-fprintf(fp,"\t\tsignal Mgmt.stopDone(SUCCESS);\n");
-fprintf(fp,"\t}\n");
-fprintf(fp,"}\n\n");
-
 fprintf(fp,"bool ctrl_module(uint16_t module_id, uint8_t ctrl) @C() {\n");
 fprintf(fp,"\terror_t err = FAIL;\n");
 fprintf(fp,"\tswitch(module_id) {\n\n");
@@ -311,9 +302,14 @@ fprintf(fp,"\tcall Timer.startOneShot(MODULE_RESPONSE_DELAY);\n");
 fprintf(fp,"\treturn err;\n");
 fprintf(fp,"}\n\n");
 
-fprintf(fp,"task void configure_engine() {\n");
+fprintf(fp,"void module_startDone(uint8_t module_id, error_t error) {\n");
 fprintf(fp,"\tcall Timer.stop();\n");
-fprintf(fp,"\tctrl_module_done(0);\n");
+fprintf(fp,"\tsignal ModuleCtrl.startDone(module_id, error);\n");
+fprintf(fp,"}\n\n");
+
+fprintf(fp,"void module_stopDone(uint8_t module_id, error_t error) {\n");
+fprintf(fp,"\tcall Timer.stop();\n");
+fprintf(fp,"\tsignal ModuleCtrl.stopDone(module_id, error);\n");
 fprintf(fp,"}\n\n");
 
 fprintf(fp,"task void set_radio_active() {\n");
@@ -321,7 +317,7 @@ fprintf(fp,"\tcall RadioActivityTimer.startOneShot(RADIO_STOP_DELAY);\n");
 fprintf(fp,"}\n\n");
 
 fprintf(fp,"event void Timer.fired() {\n");
-fprintf(fp,"\tctrl_module_done(1);\n");
+fprintf(fp,"\t//ctrl_module_done(1);\n");
 fprintf(fp,"}\n\n");
 
 fprintf(fp,"event void RadioActivityTimer.fired() {\n");
@@ -329,20 +325,20 @@ fprintf(fp,"event void RadioActivityTimer.fired() {\n");
 fprintf(fp,"}\n\n");
 
 
-fprintf(fp,"command error_t Mgmt.start() {\n");
+fprintf(fp,"command error_t ModuleCtrl.start(uint8_t module_id) {\n");
 fprintf(fp,"\tpending_radio_stop = 0;\n");
-fprintf(fp,"\tctrl_state(ON);\n");
+fprintf(fp,"\tctrl_module(module_id, ON);\n");
 fprintf(fp,"\treturn SUCCESS;\n");
 fprintf(fp,"}\n\n");
 
-fprintf(fp,"  command error_t Mgmt.stop() {\n");
-fprintf(fp,"    call RadioActivityTimer.stop();\n");
-fprintf(fp,"    if (pending_radio_stop == 1) {\n");
-fprintf(fp,"      signal RadioActivityTimer.fired();\n");
-fprintf(fp,"    }\n");
-fprintf(fp,"    ctrl_state(OFF);\n");
-fprintf(fp,"    return SUCCESS;\n");
-fprintf(fp,"  }\n\n");
+fprintf(fp,"command error_t ModuleCtrl.stop(uint8_t module_id) {\n");
+fprintf(fp,"\tcall RadioActivityTimer.stop();\n");
+fprintf(fp,"\tif (pending_radio_stop == 1) {\n");
+fprintf(fp,"\t\tsignal RadioActivityTimer.fired();\n");
+fprintf(fp,"\t}\n");
+fprintf(fp,"\tctrl_module(module_id, OFF);\n");
+fprintf(fp,"\treturn SUCCESS;\n");
+fprintf(fp,"}\n\n");
 
 fprintf(fp,"  error_t AMSend_send(uint16_t module_id, uint8_t to_layer, am_addr_t addr, message_t* msg, uint8_t len) {\n");
 fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
@@ -1598,12 +1594,12 @@ fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
 
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp, "  event void %sControl.startDone(error_t err){\n", mp->lib->full_name);
-      fprintf(fp, "    post configure_engine();\n");
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
-      fprintf(fp, "    post configure_engine();\n");
-      fprintf(fp, "  }\n\n");
+      fprintf(fp, "event void %sControl.startDone(error_t err){\n", mp->lib->full_name);
+      fprintf(fp, "\tmodule_startDone(%d, err);\n", mp->id);
+      fprintf(fp, "}\n\n");
+      fprintf(fp, "event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
+      fprintf(fp, "\tmodule_stopDone(%d, err);\n", mp->id);
+      fprintf(fp, "}\n\n");
 
       fprintf(fp, "  command error_t %sNetworkAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n", mp->lib->full_name);
       fprintf(fp, "    return AMSend_send(%d, F_NETWORK, addr, msg, len);\n", mp->id);
@@ -1679,47 +1675,47 @@ fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
 
   /* Interfaces with Networks */
 
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp, "  event void %sControl.startDone(error_t err) {\n", mp->lib->full_name);
-      fprintf(fp, "    post configure_engine();\n");
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
-      fprintf(fp, "    post configure_engine();\n");
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  event void %sNetworkAMSend.sendDone(message_t *msg, error_t error) {\n", mp->lib->full_name);
-      fprintf(fp, "    sendDone(%d, F_APPLICATION, msg, error);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  event message_t* %sNetworkReceive.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
-      fprintf(fp, "    return receive(%d, F_APPLICATION, msg, payload, len);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  event message_t* %sNetworkSnoop.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
-      fprintf(fp, "    return snoop(%d, F_APPLICATION, msg, payload, len);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  event void %sNetworkStatus.status(uint8_t layer, uint8_t status_flag) {\n", mp->lib->full_name);
-      fprintf(fp, "    return status(%d, F_APPLICATION, layer, status_flag);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command error_t %sMacAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMSend_send(%d, F_MAC, addr, msg, len);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command error_t %sMacAMSend.cancel(message_t* msg) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMSend_cancel(%d, F_MAC, msg);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command uint8_t %sMacAMSend.maxPayloadLength() {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMSend_maxPayloadLength(%d, F_MAC);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command void* %sMacAMSend.getPayload(message_t* msg, uint8_t len) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMSend_getPayload(%d, F_MAC, msg, len);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command am_addr_t %sMacAMPacket.address() {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMPacket_address(%d, F_MAC);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command am_addr_t %sMacAMPacket.destination(message_t* msg) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMPacket_destination(%d, F_MAC, msg);\n", mp->id);
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  command am_addr_t %sMacAMPacket.source(message_t* msg) {\n", mp->lib->full_name);
-      fprintf(fp, "    return AMPacket_source(%d, F_MAC, msg);\n", mp->id);
-      fprintf(fp, "  }\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp, "\tevent void %sControl.startDone(error_t err) {\n", mp->lib->full_name);
+			fprintf(fp, "\tmodule_startDone(%d, err);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
+			fprintf(fp, "\tmodule_stopDone(%d, err);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "event void %sNetworkAMSend.sendDone(message_t *msg, error_t error) {\n", mp->lib->full_name);
+			fprintf(fp, "\tsendDone(%d, F_APPLICATION, msg, error);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "event message_t* %sNetworkReceive.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn receive(%d, F_APPLICATION, msg, payload, len);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "event message_t* %sNetworkSnoop.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn snoop(%d, F_APPLICATION, msg, payload, len);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "event void %sNetworkStatus.status(uint8_t layer, uint8_t status_flag) {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn status(%d, F_APPLICATION, layer, status_flag);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "command error_t %sMacAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn AMSend_send(%d, F_MAC, addr, msg, len);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "command error_t %sMacAMSend.cancel(message_t* msg) {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn AMSend_cancel(%d, F_MAC, msg);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "command uint8_t %sMacAMSend.maxPayloadLength() {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn AMSend_maxPayloadLength(%d, F_MAC);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "command void* %sMacAMSend.getPayload(message_t* msg, uint8_t len) {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn AMSend_getPayload(%d, F_MAC, msg, len);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "command am_addr_t %sMacAMPacket.address() {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn AMPacket_address(%d, F_MAC);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "command am_addr_t %sMacAMPacket.destination(message_t* msg) {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn AMPacket_destination(%d, F_MAC, msg);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "command am_addr_t %sMacAMPacket.source(message_t* msg) {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn AMPacket_source(%d, F_MAC, msg);\n", mp->id);
+			fprintf(fp, "}\n");
       fprintf(fp, "  command void %sMacAMPacket.setDestination(message_t* msg, am_addr_t addr) {\n", mp->lib->full_name);
       fprintf(fp, "    return AMPacket_setDestination(%d, F_MAC, msg, addr);\n", mp->id);
       fprintf(fp, "  }\n\n");
@@ -1774,14 +1770,14 @@ fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
 
   /* Interfaces with Macs */
 
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp, "  event void %sControl.startDone(error_t err) {\n", mp->lib->full_name);
-      fprintf(fp, "    post configure_engine();\n");
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
-      fprintf(fp, "    post configure_engine();\n");
-      fprintf(fp, "  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp, "event void %sControl.startDone(error_t err) {\n", mp->lib->full_name);
+			fprintf(fp, "\tmodule_startDone(%d, err);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
+			fprintf(fp, "\tmodule_stopDone(%d, err);\n", mp->id);
+			fprintf(fp, "}\n\n");
       fprintf(fp, "  event void %sMacAMSend.sendDone(message_t *msg, error_t error) {\n", mp->lib->full_name);
       fprintf(fp, "    sendDone(%d, F_NETWORK, msg, error);\n", mp->id);
       fprintf(fp, "  }\n\n");
@@ -1917,14 +1913,14 @@ fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
 
   /* Interfaces with Radios */
 
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp, "  event void %sControl.startDone(error_t err) {\n", mp->lib->full_name);
-      fprintf(fp, "    post configure_engine();\n");
-      fprintf(fp, "  }\n\n");
-      fprintf(fp, "  event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
-      fprintf(fp, "    post configure_engine();\n");
-      fprintf(fp, "  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp, "event void %sControl.startDone(error_t err) {\n", mp->lib->full_name);
+			fprintf(fp, "\tmodule_startDone(%d, err);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
+			fprintf(fp, "\tmodule_stopDone(%d, err);\n", mp->id);
+			fprintf(fp, "}\n\n");
 /*
       fprintf(fp, "  event void %sRadioAMSend.sendDone(message_t *msg, error_t err) {\n", mp->lib->full_name);
       fprintf(fp, "    sendDone(%d, F_MAC, msg, err);\n", mp->id);
