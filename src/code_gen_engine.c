@@ -327,8 +327,16 @@ fprintf(fp,"}\n\n");
 
 fprintf(fp,"command error_t ModuleCtrl.start(uint8_t module_id) {\n");
 fprintf(fp,"\tpending_radio_stop = 0;\n");
-fprintf(fp,"\tctrl_module(module_id, ON);\n");
-fprintf(fp,"\treturn SUCCESS;\n");
+
+fprintf(fp,"\tswitch(module_id) {\n\n");
+for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+        if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
+                fprintf(fp, "\tcase %d:\n", mp->id);
+                fprintf(fp, "\t\treturn call %sControl.start();\n", mp->lib->full_name);
+        }
+}
+fprintf(fp,"\t}\n");
+fprintf(fp,"\treturn FAIL;\n");
 fprintf(fp,"}\n\n");
 
 fprintf(fp,"command error_t ModuleCtrl.stop(uint8_t module_id) {\n");
@@ -336,8 +344,16 @@ fprintf(fp,"\tcall RadioActivityTimer.stop();\n");
 fprintf(fp,"\tif (pending_radio_stop == 1) {\n");
 fprintf(fp,"\t\tsignal RadioActivityTimer.fired();\n");
 fprintf(fp,"\t}\n");
-fprintf(fp,"\tctrl_module(module_id, OFF);\n");
-fprintf(fp,"\treturn SUCCESS;\n");
+
+fprintf(fp,"\tswitch(module_id) {\n\n");
+for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+        if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
+                fprintf(fp, "\tcase %d:\n", mp->id);
+                fprintf(fp, "\t\treturn call %sControl.stop();\n", mp->lib->full_name);
+        }
+}
+fprintf(fp,"\t}\n");
+fprintf(fp,"\treturn FAIL;\n");
 fprintf(fp,"}\n\n");
 
 fprintf(fp,"  error_t AMSend_send(uint16_t module_id, uint8_t to_layer, am_addr_t addr, message_t* msg, uint8_t len) {\n");
