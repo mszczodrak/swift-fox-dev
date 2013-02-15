@@ -33,7 +33,7 @@ void initialize(void);
 void gc(void);
 void checkForRemotePath(struct libtab*);
 
-int event_counter	= 1;
+int event_counter	= 1; // POLICY_CONFIGURATION
 int policy_counter	= 0;
 int virtual_counter 	= 0;
 int event_id_counter	= 0;
