@@ -1374,53 +1374,58 @@ void generateFennecEngineP() {
   fprintf(fp,"    }\n\n");
   fprintf(fp,"  }\n\n");
 
-  fprintf(fp,"  message_t* receive(uint16_t module_id, uint8_t to_layer, message_t* msg, void* payload, uint8_t len) {\n");
-  fprintf(fp,"    if (to_layer == F_RADIO) check_configuration(msg->conf);\n");
+
+	fprintf(fp,"message_t* receive(uint16_t module_id, uint8_t to_layer, message_t* msg, void* payload, uint8_t len) {\n");
+	fprintf(fp,"\tif (check_configuration(msg->conf)) {\n");
+	fprintf(fp,"\t\treturn msg;\n");
+	fprintf(fp,"\t}\n\n");
+
+	fprintf(fp,"\tswitch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn signal %sNetworkReceive.receive(msg, payload, len);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn signal %sMacReceive.receive(msg, payload, len);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn signal %sRadioReceive.receive(msg, payload, len);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn msg;\n\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp, "}\n\n");
 
 
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sNetworkReceive.receive(msg, payload, len);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sMacReceive.receive(msg, payload, len);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sRadioReceive.receive(msg, payload, len);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return msg;\n\n");
-  fprintf(fp,"      }\n");
-  fprintf(fp, "  }\n\n");
-
-
-  fprintf(fp,"  message_t* snoop(uint16_t module_id, uint8_t to_layer, message_t* msg, void* payload, uint8_t len) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sNetworkSnoop.receive(msg, payload, len);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sMacSnoop.receive(msg, payload, len);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return msg;\n\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"message_t* snoop(uint16_t module_id, uint8_t to_layer, message_t* msg, void* payload, uint8_t len) {\n");
+	fprintf(fp,"\tif (check_configuration(msg->conf)) {\n");
+	fprintf(fp,"\t\treturn msg;\n");
+	fprintf(fp,"\t}\n\n");
+	fprintf(fp,"\tswitch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn signal %sNetworkSnoop.receive(msg, payload, len);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn signal %sMacSnoop.receive(msg, payload, len);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn msg;\n\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
   fprintf(fp,"  void status(uint16_t module_id, uint8_t to_layer, uint8_t layer, uint8_t status_flag) {\n");
@@ -1534,7 +1539,7 @@ void generateFennecEngineP() {
 
   fprintf(fp,"  void radioControlStartDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
   /* Let Control Unit MAC know about the radio status */
-  fprintf(fp,"    switch( configurations[POLICY_CONF_ID].mac ) {\n");
+  fprintf(fp,"    switch( configurations[POLICY_CONFIGURATION].mac ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
       fprintf(fp,"      case %d:\n", mp->id);
@@ -1556,7 +1561,7 @@ void generateFennecEngineP() {
 
   fprintf(fp,"  void radioControlStopDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
   /* Let Control Unit MAC know about the radio status */
-  fprintf(fp,"    switch( configurations[POLICY_CONF_ID].mac ) {\n");
+  fprintf(fp,"    switch( configurations[POLICY_CONFIGURATION].mac ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
       fprintf(fp,"      case %d:\n", mp->id);
