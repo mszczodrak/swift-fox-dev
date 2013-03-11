@@ -1,4 +1,4 @@
-configuration control { ControlUnit()
+configuration control { cuApp()
                         cuNet()
                         cuMac(10, 10, 1, 1, 1)
                         #cuMac(2, 200, 10, 10, 1, 1, 1)
