@@ -1,8 +1,0 @@
-
-configuration count { cam(1000)
-			dummyNet()
-			dummyMac()
-			dummyRadio()
-}
-start count
-

@@ -1,3 +1,0 @@
-configuration hello { sendTemp ctp nothing nothing am fixed16bit tinyos }
-start hello
-

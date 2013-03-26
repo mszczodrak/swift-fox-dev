@@ -1,3 +1,0 @@
-configuration hello { sendPicture sdrp nothing multiPreloadACK simpleCC2420 } 
-start hello
-

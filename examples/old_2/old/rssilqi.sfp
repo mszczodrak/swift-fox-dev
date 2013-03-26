@@ -1,3 +1,0 @@
-configuration hello { rssilqi simple nothing simpleMac tinyos } 
-start hello
-
