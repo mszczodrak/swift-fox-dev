@@ -1,5 +1,0 @@
-configuration hello { sendPayload ctpF fixed16bit nothing simpleMac fixed16bit tinyos } 
-#configuration hello { sendPayload fixed fixed16bit nothing simpleACKMac fixed16bit tinyos } 
-#configuration hello { sendPayload basicp2p fixed16bit nothing simpleAddrMac fixed16bit tinyos } 
-start hello
-

@@ -1,3 +1,0 @@
-configuration hello { blink0 broadcast nothing simpleMac simpleCC2420 } 
-start hello
-

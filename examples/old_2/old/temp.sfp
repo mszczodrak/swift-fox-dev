@@ -1,4 +1,0 @@
-configuration emergency { sendTemp broadcast fixed8bit nothing ppersistentCSMABuffer fixed8bit simpleCC2420 }
-
-start emergency
-
