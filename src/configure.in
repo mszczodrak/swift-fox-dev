@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([Swift Fox Compiler], [0.79], [marcin@ieee.org], [sfc])
-AC_CONFIG_SRCDIR([code_gen_globals.c])
+AC_CONFIG_SRCDIR([sf_driver.c fennec.c])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
