@@ -32,5 +32,6 @@ AC_CHECK_FUNCS([atexit memset mkdir strdup])
 #                 doc/whitepaper/Makefile])
 AC_OUTPUT(Makefile
 	doc/Makefile
+	man/Makefile
 	src/Makefile)
 
