@@ -1,2 +1,2 @@
 docdir = $(datadir)/doc/@PACKAGE@
-doc_DATA = manual.pdf presentation.pdf tutorial.pdf
+dist_doc_DATA = README 

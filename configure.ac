@@ -3,11 +3,11 @@
 
 AC_PREREQ([2.69])
 AC_INIT([Swift Fox Compiler], [0.79.1], [marcin@ieee.org], [sfc])
-AC_CONFIG_SRCDIR([src/sf_driver.c])
+#AC_CONFIG_SRCDIR([src/sf_driver.c])
 #AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE(sfc, 0.79.1)
 AC_PROG_CC
 AC_PROG_LEX
 AC_PROG_YACC
@@ -30,8 +30,10 @@ AC_CHECK_FUNCS([atexit memset mkdir strdup])
 #                 doc/report/Makefile
 #                 doc/tutorial/Makefile
 #                 doc/whitepaper/Makefile])
-AC_OUTPUT(Makefile
+AC_OUTPUT(
+	Makefile
+	src/Makefile
 	doc/Makefile
-	man/Makefile
-	src/Makefile)
+	examples/Makefile
+	man/Makefile)
 
