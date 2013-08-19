@@ -9,6 +9,11 @@ configuration control { cuApp()
 
 
 
-configuration empty { nullApp() nullNet() nullMac() cape()  }
+configuration empty { 
+			counter(15, 1024, NODE, 2)
+                        #nullNet()
+                        ctp(2)
+			#nullApp() nullNet() 
+			nullMac() cape()  }
 start empty
 
