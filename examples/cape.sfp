@@ -1,5 +1,5 @@
-configuration control { cuApp()
-                        cuNet()
+configuration control { nullApp()
+                        nullNet()
 			nullMac()
                         #cuMac(10, 10, 1, 1, 1)
                         #cuMac(2, 200, 10, 10, 1, 1, 1)
@@ -10,9 +10,10 @@ configuration control { cuApp()
 
 
 configuration empty { 
-			counter(15, 1024, NODE, 2)
-                        #nullNet()
-                        ctp(2)
+			counter(15, 1024, 1, 2)
+#			nullApp()
+                        nullNet()
+                        #ctp(2)
 			#nullApp() nullNet() 
 			nullMac() cape()  }
 start empty
