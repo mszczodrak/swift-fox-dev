@@ -10,14 +10,15 @@ configuration control { nullApp()
 
 
 configuration empty { 
-			counter(15, 1024, 1, 2)
-#			nullApp()
+			counter(1, 1024, 1, 2)
+			#nullApp()
                         #ctp(2)
 			nullNet() 
                         csmaca(2, 0, 10, 10, 1, 1, 1)
                         # always ON, delay_after_receive, backoff, min_backoff
                         # ack, cca, crc
 			#nullMac() 
-			cape()  }
+                        cc2420(26, 31, 1, 1) }
+			#cape()  }
 start empty
 
