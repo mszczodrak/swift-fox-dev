@@ -97,6 +97,12 @@ any		{
 #endif
 			return COMMA;			}
 
+state			{
+#ifndef __DEBUG__
+			tokenpos += yyleng;
+#endif
+			return STATE;			}
+
 (nothing|none)	{
 #ifndef __DEBUG__
 			tokenpos += yyleng;
@@ -150,8 +156,6 @@ l           {
                         tokenpos += yyleng;
 #endif
                         return LEVEL;                   }
-
-
 
 use		{
 #ifndef __DEBUG__

@@ -3,22 +3,24 @@ configuration control { nullApp()
 			nullMac()
                         #cuMac(10, 10, 1, 1, 1)
                         #cuMac(2, 200, 10, 10, 1, 1, 1)
-                        #cc2420(26, 31, 1, 1)
-			nullRadio()
+                        cc2420(26, 31, 1, 1)
 }
 
 
 
 configuration empty { 
-			counter(1, 1024, 1, 2)
+			blink(3, 5000)
+#			counter(2, 1024, NODE, 2)
 			#nullApp()
-                        #ctp(2)
-			nullNet() 
+                        ctp(2)
+			#nullNet() 
                         csmaca(2, 0, 10, 10, 1, 1, 1)
                         # always ON, delay_after_receive, backoff, min_backoff
                         # ack, cca, crc
 			#nullMac() 
                         cc2420(26, 31, 1, 1) }
-			#cape()  }
+
+state new { }
+
 start empty
 

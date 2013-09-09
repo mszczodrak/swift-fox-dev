@@ -28,6 +28,7 @@
 #define NLIBS 			256
 #define NEVS 			256
 #define NCONFS			256
+#define NSTATES			256
 #define NPOLS			256
 
 #define TYPE_APPLICATION	1
@@ -172,6 +173,35 @@ struct confnodes {
 	struct confnodes	*confs;
 	struct confnode		*conf;
 };
+
+
+struct statenode {
+	struct statenodes	*parent;
+	struct symtab		*id;
+//	struct modtab		*app;
+//	struct modtab		*net;
+//	struct modtab		*mac;
+//	struct modtab		*radio;
+//	struct paramvalue	*app_params;
+//	struct paramvalue	*net_params;
+//	struct paramvalue	*mac_params;
+//	struct paramvalue	*radio_params;
+	int			counter;
+	int 			level;
+};
+
+struct statetab {
+        struct statenode	*state;
+} statetab[NSTATES];
+
+
+struct statenodes {
+	struct statenodes	*parent;
+	struct statenodes	*states;
+	struct statenode	*state;
+};
+
+
 
 
 struct eventnode {

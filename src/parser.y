@@ -72,6 +72,8 @@ int yylex(void);
 	double			dval;
 	struct confnode		*confp;
 	struct confnodes	*confsp;
+	struct statenode	*statep;
+	struct statenodes	*statesp;
 	struct eventnode	*evep;
 	struct eventnodes	*evesp;
 	struct policy		*pol;
@@ -85,7 +87,7 @@ int yylex(void);
 	struct defvalue		*defv;
 }
 
-%token CONFIGURATION COMMA EVENT_CONDITION 
+%token STATE CONFIGURATION COMMA EVENT_CONDITION 
 %token FROM GOTO START USE WHEN 
 %token APPLICATION NETWORK MAC RADIO ADDRESS
 %token SOURCE LF VIRTUAL_NETWORK
@@ -111,6 +113,9 @@ int yylex(void);
 %type <confp>	configuration
 %type <confsp>	configurations
 %type <confsp>	defined_configurations
+%type <statep>	state
+%type <statesp>	states
+%type <statesp>	defined_states
 %type <evep>	event_condition
 %type <evesp>	defined_events
 %type <vars>	global_variables
@@ -126,6 +131,7 @@ int yylex(void);
 %type <ival>	virtual_networks
 %type <symp>	configuration_ids
 %type <symp> 	conf_level
+%type <symp> 	state_level
 %type <symp> 	event_location
 %type <mtl>	module_types
 %type <mtl>	next_module_type
@@ -156,23 +162,25 @@ swiftfox: library program
 		}
 	;
 
-program: global_variables defined_configurations defined_events policies virtual_networks initial_configuration 
+program: global_variables defined_configurations defined_states defined_events policies virtual_networks initial_configuration 
 		{
 			/* root node */
 			$$		= calloc(1, sizeof(struct program));
 			
 			/* link the node appropriately */
 			$2->parent	= NULL;  
-			if ($3 != NULL ) 
+			if ($3 != NULL )
 				$3->parent = NULL;
 			if ($4 != NULL ) 
 				$4->parent = NULL;
+			if ($5 != NULL ) 
+				$5->parent = NULL;
 			
 			/* init */
 			$$->defcon	= $2;
-			$$->defeve	= $3;
-			$$->defpol	= $4;
-			$$->init	= $6;
+			$$->defeve	= $4;
+			$$->defpol	= $5;
+			$$->init	= $7;
 		}
 	;
 
@@ -392,6 +400,131 @@ next_parameter: COMMA IDENTIFIER next_parameter
                         $$ = NULL;
                 }
         ;
+
+
+
+
+defined_states: states state
+		{
+			/* states set */
+			$$		= calloc(1, sizeof(struct statenodes));
+			
+			/* link the child nodes */
+			if ($1 != NULL)
+				$1->parent = $$;
+			$2->parent	= $$;
+			
+			$$->states	= $1;
+			$$->state	= $2;
+		}	
+	;
+
+
+states: states state
+		{
+			/* states set */
+			$$		= calloc(1, sizeof(struct statenodes));
+			
+			/* link the child nodes */
+			if ($1 != NULL) 
+				$1->parent = $$;
+			$2->parent	= $$;
+
+			$$->states	= $1;
+			$$->state	= $2;
+		}
+	| 	
+		{ 
+			$$ = NULL; 
+		}			
+	;
+
+
+
+state: STATE IDENTIFIER state_level OPEN_BRACE newlines CLOSE_BRACE newlines
+		{
+
+			/* configuration node */
+			$$		= calloc(1, sizeof(struct statenode));
+
+			/* init */
+			$2->type	= "state_id";
+			$$->id		= $2;
+	
+			/* level */
+			if ($3 == NULL) {
+				$$->level	= UNKNOWN;
+			} else {
+				$$->level	= editConst($3);
+			}
+
+			/* set ids */
+/*			
+			if ($6->id == 0) {
+				$6->id = module_id_counter;
+				$6->conf = $$;
+				++module_id_counter;
+			}
+
+			if ($8->id == 0) {
+				$8->id = module_id_counter;
+				$8->conf = $$;
+				++module_id_counter;
+			}
+
+			if ($10->id == 0) {
+				$10->id = module_id_counter;
+				$10->conf = $$;
+				++module_id_counter;
+			}
+
+			if ($12->id == 0) {
+				$12->id = module_id_counter;
+				$12->conf = $$;
+				++module_id_counter;
+			}
+*/
+			/* link child nodes */
+/*
+			$$->app			= $6;
+			$$->app_params		= $6->params;
+			$$->net			= $8;
+			$$->net_params		= $8->params;
+			$$->mac			= $10;
+			$$->mac_params		= $10->params;
+			$$->radio		= $12;
+			$$->radio_params	= $12->params;
+*/
+
+/*
+			if (!strcmp($2->name, conf_state_name)) {
+				$2->value	= conf_state_id;
+				$$->counter	= conf_state_id;
+				conf_state_redefined = 1;
+			} else {
+				$2->value	= conf_counter;
+				$$->counter	= conf_counter;
+				++conf_counter;
+			}
+*/
+
+		}
+	;
+
+state_level: LEVEL CONSTANT
+		{
+			$$ = $2;
+		}
+        |       
+                {
+                        $$ = NULL;
+                }                       
+        ;
+
+
+
+
+
 
 
 
