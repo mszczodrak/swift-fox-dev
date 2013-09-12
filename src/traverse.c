@@ -41,6 +41,7 @@ traverse_program(struct program* p, int f, int policy_counter){
 			*/
 			case TREE_TRAVERSE:
 				traverse_confnodes(p->defcon, f);
+				traverse_statenodes(p->defstate, f);
 				traverse_eventnodes(p->defeve, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
@@ -59,6 +60,7 @@ traverse_program(struct program* p, int f, int policy_counter){
 				init_sem_evt();
 				
 				traverse_confnodes(p->defcon, f);
+				traverse_statenodes(p->defstate, f);
 				traverse_eventnodes(p->defeve, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
@@ -71,6 +73,7 @@ traverse_program(struct program* p, int f, int policy_counter){
 				setFiles();
 				traverse_variables(p->vars, f);
 				traverse_confnodes(p->defcon, f);
+				traverse_statenodes(p->defstate, f);
 				traverse_eventnodes(p->defeve, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
@@ -150,6 +153,7 @@ configuration traversal
 
 \param f type of traversar (TREE_TRAVERSE, TREE_CHECK_SEMANTIC, TREE_GENERATE_CODE)
 */
+
 void
 traverse_confnodes(struct confnodes* c, int f) {	
 	if (c != NULL){
@@ -192,6 +196,7 @@ visit a single configuration
 
 \param f type of traversar (TREE_TRAVERSE, TREE_CHECK_SEMANTIC, TREE_GENERATE_CODE)
 */
+
 void
 traverse_confnode(struct confnode* c, int f) {	
 	switch (f) {
@@ -211,6 +216,65 @@ traverse_confnode(struct confnode* c, int f) {
                         break;
 	}
 }
+
+
+void
+traverse_statenodes(struct statenodes* s, int f) {	
+	if (s != NULL){
+		switch (f) {
+		case TREE_TRAVERSE:
+			traverse_statenodes(s->states, f);
+			traverse_statenode(s->state, f);
+			break;
+
+		case TREE_CHECK_SEMANTIC:
+			traverse_confnodes(s->states, f);
+			traverse_confnode(s->state, f);
+			break;
+
+		case TREE_GENERATE_CODE:
+			traverse_confnodes(s->states, f);
+			traverse_confnode(s->state, f);
+			break;
+			
+		default:
+			break;
+		}
+	} else {
+		switch(f) {
+		case TREE_CHECK_SEMANTIC:
+//			checkControlState();	
+			break;
+
+		default:
+			break;
+		}
+
+	}
+}
+
+
+void
+traverse_statenode(struct statenode* s, int f) {	
+	switch (f) {
+		case TREE_TRAVERSE:
+			break;
+
+		case TREE_CHECK_SEMANTIC:
+//			checkConfiguration(c);
+//			checkConfigurationModules(c);
+			break;
+        
+		case TREE_GENERATE_CODE:
+//			generateConfiguration(c);
+			break;
+
+		default:
+                        break;
+	}
+}
+
+
 
 /** 
 event-condition traversal

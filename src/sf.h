@@ -293,6 +293,7 @@ struct initnode {
 struct program {
 	struct variables	*vars;
 	struct confnodes	*defcon;
+	struct statenodes	*defstate;
 	struct eventnodes	*defeve;
 	struct policies		*defpol;
 	struct initnode		*init;
