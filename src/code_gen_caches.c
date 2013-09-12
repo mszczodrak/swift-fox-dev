@@ -225,24 +225,6 @@ conftab list of all configurations.
 */
 void generateConfiguration(struct confnode* c) {
 
-/*
-	if (c->app->lib->id == 0) {
-		c->app->lib->used = 1;
-	}
-
-	if (c->net->lib->id == 0) {
-		c->net->lib->used = 1;
-	} 
-
-	if (c->mac->lib->id == 0) {
-		c->mac->lib->used = 1;
-	} 
-
-	if (c->radio->lib->id == 0) {
-		c->radio->lib->used = 1;
-	} 
-*/
-//	conftab[c->counter].conf = c;
 }
 
 /** Marks the initial state.
