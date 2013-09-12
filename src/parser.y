@@ -39,6 +39,8 @@ int virtual_counter 	= 0;
 int event_id_counter	= 0;
 FILE *fcode		= NULL;
 
+int state_id_counter	= 0;
+
 int module_id_counter = 1;
 
 int active_state;
@@ -452,6 +454,7 @@ states: states state
 
 			$$->states	= $1;
 			$$->state	= $2;
+
 		}
 	| 	
 		{ 
@@ -470,6 +473,8 @@ state: STATE IDENTIFIER state_level OPEN_BRACE newlines conf_ids newlines CLOSE_
 			/* init */
 			$2->type	= "state_id";
 			$$->id		= $2;
+
+			$$->confs	= $6;
 	
 			/* level */
 			if ($3 == NULL) {
@@ -477,6 +482,12 @@ state: STATE IDENTIFIER state_level OPEN_BRACE newlines conf_ids newlines CLOSE_
 			} else {
 				$$->level	= editConst($3);
 			}
+
+
+			$$->counter	= state_id_counter;
+			++state_id_counter;
+
+			statetab[$$->counter].state = $$;
 		}
 	;
 

@@ -228,13 +228,13 @@ traverse_statenodes(struct statenodes* s, int f) {
 			break;
 
 		case TREE_CHECK_SEMANTIC:
-			traverse_confnodes(s->states, f);
-			traverse_confnode(s->state, f);
+			traverse_statenodes(s->states, f);
+			traverse_statenode(s->state, f);
 			break;
 
 		case TREE_GENERATE_CODE:
-			traverse_confnodes(s->states, f);
-			traverse_confnode(s->state, f);
+			traverse_statenodes(s->states, f);
+			traverse_statenode(s->state, f);
 			break;
 			
 		default:

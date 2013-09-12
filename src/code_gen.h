@@ -30,6 +30,7 @@
 
 extern int conf_counter;
 extern int module_id_counter;
+extern int state_id_counter;
 extern int event_scale_counter;
 
 extern FILE* tmp_confs;

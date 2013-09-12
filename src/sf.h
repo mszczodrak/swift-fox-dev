@@ -176,9 +176,26 @@ struct confnodes {
 
 struct confnode *conflook(struct symtab *conf_id);
 
+
+struct conf_id {
+	struct conf_ids		*parent;
+	struct symtab		*id;
+	struct confnode		*conf;
+};
+
+struct conf_ids {
+	struct conf_ids		*parent;
+	struct conf_ids		*confs;
+	struct conf_id		*conf;
+};
+
+
+
+
 struct statenode {
 	struct statenodes	*parent;
 	struct symtab		*id;
+	struct conf_ids		*confs;
 //	struct modtab		*app;
 //	struct modtab		*net;
 //	struct modtab		*mac;
@@ -200,19 +217,6 @@ struct statenodes {
 	struct statenodes	*parent;
 	struct statenodes	*states;
 	struct statenode	*state;
-};
-
-
-struct conf_id {
-	struct conf_ids		*parent;
-	struct symtab		*id;
-	struct confnode		*conf;
-};
-
-struct conf_ids {
-	struct conf_ids		*parent;
-	struct conf_ids		*confs;
-	struct conf_id		*conf;
 };
 
 
