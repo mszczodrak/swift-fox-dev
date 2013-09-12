@@ -477,57 +477,6 @@ state: STATE IDENTIFIER state_level OPEN_BRACE newlines conf_ids newlines CLOSE_
 			} else {
 				$$->level	= editConst($3);
 			}
-
-			/* set ids */
-/*			
-			if ($6->id == 0) {
-				$6->id = module_id_counter;
-				$6->conf = $$;
-				++module_id_counter;
-			}
-
-			if ($8->id == 0) {
-				$8->id = module_id_counter;
-				$8->conf = $$;
-				++module_id_counter;
-			}
-
-			if ($10->id == 0) {
-				$10->id = module_id_counter;
-				$10->conf = $$;
-				++module_id_counter;
-			}
-
-			if ($12->id == 0) {
-				$12->id = module_id_counter;
-				$12->conf = $$;
-				++module_id_counter;
-			}
-*/
-			/* link child nodes */
-/*
-			$$->app			= $6;
-			$$->app_params		= $6->params;
-			$$->net			= $8;
-			$$->net_params		= $8->params;
-			$$->mac			= $10;
-			$$->mac_params		= $10->params;
-			$$->radio		= $12;
-			$$->radio_params	= $12->params;
-*/
-
-/*
-			if (!strcmp($2->name, conf_state_name)) {
-				$2->value	= conf_state_id;
-				$$->counter	= conf_state_id;
-				conf_state_redefined = 1;
-			} else {
-				$2->value	= conf_counter;
-				$$->counter	= conf_counter;
-				++conf_counter;
-			}
-*/
-
 		}
 	;
 
