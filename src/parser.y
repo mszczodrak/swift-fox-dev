@@ -72,6 +72,8 @@ int yylex(void);
 	double			dval;
 	struct confnode		*confp;
 	struct confnodes	*confsp;
+	struct conf_id		*confid;
+	struct conf_ids		*confids;
 	struct statenode	*statep;
 	struct statenodes	*statesp;
 	struct eventnode	*evep;
@@ -112,6 +114,8 @@ int yylex(void);
 %type <symp>	from_configurations
 %type <confp>	configuration
 %type <confsp>	configurations
+%type <confid>	conf_id
+%type <confids> conf_ids
 %type <confsp>	defined_configurations
 %type <statep>	state
 %type <statesp>	states
@@ -306,12 +310,21 @@ configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module ne
 			/* link child nodes */
 			$$->app			= $6;
 			$$->app_params		= $6->params;
+			if ($6) $$->app->lib->used = 1;
+
 			$$->net			= $8;
 			$$->net_params		= $8->params;
+			if ($8) $$->net->lib->used = 1;
+
+
 			$$->mac			= $10;
 			$$->mac_params		= $10->params;
+			if ($10) $$->mac->lib->used = 1;
+
+
 			$$->radio		= $12;
 			$$->radio_params	= $12->params;
+			if ($12) $$->radio->lib->used = 1;
 
 			if (!strcmp($2->name, conf_state_name)) {
 				$2->value	= conf_state_id;
@@ -322,6 +335,9 @@ configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module ne
 				$$->counter	= conf_counter;
 				++conf_counter;
 			}
+
+			conftab[$$->counter].conf = $$;
+
 		}
 	;
 
@@ -417,6 +433,10 @@ defined_states: states state
 			$$->states	= $1;
 			$$->state	= $2;
 		}	
+	|
+		{
+			$$ = NULL;
+		}
 	;
 
 
@@ -441,7 +461,7 @@ states: states state
 
 
 
-state: STATE IDENTIFIER state_level OPEN_BRACE newlines CLOSE_BRACE newlines
+state: STATE IDENTIFIER state_level OPEN_BRACE newlines conf_ids newlines CLOSE_BRACE newlines
 		{
 
 			/* configuration node */
@@ -522,10 +542,36 @@ state_level: LEVEL CONSTANT
         ;
 
 
+conf_ids: conf_ids newlines conf_id
+		{
+			/* states set */
+			$$		= calloc(1, sizeof(struct conf_ids));
+			
+			/* link the child nodes */
+			if ($1 != NULL) 
+				$1->parent = $$;
+			$3->parent	= $$;
+
+			$$->confs	= $1;
+			$$->conf	= $3;
+		}
+	| 	
+		{ 
+			$$ = NULL; 
+		}			
+	;
 
 
 
+conf_id: IDENTIFIER
+		{
 
+			$$		= calloc(1, sizeof(struct conf_id));
+
+			$$->id		= $1;
+			$$->conf	= conflook($1);	
+
+		}
 
 
 defined_events: defined_events event_condition
@@ -1183,6 +1229,23 @@ proc_policy(struct policy *p) {
 
 	return 0;	
 }
+
+/* finds configuration record based on its string ID */
+struct confnode *
+conflook(struct symtab *conf_id) {
+	/* iterator */
+	struct conftab *cn = NULL;
+
+	/* loop */
+	for(cn = conftab; cn < &conftab[NCONFS]; cn++) {
+		if (cn->conf && cn->conf->id && (cn->conf->id == conf_id)) {
+			return cn->conf;
+		}
+	}
+	yyerror("Configuration undefined");
+	return NULL;
+}
+
 
 
 /* library lookup */
