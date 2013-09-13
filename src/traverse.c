@@ -261,6 +261,7 @@ traverse_statenode(struct statenode* s, int f) {
 			break;
 
 		case TREE_CHECK_SEMANTIC:
+			checkState(s);
 //			checkConfiguration(c);
 //			checkConfigurationModules(c);
 			break;

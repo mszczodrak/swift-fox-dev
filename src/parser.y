@@ -184,6 +184,7 @@ program: global_variables defined_configurations defined_states defined_events p
 			
 			/* init */
 			$$->defcon	= $2;
+			$$->defstate	= $3;
 			$$->defeve	= $4;
 			$$->defpol	= $5;
 			$$->init	= $7;
@@ -431,6 +432,15 @@ defined_states: states state
 			if ($1 != NULL)
 				$1->parent = $$;
 			$2->parent	= $$;
+
+			if ($1 == NULL) {
+				printf("states is NULL\n");
+			}
+
+
+			if ($2 == NULL) {
+				printf("state is NULL\n");
+			}
 			
 			$$->states	= $1;
 			$$->state	= $2;

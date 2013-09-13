@@ -51,6 +51,40 @@ init_sem_evt(void) {
 		sizeof(struct symtab *) * NSYMS);
 }
 
+
+void
+checkState(struct statenode *s) {
+	int i;
+	struct statenode *state;
+	struct statetab		*stateptr;
+
+	/*
+	check for redclarations
+	*/
+	
+	for (i = 0; i < state_id_counter; i++) {
+		//printf("0x%1x 0x%1x\n", statetab[i].state, s);
+		if ((statetab[i].state != s) && (statetab[i].state->id == s->id)) {
+			goto state_err;
+		}
+	}
+
+
+	return;
+
+
+state_err:
+	/* redeclaration */
+	(void)fprintf(stderr, "error: redeclaration of state %s\n",
+			s->id->name);
+	/* terminate */
+	exit(1);
+
+
+
+}
+
+
 /** 
 semantic checks for the configuration nodes 
 /param c pointer to confnode
