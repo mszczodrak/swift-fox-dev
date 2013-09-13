@@ -215,7 +215,6 @@ global_variables: global_variables global_variable
 
 global_variable:  param_type IDENTIFIER newlines
 		{
-			printf("hello\n");
 			//printf("var %s\n", $1);
 
 			$$		= calloc(1, sizeof(struct variable));
@@ -433,15 +432,6 @@ defined_states: states state
 				$1->parent = $$;
 			$2->parent	= $$;
 
-			if ($1 == NULL) {
-				printf("states is NULL\n");
-			}
-
-
-			if ($2 == NULL) {
-				printf("state is NULL\n");
-			}
-			
 			$$->states	= $1;
 			$$->state	= $2;
 		}	

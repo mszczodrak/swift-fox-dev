@@ -70,6 +70,7 @@ checkState(struct statenode *s) {
 	}
 
 
+	/* OK, no problems found */
 	return;
 
 
