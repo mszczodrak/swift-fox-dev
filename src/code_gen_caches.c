@@ -71,7 +71,6 @@ void generateCaches(int event_counter, int policy_counter) {
 	/* Generate Configurations */
 
 	fprintf(fp, "uint16_t active_state = %d;\n\n", active_state);
-	fprintf(fp, "uint16_t network_state = %d;\n\n", active_state);
 	fprintf(fp, "struct fennec_configuration configurations[NUMBER_OF_CONFIGURATIONS] = {\n");
 //	fprintf(fp, "\t{\n");
 //	fprintf(fp, "\t\t.application = 0,\n");
@@ -110,23 +109,23 @@ void generateCaches(int event_counter, int policy_counter) {
 	struct conf_ids *conf_ptr;
 	int confs_per_state = 0;
 
-	fprintf(fp, "network_state_t v_states[NUMBER_OF_STATES] = {\n");
+	fprintf(fp, "struct network_state states[NUMBER_OF_STATES] = {\n");
 
 	for( i = 0; i < state_id_counter; i++ ) {
 		confs_per_state = 0;
 		fprintf(fp, "\t{\n");
-		fprintf(fp, "\t\t.id = %d;\n", statetab[i].state->counter);
+		fprintf(fp, "\t\t.state_id = %d,\n", statetab[i].state->counter);
 		conf_ptr = statetab[i].state->confs;
 		while (conf_ptr) { 
 			if (conf_ptr->conf) {
 				
-				fprintf(fp, "\t\t.conf_ids[%d] = %d;\n", 
+				fprintf(fp, "\t\t.conf_ids[%d] = %d,\n", 
 					confs_per_state, conf_ptr->conf->conf->counter);
 				confs_per_state++;
 			}
 			conf_ptr = conf_ptr->confs;
 		}
-		fprintf(fp, "\t\t.num_confs = %d;\n", confs_per_state);
+		fprintf(fp, "\t\t.num_confs = %d\n", confs_per_state);
 
 		fprintf(fp, "\t}\n");
 		if (i+1 < state_id_counter) {
@@ -139,15 +138,8 @@ void generateCaches(int event_counter, int policy_counter) {
 
 
 	fprintf(fp, "struct default_params defaults[NUMBER_OF_CONFIGURATIONS] = {\n");
-	fprintf(fp, "\t{\n");
-	fprintf(fp, "\t\t.application_cache = NULL,\n");
-	fprintf(fp, "\t\t.network_cache = NULL,\n");
-	fprintf(fp, "\t\t.mac_cache = NULL,\n");
-	fprintf(fp, "\t\t.radio_cache = NULL\n");
-	fprintf(fp, "\t}\n");
 
 	for( i = 1; i < conf_counter; i++ ) {
-		fprintf(fp, "\t,\n");
 		fprintf(fp, "\t{\n");
 		fprintf(fp, "\t\t.application_cache = &%s_data,\n", 
 					conftab[i].conf->app->lib->full_name);
@@ -199,6 +191,9 @@ void generateCaches(int event_counter, int policy_counter) {
                 }
 
 		fprintf(fp, "\t}\n");
+		if (i+1 < state_id_counter) {
+			fprintf(fp, "\t,\n");
+		}
 	}
 
 	fprintf(fp, "};\n\n");

@@ -332,6 +332,7 @@ configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module ne
 			}
 
 			$2->value	= conf_counter;
+			$$->counter	= conf_counter;
 
 			conftab[conf_counter].conf = $$;
 
