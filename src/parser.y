@@ -45,7 +45,6 @@ int module_id_counter = 1;
 
 int active_state;
 char *conf_state_name = "control";
-int conf_state_id = 1;
 int conf_state_redefined = 0;
 
 char *conf_state_app = "cuApp";
@@ -53,7 +52,7 @@ char *conf_state_net = "cuNet";
 char *conf_state_mac = "cuMac";
 char *conf_state_radio = "cc2420";
 
-int conf_counter	= 2;
+int conf_counter	= 0;
 
 struct eventnodes *last_evens = NULL;
 int file_status;
@@ -329,16 +328,14 @@ configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module ne
 			if ($12) $$->radio->lib->used = 1;
 
 			if (!strcmp($2->name, conf_state_name)) {
-				$2->value	= conf_state_id;
-				$$->counter	= conf_state_id;
 				conf_state_redefined = 1;
-			} else {
-				$2->value	= conf_counter;
-				$$->counter	= conf_counter;
-				++conf_counter;
 			}
 
-			conftab[$$->counter].conf = $$;
+			$2->value	= conf_counter;
+
+			conftab[conf_counter].conf = $$;
+
+			++conf_counter;
 
 		}
 	;

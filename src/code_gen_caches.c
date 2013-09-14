@@ -73,20 +73,20 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "uint16_t active_state = %d;\n\n", active_state);
 	fprintf(fp, "uint16_t network_state = %d;\n\n", active_state);
 	fprintf(fp, "struct fennec_configuration configurations[NUMBER_OF_CONFIGURATIONS] = {\n");
-	fprintf(fp, "\t{\n");
-	fprintf(fp, "\t\t.application = 0,\n");
-	fprintf(fp, "\t\t.network = 0,\n");
-	fprintf(fp, "\t\t.mac = 0,\n");
-	fprintf(fp, "\t\t.radio = 0,\n");
-	fprintf(fp, "\t\t.level = 0\n");
-	fprintf(fp, "\t}\n");
+//	fprintf(fp, "\t{\n");
+//	fprintf(fp, "\t\t.application = 0,\n");
+//	fprintf(fp, "\t\t.network = 0,\n");
+//	fprintf(fp, "\t\t.mac = 0,\n");
+//	fprintf(fp, "\t\t.radio = 0,\n");
+//	fprintf(fp, "\t\t.level = 0\n");
+//	fprintf(fp, "\t}\n");
 
 	/* generate code specifying each configuration's definition */
 
-	for( i = 1; i < conf_counter; i++ ) {
-		fprintf(fp, "\t,\n");
+	for( i = 0; i < conf_counter; i++ ) {
 		fprintf(fp, "\t{\n");
     
+		fprintf(fp, "\t\t.conf_id = %d,\n", conftab[i].conf->counter);
 		fprintf(fp, "\t\t.application = %d,\n", conftab[i].conf->app->id);
 		fprintf(fp, "\t\t.network = %d,\n", conftab[i].conf->net->id);
 		fprintf(fp, "\t\t.mac = %d,\n", conftab[i].conf->mac->id);
@@ -97,6 +97,9 @@ void generateCaches(int event_counter, int policy_counter) {
 			fprintf(fp, "\t\t.level = %d\n", conftab[i].conf->level);
 		}
 		fprintf(fp, "\t}\n");
+		if (i+1 < conf_counter) {
+			fprintf(fp, "\t,\n");
+		}
 	}
 
 	fprintf(fp, "};\n\n");

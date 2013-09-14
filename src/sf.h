@@ -60,14 +60,13 @@
 
 #define STD_FENNEC_FOX_LIB	"support/sfc/fennec.sfl"
 
-#define POLICY_CONFIGURATION	250
+//#define POLICY_CONFIGURATION	250
 
 #define UNKNOWN			-1
 
 extern char *ffmodules;
 extern int active_state;
 extern char *conf_state_name;
-extern int conf_state_id;
 extern int conf_state_redefined;
 
 extern char *conf_state_app;
