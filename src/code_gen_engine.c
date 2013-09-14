@@ -328,7 +328,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"error_t AMSend_send(uint16_t module_id, uint8_t to_layer, am_addr_t addr, message_t* msg, uint8_t len) {\n");
-	fprintf(fp,"\tif (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
 	fprintf(fp,"\tswitch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -509,299 +508,284 @@ void generateFennecEngineP() {
 
 
 
+	fprintf(fp,"  bool AMPacket_isForMe(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sNetworkAMPacket.isForMe(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sMacAMPacket.isForMe(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
+	fprintf(fp,"  am_id_t AMPacket_type(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sNetworkAMPacket.type(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sMacAMPacket.type(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  bool AMPacket_isForMe(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sNetworkAMPacket.isForMe(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sMacAMPacket.isForMe(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  void AMPacket_setType(uint16_t module_id, uint8_t to_layer, message_t *msg, am_id_t t) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sNetworkAMPacket.setType(msg, t);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sMacAMPacket.setType(msg, t);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  am_id_t AMPacket_type(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sNetworkAMPacket.type(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sMacAMPacket.type(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  am_group_t AMPacket_group(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sNetworkAMPacket.group(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sMacAMPacket.group(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void AMPacket_setType(uint16_t module_id, uint8_t to_layer, message_t *msg, am_id_t t) {\n");
-  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sNetworkAMPacket.setType(msg, t);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sMacAMPacket.setType(msg, t);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  void AMPacket_setGroup(uint16_t module_id, uint8_t to_layer, message_t *msg, am_group_t grp) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sNetworkAMPacket.setGroup(msg, grp);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sMacAMPacket.setGroup(msg, grp);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  am_group_t AMPacket_group(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sNetworkAMPacket.group(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sMacAMPacket.group(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  void* Packet_getPayload(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sNetworkPacket.getPayload(msg, len);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sMacPacket.getPayload(msg, len);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return NULL;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void AMPacket_setGroup(uint16_t module_id, uint8_t to_layer, message_t *msg, am_group_t grp) {\n");
-  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sNetworkAMPacket.setGroup(msg, grp);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sMacAMPacket.setGroup(msg, grp);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  uint8_t Packet_maxPayloadLength(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sNetworkPacket.maxPayloadLength();\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sMacPacket.maxPayloadLength();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void* Packet_getPayload(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
-  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sNetworkPacket.getPayload(msg, len);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sMacPacket.getPayload(msg, len);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return NULL;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  am_group_t AMPacket_localGroup(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sNetworkAMPacket.localGroup();\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sMacAMPacket.localGroup();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  uint8_t Packet_maxPayloadLength(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sNetworkPacket.maxPayloadLength();\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sMacPacket.maxPayloadLength();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  void Packet_clear(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sNetworkPacket.clear(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sMacPacket.clear(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  am_group_t AMPacket_localGroup(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sNetworkAMPacket.localGroup();\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sMacAMPacket.localGroup();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  uint8_t Packet_payloadLength(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sNetworkPacket.payloadLength(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sMacPacket.payloadLength(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void Packet_clear(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sNetworkPacket.clear(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sMacPacket.clear(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  void Packet_setPayloadLength(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sNetworkPacket.setPayloadLength(msg, len);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sMacPacket.setPayloadLength(msg, len);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  uint8_t Packet_payloadLength(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sNetworkPacket.payloadLength(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sMacPacket.payloadLength(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  error_t PacketAcknowledgements_requestAck(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sNetworkPacketAcknowledgements.requestAck(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sMacPacketAcknowledgements.requestAck(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return FAIL;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void Packet_setPayloadLength(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
-  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sNetworkPacket.setPayloadLength(msg, len);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sMacPacket.setPayloadLength(msg, len);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  error_t PacketAcknowledgements_noAck(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sNetworkPacketAcknowledgements.noAck(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sMacPacketAcknowledgements.noAck(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return FAIL;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  error_t PacketAcknowledgements_requestAck(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sNetworkPacketAcknowledgements.requestAck(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sMacPacketAcknowledgements.requestAck(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return FAIL;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
-
-
-  fprintf(fp,"  error_t PacketAcknowledgements_noAck(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sNetworkPacketAcknowledgements.noAck(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sMacPacketAcknowledgements.noAck(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return FAIL;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
-
-
-  fprintf(fp,"  bool PacketAcknowledgements_wasAcked(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sNetworkPacketAcknowledgements.wasAcked(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sMacPacketAcknowledgements.wasAcked(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  bool PacketAcknowledgements_wasAcked(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sNetworkPacketAcknowledgements.wasAcked(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sMacPacketAcknowledgements.wasAcked(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
   /* Radio Only Interfaces */
@@ -1189,7 +1173,6 @@ void generateFennecEngineP() {
 
   fprintf(fp,"  error_t RadioSend_send(uint16_t module_id, uint8_t to_layer, message_t* msg, bool useCca) {\n");
   fprintf(fp,"    error_t err;\n");
-  fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
   fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
   for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1224,7 +1207,6 @@ void generateFennecEngineP() {
 
 	fprintf(fp,"  void* RadioPacket_getPayload(uint16_t module_id, uint8_t to_layer, message_t* msg, uint8_t len) {\n");
 	fprintf(fp,"    void *ptr;\n");
-	fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
 	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1242,7 +1224,6 @@ void generateFennecEngineP() {
 
 	fprintf(fp,"  error_t RadioBuffer_load(uint16_t module_id, uint8_t to_layer, message_t* msg) {\n");
 	fprintf(fp,"    error_t err;\n");
-	fprintf(fp,"    if (msg->conf != POLICY_CONFIGURATION) msg->conf = get_conf_id();\n");
 	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
