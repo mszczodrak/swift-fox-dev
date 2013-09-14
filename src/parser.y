@@ -52,7 +52,7 @@ char *conf_state_net = "cuNet";
 char *conf_state_mac = "cuMac";
 char *conf_state_radio = "cc2420";
 
-int conf_counter	= 0;
+int conf_id_counter	= 0;
 
 struct eventnodes *last_evens = NULL;
 int file_status;
@@ -331,12 +331,12 @@ configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module ne
 				conf_state_redefined = 1;
 			}
 
-			$2->value	= conf_counter;
-			$$->counter	= conf_counter;
+			$2->value	= conf_id_counter;
+			$$->counter	= conf_id_counter;
 
-			conftab[conf_counter].conf = $$;
+			conftab[conf_id_counter].conf = $$;
 
-			++conf_counter;
+			++conf_id_counter;
 
 		}
 	;

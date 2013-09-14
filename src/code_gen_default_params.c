@@ -51,7 +51,7 @@ void generateDefaultParams() {
 	/** 
 	generate structure with default parameters for each module of a given configuration 
 	*/
-	for( i = 1; i < conf_counter; i++ ) {
+	for( i = 1; i < conf_id_counter; i++ ) {
 		/** 
 		application default parameter values 
 		*/

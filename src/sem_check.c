@@ -575,8 +575,8 @@ checkControlState(void) {
 	addConfModule(c, &c->mac, &c->mac_params, conf_state_mac);
 	addConfModule(c, &c->radio, &c->radio_params, conf_state_radio);
 
-	conftab[conf_counter].conf = c;
-	++conf_counter;
+	conftab[conf_id_counter].conf = c;
+	++conf_id_counter;
 
 	/** 
 	done with creating control default control state

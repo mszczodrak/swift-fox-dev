@@ -93,7 +93,7 @@ code can be generated.
 \param policy_counter number of policies found in Swift Fox program.
 */
 void finishCodeGeneration(int policy_counter) {
-	int conf_counter = 0;
+	int conf_id_counter = 0;
 	int event_counter = 0;
 	struct symtab *sp;
 
@@ -103,7 +103,7 @@ void finishCodeGeneration(int policy_counter) {
 				event_counter++;
 			}
 			if (!strcmp(sp->type, "configuration_id")) {
-				conf_counter++;
+				conf_id_counter++;
 			}
 		}
 	}

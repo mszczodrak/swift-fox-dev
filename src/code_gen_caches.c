@@ -52,7 +52,7 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "#ifndef __FF_CACHES_H__\n");
 	fprintf(fp, "#define __FF_CACHES_H__\n\n");
 
-	fprintf(fp, "#define NUMBER_OF_CONFIGURATIONS  %d\n", conf_counter);
+	fprintf(fp, "#define NUMBER_OF_CONFIGURATIONS  %d\n", conf_id_counter);
 	fprintf(fp, "#define NUMBER_OF_STATES  %d\n", state_id_counter);
 	fprintf(fp, "#define NUMBER_OF_POLICIES  %d\n", policy_counter);
 	fprintf(fp, "#include <Fennec.h>\n");
@@ -82,7 +82,7 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	/* generate code specifying each configuration's definition */
 
-	for( i = 0; i < conf_counter; i++ ) {
+	for( i = 0; i < conf_id_counter; i++ ) {
 		fprintf(fp, "\t{\n");
     
 		fprintf(fp, "\t\t.conf_id = %d,\n", conftab[i].conf->counter);
@@ -96,7 +96,7 @@ void generateCaches(int event_counter, int policy_counter) {
 			fprintf(fp, "\t\t.level = %d\n", conftab[i].conf->level);
 		}
 		fprintf(fp, "\t}\n");
-		if (i+1 < conf_counter) {
+		if (i+1 < conf_id_counter) {
 			fprintf(fp, "\t,\n");
 		}
 	}
@@ -139,7 +139,7 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	fprintf(fp, "struct default_params defaults[NUMBER_OF_CONFIGURATIONS] = {\n");
 
-	for( i = 1; i < conf_counter; i++ ) {
+	for( i = 1; i < conf_id_counter; i++ ) {
 		fprintf(fp, "\t{\n");
 		fprintf(fp, "\t\t.application_cache = &%s_data,\n", 
 					conftab[i].conf->app->lib->full_name);
