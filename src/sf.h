@@ -60,7 +60,6 @@
 
 #define STD_FENNEC_FOX_LIB	"support/sfc/fennec.sfl"
 
-//#define POLICY_CONFIGURATION	250
 
 #define UNKNOWN			-1
 
