@@ -788,404 +788,402 @@ void generateFennecEngineP() {
 	fprintf(fp,"  }\n\n");
 
 
-  /* Radio Only Interfaces */
+	/* Radio Only Interfaces */
 
-  fprintf(fp,"  error_t RadioConfig_sync(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioConfig.sync();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
-
-
-  fprintf(fp,"  uint8_t RadioConfig_getChannel(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioConfig.getChannel();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  error_t RadioConfig_sync(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioConfig.sync();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void RadioConfig_setChannel(uint16_t module_id, uint8_t to_layer, uint8_t channel) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioConfig.setChannel( channel );\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  uint8_t RadioConfig_getChannel(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioConfig.getChannel();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  uint16_t RadioConfig_getShortAddr(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioConfig.getShortAddr();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  void RadioConfig_setChannel(uint16_t module_id, uint8_t to_layer, uint8_t channel) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioConfig.setChannel( channel );\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void RadioConfig_setShortAddr(uint16_t module_id, uint8_t to_layer, uint16_t address) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioConfig.setShortAddr(address);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  uint16_t RadioConfig_getShortAddr(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioConfig.getShortAddr();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  uint16_t RadioConfig_getPanAddr(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioConfig.getPanAddr();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  void RadioConfig_setShortAddr(uint16_t module_id, uint8_t to_layer, uint16_t address) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioConfig.setShortAddr(address);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void RadioConfig_setPanAddr(uint16_t module_id, uint8_t to_layer, uint16_t address) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioConfig.setPanAddr(address);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  uint16_t RadioConfig_getPanAddr(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioConfig.getPanAddr();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void RadioConfig_setAddressRecognition(uint16_t module_id, uint8_t to_layer, bool enableAddressRecognition, bool useHwAddressRecognition) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioConfig.setAddressRecognition(enableAddressRecognition, useHwAddressRecognition);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  void RadioConfig_setPanAddr(uint16_t module_id, uint8_t to_layer, uint16_t address) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioConfig.setPanAddr(address);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  bool RadioConfig_isAddressRecognitionEnabled(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioConfig.isAddressRecognitionEnabled();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  void RadioConfig_setAddressRecognition(uint16_t module_id, uint8_t to_layer, bool enableAddressRecognition, bool useHwAddressRecognition) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioConfig.setAddressRecognition(enableAddressRecognition, useHwAddressRecognition);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  bool RadioConfig_isHwAddressRecognitionDefault(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioConfig.isHwAddressRecognitionDefault();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  bool RadioConfig_isAddressRecognitionEnabled(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioConfig.isAddressRecognitionEnabled();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void RadioConfig_setAutoAck(uint16_t module_id, uint8_t to_layer, bool enableAutoAck, bool hwAutoAck) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioConfig.setAutoAck(enableAutoAck, hwAutoAck);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  bool RadioConfig_isHwAddressRecognitionDefault(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioConfig.isHwAddressRecognitionDefault();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  bool RadioConfig_isHwAutoAckDefault(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioConfig.isHwAutoAckDefault();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  void RadioConfig_setAutoAck(uint16_t module_id, uint8_t to_layer, bool enableAutoAck, bool hwAutoAck) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioConfig.setAutoAck(enableAutoAck, hwAutoAck);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  bool RadioConfig_isAutoAckEnabled(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioConfig.isAutoAckEnabled();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  bool RadioConfig_isHwAutoAckDefault(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioConfig.isHwAutoAckDefault();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-
-
-  fprintf(fp,"  error_t RadioPower_startVReg(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioPower.startVReg();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
-
-
-  fprintf(fp,"  error_t RadioPower_stopVReg(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioPower.stopVReg();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
-
-
-  fprintf(fp,"  error_t RadioPower_startOscillator(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioPower.startOscillator();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
-
-
-  fprintf(fp,"  error_t RadioPower_stopOscillator(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioPower.stopOscillator();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
-
-
-  fprintf(fp,"  error_t RadioPower_rxOn(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioPower.rxOn();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
-
-
-  fprintf(fp,"  error_t RadioPower_rfOff(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioPower.rfOff();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
-
-
-  fprintf(fp,"  error_t ReadRssi_read(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sReadRssi.read();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
-
-
-  fprintf(fp,"  error_t RadioResource_request(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioResource.request();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return FAIL;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
-
-
-  fprintf(fp,"  error_t RadioResource_immediateRequest(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioResource.immediateRequest();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
-
-
-  fprintf(fp,"  error_t RadioResource_release(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioResource.release();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
-
-
-  fprintf(fp,"  bool RadioResource_isOwner(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioResource.isOwner();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  bool RadioConfig_isAutoAckEnabled(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioConfig.isAutoAckEnabled();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
 
-  fprintf(fp,"  error_t RadioControl_start(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioControl.start();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return FAIL;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  error_t RadioPower_startVReg(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioPower.startVReg();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  error_t RadioControl_stop(uint16_t module_id, uint8_t to_layer) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioControl.stop();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return FAIL;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  error_t RadioPower_stopVReg(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioPower.stopVReg();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  error_t RadioSend_cancel(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-  fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        return call %sRadioSend.cancel(msg);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return FAIL;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  error_t RadioPower_startOscillator(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioPower.startOscillator();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  error_t RadioSend_send(uint16_t module_id, uint8_t to_layer, message_t* msg, bool useCca) {\n");
-  fprintf(fp,"    error_t err;\n");
-  fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"      case %d:\n", mp->id);
-      fprintf(fp,"        err = call %sRadioSend.send(msg, useCca);\n\n", mp->lib->full_name);
-      fprintf(fp,"        if (err == SUCCESS) post set_radio_active();\n");
-      fprintf(fp,"        return err;\n\n");
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return FAIL;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	fprintf(fp,"  error_t RadioPower_stopOscillator(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioPower.stopOscillator();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
+
+
+	fprintf(fp,"  error_t RadioPower_rxOn(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioPower.rxOn();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
+
+
+	fprintf(fp,"  error_t RadioPower_rfOff(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioPower.rfOff();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
+
+
+	fprintf(fp,"  error_t ReadRssi_read(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sReadRssi.read();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
+
+
+	fprintf(fp,"  error_t RadioResource_request(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioResource.request();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return FAIL;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
+
+
+	fprintf(fp,"  error_t RadioResource_immediateRequest(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioResource.immediateRequest();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
+
+
+	fprintf(fp,"  error_t RadioResource_release(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioResource.release();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
+
+
+	fprintf(fp,"  bool RadioResource_isOwner(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioResource.isOwner();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
+
+
+	fprintf(fp,"  error_t RadioControl_start(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioControl.start();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return FAIL;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
+
+
+	fprintf(fp,"  error_t RadioControl_stop(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioControl.stop();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return FAIL;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
+
+
+	fprintf(fp,"  error_t RadioSend_cancel(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"    switch( get_module_id(module_id, get_conf_id(), to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        return call %sRadioSend.cancel(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return FAIL;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
+
+
+	fprintf(fp,"  error_t RadioSend_send(uint16_t module_id, uint8_t to_layer, message_t* msg, bool useCca) {\n");
+	fprintf(fp,"    error_t err;\n");
+	fprintf(fp,"    switch( get_module_id(module_id, msg->conf, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"      case %d:\n", mp->id);
+			fprintf(fp,"        err = call %sRadioSend.send(msg, useCca);\n\n", mp->lib->full_name);
+			fprintf(fp,"        if (err == SUCCESS) post set_radio_active();\n");
+			fprintf(fp,"        return err;\n\n");
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return FAIL;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
 	fprintf(fp,"  uint8_t RadioPacket_maxPayloadLength(uint16_t module_id, uint8_t to_layer) {\n");
