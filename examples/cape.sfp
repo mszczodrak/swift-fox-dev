@@ -1,12 +1,13 @@
 configuration count { 
-			counter(2, 1024, NODE, 2)
-                        ctp(2)
-                        csmaca(2, 0, 10, 10, 1, 1, 1)
+			counter(30, 1024, NODE, 74)
+                        ctp(74)
+                        csmaca(74, 0, 10, 10, 1, 1, 1)
                         # always ON, delay_after_receive, backoff, min_backoff
                         # ack, cca, crc
-			cape() }
-#                        cc2420(26, 31, 1, 1) }
-#			nullRadio() }
+#			cape() 
+                        cc2420(26, 31, 1, 1) 
+#			nullRadio() 
+}
 
 state simple { count }
 
