@@ -498,7 +498,7 @@ checkInitial(struct initnode *i) {
 		if (sp->name &&
 			!strcmp(sp->name, i->id->name))
 			if (sp->type &&
-				!strcmp(sp->type, "configuration_id")) {
+				!strcmp(sp->type, "state_id")) {
 				/* found */
 				found = 1;
 				break;
@@ -513,7 +513,7 @@ checkInitial(struct initnode *i) {
 
 conf_err:
 	/* undeclared initial configuration */
-	(void)fprintf(stderr, "error: undeclared 'initial' configuration %s\n",
+	(void)fprintf(stderr, "error: undeclared 'initial' state %s\n",
 			i->id->name);
 	/* terminate */
 	exit(1);

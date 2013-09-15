@@ -1,30 +1,14 @@
-configuration con { 	nullApp()
-                        nullNet()
-			nullMac()
-                        #cuMac(10, 10, 1, 1, 1)
-                        #cuMac(2, 200, 10, 10, 1, 1, 1)
-			nullRadio() 
-                        #cc2420(26, 31, 1, 1)
-}
-
-
-
-configuration empty { 
-#			blink(3, 5000)
+configuration count { 
 			counter(2, 1024, NODE, 2)
-#			counterEH(2, 1024, NODE, 2)
-			#nullApp()
                         ctp(2)
-			#nullNet() 
                         csmaca(2, 0, 10, 10, 1, 1, 1)
                         # always ON, delay_after_receive, backoff, min_backoff
                         # ack, cca, crc
-			#nullMac() 
-#			cape() }
+			cape() }
 #                        cc2420(26, 31, 1, 1) }
-			nullRadio() }
+#			nullRadio() }
 
-state new { con empty }
+state simple { count }
 
-start empty
+start simple
 
