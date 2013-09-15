@@ -713,7 +713,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void Packet_setPayloadLength(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
+	fprintf(fp,"void Packet_setPayloadLength(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -730,10 +730,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t PacketAcknowledgements_requestAck(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"error_t PacketAcknowledgements_requestAck(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -750,10 +750,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return FAIL;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t PacketAcknowledgements_noAck(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"error_t PacketAcknowledgements_noAck(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -770,10 +770,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return FAIL;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  bool PacketAcknowledgements_wasAcked(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"bool PacketAcknowledgements_wasAcked(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -790,12 +790,12 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
 	/* Radio Only Interfaces */
 
-	fprintf(fp,"  error_t RadioConfig_sync(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"error_t RadioConfig_sync(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -806,7 +806,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
 	fprintf(fp,"  uint8_t RadioConfig_getChannel(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
@@ -820,7 +820,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
 	fprintf(fp,"void RadioConfig_setChannel(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, uint8_t channel) {\n");
@@ -1005,7 +1005,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t RadioPower_startOscillator(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"error_t RadioPower_startOscillator(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1016,10 +1016,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t RadioPower_stopOscillator(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"error_t RadioPower_stopOscillator(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1030,10 +1030,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t RadioPower_rxOn(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"error_t RadioPower_rxOn(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1044,10 +1044,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t RadioPower_rfOff(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"error_t RadioPower_rfOff(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1058,10 +1058,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t ReadRssi_read(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"error_t ReadRssi_read(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1072,10 +1072,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t RadioResource_request(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"error_t RadioResource_request(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1086,10 +1086,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return FAIL;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t RadioResource_immediateRequest(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"error_t RadioResource_immediateRequest(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1100,10 +1100,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t RadioResource_release(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"error_t RadioResource_release(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1114,10 +1114,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  bool RadioResource_isOwner(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"bool RadioResource_isOwner(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1128,10 +1128,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t RadioControl_start(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"error_t RadioControl_start(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1142,10 +1142,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return FAIL;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t RadioControl_stop(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"error_t RadioControl_stop(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1156,10 +1156,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return FAIL;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t RadioSend_cancel(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"error_t RadioSend_cancel(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1170,11 +1170,11 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return FAIL;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t RadioSend_send(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t* msg, bool useCca) {\n");
-	fprintf(fp,"    error_t err;\n");
+	fprintf(fp,"error_t RadioSend_send(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t* msg, bool useCca) {\n");
+	fprintf(fp,"error_t err;\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1187,7 +1187,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return FAIL;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
 	fprintf(fp,"  uint8_t RadioPacket_maxPayloadLength(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
@@ -1204,11 +1204,11 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void* RadioPacket_getPayload(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t* msg, uint8_t len) {\n");
-	fprintf(fp,"    void *ptr;\n");
+	fprintf(fp,"void* RadioPacket_getPayload(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t* msg, uint8_t len) {\n");
+	fprintf(fp,"void *ptr;\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1221,11 +1221,11 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return NULL;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t RadioBuffer_load(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t* msg) {\n");
-	fprintf(fp,"    error_t err;\n");
+	fprintf(fp,"error_t RadioBuffer_load(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t* msg) {\n");
+	fprintf(fp,"error_t err;\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1238,11 +1238,11 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return FAIL;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
 
-	fprintf(fp,"  bool PacketIndicator_isReceiving(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"bool PacketIndicator_isReceiving(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1253,10 +1253,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  bool EnergyIndicator_isReceiving(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"bool EnergyIndicator_isReceiving(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1267,10 +1267,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  bool ByteIndicator_isReceiving(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"bool ByteIndicator_isReceiving(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1281,10 +1281,10 @@ void generateFennecEngineP() {
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return 0;\n");
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void sendDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t* msg, error_t error) {\n");
+	fprintf(fp,"void sendDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t* msg, error_t error) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
@@ -1302,8 +1302,8 @@ void generateFennecEngineP() {
 	}
 	fprintf(fp,"      default:\n");
 	fprintf(fp,"        return;\n");
-	fprintf(fp,"    }\n\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
+	fprintf(fp,"}\n\n");
 
 
 	fprintf(fp,"message_t* receive(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t* msg, void* payload, uint8_t len) {\n");
@@ -1360,7 +1360,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void status(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, uint8_t layer, uint8_t status_flag) {\n");
+	fprintf(fp,"void status(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, uint8_t layer, uint8_t status_flag) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
@@ -1381,10 +1381,10 @@ void generateFennecEngineP() {
 		}
 	}
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void syncDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error) {\n");
+	fprintf(fp,"void syncDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
@@ -1393,10 +1393,10 @@ void generateFennecEngineP() {
 		}
 	}
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void startVRegDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"void startVRegDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
@@ -1405,10 +1405,10 @@ void generateFennecEngineP() {
 		}
 	}
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void startOscillatorDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"void startOscillatorDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
@@ -1417,10 +1417,10 @@ void generateFennecEngineP() {
 		}
 	}
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void readRssiDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error, uint16_t rssi) {\n");
+	fprintf(fp,"void readRssiDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error, uint16_t rssi) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
@@ -1429,11 +1429,11 @@ void generateFennecEngineP() {
 		}
 	}
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
 
-	fprintf(fp,"  void granted(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"void granted(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
@@ -1442,10 +1442,10 @@ void generateFennecEngineP() {
 		}
 	}
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void transmitLoadDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, error_t error) {\n");
+	fprintf(fp,"void transmitLoadDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, error_t error) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
@@ -1454,10 +1454,10 @@ void generateFennecEngineP() {
 		}
 	}
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void transmitSendDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, error_t error) {\n");
+	fprintf(fp,"void transmitSendDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, error_t error) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
@@ -1466,10 +1466,10 @@ void generateFennecEngineP() {
 		}
 	}
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void radioControlStartDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error) {\n");
+	fprintf(fp,"void radioControlStartDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error) {\n");
 	/* Let Control Unit MAC know about the radio status */
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -1488,10 +1488,10 @@ void generateFennecEngineP() {
 		}		
 	}
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void radioControlStopDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error) {\n");
+	fprintf(fp,"void radioControlStopDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error) {\n");
 	/* Let Control Unit MAC know about the radio status */
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -1510,7 +1510,7 @@ void generateFennecEngineP() {
 		}
 	}
 	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"}\n\n");
 
 
 	/* Interfaces with Applications */
@@ -1642,52 +1642,52 @@ void generateFennecEngineP() {
 			fprintf(fp, "}\n");
 fprintf(fp, "command void %sMacAMPacket.setDestination(message_t* msg, am_addr_t addr) {\n", mp->lib->full_name);
 fprintf(fp, "    return AMPacket_setDestination(%d, F_MAC, msg, addr);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command void %sMacAMPacket.setSource(message_t* msg, am_addr_t addr) {\n", mp->lib->full_name);
 fprintf(fp, "    return AMPacket_setSource(%d, F_MAC, msg, addr);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command bool %sMacAMPacket.isForMe(message_t* msg) {\n", mp->lib->full_name);
 fprintf(fp, "    return AMPacket_isForMe(%d, F_MAC, msg);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command am_id_t %sMacAMPacket.type(message_t* msg) {\n", mp->lib->full_name);
 fprintf(fp, "    return AMPacket_type(%d, F_MAC, msg);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command void %sMacAMPacket.setType(message_t* msg, am_id_t t) {\n", mp->lib->full_name);
 fprintf(fp, "    return AMPacket_setType(%d, F_MAC, msg, t);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command am_group_t %sMacAMPacket.group(message_t* msg) {\n", mp->lib->full_name);
 fprintf(fp, "    return AMPacket_group(%d, F_MAC, msg);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command void %sMacAMPacket.setGroup(message_t* msg, am_group_t grp) {\n", mp->lib->full_name);
 fprintf(fp, "    return AMPacket_setGroup(%d, F_MAC, msg, grp);\n", mp->id);
 fprintf(fp, "  }\n");
 fprintf(fp, "command am_group_t %sMacAMPacket.localGroup() {\n", mp->lib->full_name);
 fprintf(fp, "    return AMPacket_localGroup(%d, F_MAC);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command void %sMacPacket.clear(message_t* msg) {\n", mp->lib->full_name);
 fprintf(fp, "    return Packet_clear(%d, F_MAC, msg);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command uint8_t %sMacPacket.payloadLength(message_t* msg) {\n", mp->lib->full_name);
 fprintf(fp, "    return Packet_payloadLength(%d, F_MAC, msg);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command void %sMacPacket.setPayloadLength(message_t* msg, uint8_t len) {\n", mp->lib->full_name);
 fprintf(fp, "    return Packet_setPayloadLength(%d, F_MAC, msg, len);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command uint8_t %sMacPacket.maxPayloadLength() {\n", mp->lib->full_name);
 fprintf(fp, "    return Packet_maxPayloadLength(%d, F_MAC);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command void* %sMacPacket.getPayload(message_t* msg, uint8_t len) {\n", mp->lib->full_name);
 fprintf(fp, "    return Packet_getPayload(%d, F_MAC, msg, len);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command error_t %sMacPacketAcknowledgements.requestAck( message_t* msg ) {\n", mp->lib->full_name);
 fprintf(fp, "    return PacketAcknowledgements_requestAck(%d, F_MAC, msg);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command error_t %sMacPacketAcknowledgements.noAck( message_t* msg ) {\n", mp->lib->full_name);
 fprintf(fp, "    return PacketAcknowledgements_noAck(%d, F_MAC, msg);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command bool %sMacPacketAcknowledgements.wasAcked(message_t* msg) {\n", mp->lib->full_name);
 fprintf(fp, "    return PacketAcknowledgements_wasAcked(%d, F_MAC, msg);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 }
 }
 
@@ -1702,134 +1702,134 @@ fprintf(fp, "}\n\n");
 fprintf(fp, "event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
 fprintf(fp, "\tmodule_stopDone(%d, err);\n", mp->id);
 fprintf(fp, "}\n\n");
-fprintf(fp, "  event void %sMacAMSend.sendDone(message_t *msg, error_t error) {\n", mp->lib->full_name);
+fprintf(fp, "event void %sMacAMSend.sendDone(message_t *msg, error_t error) {\n", mp->lib->full_name);
 fprintf(fp, "    sendDone(%d, F_NETWORK, msg, error);\n", mp->id);
-fprintf(fp, "  }\n\n");
-fprintf(fp, "  event message_t* %sMacReceive.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
+fprintf(fp, "}\n\n");
+fprintf(fp, "event message_t* %sMacReceive.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
 fprintf(fp, "    return receive(%d, F_NETWORK, msg, payload, len);\n", mp->id);
-fprintf(fp, "  }\n\n");
-fprintf(fp, "  event message_t* %sMacSnoop.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
+fprintf(fp, "}\n\n");
+fprintf(fp, "event message_t* %sMacSnoop.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
 fprintf(fp, "    return snoop(%d, F_NETWORK, msg, payload, len);\n", mp->id);
-fprintf(fp, "  }\n\n");
-fprintf(fp, "  event void %sMacStatus.status(uint8_t layer, uint8_t status_flag) {\n", mp->lib->full_name);
+fprintf(fp, "}\n\n");
+fprintf(fp, "event void %sMacStatus.status(uint8_t layer, uint8_t status_flag) {\n", mp->lib->full_name);
 fprintf(fp, "    return status(%d, F_NETWORK, layer, status_flag);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
 fprintf(fp, "command error_t %sRadioConfig.sync() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioConfig_sync(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command uint8_t %sRadioConfig.getChannel() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioConfig_getChannel(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command void %sRadioConfig.setChannel(uint8_t channel) {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioConfig_setChannel(%d, F_RADIO, channel);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 /*
 fprintf(fp, "command ieee_eui64_t %sRadioConfig.getExtAddr() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioConfig_getExtAddr(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 */
 fprintf(fp, "  async command uint16_t %sRadioConfig.getShortAddr() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioConfig_getShortAddr(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command void %sRadioConfig.setShortAddr(uint16_t address) {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioConfig_setShortAddr(%d, F_RADIO, address);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command uint16_t %sRadioConfig.getPanAddr() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioConfig_getPanAddr(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command void %sRadioConfig.setPanAddr(uint16_t address) {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioConfig_setPanAddr(%d, F_RADIO, address);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command void %sRadioConfig.setAddressRecognition(bool enableAddressRecognition, bool useHwAddressRecognition) {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioConfig_setAddressRecognition(%d, F_RADIO, enableAddressRecognition, useHwAddressRecognition);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command bool %sRadioConfig.isAddressRecognitionEnabled() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioConfig_isAddressRecognitionEnabled(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command bool %sRadioConfig.isHwAddressRecognitionDefault() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioConfig_isHwAddressRecognitionDefault(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command void %sRadioConfig.setAutoAck(bool enableAutoAck, bool hwAutoAck) {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioConfig_setAutoAck(%d, F_RADIO, enableAutoAck, hwAutoAck);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command bool %sRadioConfig.isAutoAckEnabled() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioConfig_isAutoAckEnabled(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command bool %sRadioConfig.isHwAutoAckDefault() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioConfig_isHwAutoAckDefault(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
 
 fprintf(fp, "  async command error_t %sRadioPower.startVReg() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioPower_startVReg(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command error_t %sRadioPower.stopVReg() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioPower_stopVReg(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command error_t %sRadioPower.startOscillator() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioPower_startOscillator(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command error_t %sRadioPower.stopOscillator() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioPower_stopOscillator(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command error_t %sRadioPower.rxOn() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioPower_rxOn(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command error_t %sRadioPower.rfOff() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioPower_rfOff(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
 fprintf(fp, "command error_t %sReadRssi.read() {\n", mp->lib->full_name);
 fprintf(fp, "    return ReadRssi_read(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
 fprintf(fp, "  async command error_t %sRadioResource.request() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioResource_request(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command error_t %sRadioResource.immediateRequest() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioResource_immediateRequest(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command error_t %sRadioResource.release() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioResource_release(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command error_t %sRadioResource.isOwner() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioResource_isOwner(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
 fprintf(fp, "command error_t %sRadioControl.start() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioControl_start(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "command error_t %sRadioControl.stop() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioControl_stop(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
 fprintf(fp, "  async command error_t %sRadioSend.cancel(message_t *msg) {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioSend_cancel(%d, F_RADIO, msg);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command error_t %sRadioSend.send(message_t* msg, bool useCca) {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioSend_send(%d, F_RADIO, msg, useCca);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command uint8_t %sRadioPacket.maxPayloadLength() {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioPacket_maxPayloadLength(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command void* %sRadioPacket.getPayload(message_t* msg, uint8_t len) {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioPacket_getPayload(%d, F_RADIO, msg, len);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
 fprintf(fp, "  async command error_t %sRadioBuffer.load(message_t* msg) {\n", mp->lib->full_name);
 fprintf(fp, "    return RadioBuffer_load(%d, F_RADIO, msg);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
 fprintf(fp, "  async command bool %sPacketIndicator.isReceiving() {\n", mp->lib->full_name);
 fprintf(fp, "    return PacketIndicator_isReceiving(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command bool %sEnergyIndicator.isReceiving() {\n", mp->lib->full_name);
 fprintf(fp, "    return EnergyIndicator_isReceiving(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async command bool %sByteIndicator.isReceiving() {\n", mp->lib->full_name);
 fprintf(fp, "    return ByteIndicator_isReceiving(%d, F_RADIO);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
 
 }
@@ -1846,55 +1846,55 @@ fprintf(fp, "event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name
 fprintf(fp, "\tmodule_stopDone(%d, err);\n", mp->id);
 fprintf(fp, "}\n\n");
 /*
-fprintf(fp, "  event void %sRadioAMSend.sendDone(message_t *msg, error_t err) {\n", mp->lib->full_name);
+fprintf(fp, "event void %sRadioAMSend.sendDone(message_t *msg, error_t err) {\n", mp->lib->full_name);
 fprintf(fp, "    sendDone(%d, F_MAC, msg, err);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 */
-fprintf(fp, "  event message_t* %sRadioReceive.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
+fprintf(fp, "event message_t* %sRadioReceive.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
 fprintf(fp, "    return receive(%d, F_MAC, msg, payload, len);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 /*
-fprintf(fp, "  event message_t* %sRadioSnoop.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
+fprintf(fp, "event message_t* %sRadioSnoop.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
 fprintf(fp, "    return snoop(%d, F_MAC, msg, payload, len);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 */
-fprintf(fp, "  event void %sRadioStatus.status(uint8_t layer, uint8_t status_flag) {\n", mp->lib->full_name);
+fprintf(fp, "event void %sRadioStatus.status(uint8_t layer, uint8_t status_flag) {\n", mp->lib->full_name);
 fprintf(fp, "    return status(%d, F_MAC, layer, status_flag);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
-fprintf(fp, "  event void %sRadioConfig.syncDone(error_t error) {\n", mp->lib->full_name);
+fprintf(fp, "event void %sRadioConfig.syncDone(error_t error) {\n", mp->lib->full_name);
 fprintf(fp, "    return syncDone(%d, F_MAC, error);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
 fprintf(fp, "  async event void %sRadioPower.startVRegDone() {\n", mp->lib->full_name);
 fprintf(fp, "    return startVRegDone(%d, F_MAC);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async event void %sRadioPower.startOscillatorDone() {\n", mp->lib->full_name);
 fprintf(fp, "    return startOscillatorDone(%d, F_MAC);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
-fprintf(fp, "  event void %sReadRssi.readDone(error_t error, uint16_t rssi) {\n", mp->lib->full_name);
+fprintf(fp, "event void %sReadRssi.readDone(error_t error, uint16_t rssi) {\n", mp->lib->full_name);
 fprintf(fp, "    return readRssiDone(%d, F_MAC, error, rssi);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
-fprintf(fp, "  event void %sRadioResource.granted() {\n", mp->lib->full_name);
+fprintf(fp, "event void %sRadioResource.granted() {\n", mp->lib->full_name);
 fprintf(fp, "    return granted(%d, F_MAC);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
 fprintf(fp, "  async event void %sRadioBuffer.loadDone(message_t* msg, error_t error) {\n", mp->lib->full_name);
 fprintf(fp, "    return transmitLoadDone(%d, F_MAC, msg, error);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 fprintf(fp, "  async event void %sRadioSend.sendDone(message_t *msg, error_t error) {\n", mp->lib->full_name);
 fprintf(fp, "    return transmitSendDone(%d, F_MAC, msg, error);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
-fprintf(fp, "  event void %sRadioControl.startDone(error_t error) {\n", mp->lib->full_name);
+fprintf(fp, "event void %sRadioControl.startDone(error_t error) {\n", mp->lib->full_name);
 fprintf(fp, "    return radioControlStartDone(%d, F_MAC, error);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 
-fprintf(fp, "  event void %sRadioControl.stopDone(error_t error) {\n", mp->lib->full_name);
+fprintf(fp, "event void %sRadioControl.stopDone(error_t error) {\n", mp->lib->full_name);
 fprintf(fp, "    return radioControlStopDone(%d, F_MAC, error);\n", mp->id);
-fprintf(fp, "  }\n\n");
+fprintf(fp, "}\n\n");
 }
 }
 
