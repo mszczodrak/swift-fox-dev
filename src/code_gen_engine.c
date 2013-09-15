@@ -61,8 +61,8 @@ void generateFennecEngineC() {
       			fprintf(fp, "FennecEngineP.%sNetworkAMPacket <- %s.NetworkAMPacket;\n", mp->lib->full_name, mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sNetworkPacketAcknowledgements <- %s.NetworkPacketAcknowledgements;\n",
 									mp->lib->full_name, mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkStatus <- %s.NetworkStatus;\n\n", mp->lib->full_name, mp->lib->full_name);
-
+      			fprintf(fp, "FennecEngineP.%sNetworkStatus <- %s.NetworkStatus;\n", mp->lib->full_name, mp->lib->full_name);
+			fprintf(fp, "\n");
     		}
   	}
 
@@ -96,7 +96,8 @@ void generateFennecEngineC() {
       			fprintf(fp, "FennecEngineP.%sMacAMPacket <- %s.MacAMPacket;\n", mp->lib->full_name, mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sMacPacket <- %s.MacPacket;\n", mp->lib->full_name, mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sMacPacketAcknowledgements <- %s.MacPacketAcknowledgements;\n", mp->lib->full_name, mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sMacStatus <- %s.MacStatus;\n\n", mp->lib->full_name, mp->lib->full_name);
+      			fprintf(fp, "FennecEngineP.%sMacStatus <- %s.MacStatus;\n", mp->lib->full_name, mp->lib->full_name);
+			fprintf(fp, "\n");
     		}
   	}
 
@@ -128,6 +129,7 @@ void generateFennecEngineC() {
 			fprintf(fp, "FennecEngineP.%sEnergyIndicator <- %s.EnergyIndicator;\n", mp->lib->full_name, mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sByteIndicator <- %s.ByteIndicator;\n", mp->lib->full_name, mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sRadioControl <- %s.RadioControl;\n", mp->lib->full_name, mp->lib->full_name);
+			fprintf(fp, "\n");
 		}
 	}
 
@@ -152,6 +154,7 @@ void generateFennecEngineC() {
 			fprintf(fp, "FennecEngineP.%sEnergyIndicator -> %s.EnergyIndicator;\n", mp->lib->full_name, mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sByteIndicator -> %s.ByteIndicator;\n", mp->lib->full_name, mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sRadioControl -> %s.RadioControl;\n", mp->lib->full_name, mp->lib->full_name);
+			fprintf(fp, "\n");
 		}
 	}
 
