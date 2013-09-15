@@ -139,7 +139,7 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	fprintf(fp, "struct default_params defaults[NUMBER_OF_CONFIGURATIONS] = {\n");
 
-	for( i = 1; i < conf_id_counter; i++ ) {
+	for( i = 0; i < conf_id_counter; i++ ) {
 		fprintf(fp, "\t{\n");
 		fprintf(fp, "\t\t.application_cache = &%s_data,\n", 
 					conftab[i].conf->app->lib->full_name);
