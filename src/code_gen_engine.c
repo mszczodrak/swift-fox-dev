@@ -175,7 +175,6 @@ void generateFennecEngineP() {
                 exit(1);
         }
 
-
 	fprintf(fp, "/* Swift Fox generated code for Fennec Fox Application module */\n");
   	fprintf(fp, "#include <Fennec.h>\n");
   	fprintf(fp, "#define RADIO_STOP_DELAY         100\n\n");
@@ -493,225 +492,225 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void AMPacket_setSource(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, am_addr_t addr) {\n");
+	fprintf(fp,"void AMPacket_setSource(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, am_addr_t addr) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sNetworkAMPacket.setSource(msg, addr);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sNetworkAMPacket.setSource(msg, addr);\n\n", mp->lib->full_name);
 		}
 	}
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sMacAMPacket.setSource(msg, addr);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sMacAMPacket.setSource(msg, addr);\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
 
-	fprintf(fp,"  bool AMPacket_isForMe(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"bool AMPacket_isForMe(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sNetworkAMPacket.isForMe(msg);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sNetworkAMPacket.isForMe(msg);\n\n", mp->lib->full_name);
 		}
 	}
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sMacAMPacket.isForMe(msg);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sMacAMPacket.isForMe(msg);\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return 0;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  am_id_t AMPacket_type(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"am_id_t AMPacket_type(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sNetworkAMPacket.type(msg);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sNetworkAMPacket.type(msg);\n\n", mp->lib->full_name);
 		}
 	}
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sMacAMPacket.type(msg);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sMacAMPacket.type(msg);\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return 0;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void AMPacket_setType(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, am_id_t t) {\n");
+	fprintf(fp,"void AMPacket_setType(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, am_id_t t) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sNetworkAMPacket.setType(msg, t);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sNetworkAMPacket.setType(msg, t);\n\n", mp->lib->full_name);
 		}
 	}
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sMacAMPacket.setType(msg, t);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sMacAMPacket.setType(msg, t);\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  am_group_t AMPacket_group(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"am_group_t AMPacket_group(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sNetworkAMPacket.group(msg);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sNetworkAMPacket.group(msg);\n\n", mp->lib->full_name);
 		}
 	}
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sMacAMPacket.group(msg);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sMacAMPacket.group(msg);\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return 0;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void AMPacket_setGroup(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, am_group_t grp) {\n");
+	fprintf(fp,"void AMPacket_setGroup(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, am_group_t grp) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sNetworkAMPacket.setGroup(msg, grp);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sNetworkAMPacket.setGroup(msg, grp);\n\n", mp->lib->full_name);
 		}
 	}
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sMacAMPacket.setGroup(msg, grp);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sMacAMPacket.setGroup(msg, grp);\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void* Packet_getPayload(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
+	fprintf(fp,"void* Packet_getPayload(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sNetworkPacket.getPayload(msg, len);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sNetworkPacket.getPayload(msg, len);\n\n", mp->lib->full_name);
 		}
 	}
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sMacPacket.getPayload(msg, len);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sMacPacket.getPayload(msg, len);\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return NULL;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn NULL;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  uint8_t Packet_maxPayloadLength(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"uint8_t Packet_maxPayloadLength(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sNetworkPacket.maxPayloadLength();\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sNetworkPacket.maxPayloadLength();\n\n", mp->lib->full_name);
 		}
 	}
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sMacPacket.maxPayloadLength();\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sMacPacket.maxPayloadLength();\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return 0;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  am_group_t AMPacket_localGroup(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"am_group_t AMPacket_localGroup(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sNetworkAMPacket.localGroup();\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sNetworkAMPacket.localGroup();\n\n", mp->lib->full_name);
 		}
 	}
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sMacAMPacket.localGroup();\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sMacAMPacket.localGroup();\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return 0;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void Packet_clear(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"void Packet_clear(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sNetworkPacket.clear(msg);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sNetworkPacket.clear(msg);\n\n", mp->lib->full_name);
 		}
 	}
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sMacPacket.clear(msg);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sMacPacket.clear(msg);\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  uint8_t Packet_payloadLength(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"uint8_t Packet_payloadLength(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sNetworkPacket.payloadLength(msg);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sNetworkPacket.payloadLength(msg);\n\n", mp->lib->full_name);
 		}
 	}
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sMacPacket.payloadLength(msg);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sMacPacket.payloadLength(msg);\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return 0;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
 	fprintf(fp,"  void Packet_setPayloadLength(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
@@ -838,173 +837,172 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  uint16_t RadioConfig_getShortAddr(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"uint16_t RadioConfig_getShortAddr(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sRadioConfig.getShortAddr();\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioConfig.getShortAddr();\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return 0;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void RadioConfig_setShortAddr(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, uint16_t address) {\n");
+	fprintf(fp,"void RadioConfig_setShortAddr(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, uint16_t address) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sRadioConfig.setShortAddr(address);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioConfig.setShortAddr(address);\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  uint16_t RadioConfig_getPanAddr(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"uint16_t RadioConfig_getPanAddr(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sRadioConfig.getPanAddr();\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioConfig.getPanAddr();\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return 0;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void RadioConfig_setPanAddr(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, uint16_t address) {\n");
+	fprintf(fp,"void RadioConfig_setPanAddr(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, uint16_t address) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sRadioConfig.setPanAddr(address);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioConfig.setPanAddr(address);\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void RadioConfig_setAddressRecognition(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, bool enableAddressRecognition, bool useHwAddressRecognition) {\n");
+	fprintf(fp,"void RadioConfig_setAddressRecognition(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, bool enableAddressRecognition, bool useHwAddressRecognition) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sRadioConfig.setAddressRecognition(enableAddressRecognition, useHwAddressRecognition);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioConfig.setAddressRecognition(enableAddressRecognition, useHwAddressRecognition);\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  bool RadioConfig_isAddressRecognitionEnabled(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"bool RadioConfig_isAddressRecognitionEnabled(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sRadioConfig.isAddressRecognitionEnabled();\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioConfig.isAddressRecognitionEnabled();\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return 0;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  bool RadioConfig_isHwAddressRecognitionDefault(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"bool RadioConfig_isHwAddressRecognitionDefault(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sRadioConfig.isHwAddressRecognitionDefault();\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioConfig.isHwAddressRecognitionDefault();\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return 0;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  void RadioConfig_setAutoAck(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, bool enableAutoAck, bool hwAutoAck) {\n");
+	fprintf(fp,"void RadioConfig_setAutoAck(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, bool enableAutoAck, bool hwAutoAck) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sRadioConfig.setAutoAck(enableAutoAck, hwAutoAck);\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioConfig.setAutoAck(enableAutoAck, hwAutoAck);\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  bool RadioConfig_isHwAutoAckDefault(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"bool RadioConfig_isHwAutoAckDefault(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sRadioConfig.isHwAutoAckDefault();\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioConfig.isHwAutoAckDefault();\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return 0;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  bool RadioConfig_isAutoAckEnabled(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"bool RadioConfig_isAutoAckEnabled(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sRadioConfig.isAutoAckEnabled();\n\n", mp->lib->full_name);
-		}
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioConfig.isAutoAckEnabled();\n\n", mp->lib->full_name);
+		}	
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return 0;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-
-	fprintf(fp,"  error_t RadioPower_startVReg(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"error_t RadioPower_startVReg(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sRadioPower.startVReg();\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioPower.startVReg();\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return 0;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"  error_t RadioPower_stopVReg(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"error_t RadioPower_stopVReg(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"case %d:\n", mp->id);
-			fprintf(fp,"        return call %sRadioPower.stopVReg();\n\n", mp->lib->full_name);
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioPower.stopVReg();\n\n", mp->lib->full_name);
 		}
 	}
-	fprintf(fp,"      default:\n");
-	fprintf(fp,"        return 0;\n");
-	fprintf(fp,"    }\n");
-	fprintf(fp,"  }\n\n");
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
 
 
 	fprintf(fp,"  error_t RadioPower_startOscillator(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
@@ -1244,68 +1242,68 @@ void generateFennecEngineP() {
 
 
 
-  fprintf(fp,"  bool PacketIndicator_isReceiving(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"  bool PacketIndicator_isReceiving(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return call %sPacketIndicator.isReceiving();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return call %sPacketIndicator.isReceiving();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  bool EnergyIndicator_isReceiving(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"  bool EnergyIndicator_isReceiving(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return call %sEnergyIndicator.isReceiving();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return call %sEnergyIndicator.isReceiving();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  bool ByteIndicator_isReceiving(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"  bool ByteIndicator_isReceiving(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return call %sByteIndicator.isReceiving();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return 0;\n");
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return call %sByteIndicator.isReceiving();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return 0;\n");
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void sendDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t* msg, error_t error) {\n");
+	fprintf(fp,"  void sendDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t* msg, error_t error) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        signal %sNetworkAMSend.sendDone(msg, error);\n", mp->lib->full_name);
-      fprintf(fp,"        return;\n\n");
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        signal %sMacAMSend.sendDone(msg, error);\n", mp->lib->full_name);
-      fprintf(fp,"        return;\n\n");
-    }
-  }
-  fprintf(fp,"      default:\n");
-  fprintf(fp,"        return;\n");
-  fprintf(fp,"    }\n\n");
-  fprintf(fp,"  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        signal %sNetworkAMSend.sendDone(msg, error);\n", mp->lib->full_name);
+			fprintf(fp,"        return;\n\n");
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        signal %sMacAMSend.sendDone(msg, error);\n", mp->lib->full_name);
+			fprintf(fp,"        return;\n\n");
+		}
+	}
+	fprintf(fp,"      default:\n");
+	fprintf(fp,"        return;\n");
+	fprintf(fp,"    }\n\n");
+	fprintf(fp,"  }\n\n");
 
 
 	fprintf(fp,"message_t* receive(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t* msg, void* payload, uint8_t len) {\n");
@@ -1326,6 +1324,7 @@ void generateFennecEngineP() {
 			fprintf(fp,"\t\treturn signal %sMacReceive.receive(msg, payload, len);\n\n", mp->lib->full_name);
 		}
 	}
+
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1361,160 +1360,160 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 
-  fprintf(fp,"  void status(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, uint8_t layer, uint8_t status_flag) {\n");
+	fprintf(fp,"  void status(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, uint8_t layer, uint8_t status_flag) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sNetworkStatus.status(layer, status_flag);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sMacStatus.status(layer, status_flag);\n\n", mp->lib->full_name);
-    }
-  }
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sRadioStatus.status(layer, status_flag);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return signal %sNetworkStatus.status(layer, status_flag);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return signal %sMacStatus.status(layer, status_flag);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return signal %sRadioStatus.status(layer, status_flag);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void syncDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error) {\n");
+	fprintf(fp,"  void syncDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sRadioConfig.syncDone(error);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return signal %sRadioConfig.syncDone(error);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void startVRegDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"  void startVRegDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sRadioPower.startVRegDone();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return signal %sRadioPower.startVRegDone();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void startOscillatorDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"  void startOscillatorDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sRadioPower.startOscillatorDone();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return signal %sRadioPower.startOscillatorDone();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void readRssiDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error, uint16_t rssi) {\n");
+	fprintf(fp,"  void readRssiDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error, uint16_t rssi) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sReadRssi.readDone(error, rssi);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return signal %sReadRssi.readDone(error, rssi);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
 
-  fprintf(fp,"  void granted(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
+	fprintf(fp,"  void granted(uint16_t module_id, uint8_t from_layer, uint8_t to_layer) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sRadioResource.granted();\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return signal %sRadioResource.granted();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void transmitLoadDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, error_t error) {\n");
+	fprintf(fp,"  void transmitLoadDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, error_t error) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sRadioBuffer.loadDone(msg, error);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return signal %sRadioBuffer.loadDone(msg, error);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void transmitSendDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, error_t error) {\n");
+	fprintf(fp,"  void transmitSendDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, message_t *msg, error_t error) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sRadioSend.sendDone(msg, error);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return signal %sRadioSend.sendDone(msg, error);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void radioControlStartDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error) {\n");
-  /* Let Control Unit MAC know about the radio status */
+	fprintf(fp,"  void radioControlStartDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error) {\n");
+	/* Let Control Unit MAC know about the radio status */
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        signal %sRadioControl.startDone(error);\n", mp->lib->full_name);
-      fprintf(fp,"        break;\n\n");
-    }
-  }
-  fprintf(fp,"    }\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        signal %sRadioControl.startDone(error);\n", mp->lib->full_name);
+			fprintf(fp,"        break;\n\n");
+		}
+	}
+	fprintf(fp,"    }\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sRadioControl.startDone(error);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return signal %sRadioControl.startDone(error);\n\n", mp->lib->full_name);
+		}		
+	}
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  fprintf(fp,"  void radioControlStopDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error) {\n");
-  /* Let Control Unit MAC know about the radio status */
+	fprintf(fp,"  void radioControlStopDone(uint16_t module_id, uint8_t from_layer, uint8_t to_layer, error_t error) {\n");
+	/* Let Control Unit MAC know about the radio status */
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        signal %sRadioControl.stopDone(error);\n", mp->lib->full_name);
-      fprintf(fp,"        break;\n\n");
-    }
-  }
-  fprintf(fp,"    }\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        signal %sRadioControl.stopDone(error);\n", mp->lib->full_name);
+			fprintf(fp,"        break;\n\n");
+		}
+	}
+	fprintf(fp,"    }\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, from_layer, to_layer) ) {\n");
-  for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-      fprintf(fp,"case %d:\n", mp->id);
-      fprintf(fp,"        return signal %sRadioControl.stopDone(error);\n\n", mp->lib->full_name);
-    }
-  }
-  fprintf(fp,"    }\n");
-  fprintf(fp,"  }\n\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"case %d:\n", mp->id);
+			fprintf(fp,"        return signal %sRadioControl.stopDone(error);\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"    }\n");
+	fprintf(fp,"  }\n\n");
 
 
-  /* Interfaces with Applications */
+	/* Interfaces with Applications */
 
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
