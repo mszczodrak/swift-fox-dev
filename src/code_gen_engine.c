@@ -186,7 +186,7 @@ void generateFennecEngineP() {
   	fprintf(fp, "uses interface Leds;\n");
   	fprintf(fp, "uses interface Timer<TMilli> as RadioActivityTimer;\n");
 
-  	fprintf(fp, "/* Application Modules */\n\n");
+  	fprintf(fp, "\n\t/* Application Modules */\n\n");
 
   	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
@@ -198,11 +198,12 @@ void generateFennecEngineP() {
       			fprintf(fp, "provides interface Packet as %sNetworkPacket;\n", mp->lib->full_name);
       			fprintf(fp, "provides interface AMPacket as %sNetworkAMPacket;\n", mp->lib->full_name);
       			fprintf(fp, "provides interface PacketAcknowledgements as %sNetworkPacketAcknowledgements;\n", mp->lib->full_name);
-      			fprintf(fp, "provides interface ModuleStatus as %sNetworkStatus;\n\n", mp->lib->full_name);
+      			fprintf(fp, "provides interface ModuleStatus as %sNetworkStatus;\n", mp->lib->full_name);
+			fprintf(fp, "\n");
     		}
   	}
 
-  	fprintf(fp, "/* Network Modules */\n\n");
+  	fprintf(fp, "\n\t/* Network Modules */\n\n");
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -221,58 +222,61 @@ void generateFennecEngineP() {
 			fprintf(fp, "provides interface Packet as %sMacPacket;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface AMPacket as %sMacAMPacket;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface PacketAcknowledgements as %sMacPacketAcknowledgements;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface ModuleStatus as %sMacStatus;\n\n", mp->lib->full_name);
+			fprintf(fp, "provides interface ModuleStatus as %sMacStatus;\n", mp->lib->full_name);
+			fprintf(fp, "\n");
 		}
 	}
 
-	fprintf(fp, "/* MAC Modules */\n\n");
+	fprintf(fp, "\n\t/* MAC Modules */\n\n");
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp, "  /* MAC Module: %s */\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface Mgmt as %sControl;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface AMSend as %sMacAMSend;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface Receive as %sMacReceive;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface Receive as %sMacSnoop;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface Packet as %sMacPacket;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface AMPacket as %sMacAMPacket;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface PacketAcknowledgements as %sMacPacketAcknowledgements;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface ModuleStatus as %sMacStatus;\n", mp->lib->full_name);
-			fprintf(fp, "  provides interface Receive as %sRadioReceive;\n", mp->lib->full_name);
-			fprintf(fp, "  provides interface ModuleStatus as %sRadioStatus;\n", mp->lib->full_name);
-			fprintf(fp, "  provides interface Resource as %sRadioResource;\n", mp->lib->full_name);
-			fprintf(fp, "  provides interface RadioConfig as %sRadioConfig;\n", mp->lib->full_name);
-			fprintf(fp, "  provides interface RadioPower as %sRadioPower;\n", mp->lib->full_name);
-			fprintf(fp, "  provides interface Read<uint16_t> as %sReadRssi;\n", mp->lib->full_name);
-			fprintf(fp, "  provides interface RadioBuffer as %sRadioBuffer;\n", mp->lib->full_name);
-			fprintf(fp, "  provides interface RadioSend as %sRadioSend;\n", mp->lib->full_name);
-			fprintf(fp, "  provides interface RadioPacket as %sRadioPacket;\n", mp->lib->full_name);
-			fprintf(fp, "  provides interface ReceiveIndicator as %sPacketIndicator;\n", mp->lib->full_name);
-			fprintf(fp, "  provides interface ReceiveIndicator as %sEnergyIndicator;\n", mp->lib->full_name);
-			fprintf(fp, "  provides interface ReceiveIndicator as %sByteIndicator;\n", mp->lib->full_name);
-			fprintf(fp, "  provides interface SplitControl as %sRadioControl;\n", mp->lib->full_name);
+			fprintf(fp, "/* MAC Module: %s */\n", mp->lib->full_name);
+			fprintf(fp, "uses interface Mgmt as %sControl;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface AMSend as %sMacAMSend;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface Receive as %sMacReceive;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface Receive as %sMacSnoop;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface Packet as %sMacPacket;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface AMPacket as %sMacAMPacket;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface PacketAcknowledgements as %sMacPacketAcknowledgements;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface ModuleStatus as %sMacStatus;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface Receive as %sRadioReceive;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface ModuleStatus as %sRadioStatus;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface Resource as %sRadioResource;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface RadioConfig as %sRadioConfig;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface RadioPower as %sRadioPower;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface Read<uint16_t> as %sReadRssi;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface RadioBuffer as %sRadioBuffer;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface RadioSend as %sRadioSend;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface RadioPacket as %sRadioPacket;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface ReceiveIndicator as %sPacketIndicator;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface ReceiveIndicator as %sEnergyIndicator;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface ReceiveIndicator as %sByteIndicator;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface SplitControl as %sRadioControl;\n", mp->lib->full_name);
+			fprintf(fp, "\n");
 		}
 	}
 
-	fprintf(fp, "  /* Radio Modules */\n\n");
+	fprintf(fp, "\n\t/* Radio Modules */\n\n");
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp, "  /* Radio Module: %s */\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface Mgmt as %sControl;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface Receive as %sRadioReceive;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface ModuleStatus as %sRadioStatus;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface Resource as %sRadioResource;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface RadioConfig as %sRadioConfig;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface RadioPower as %sRadioPower;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface Read<uint16_t> as %sReadRssi;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface RadioBuffer as %sRadioBuffer;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface RadioSend as %sRadioSend;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface RadioPacket as %sRadioPacket;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface ReceiveIndicator as %sPacketIndicator;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface ReceiveIndicator as %sEnergyIndicator;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface ReceiveIndicator as %sByteIndicator;\n", mp->lib->full_name);
-			fprintf(fp, "  uses interface SplitControl as %sRadioControl;\n", mp->lib->full_name);
+			fprintf(fp, "/* Radio Module: %s */\n", mp->lib->full_name);
+			fprintf(fp, "uses interface Mgmt as %sControl;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface Receive as %sRadioReceive;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface ModuleStatus as %sRadioStatus;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface Resource as %sRadioResource;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface RadioConfig as %sRadioConfig;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface RadioPower as %sRadioPower;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface Read<uint16_t> as %sReadRssi;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface RadioBuffer as %sRadioBuffer;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface RadioSend as %sRadioSend;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface RadioPacket as %sRadioPacket;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface ReceiveIndicator as %sPacketIndicator;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface ReceiveIndicator as %sEnergyIndicator;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface ReceiveIndicator as %sByteIndicator;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface SplitControl as %sRadioControl;\n", mp->lib->full_name);
+			fprintf(fp, "\n");
 		}
 	}
 
