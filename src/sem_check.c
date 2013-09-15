@@ -551,6 +551,10 @@ checks control state
 void
 checkControlState(void) {
 
+
+	/* HACK */
+	conf_state_redefined = 1;
+
 	if (conf_state_redefined) {
 		return;
 	}

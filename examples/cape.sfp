@@ -1,4 +1,4 @@
-configuration control { nullApp()
+configuration con { 	nullApp()
                         nullNet()
 			nullMac()
                         #cuMac(10, 10, 1, 1, 1)
@@ -11,8 +11,8 @@ configuration control { nullApp()
 
 configuration empty { 
 #			blink(3, 5000)
-#			counter(2, 1024, NODE, 2)
-			counterEH(2, 1024, NODE, 2)
+			counter(2, 1024, NODE, 2)
+#			counterEH(2, 1024, NODE, 2)
 			#nullApp()
                         ctp(2)
 			#nullNet() 
@@ -20,10 +20,11 @@ configuration empty {
                         # always ON, delay_after_receive, backoff, min_backoff
                         # ack, cca, crc
 			#nullMac() 
-			cape() }
+#			cape() }
 #                        cc2420(26, 31, 1, 1) }
+			nullRadio() }
 
-state new { control empty }
+state new { con empty }
 
 start empty
 
