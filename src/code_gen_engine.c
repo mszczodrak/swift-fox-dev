@@ -333,6 +333,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"error_t AMSend_send(uint16_t module_id, uint8_t to_layer, am_addr_t addr, message_t* msg, uint8_t len) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -353,6 +354,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t AMSend_cancel(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -373,6 +375,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void* AMSend_getPayload(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -433,6 +436,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_addr_t AMPacket_destination(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -453,6 +457,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_addr_t AMPacket_source(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -473,6 +478,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void AMPacket_setDestination(uint16_t module_id, uint8_t to_layer, message_t *msg, am_addr_t addr) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -493,6 +499,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void AMPacket_setSource(uint16_t module_id, uint8_t to_layer, message_t *msg, am_addr_t addr) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -514,6 +521,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"bool AMPacket_isForMe(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -534,6 +542,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_id_t AMPacket_type(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -554,6 +563,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void AMPacket_setType(uint16_t module_id, uint8_t to_layer, message_t *msg, am_id_t t) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -574,6 +584,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_group_t AMPacket_group(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -594,6 +605,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void AMPacket_setGroup(uint16_t module_id, uint8_t to_layer, message_t *msg, am_group_t grp) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -614,6 +626,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void* Packet_getPayload(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -674,6 +687,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void Packet_clear(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -694,6 +708,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"uint8_t Packet_payloadLength(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -714,6 +729,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void Packet_setPayloadLength(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -734,6 +750,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t PacketAcknowledgements_requestAck(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -754,6 +771,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t PacketAcknowledgements_noAck(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -774,6 +792,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"bool PacketAcknowledgements_wasAcked(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -1160,6 +1179,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioSend_cancel(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1175,6 +1195,7 @@ void generateFennecEngineP() {
 
 	fprintf(fp,"error_t RadioSend_send(uint16_t module_id, uint8_t to_layer, message_t* msg, bool useCca) {\n");
 	fprintf(fp,"error_t err;\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1209,6 +1230,7 @@ void generateFennecEngineP() {
 
 	fprintf(fp,"void* RadioPacket_getPayload(uint16_t module_id, uint8_t to_layer, message_t* msg, uint8_t len) {\n");
 	fprintf(fp,"void *ptr;\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1226,6 +1248,7 @@ void generateFennecEngineP() {
 
 	fprintf(fp,"error_t RadioBuffer_load(uint16_t module_id, uint8_t to_layer, message_t* msg) {\n");
 	fprintf(fp,"error_t err;\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1285,6 +1308,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void sendDone(uint16_t module_id, uint8_t to_layer, message_t* msg, error_t error) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
@@ -1307,6 +1331,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"message_t* receive(uint16_t module_id, uint8_t to_layer, message_t* msg, void* payload, uint8_t len) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	fprintf(fp,"\t\treturn msg;\n");
 	fprintf(fp,"}\n\n");
@@ -1338,6 +1363,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"message_t* snoop(uint16_t module_id, uint8_t to_layer, message_t* msg, void* payload, uint8_t len) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	fprintf(fp,"\t\treturn msg;\n");
 	fprintf(fp,"}\n\n");
@@ -1446,6 +1472,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void transmitLoadDone(uint16_t module_id, uint8_t to_layer, message_t *msg, error_t error) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
@@ -1458,6 +1485,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void transmitSendDone(uint16_t module_id, uint8_t to_layer, message_t *msg, error_t error) {\n");
+	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
