@@ -138,6 +138,7 @@ void generateCaches(int event_counter, int policy_counter) {
 */
 
 
+/*
 	fprintf(fp, "struct default_params defaults[NUMBER_OF_CONFIGURATIONS] = {\n");
 
 	for( i = 0; i < conf_id_counter; i++ ) {
@@ -198,6 +199,7 @@ void generateCaches(int event_counter, int policy_counter) {
 	}
 
 	fprintf(fp, "};\n\n");
+*/
 
 
 	for( i = 0; i < state_id_counter; i++ ) {

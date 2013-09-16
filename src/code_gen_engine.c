@@ -1709,14 +1709,31 @@ void generateFennecEngineP() {
 						type_name(pt->type), 
 						mp->lib->full_name, 
 						pt->name);
-				fprintf(fp, "\treturn 0;\n");
+				
+				fprintf(fp, "\tstruct %s_params *params = (struct %s_params*) get_conf_params(%d).application;\n", 
+							mp->lib->full_name, 
+							mp->lib->full_name, 
+							mp->id);
+				fprintf(fp, "\treturn params->%s;\n", pt->name);
 				fprintf(fp, "}\n\n");
 				fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
 						mp->lib->full_name, 
 						pt->name, 
 						type_name(pt->type), 
 						pt->name);
-				fprintf(fp, "\treturn 0;\n");
+				fprintf(fp, "\tstruct %s_params *params = (struct %s_params*) get_conf_params(%d).application;\n", 
+							mp->lib->full_name, 
+							mp->lib->full_name, 
+							mp->id);
+
+//				fprintf(fp, "\tmemcpy(&new_%s, params->%s, sizeof(%s));\n", 
+//						pt->name,
+//						pt->name,
+//						type_name(pt->type));
+				fprintf(fp, "\tparams->%s = new_%s;\n", 
+						pt->name,
+						pt->name);
+				fprintf(fp, "\treturn SUCCESS;\n");
 		                fprintf(fp, "}\n\n");
 		        }
 

@@ -78,7 +78,7 @@ void module_params_h(struct modtab *mp) {
 
 	fprintf(fp, "};\n\n");
 
-	fprintf(fp, "struct %s_params %s_data;\n", mp->lib->full_name, mp->lib->full_name);
+	//fprintf(fp, "struct %s_params %s_data;\n", mp->lib->full_name, mp->lib->full_name);
 
 	fprintf(fp, "#endif\n");
 
