@@ -219,8 +219,6 @@ global_variables: global_variables global_variable
 
 global_variable: param_type IDENTIFIER array_part assign_value newlines 
 		{
-			//printf("var %s\n", $1);
-
 			$$		= calloc(1, sizeof(struct variable));
 			$$->type 	= $1;
 			$$->name	= $2;

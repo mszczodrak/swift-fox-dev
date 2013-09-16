@@ -47,6 +47,16 @@ void setFiles() {
 	fclose(tmp);
 }
 
+void initCodeGeneration() {
+	/* check if sfc directory exists */
+	if (create_dir("Fennec/sfc")) {
+		fprintf(stderr, "Cannot create directory %s\n", "Fennec/sfc");
+		exit(1);
+	}
+
+}
+
+
 /** Fill the content of the fennec.extra file.
 */
 void setFennecExtra() {
@@ -108,12 +118,6 @@ void finishCodeGeneration(int policy_counter) {
 	}
 
 
-	/* check if sfc directory exists */
-	if (create_dir("Fennec/sfc")) {
-		fprintf(stderr, "Cannot create directory %s\n", "Fennec/sfc");
-		exit(1);
-	}
-
 	generateCaches(event_counter, policy_counter);
 	generateDefaultParams();
 
@@ -124,7 +128,6 @@ void finishCodeGeneration(int policy_counter) {
 	generateEventP(event_counter);
 
 	generateParams();
-	generateGlobals();
 
 	setFennecExtra();
 }

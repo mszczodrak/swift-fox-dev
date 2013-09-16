@@ -36,7 +36,13 @@ extern int event_scale_counter;
 extern FILE* tmp_confs;
 
 void setFiles();
+void initCodeGeneration();
+
 void setFennecExtra();
+
+void startGlobalVariables();
+void addGlobalVariable(struct variable *sh);
+void endGlobalVariables();
 
 void finishCodeGeneration(int policy_counter);
 

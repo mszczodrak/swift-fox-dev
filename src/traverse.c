@@ -71,7 +71,10 @@ traverse_program(struct program* p, int f, int policy_counter){
 			*/
 			case TREE_GENERATE_CODE:
 				setFiles();
+				initCodeGeneration();
+				startGlobalVariables();
 				traverse_variables(p->vars, f);
+				endGlobalVariables();
 				traverse_confnodes(p->defcon, f);
 				traverse_statenodes(p->defstate, f);
 				traverse_eventnodes(p->defeve, f);
@@ -137,7 +140,7 @@ traverse_variable(struct variable* sh, int f) {
 		break;
 
 	case TREE_GENERATE_CODE:
-	//                generateSharedVariable(sh);
+		addGlobalVariable(sh);
 		break;
 
 	default:

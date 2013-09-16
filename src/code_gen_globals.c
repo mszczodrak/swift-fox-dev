@@ -19,12 +19,9 @@
 #include "code_gen.h"
 #include "utils.h"
 
-
-void generateGlobals() {
+void startGlobalVariables() {
 	char *full_path = get_sfc_path("", "ff_globals.h");
 	FILE *fp = fopen(full_path, "w");
-//	struct paramtype *pt;
-//	int i;
 
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write \
@@ -35,11 +32,41 @@ void generateGlobals() {
 	fprintf(fp, "#ifndef _FF_GLOBALS_H_\n");
 	fprintf(fp, "#define _FF_GLOBALS_H_\n\n");
 
-	fprintf(fp, "#endif\n");
-
-	fclose(fp);
 	free(full_path);
+	fclose(fp);
 }
 
 
 
+void endGlobalVariables() {
+	char *full_path = get_sfc_path("", "ff_globals.h");
+	FILE *fp = fopen(full_path, "a");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "#endif\n");
+
+	free(full_path);
+	fclose(fp);
+}
+
+
+void addGlobalVariable(struct variable *sh) {
+	char *full_path = get_sfc_path("", "ff_globals.h");
+	FILE *fp = fopen(full_path, "a");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "%s %s[%d];\n\n", type_name(sh->type), sh->name->name, sh->length);
+
+	free(full_path);
+	fclose(fp);
+}
