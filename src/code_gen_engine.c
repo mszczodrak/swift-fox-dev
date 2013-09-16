@@ -1709,13 +1709,13 @@ void generateFennecEngineP() {
 						type_name(pt->type), 
 						mp->lib->full_name, 
 						pt->name);
-				
 				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) get_conf_params(%d).application;\n", 
 							mp->lib->full_name, 
 							mp->lib->full_name, 
 							mp->id);
 				fprintf(fp, "\treturn *(params->%s);\n", pt->name);
 				fprintf(fp, "}\n\n");
+
 				fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
 						mp->lib->full_name, 
 						pt->name, 
@@ -1839,11 +1839,17 @@ void generateFennecEngineP() {
 						pt->name, 
 						type_name(pt->type), 
 						pt->name);
-				fprintf(fp, "\treturn 0;\n");
+				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) get_conf_params(%d).network;\n", 
+							mp->lib->full_name, 
+							mp->lib->full_name, 
+							mp->id);
+
+				fprintf(fp, "\t*params->%s = new_%s;\n", 
+						pt->name,
+						pt->name);
+				fprintf(fp, "\treturn SUCCESS;\n");
 		                fprintf(fp, "}\n\n");
 		        }
-
-
 
 
 			fprintf(fp, "event void %sNetworkAMSend.sendDone(message_t *msg, error_t error) {\n", mp->lib->full_name);
@@ -1949,19 +1955,27 @@ void generateFennecEngineP() {
 						type_name(pt->type), 
 						mp->lib->full_name, 
 						pt->name);
-				fprintf(fp, "\treturn 0;\n");
+				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) get_conf_params(%d).mac;\n", 
+							mp->lib->full_name, 
+							mp->lib->full_name, 
+							mp->id);
+				fprintf(fp, "\treturn *(params->%s);\n", pt->name);
 				fprintf(fp, "}\n\n");
 				fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
 						mp->lib->full_name, 
 						pt->name, 
 						type_name(pt->type), 
 						pt->name);
-				fprintf(fp, "\treturn 0;\n");
+				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) get_conf_params(%d).mac;\n", 
+							mp->lib->full_name, 
+							mp->lib->full_name, 
+							mp->id);
+				fprintf(fp, "\t*params->%s = new_%s;\n", 
+						pt->name,
+						pt->name);
+				fprintf(fp, "\treturn SUCCESS;\n");
 		                fprintf(fp, "}\n\n");
 		        }
-
-
-
 
 
 			fprintf(fp, "event void %sMacAMSend.sendDone(message_t *msg, error_t error) {\n", mp->lib->full_name);
@@ -2113,20 +2127,27 @@ void generateFennecEngineP() {
 						type_name(pt->type), 
 						mp->lib->full_name, 
 						pt->name);
-				fprintf(fp, "\treturn 0;\n");
+				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) get_conf_params(%d).radio;\n", 
+							mp->lib->full_name, 
+							mp->lib->full_name, 
+							mp->id);
+				fprintf(fp, "\treturn *(params->%s);\n", pt->name);
 				fprintf(fp, "}\n\n");
 				fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
 						mp->lib->full_name, 
 						pt->name, 
 						type_name(pt->type), 
 						pt->name);
-				fprintf(fp, "\treturn 0;\n");
+				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) get_conf_params(%d).radio;\n", 
+							mp->lib->full_name, 
+							mp->lib->full_name, 
+							mp->id);
+				fprintf(fp, "\t*params->%s = new_%s;\n", 
+						pt->name,
+						pt->name);
+				fprintf(fp, "\treturn SUCCESS;\n");
 		                fprintf(fp, "}\n\n");
 		        }
-
-
-
-
 
 
 /*
