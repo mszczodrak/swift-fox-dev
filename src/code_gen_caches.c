@@ -205,8 +205,26 @@ void generateCaches(int event_counter, int policy_counter) {
 		conf_ptr = statetab[i].state->confs;
 		while (conf_ptr) { 
 			if (conf_ptr->conf) {
-				
 				fprintf(fp, "%d", conf_ptr->conf->conf->counter);
+			}
+			conf_ptr = conf_ptr->confs;
+			if (conf_ptr != NULL) {
+				fprintf(fp, ", ");
+
+			}
+		}
+		fprintf(fp, "};\n\n");
+
+		fprintf(fp, "struct stack_params %s_params[%d] = {\n", statetab[i].state->id->name, statetab[i].state->confs_counter);
+		conf_ptr = statetab[i].state->confs;
+		while (conf_ptr) { 
+			if (conf_ptr->conf) {
+				fprintf(fp, "\t{\n");
+				fprintf(fp, "\t\t&%s_%s,\n", conf_ptr->conf->conf->id->name, conf_ptr->conf->conf->app->lib->full_name);
+				fprintf(fp, "\t\t&%s_%s,\n", conf_ptr->conf->conf->id->name, conf_ptr->conf->conf->net->lib->full_name);
+				fprintf(fp, "\t\t&%s_%s,\n", conf_ptr->conf->conf->id->name, conf_ptr->conf->conf->mac->lib->full_name);
+				fprintf(fp, "\t\t&%s_%s\n", conf_ptr->conf->conf->id->name, conf_ptr->conf->conf->radio->lib->full_name);
+				fprintf(fp, "\t}\n");
 			}
 			conf_ptr = conf_ptr->confs;
 			if (conf_ptr != NULL) {
@@ -219,12 +237,16 @@ void generateCaches(int event_counter, int policy_counter) {
 
 
 
+
+
 	fprintf(fp, "struct state states[NUMBER_OF_STATES] = {\n");
 	for( i = 0; i < state_id_counter; i++ ) {
                 fprintf(fp, "\t{\n");
                 fprintf(fp, "\t\t.state_id = %d,\n", statetab[i].state->counter);
                 fprintf(fp, "\t\t.num_confs = %d,\n", statetab[i].state->confs_counter);
-		fprintf(fp, "\t\t.conf_list = %s_confs\n", statetab[i].state->id->name);
+		fprintf(fp, "\t\t.conf_list = %s_confs,\n", statetab[i].state->id->name);
+		fprintf(fp, "\t\t.conf_params = %s_params\n", statetab[i].state->id->name);
+		
 
 		fprintf(fp, "\t}\n");
 		if (i+1 < state_id_counter) {
