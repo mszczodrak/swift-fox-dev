@@ -27,6 +27,7 @@ void generateDefaultParams() {
         char *full_path = get_sfc_path("", "ff_defaults.h");
         FILE *fp = fopen(full_path, "w");
 	struct paramvalue *pv;
+	struct paramtype *pt;
 	struct modtab *mp;
 	int i;
 
@@ -124,6 +125,87 @@ void generateDefaultParams() {
                 }
                 fprintf(fp, "};\n");
 	}
+
+
+
+	/** 
+	generate structure with default parameters for each module of a given configuration 
+	*/
+	for( i = 0; i < conf_id_counter; i++ ) {
+		/** 
+		application default parameter values 
+		*/
+		fprintf(fp, "struct %s_params_ptr %s_%s_ptr = {\n",
+        	        conftab[i].conf->app->lib->full_name, conftab[i].conf->id->name,
+                	conftab[i].conf->app->lib->full_name);
+
+                for (pt = conftab[i].conf->app->lib->params; pt != NULL; ) {
+                        fprintf(fp, "\t&%s_%s.%s", conftab[i].conf->id->name, conftab[i].conf->app->lib->full_name, pt->name);
+
+                        pt = pt->child;
+                        if (pt == NULL)
+                                fprintf(fp, "\n");
+                        else
+                                fprintf(fp, ",\n");
+                }
+                fprintf(fp, "};\n");
+
+                /** 
+		network default parameter values 
+		*/
+                fprintf(fp, "struct %s_params_ptr %s_%s_ptr = {\n",
+                        conftab[i].conf->net->lib->full_name, conftab[i].conf->id->name,
+                        conftab[i].conf->net->lib->full_name);
+
+                for (pt = conftab[i].conf->net->lib->params; pt != NULL; ) {
+                        fprintf(fp, "\t&%s_%s.%s", conftab[i].conf->id->name, conftab[i].conf->net->lib->full_name, pt->name);
+
+                        pt = pt->child;
+                        if (pt == NULL)
+                                fprintf(fp, "\n");
+                        else
+                                fprintf(fp, ",\n");
+                }
+                fprintf(fp, "};\n");
+
+		/** 
+		mac default parameter values 
+		*/
+                fprintf(fp, "struct %s_params_ptr %s_%s_ptr = {\n",
+                        conftab[i].conf->mac->lib->full_name, conftab[i].conf->id->name,
+                        conftab[i].conf->mac->lib->full_name);
+
+                for (pt = conftab[i].conf->mac->lib->params; pt != NULL; ) {
+                        fprintf(fp, "\t&%s_%s.%s", conftab[i].conf->id->name, conftab[i].conf->mac->lib->full_name, pt->name);
+                        
+                        pt = pt->child;         
+                        if (pt == NULL)
+                                fprintf(fp, "\n");
+                        else    
+                                fprintf(fp, ",\n");
+                }               
+                fprintf(fp, "};\n");
+
+		/** 
+		radio default parameter values 
+		*/
+                fprintf(fp, "struct %s_params_ptr %s_%s_ptr = {\n",
+                        conftab[i].conf->radio->lib->full_name, conftab[i].conf->id->name,
+                        conftab[i].conf->radio->lib->full_name);
+
+                for (pt = conftab[i].conf->radio->lib->params; pt != NULL; ) {
+                        fprintf(fp, "\t&%s_%s.%s", conftab[i].conf->id->name, conftab[i].conf->radio->lib->full_name, pt->name);
+                                                
+                        pt = pt->child;         
+                        if (pt == NULL)
+                                fprintf(fp, "\n");
+                        else    
+                                fprintf(fp, ",\n");
+                }
+                fprintf(fp, "};\n");
+	}
+
+
 
 	fprintf(fp, "#endif\n\n");
 	fclose(fp);
