@@ -290,26 +290,6 @@ not		{
 #endif
                         return CLOSE_SQUARE_BRACE;               }
 
-{identifier}	{
-#ifndef __DEBUG__
-			tokenpos += yyleng;
-			yylval.symp = symlook(yytext);
-#endif
-			return IDENTIFIER;		}
-
-{path}		{
-#ifndef __DEBUG__
-			tokenpos += yyleng;
-			yylval.libp = liblook(yytext);
-#endif
-			return PATH;			}
-{constant}	{
-#ifndef __DEBUG__
-			tokenpos += yyleng;
-			yylval.symp = symlook(yytext);
-#endif
-			return CONSTANT;		}
-
 uint8_t		{
 #ifndef __DEBUG__
 			tokenpos += yyleng;
@@ -345,6 +325,31 @@ double		{
 			yylval.ival = TYPE_DOUBLE;
 #endif
 			return VARIABLE_TYPE;		}
+
+
+
+
+
+
+{identifier}	{
+#ifndef __DEBUG__
+			tokenpos += yyleng;
+			yylval.symp = symlook(yytext);
+#endif
+			return IDENTIFIER;		}
+
+{path}		{
+#ifndef __DEBUG__
+			tokenpos += yyleng;
+			yylval.libp = liblook(yytext);
+#endif
+			return PATH;			}
+{constant}	{
+#ifndef __DEBUG__
+			tokenpos += yyleng;
+			yylval.symp = symlook(yytext);
+#endif
+			return CONSTANT;		}
 
 
 

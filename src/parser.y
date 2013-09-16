@@ -936,6 +936,10 @@ param_type: VARIABLE_TYPE
 			$$ = $1;
 
 		}
+	|
+		{
+			$$ = 0;
+		}
 		
 /*
 		{
