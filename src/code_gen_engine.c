@@ -53,13 +53,8 @@ void generateFennecEngineC() {
       			fprintf(fp, "components %sC as %s;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
-      			fprintf(fp, "components %sParamsC;\n",
-						mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sControl -> %s;\n\n",
 						mp->lib->full_name,
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sStackParams -> %sParamsC;\n", 
-						mp->lib->full_name, 
 						mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sParams <- %s.%sParams;\n\n", 
 						mp->lib->full_name, 
@@ -97,14 +92,9 @@ void generateFennecEngineC() {
       			fprintf(fp, "components %sC as %s;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
-      			fprintf(fp, "components %sParamsC;\n",
-						mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sControl -> %s;\n\n",
 						mp->lib->full_name,
 						mp->lib->full_name); 
-       			fprintf(fp, "FennecEngineP.%sStackParams -> %sParamsC;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sParams <- %s.%sParams;\n\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name, 
@@ -162,13 +152,8 @@ void generateFennecEngineC() {
 			fprintf(fp, "components %sC as %s;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
-			fprintf(fp, "components %sParamsC;\n",
-						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sControl -> %s;\n",
 						mp->lib->full_name,
-						mp->lib->full_name);
-       			fprintf(fp, "FennecEngineP.%sStackParams -> %sParamsC;\n", 
-						mp->lib->full_name, 
 						mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sParams <- %s.%sParams;\n\n", 
 						mp->lib->full_name, 
@@ -245,12 +230,7 @@ void generateFennecEngineC() {
 			fprintf(fp, "components %sC as %s;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
-			fprintf(fp, "components %sParamsC;\n", 
-						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sControl -> %s;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-       			fprintf(fp, "FennecEngineP.%sStackParams -> %sParamsC;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sParams <- %s.%sParams;\n\n", 
@@ -335,8 +315,6 @@ void generateFennecEngineP() {
 						mp->lib->full_name);
       			fprintf(fp, "uses interface Mgmt as %sControl;\n", 
 						mp->lib->full_name);
-      			fprintf(fp, "uses interface %sStackParams;\n", 
-						mp->lib->full_name);
       			fprintf(fp, "provides interface %sParams;\n", 
 						mp->lib->full_name);
       			fprintf(fp, "provides interface AMSend as %sNetworkAMSend;\n", 
@@ -363,8 +341,6 @@ void generateFennecEngineP() {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp, "/* Network Module: %s */\n", mp->lib->full_name);
 			fprintf(fp, "uses interface Mgmt as %sControl;\n", mp->lib->full_name);
-      			fprintf(fp, "uses interface %sStackParams;\n", 
-						mp->lib->full_name);
       			fprintf(fp, "provides interface %sParams;\n", 
 						mp->lib->full_name);
 
@@ -394,8 +370,6 @@ void generateFennecEngineP() {
 			fprintf(fp, "/* MAC Module: %s */\n", mp->lib->full_name);
 			fprintf(fp, "uses interface Mgmt as %sControl;\n", mp->lib->full_name);
 
-      			fprintf(fp, "uses interface %sStackParams;\n", 
-						mp->lib->full_name);
       			fprintf(fp, "provides interface %sParams;\n", 
 						mp->lib->full_name);
 
@@ -431,8 +405,6 @@ void generateFennecEngineP() {
 			fprintf(fp, "/* Radio Module: %s */\n", mp->lib->full_name);
 			fprintf(fp, "uses interface Mgmt as %sControl;\n", mp->lib->full_name);
 
-      			fprintf(fp, "uses interface %sStackParams;\n", 
-						mp->lib->full_name);
       			fprintf(fp, "provides interface %sParams;\n", 
 						mp->lib->full_name);
 
@@ -1715,24 +1687,48 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
 
+	struct paramtype *pt;
+
 
 	/* Interfaces with Applications */
 
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+			fprintf(fp, "\n/* Linking Application %s */\n", mp->lib->full_name);
 			fprintf(fp, "event void %sControl.startDone(error_t err){\n", mp->lib->full_name);
 			fprintf(fp, "\tmodule_startDone(%d, err);\n", mp->id);
 			fprintf(fp, "}\n\n");
 			fprintf(fp, "event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
 			fprintf(fp, "\tmodule_stopDone(%d, err);\n", mp->id);
 			fprintf(fp, "}\n\n");
+			fprintf(fp, "\t/* Parameter Interfaces */\n\n");	
 
-			fprintf(fp, "command error_t %sNetworkAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n", mp->lib->full_name);
-			fprintf(fp, "\treturn AMSend_send(%d, F_NETWORK, addr, msg, len);\n", mp->id);
+			for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
+				fprintf(fp, "command %s %sParams.get_%s() {\n",
+						type_name(pt->type), 
+						mp->lib->full_name, 
+						pt->name);
+				fprintf(fp, "\treturn 0;\n");
+				fprintf(fp, "}\n\n");
+				fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
+						mp->lib->full_name, 
+						pt->name, 
+						type_name(pt->type), 
+						pt->name);
+				fprintf(fp, "\treturn 0;\n");
+		                fprintf(fp, "}\n\n");
+		        }
+
+			fprintf(fp, "command error_t %sNetworkAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n",
+						mp->lib->full_name);
+			fprintf(fp, "\treturn AMSend_send(%d, F_NETWORK, addr, msg, len);\n", 
+						mp->id);
 			fprintf(fp, "}\n\n");
-			fprintf(fp, "command error_t %sNetworkAMSend.cancel(message_t* msg) {\n", mp->lib->full_name);
-			fprintf(fp, "\treturn AMSend_cancel(%d, F_NETWORK, msg);\n", mp->id);
+			fprintf(fp, "command error_t %sNetworkAMSend.cancel(message_t* msg) {\n",
+						mp->lib->full_name);
+			fprintf(fp, "\treturn AMSend_cancel(%d, F_NETWORK, msg);\n",
+						mp->id);
 			fprintf(fp, "}\n\n");
 			fprintf(fp, "command uint8_t %sNetworkAMSend.maxPayloadLength() {\n", mp->lib->full_name);
 			fprintf(fp, "\treturn AMSend_maxPayloadLength(%d, F_NETWORK);\n", mp->id);
@@ -1810,6 +1806,29 @@ void generateFennecEngineP() {
 			fprintf(fp, "event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
 			fprintf(fp, "\tmodule_stopDone(%d, err);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
+
+			fprintf(fp, "\t/* Parameter Interfaces */\n\n");	
+
+			for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
+				fprintf(fp, "command %s %sParams.get_%s() {\n",
+						type_name(pt->type), 
+						mp->lib->full_name, 
+						pt->name);
+				fprintf(fp, "\treturn 0;\n");
+				fprintf(fp, "}\n\n");
+				fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
+						mp->lib->full_name, 
+						pt->name, 
+						type_name(pt->type), 
+						pt->name);
+				fprintf(fp, "\treturn 0;\n");
+		                fprintf(fp, "}\n\n");
+		        }
+
+
+
+
 			fprintf(fp, "event void %sNetworkAMSend.sendDone(message_t *msg, error_t error) {\n", mp->lib->full_name);
 			fprintf(fp, "\tsendDone(%d, F_APPLICATION, msg, error);\n", mp->id);
 			fprintf(fp, "}\n\n");
@@ -1904,6 +1923,30 @@ void generateFennecEngineP() {
 			fprintf(fp, "event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
 			fprintf(fp, "\tmodule_stopDone(%d, err);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
+
+			fprintf(fp, "\t/* Parameter Interfaces */\n\n");	
+
+			for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
+				fprintf(fp, "command %s %sParams.get_%s() {\n",
+						type_name(pt->type), 
+						mp->lib->full_name, 
+						pt->name);
+				fprintf(fp, "\treturn 0;\n");
+				fprintf(fp, "}\n\n");
+				fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
+						mp->lib->full_name, 
+						pt->name, 
+						type_name(pt->type), 
+						pt->name);
+				fprintf(fp, "\treturn 0;\n");
+		                fprintf(fp, "}\n\n");
+		        }
+
+
+
+
+
 			fprintf(fp, "event void %sMacAMSend.sendDone(message_t *msg, error_t error) {\n", mp->lib->full_name);
 			fprintf(fp, "\tsendDone(%d, F_NETWORK, msg, error);\n", mp->id);
 			fprintf(fp, "}\n\n");
@@ -2044,6 +2087,31 @@ void generateFennecEngineP() {
 			fprintf(fp, "event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
 			fprintf(fp, "\tmodule_stopDone(%d, err);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
+
+			fprintf(fp, "\t/* Parameter Interfaces */\n\n");	
+
+			for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
+				fprintf(fp, "command %s %sParams.get_%s() {\n",
+						type_name(pt->type), 
+						mp->lib->full_name, 
+						pt->name);
+				fprintf(fp, "\treturn 0;\n");
+				fprintf(fp, "}\n\n");
+				fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
+						mp->lib->full_name, 
+						pt->name, 
+						type_name(pt->type), 
+						pt->name);
+				fprintf(fp, "\treturn 0;\n");
+		                fprintf(fp, "}\n\n");
+		        }
+
+
+
+
+
+
 /*
 			fprintf(fp, "event void %sRadioAMSend.sendDone(message_t *msg, error_t err) {\n", mp->lib->full_name);
 			fprintf(fp, "    sendDone(%d, F_MAC, msg, err);\n", mp->id);
