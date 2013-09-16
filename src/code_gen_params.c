@@ -99,16 +99,16 @@ void module_params_c(struct modtab *mp) {
         fprintf(fp, "}\n\n");
 
         fprintf(fp, "implementation {\n\n");
-	fprintf(fp, "\tcommand void %sParams.send_status(uint16_t status_flag) {\n", 
+	fprintf(fp, "\tcommand void %sStackParams.send_status(uint16_t status_flag) {\n", 
 							mp->lib->full_name);
         fprintf(fp, "\t}\n\n");
 
 	for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
-		fprintf(fp, "command %s %sParams.get_%s(state_t state_id, conf_t conf_id) {\n",
+		fprintf(fp, "command %s %sStackParams.get_%s(state_t state_id, conf_t conf_id) {\n",
 			type_name(pt->type), mp->lib->full_name, pt->name);
 		fprintf(fp, "\treturn %s_data.%s;\n", mp->lib->full_name, pt->name);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command error_t %sParams.set_%s(state_t state_id, conf_t conf_id, %s new_%s) {\n",
+		fprintf(fp, "command error_t %sStackParams.set_%s(state_t state_id, conf_t conf_id, %s new_%s) {\n",
 			mp->lib->full_name, pt->name, type_name(pt->type), pt->name);
 		fprintf(fp, "\t%s_data.%s = new_%s;\n",
 					mp->lib->full_name, pt->name, pt->name);
