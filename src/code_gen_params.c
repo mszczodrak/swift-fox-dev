@@ -19,7 +19,7 @@
 #include "code_gen.h"
 #include "utils.h"
 
-void module_params_interface(struct modtab *mp) {
+void module_params_interface_app(struct modtab *mp) {
 	char *full_path = get_sfc_path(mp->lib->full_name, "Params.nc");
 	FILE *fp = fopen(full_path, "w");
 	struct paramtype *pt;
@@ -47,6 +47,39 @@ void module_params_interface(struct modtab *mp) {
 	free(full_path);
 }
 
+void module_params_interface_stack(struct modtab *mp) {
+	char *full_path = get_sfc_path(mp->lib->full_name, "StackParams.nc");
+	FILE *fp = fopen(full_path, "w");
+	struct paramtype *pt;
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "interface %sStackParams {\n", (mp->lib->full_name));
+	fprintf(fp, "\tevent void receive_status(uint16_t status_flag);\n");
+	fprintf(fp, "\tcommand void send_status(uint16_t status_flag);\n");
+
+        for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
+                fprintf(fp, "\tcommand %s get_%s(state_t state_id, conf_t conf_id);\n", 
+				type_name(pt->type), pt->name);
+                fprintf(fp, "\tcommand error_t set_%s(state_t state_id, conf_t conf_id, %s new_%s);\n", 
+				pt->name, type_name(pt->type), pt->name);
+        }
+
+	fprintf(fp, "}\n\n");
+
+	fclose(fp);
+	free(full_path);
+}
+
+
+
+
+
+
 void module_params_c(struct modtab *mp) {
 
 	char *full_path = get_sfc_path(mp->lib->full_name, "ParamsC.nc");
@@ -62,7 +95,7 @@ void module_params_c(struct modtab *mp) {
         fprintf(fp, "#include <Fennec.h>\n");
         fprintf(fp, "#include \"%sParams.h\"\n\n", mp->lib->full_name);
         fprintf(fp, "module %sParamsC {\n", mp->lib->full_name);
-        fprintf(fp, "provides interface %sParams;\n", mp->lib->full_name);
+        fprintf(fp, "provides interface %sStackParams;\n", mp->lib->full_name);
         fprintf(fp, "}\n\n");
 
         fprintf(fp, "implementation {\n\n");
@@ -71,11 +104,11 @@ void module_params_c(struct modtab *mp) {
         fprintf(fp, "\t}\n\n");
 
 	for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
-		fprintf(fp, "command %s %sParams.get_%s() {\n",
+		fprintf(fp, "command %s %sParams.get_%s(state_t state_id, conf_t conf_id) {\n",
 			type_name(pt->type), mp->lib->full_name, pt->name);
 		fprintf(fp, "\treturn %s_data.%s;\n", mp->lib->full_name, pt->name);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
+		fprintf(fp, "command error_t %sParams.set_%s(state_t state_id, conf_t conf_id, %s new_%s) {\n",
 			mp->lib->full_name, pt->name, type_name(pt->type), pt->name);
 		fprintf(fp, "\t%s_data.%s = new_%s;\n",
 					mp->lib->full_name, pt->name, pt->name);
@@ -128,7 +161,8 @@ void generateParams() {
 	struct modtab *mp;
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if ((mp->lib != NULL) && (mp->lib->path) && (mp->id > 0) && (mp->lib->used == 1)) {
-			module_params_interface(mp);
+			module_params_interface_app(mp);
+			module_params_interface_stack(mp);
 			module_params_c(mp);
 			module_params_h(mp);
 		}

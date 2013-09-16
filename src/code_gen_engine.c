@@ -50,23 +50,47 @@ void generateFennecEngineC() {
 
   	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-      			fprintf(fp, "components %sC as %s;\n", mp->lib->full_name, mp->lib->full_name);
-      			fprintf(fp, "components %sParamsC;\n", mp->lib->full_name);
-      			fprintf(fp, "%s.%sParams -> %sParamsC;\n", mp->lib->full_name, mp->lib->full_name, mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sControl -> %s;\n", mp->lib->full_name, mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkAMSend <- %s.NetworkAMSend;\n", mp->lib->full_name, mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkReceive <- %s.NetworkReceive;\n", mp->lib->full_name, mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkSnoop <- %s.NetworkSnoop;\n", mp->lib->full_name, mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkPacket <- %s.NetworkPacket;\n", mp->lib->full_name, mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkAMPacket <- %s.NetworkAMPacket;\n", mp->lib->full_name, mp->lib->full_name);
+      			fprintf(fp, "components %sC as %s;\n",
+						mp->lib->full_name,
+						mp->lib->full_name);
+      			fprintf(fp, "components %sParamsC;\n",
+						mp->lib->full_name);
+      			fprintf(fp, "FennecEngineP.%sControl -> %s;\n\n",
+						mp->lib->full_name,
+						mp->lib->full_name);
+      			fprintf(fp, "FennecEngineP.%sStackParams -> %sParamsC;\n", 
+						mp->lib->full_name, 
+						mp->lib->full_name);
+      			fprintf(fp, "FennecEngineP.%sParams <- %s.%sParams;\n\n", 
+						mp->lib->full_name, 
+						mp->lib->full_name, 
+						mp->lib->full_name);
+      			fprintf(fp, "FennecEngineP.%sNetworkAMSend <- %s.NetworkAMSend;\n",
+						mp->lib->full_name,
+						mp->lib->full_name);
+      			fprintf(fp, "FennecEngineP.%sNetworkReceive <- %s.NetworkReceive;\n",
+						mp->lib->full_name,
+						mp->lib->full_name);
+      			fprintf(fp, "FennecEngineP.%sNetworkSnoop <- %s.NetworkSnoop;\n",
+						mp->lib->full_name,
+						mp->lib->full_name);
+      			fprintf(fp, "FennecEngineP.%sNetworkPacket <- %s.NetworkPacket;\n",
+						mp->lib->full_name,
+						mp->lib->full_name);
+      			fprintf(fp, "FennecEngineP.%sNetworkAMPacket <- %s.NetworkAMPacket;\n",
+						mp->lib->full_name,
+						mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sNetworkPacketAcknowledgements <- %s.NetworkPacketAcknowledgements;\n",
-									mp->lib->full_name, mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkStatus <- %s.NetworkStatus;\n", mp->lib->full_name, mp->lib->full_name);
+						mp->lib->full_name, 
+						mp->lib->full_name);
+      			fprintf(fp, "FennecEngineP.%sNetworkStatus <- %s.NetworkStatus;\n",
+						mp->lib->full_name,
+						mp->lib->full_name);
 			fprintf(fp, "\n");
     		}
   	}
 
-  	fprintf(fp, "  /* Defined and linked network modules */\n\n");
+  	fprintf(fp, "/* Defined and linked network modules */\n\n");
 
   	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -75,13 +99,17 @@ void generateFennecEngineC() {
 						mp->lib->full_name);
       			fprintf(fp, "components %sParamsC;\n",
 						mp->lib->full_name);
-      			fprintf(fp, "%s.%sParams -> %sParamsC;\n",
+      			fprintf(fp, "FennecEngineP.%sControl -> %s;\n\n",
 						mp->lib->full_name,
-						mp->lib->full_name,
+						mp->lib->full_name); 
+       			fprintf(fp, "FennecEngineP.%sStackParams -> %sParamsC;\n", 
+						mp->lib->full_name, 
 						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sControl -> %s;\n",
-						mp->lib->full_name,
+      			fprintf(fp, "FennecEngineP.%sParams <- %s.%sParams;\n\n", 
+						mp->lib->full_name, 
+						mp->lib->full_name, 
 						mp->lib->full_name);
+ 
       			fprintf(fp, "FennecEngineP.%sNetworkAMSend -> %s.NetworkAMSend;\n", mp->lib->full_name, mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sNetworkReceive -> %s.NetworkReceive;\n", mp->lib->full_name, mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sNetworkSnoop -> %s.NetworkSnoop;\n", mp->lib->full_name, mp->lib->full_name);
