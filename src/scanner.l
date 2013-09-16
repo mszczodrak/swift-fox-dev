@@ -310,6 +310,45 @@ not		{
 #endif
 			return CONSTANT;		}
 
+uint8_t		{
+#ifndef __DEBUG__
+			tokenpos += yyleng;
+			yylval.ival = TYPE_UINT8_T;
+#endif
+			return VARIABLE_TYPE;		}
+
+uint16_t	{
+#ifndef __DEBUG__
+			tokenpos += yyleng;
+			yylval.ival = TYPE_UINT16_T;
+#endif
+			return VARIABLE_TYPE;		}
+
+
+uint32_t	{
+#ifndef __DEBUG__
+			tokenpos += yyleng;
+			yylval.ival = TYPE_UINT32_T;
+#endif
+			return VARIABLE_TYPE;		}
+
+float		{
+#ifndef __DEBUG__
+			tokenpos += yyleng;
+			yylval.ival = TYPE_FLOAT;
+#endif
+			return VARIABLE_TYPE;		}
+
+double		{
+#ifndef __DEBUG__
+			tokenpos += yyleng;
+			yylval.ival = TYPE_DOUBLE;
+#endif
+			return VARIABLE_TYPE;		}
+
+
+
+
 virtual-network	{
 			return VIRTUAL_NETWORK;		}
 

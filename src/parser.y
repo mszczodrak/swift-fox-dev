@@ -98,6 +98,7 @@ int yylex(void);
 %token OPEN_BRACE CLOSE_BRACE OPEN_PARENTHESIS CLOSE_PARENTHESIS ONCE
 %token OPEN_SQUARE_BRACE CLOSE_SQUARE_BRACE
 %token LEVEL AT SHARED
+%token U_INT_EIGHT U_INT_SIXTEEN U_INT_THIRTY_TWO FLOAT DOUBLE
 
 
 %token <symp>	CONSTANT
@@ -108,6 +109,7 @@ int yylex(void);
 %token <ival>	AND
 %token <ival>	OR
 %token <ival>	NOT
+%token <ival>	VARIABLE_TYPE
 %token <modp>	NOTHING
 %token <symp>	ANY
 %token <modp>	MODULES
@@ -928,12 +930,18 @@ next_module_type: newlines COMMA newlines param_type IDENTIFIER default_value ne
 	;
 
 
-param_type: IDENTIFIER
+param_type: VARIABLE_TYPE
+		{
+			printf("got %d\n", $1);
+			$$ = $1;
+
+		}
+		
+/*
 		{
 			$$ = 0;
 
 			if (!strcmp($1->name, "uint8_t"))
-				$$ = TYPE_UINT8_T;
 
 			if (!strcmp($1->name, "uint16_t"))
 				$$ = TYPE_UINT16_T;
@@ -948,6 +956,7 @@ param_type: IDENTIFIER
 				$$ = TYPE_DOUBLE;
 
 		}
+*/
 	;
 
 
