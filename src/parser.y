@@ -138,6 +138,8 @@ int yylex(void);
 %type <ival>	virtual_networks
 %type <symp>	configuration_ids
 %type <symp> 	conf_level
+%type <ival> 	array_part
+%type <ival> 	assign_value
 %type <symp> 	state_level
 %type <symp> 	event_location
 %type <mtl>	module_types
@@ -214,13 +216,17 @@ global_variables: global_variables global_variable
         ;
 
 
-global_variable:  param_type IDENTIFIER newlines
+global_variable: param_type IDENTIFIER array_part assign_value newlines 
 		{
 			//printf("var %s\n", $1);
 
 			$$		= calloc(1, sizeof(struct variable));
 			$$->type 	= $1;
 			$$->name	= $2;
+			$$->length	= $3;
+			
+
+			printf("def value %d\n", $4);
 		
 			printf("hello type %d\n", $$->type);
 			printf("hello type %s\n", $$->name->name);
@@ -231,6 +237,30 @@ global_variable:  param_type IDENTIFIER newlines
 			//$$->var_type	= $2;
 			//$$->name	= $3;
 		}
+
+array_part: OPEN_SQUARE_BRACE CONSTANT CLOSE_SQUARE_BRACE
+		{
+			$$ = editConst($2);
+		}
+	|
+		{
+			$$ = 1;
+		}
+	;
+
+assign_value: RELOP CONSTANT
+		{
+			if ($1 == EQ) {
+				$$ = editConst($2);
+			} else {
+				$$ = 0;
+			}
+		}
+	|
+		{
+			$$ = 0;
+		}
+	; 
 
 
 defined_configurations: configurations configuration

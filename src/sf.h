@@ -250,9 +250,11 @@ struct variable {
 	/** type of a variable encoded as intiger */
 	int			type;
 	/** pointer to a symtab storing type of the variable */
-	struct symtab		*var_type;
+	//struct symtab		*var_type;
 	/** pointer to a symtab containing the variable's name */
 	struct symtab		*name;
+	/** lenght of the variable - use for arrays */
+	int			length;
 };
 
 

@@ -1,3 +1,5 @@
+uint8_t node_addr = 3
+
 configuration count { 
 			counter(30, 1024, NODE, 74)
                         ctp(74)
