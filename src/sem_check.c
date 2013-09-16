@@ -579,7 +579,7 @@ checkControlState(void) {
 	}
 
 	c->id = symlook(conf_state_name);
-	c->id->type = "configuration_ud";
+	c->id->type = "configuration_id";
 
 	addConfModule(c, &c->app, &c->app_params, conf_state_app);
 	addConfModule(c, &c->net, &c->net_params, conf_state_net);
