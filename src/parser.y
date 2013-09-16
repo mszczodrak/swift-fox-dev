@@ -932,7 +932,6 @@ next_module_type: newlines COMMA newlines param_type IDENTIFIER default_value ne
 
 param_type: VARIABLE_TYPE
 		{
-			printf("got %d\n", $1);
 			$$ = $1;
 
 		}
