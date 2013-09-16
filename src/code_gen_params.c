@@ -62,7 +62,7 @@ void module_params_c(struct modtab *mp) {
         fprintf(fp, "#include <Fennec.h>\n");
         fprintf(fp, "#include \"%sParams.h\"\n\n", mp->lib->full_name);
         fprintf(fp, "module %sParamsC {\n", mp->lib->full_name);
-        fprintf(fp, "\t provides interface %sParams;\n", mp->lib->full_name);
+        fprintf(fp, "provides interface %sParams;\n", mp->lib->full_name);
         fprintf(fp, "}\n\n");
 
         fprintf(fp, "implementation {\n\n");
@@ -71,16 +71,16 @@ void module_params_c(struct modtab *mp) {
         fprintf(fp, "\t}\n\n");
 
 	for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
-		fprintf(fp, "\tcommand %s %sParams.get_%s() {\n",
+		fprintf(fp, "command %s %sParams.get_%s() {\n",
 			type_name(pt->type), mp->lib->full_name, pt->name);
-		fprintf(fp, "\t\treturn %s_data.%s;\n", mp->lib->full_name, pt->name);
-		fprintf(fp, "\t}\n\n");
-		fprintf(fp, "\tcommand error_t %sParams.set_%s(%s new_%s) {\n",
+		fprintf(fp, "\treturn %s_data.%s;\n", mp->lib->full_name, pt->name);
+		fprintf(fp, "}\n\n");
+		fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
 			mp->lib->full_name, pt->name, type_name(pt->type), pt->name);
-		fprintf(fp, "\t\t%s_data.%s = new_%s;\n",
+		fprintf(fp, "\t%s_data.%s = new_%s;\n",
 					mp->lib->full_name, pt->name, pt->name);
-		fprintf(fp, "\t\treturn SUCCESS;\n");
-		fprintf(fp, "\t}\n\n");
+		fprintf(fp, "\treturn SUCCESS;\n");
+		fprintf(fp, "}\n\n");
         }
 
         fprintf(fp, "}\n\n");

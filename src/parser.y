@@ -186,6 +186,7 @@ program: global_variables defined_configurations defined_states defined_events p
 				$5->parent = NULL;
 			
 			/* init */
+			$$->vars	= $1;
 			$$->defcon	= $2;
 			$$->defstate	= $3;
 			$$->defeve	= $4;
@@ -505,6 +506,12 @@ state: STATE IDENTIFIER state_level OPEN_BRACE newlines conf_ids newlines CLOSE_
 			$$->id		= $2;
 
 			$$->confs	= $6;
+
+			if ($6 != NULL) {
+				$$->confs_counter = $6->count;
+			} else {
+				$$->confs_counter = 0;
+			}
 	
 			/* level */
 			if ($3 == NULL) {
@@ -538,12 +545,17 @@ conf_ids: conf_ids newlines conf_id
 			$$		= calloc(1, sizeof(struct conf_ids));
 			
 			/* link the child nodes */
-			if ($1 != NULL) 
+			if ($1 != NULL) { 
 				$1->parent = $$;
+				$$->count = $1->count + 1;
+			} else {
+				$$->count = 1;
+			}
 			$3->parent	= $$;
 
 			$$->confs	= $1;
 			$$->conf	= $3;
+
 		}
 	| 	
 		{ 

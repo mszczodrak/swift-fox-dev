@@ -185,6 +185,7 @@ struct conf_ids {
 	struct conf_ids		*parent;
 	struct conf_ids		*confs;
 	struct conf_id		*conf;
+	int 			count;
 };
 
 
@@ -204,6 +205,7 @@ struct statenode {
 //	struct paramvalue	*radio_params;
 	int			counter;
 	int 			level;
+	int 			confs_counter;
 };
 
 struct statetab {

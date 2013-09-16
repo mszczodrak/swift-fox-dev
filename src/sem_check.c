@@ -70,6 +70,13 @@ checkState(struct statenode *s) {
 	}
 
 
+	/*
+	count how many configurations this state has 
+	*/
+
+	
+
+
 	/* OK, no problems found */
 	return;
 
