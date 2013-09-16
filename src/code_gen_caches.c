@@ -71,7 +71,7 @@ void generateCaches(int event_counter, int policy_counter) {
 	/* Generate Configurations */
 
 	fprintf(fp, "uint16_t active_state = %d;\n\n", active_state);
-	fprintf(fp, "struct fennec_configuration configurations[NUMBER_OF_CONFIGURATIONS] = {\n");
+	fprintf(fp, "struct stack_configuration configurations[NUMBER_OF_CONFIGURATIONS] = {\n");
 //	fprintf(fp, "\t{\n");
 //	fprintf(fp, "\t\t.application = 0,\n");
 //	fprintf(fp, "\t\t.network = 0,\n");
