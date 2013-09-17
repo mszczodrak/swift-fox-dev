@@ -1704,6 +1704,11 @@ void generateFennecEngineP() {
 			fprintf(fp, "}\n\n");
 			fprintf(fp, "\t/* Parameter Interfaces */\n\n");	
 
+			/* check if the interface is empty, if it is add dummy call */
+			if (mp->lib->params == NULL) {
+				fprintf(fp, "command void %sParams.dummy() {}\n", mp->lib->full_name);
+			}
+
 			for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
 				fprintf(fp, "command %s %sParams.get_%s() {\n",
 						type_name(pt->type), 
@@ -1822,6 +1827,11 @@ void generateFennecEngineP() {
 
 
 			fprintf(fp, "\t/* Parameter Interfaces */\n\n");	
+
+			/* check if the interface is empty, if it is add dummy call */
+			if (mp->lib->params == NULL) {
+				fprintf(fp, "command void %sParams.dummy() {}\n", mp->lib->full_name);
+			}
 
 			for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
 				fprintf(fp, "command %s %sParams.get_%s() {\n",
@@ -1949,6 +1959,11 @@ void generateFennecEngineP() {
 
 
 			fprintf(fp, "\t/* Parameter Interfaces */\n\n");	
+
+			/* check if the interface is empty, if it is add dummy call */
+			if (mp->lib->params == NULL) {
+				fprintf(fp, "command void %sParams.dummy() {}\n", mp->lib->full_name);
+			}
 
 			for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
 				fprintf(fp, "command %s %sParams.get_%s() {\n",
@@ -2121,6 +2136,11 @@ void generateFennecEngineP() {
 
 
 			fprintf(fp, "\t/* Parameter Interfaces */\n\n");	
+
+			/* check if the interface is empty, if it is add dummy call */
+			if (mp->lib->params == NULL) {
+				fprintf(fp, "command void %sParams.dummy() {}\n", mp->lib->full_name);
+			}
 
 			for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
 				fprintf(fp, "command %s %sParams.get_%s() {\n",
