@@ -109,7 +109,7 @@ state			{
 #ifndef __DEBUG__
 			tokenpos += yyleng;
 #endif
-			return EVENT_CONDITION;		}
+			return EVENT;			}
 from		{
 #ifndef __DEBUG__
 			tokenpos += yyleng;

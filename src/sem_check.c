@@ -74,7 +74,8 @@ checkState(struct statenode *s) {
 	/* check if every configuration is defined */
 	for (i = 0; i < state_id_counter; i++) {
 		for (conf_ptr = statetab[i].state->confs; conf_ptr != NULL; conf_ptr = conf_ptr->confs) {
-			if (strcmp(conf_ptr->conf->id->type, "configuration_id")) {
+			if (strcmp(conf_ptr->conf->id->type, "configuration_id") &&
+				strcmp(conf_ptr->conf->id->type, "event_id") ) {
 				goto undef_conf;
 			}
 		}
@@ -568,47 +569,4 @@ checks control state
 */
 void
 checkControlState(void) {
-
-
-	/* HACK */
-	conf_state_redefined = 1;
-
-	if (conf_state_redefined) {
-		return;
-	}
-
-	struct confnode *c = calloc(1, sizeof(struct confnode));
-
-	if (c == NULL) {
-		fprintf(stderr, "Failed to calloc in 'checkControlState\n");
-		exit(1);
-	}
-	
-	if (find_sym(conf_state_name) != NULL) {
-		fprintf(stderr, "Found control state, but should not\n");
-		exit(1);
-	}
-
-	c->id = symlook(conf_state_name);
-	c->id->type = "configuration_id";
-
-	addConfModule(c, &c->app, &c->app_params, conf_state_app);
-	addConfModule(c, &c->net, &c->net_params, conf_state_net);
-	addConfModule(c, &c->mac, &c->mac_params, conf_state_mac);
-	addConfModule(c, &c->radio, &c->radio_params, conf_state_radio);
-
-	conftab[conf_id_counter].conf = c;
-	++conf_id_counter;
-
-	/** 
-	done with creating control default control state
-	*/
-	/**
-	check configuration
-	*/
-	checkConfiguration(c);
-	/**
-	check configuration module
-	*/
-	checkConfigurationModules(c);
 }

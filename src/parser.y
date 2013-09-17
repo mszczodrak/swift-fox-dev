@@ -88,7 +88,7 @@ int yylex(void);
 	struct defvalue		*defv;
 }
 
-%token STATE CONFIGURATION COMMA EVENT_CONDITION 
+%token STATE CONFIGURATION COMMA EVENT 
 %token FROM GOTO START USE WHEN 
 %token APPLICATION NETWORK MAC RADIO 
 %token SOURCE LF 
@@ -121,7 +121,6 @@ int yylex(void);
 %type <statep>	state
 %type <statesp>	states
 %type <statesp>	defined_states
-%type <evep>	event_condition
 %type <evesp>	defined_events
 %type <vars>	global_variables
 %type <var>	global_variable
@@ -136,13 +135,13 @@ int yylex(void);
 %type <ival> 	array_part
 %type <dval> 	assign_value
 %type <ival> 	state_level
-%type <dval> 	event_location
 %type <mtl>	module_types
 %type <mtl>	next_module_type
 %type <parv>	parameters
 %type <parv>	next_parameter
 %type <ival>	param_type
 %type <defv>	default_value
+%type <str>	configuration_type
 
 %%
 
@@ -280,14 +279,14 @@ configurations: configurations configuration
 		}			
 	;
 
-configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module newlines module newlines module newlines module newlines CLOSE_BRACE newlines
+configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines module newlines module newlines module newlines module newlines CLOSE_BRACE newlines
 		{
 
 			/* configuration node */
 			$$		= calloc(1, sizeof(struct confnode));
 
 			/* init */
-			$2->type	= "configuration_id";
+			$2->type	= $1;
 			$$->id		= $2;
 	
 			/* level */
@@ -350,6 +349,18 @@ configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module ne
 
 		}
 	;
+
+
+configuration_type: CONFIGURATION
+		{
+			$$ = "configuration_id";
+		}
+	| EVENT
+		{
+			$$ = "event_id";
+		}
+	;
+
 
 conf_level: LEVEL CONSTANT
 		{
@@ -544,65 +555,11 @@ conf_id: IDENTIFIER
 		}
 
 
-defined_events: defined_events event_condition
-		{
-			/* event-conditions set */
-			$$		= calloc(1, sizeof(struct eventnodes));
-			
-			/* link child nodes */
-			if ($1 != NULL) {
-				$1->parent = $$;
-				last_evens = $$;
-			}
-			$2->parent = $$;
-			
-			$$->evens	= $1;
-			$$->even	= $2;
-		}
-	|	
+defined_events: 
 		{ 
 			$$ = NULL; 
 		}	
 	;
-
-event_condition: EVENT_CONDITION IDENTIFIER OPEN_BRACE IDENTIFIER RELOP CONSTANT event_location CLOSE_BRACE newlines
-		{
-			/* event-condition node */
-			$2->value	= event_counter;
-			$2->type	= "event_id";	
-			$2->lib		= $4->lib;
-	
-			/* init */
-			$$ = calloc(1, sizeof(struct eventnode));
-			$$->id		= $2;
-			$$->counter	= $2->value;
-			
-			/* link child nodes */
-			$$->src		= $4;
-			$$->cst		= $6;
-
-			struct evtab *ev= evlook($2->name);
-                        ev->num 	= event_counter;
-                        ev->op		= $5;
-                        ev->value 	= $$->cst;
-
-                        /* event location */
-                        ev->addr        = $7;
-
-			event_counter++;
-		}
-	;
-
-
-event_location: AT CONSTANT
-                {
-                        $$ = $2;
-                }
-        |       
-                {
-                        $$ = UNKNOWN;
-                }                       
-        ;
 
 
 policies: policies policy 
