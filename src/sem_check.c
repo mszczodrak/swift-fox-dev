@@ -436,12 +436,12 @@ to_conf_err:
 void
 updateStatesWithEvents(struct policy *p) {
 	int i;
-//	struct statetab *stateptr;
-	struct conf_ids *eids = p->event_confs;
 	struct conf_ids *cids;
 
-	/* if we have 'any' policy then append configurtion to any state */
 	for (i = 0; i < state_id_counter; i++) {
+		/** 
+		if we have 'any' policy then append configurtion to any state 
+		*/
 		if (!(strcmp(p->from->name, "any")) || 
 			!(strcmp(p->from->name, statetab[i].state->id->name))) {
 
@@ -449,26 +449,15 @@ updateStatesWithEvents(struct policy *p) {
 			cids = statetab[i].state->confs;
 
 			if (cids == NULL) {
-				statetab[i].state->confs = calloc(1, sizeof(struct conf_ids));
+				statetab[i].state->confs = p->event_confs;
 			} else {
 				while(cids->confs != NULL) {
 					cids = cids->confs;
 				}
-				cids->confs = calloc(1, sizeof(struct conf_ids));
+				cids->confs = p->event_confs;
 			}
-			cids = cids->confs;
-			printf("match\n");
-			cids->confs = NULL;
-			cids->conf = eids->conf;
-			statetab[i].state->confs_counter = statetab[i].state->confs_counter + 1;
-			//printf("0x%1x 0x%1x\n", statetab[i].state, s);
-//			if ((statetab[i].state != s) && (statetab[i].state->id == s->id)) {
-//				goto state_err;
 		}
 	}	
-
-
-
 }
 
 
