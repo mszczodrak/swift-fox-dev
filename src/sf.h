@@ -93,7 +93,7 @@ struct symtab *symlook(char *);
 struct symtab *find_sym(char *);
 
 struct defvalue {
-	struct symtab		*def_value;
+	double			def_value;
 	int 			def_valid;
 };
 
@@ -225,7 +225,7 @@ struct eventnode {
 	/** event's counter */
 	int 			counter;
 	/** pointer to a symtab with ... */
-	struct symtab		*cst;
+	double			cst;
 };
 
 struct eventnodes {

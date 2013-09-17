@@ -100,7 +100,7 @@ int yylex(void);
 %token U_INT_EIGHT U_INT_SIXTEEN U_INT_THIRTY_TWO FLOAT DOUBLE
 
 
-%token <symp>	CONSTANT
+%token <dval>	CONSTANT
 %token <symp>	IDENTIFIER
 %token <str>	VARIABLE_LINE
 %token <libp>	PATH
@@ -134,11 +134,11 @@ int yylex(void);
 %type <ival>	when_events
 %type <ival>	one_event
 %type <symp>	configuration_ids
-%type <symp> 	conf_level
+%type <ival> 	conf_level
 %type <ival> 	array_part
-%type <ival> 	assign_value
-%type <symp> 	state_level
-%type <symp> 	event_location
+%type <dval> 	assign_value
+%type <ival> 	state_level
+%type <dval> 	event_location
 %type <mtl>	module_types
 %type <mtl>	next_module_type
 %type <parv>	parameters
@@ -222,7 +222,7 @@ global_variable: param_type IDENTIFIER array_part assign_value newlines
 			$$->length	= $3;
 			
 
-			printf("def value %d\n", $4);
+			printf("def value %f\n", $4);
 		
 			printf("hello type %d\n", $$->type);
 			printf("hello type %s\n", $$->name->name);
@@ -236,7 +236,7 @@ global_variable: param_type IDENTIFIER array_part assign_value newlines
 
 array_part: OPEN_SQUARE_BRACE CONSTANT CLOSE_SQUARE_BRACE
 		{
-			$$ = editConst($2);
+			$$ = (int)$2;
 		}
 	|
 		{
@@ -247,7 +247,7 @@ array_part: OPEN_SQUARE_BRACE CONSTANT CLOSE_SQUARE_BRACE
 assign_value: RELOP CONSTANT
 		{
 			if ($1 == EQ) {
-				$$ = editConst($2);
+				$$ = $2;
 			} else {
 				$$ = 0;
 			}
@@ -304,11 +304,7 @@ configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module ne
 			$$->id		= $2;
 	
 			/* level */
-			if ($3 == NULL) {
-				$$->level	= UNKNOWN;
-			} else {
-				$$->level	= editConst($3);
-			}
+			$$->level	= $3;
 
 			/* set ids */
 			
@@ -375,7 +371,7 @@ conf_level: LEVEL CONSTANT
 		}
         |       
                 {
-                        $$ = NULL;
+                        $$ = UNKNOWN;
                 }                       
         ;
 
@@ -500,6 +496,10 @@ state: STATE IDENTIFIER state_level OPEN_BRACE newlines conf_ids newlines CLOSE_
 			$2->type	= "state_id";
 			$$->id		= $2;
 
+			/* level */
+			$$->level	= $3;
+
+
 			$$->confs	= $6;
 
 			if ($6 != NULL) {
@@ -508,14 +508,6 @@ state: STATE IDENTIFIER state_level OPEN_BRACE newlines conf_ids newlines CLOSE_
 				$$->confs_counter = 0;
 			}
 	
-			/* level */
-			if ($3 == NULL) {
-				$$->level	= UNKNOWN;
-			} else {
-				$$->level	= editConst($3);
-			}
-
-
 			$$->counter	= state_id_counter;
 			++state_id_counter;
 
@@ -529,7 +521,7 @@ state_level: LEVEL CONSTANT
 		}
         |       
                 {
-                        $$ = NULL;
+                        $$ = UNKNOWN;
                 }                       
         ;
 
@@ -607,20 +599,15 @@ event_condition: EVENT_CONDITION IDENTIFIER OPEN_BRACE IDENTIFIER RELOP CONSTANT
 			/* link child nodes */
 			$$->src		= $4;
 			$$->cst		= $6;
-			$$->cst->value	= editConst($6);
 
 			struct evtab *ev= evlook($2->name);
                         ev->num 	= event_counter;
                         ev->op		= $5;
-                        ev->value 	= $$->cst->value;
+                        ev->value 	= $$->cst;
 			ev->scale	= $7;
 
                         /* event location */
-                        if ($8 == NULL) {
-                                ev->addr        = UNKNOWN;
-                        } else {
-                                ev->addr        = editConst($8);
-                        }
+                        ev->addr        = $8;
 
 			event_counter++;
 		}
@@ -633,7 +620,7 @@ event_location: AT CONSTANT
                 }
         |       
                 {
-                        $$ = NULL;
+                        $$ = UNKNOWN;
                 }                       
         ;
 
@@ -921,7 +908,7 @@ default_value: RELOP CONSTANT
 	|
 		{
 			$$		= calloc(1, sizeof(struct defvalue));
-			$$->def_value	= NULL;
+			$$->def_value	= 0;
 			$$->def_valid	= 0;
 		}
 	;
