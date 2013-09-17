@@ -1468,6 +1468,13 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_EVENT) {
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\tsignal %sNetworkAMSend.sendDone(msg, error);\n", mp->lib->full_name);
+			fprintf(fp,"\t\treturn;\n\n");
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
 			fprintf(fp,"\t\tsignal %sNetworkAMSend.sendDone(msg, error);\n", mp->lib->full_name);
@@ -1494,6 +1501,12 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_EVENT) {
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn signal %sNetworkReceive.receive(msg, payload, len);\n\n", mp->lib->full_name);
+		}
+	}
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1526,6 +1539,12 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_EVENT) {
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn signal %sNetworkSnoop.receive(msg, payload, len);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
 			fprintf(fp,"\t\treturn signal %sNetworkSnoop.receive(msg, payload, len);\n\n", mp->lib->full_name);
@@ -1545,6 +1564,12 @@ void generateFennecEngineP() {
 
 	fprintf(fp,"void status(uint16_t module_id, uint8_t to_layer, uint8_t layer, uint8_t status_flag) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_EVENT) {
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn signal %sNetworkStatus.status(layer, status_flag);\n\n", mp->lib->full_name);
+		}
+	}
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1704,7 +1729,7 @@ void generateFennecEngineP() {
 
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && ((mp->lib->type == TYPE_APPLICATION) || (mp->lib->type == TYPE_EVENT))) {
 			fprintf(fp, "\n/* Linking Application %s */\n", mp->lib->full_name);
 			fprintf(fp, "event void %sControl.startDone(error_t err){\n", mp->lib->full_name);
 			fprintf(fp, "\tmodule_startDone(%d, err);\n", mp->id);
