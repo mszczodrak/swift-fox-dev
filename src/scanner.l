@@ -134,14 +134,7 @@ start		{
 #endif
                         return AT;                   }
 
-level           {
-#ifndef __DEBUG__
-                        tokenpos += yyleng;
-#endif
-                        return LEVEL;                   }
-
-
-l           {
+(level|l)           {
 #ifndef __DEBUG__
                         tokenpos += yyleng;
 #endif
