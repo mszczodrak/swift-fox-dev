@@ -132,7 +132,6 @@ int yylex(void);
 %type <str>	type
 %type <ival>	when_events
 %type <ival>	one_event
-%type <symp>	configuration_ids
 %type <ival> 	conf_level
 %type <ival> 	array_part
 %type <dval> 	assign_value
@@ -393,22 +392,19 @@ parameters: IDENTIFIER next_parameter
                         $$              = calloc(1, sizeof(struct paramvalue));
 			$$->child	= $2;
                         $$->value       = $1;
+			$$->num_value	= 0;
                 }
         | CONSTANT next_parameter
                 {
-                        struct symtab *sp = symlook($1->name);
-                        if (sp == NULL)
-                                yyerror("symtab pointer not found");
-
                         /* pramvalue node */
                         $$              = calloc(1, sizeof(struct paramvalue));
                         $$->child       = $2;
-                        $$->value       = $1;
+                        $$->value       = NULL;
+                        $$->num_value	= $1;
                 }
 	|	
 		{
                         $$ = NULL;
-
 		}
         ;
 
@@ -422,17 +418,15 @@ next_parameter: COMMA IDENTIFIER next_parameter
                         $$              = calloc(1, sizeof(struct paramvalue));
                         $$->child       = $3;
                         $$->value       = $2;
+			$$->num_value	= 0;
                 }
         | COMMA CONSTANT next_parameter
 		{
-                        struct symtab *sp = symlook($2->name);
-                        if (sp == NULL)
-                                yyerror("symtab pointer not found");
-
                         /* pramvalue node */
                         $$              = calloc(1, sizeof(struct paramvalue));
                         $$->child       = $3;
-                        $$->value       = $2;
+                        $$->value       = NULL;
+			$$->num_value	= $2;
 		}
 	|
                 {
@@ -765,17 +759,6 @@ initial_configuration: START IDENTIFIER newlines
 		} 
 	;
 
-
-configuration_ids: configuration_ids IDENTIFIER         
-                {
-                        $$ = $1;
-                }
-                
-        |
-                {
-                        $$ = NULL;
-                }
-        ;
 
 /* Library section */
 

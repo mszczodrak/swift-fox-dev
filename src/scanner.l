@@ -316,7 +316,7 @@ double		{
 {constant}	{
 #ifndef __DEBUG__
 			tokenpos += yyleng;
-			yylval.symp = symlook(yytext);
+			yylval.dval = atof(yytext);
 #endif
 			return CONSTANT;		}
 

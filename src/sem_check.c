@@ -309,7 +309,7 @@ checkSingleModule(struct confnode *c, struct modtab *mp,
 			/* extend module's parameter list with the 
 			 * default values */
 			*mod_par_val = calloc(1, sizeof(struct paramvalue));
-			(*mod_par_val)->value = par_type->def_val->def_value;
+			(*mod_par_val)->num_value = par_type->def_val->def_value;
 			(*mod_par_val)->child = NULL;
                 } else {
 			/* parameters are missing and there are no default

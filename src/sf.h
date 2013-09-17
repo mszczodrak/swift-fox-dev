@@ -107,6 +107,7 @@ struct paramtype {
 struct paramvalue {
 	struct paramvalue	*child;	
 	struct symtab		*value;
+	double			num_value;
 };
 
 struct libtab {
