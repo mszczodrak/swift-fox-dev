@@ -91,10 +91,10 @@ int yylex(void);
 
 %token STATE CONFIGURATION COMMA EVENT_CONDITION 
 %token FROM GOTO START USE WHEN 
-%token APPLICATION NETWORK MAC RADIO ADDRESS
+%token APPLICATION NETWORK MAC RADIO 
 %token SOURCE LF 
 %token LT GT LE GE NE EQ
-%token OPEN_BRACE CLOSE_BRACE OPEN_PARENTHESIS CLOSE_PARENTHESIS ONCE
+%token OPEN_BRACE CLOSE_BRACE OPEN_PARENTHESIS CLOSE_PARENTHESIS
 %token OPEN_SQUARE_BRACE CLOSE_SQUARE_BRACE
 %token LEVEL AT 
 %token U_INT_EIGHT U_INT_SIXTEEN U_INT_THIRTY_TWO FLOAT DOUBLE
@@ -1295,7 +1295,7 @@ initialize(void) {
 			"network", "source", "event-condition", "from", "goto",
 			"none", "conf", "event", "on", "off", 			
 			"mac", "radio", // new keywords
-			"when", "nothing", "once", "event"};
+			"when", "nothing", "event"};
 	
 	/* size of the keywords set */
 	int k_num 		= sizeof(keywords)/sizeof(char*);

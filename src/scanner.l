@@ -165,21 +165,11 @@ radio         {
                         tokenpos += yyleng;
 #endif
                         return RADIO;                 }
-address         {
-#ifndef __DEBUG__
-                        tokenpos += yyleng;
-#endif
-                        return ADDRESS;                 }
 source		{
 #ifndef __DEBUG__
 			tokenpos += yyleng;
 #endif
 			return SOURCE;			}
-once		{
-#ifndef __DEBUG__
-			tokenpos += yyleng;
-#endif
-			return ONCE;			}
 when		{
 #ifndef __DEBUG__
 			tokenpos += yyleng;
@@ -308,10 +298,6 @@ double		{
 			yylval.ival = TYPE_DOUBLE;
 #endif
 			return VARIABLE_TYPE;		}
-
-
-
-
 
 
 {identifier}	{
