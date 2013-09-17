@@ -160,6 +160,22 @@ void generateCaches(int event_counter, int policy_counter) {
 	}
 	fprintf(fp, "};\n\n");
 
+
+	/* module_t to event_id */
+	fprintf(fp, "uint8_t event_module[NUMBER_OF_EVENTS][2] = {\n");
+	fprintf(fp, "\t/* [event_id, conf_id */\n");
+	for ( i = 0; i < conf_id_counter; i++ ) {
+		if (!strcmp(conftab[i].conf->id->type, "event_id")) {
+			fprintf(fp, "\t{%d, %d},\n",
+					conftab[i].conf->id->value,
+					conftab[i].conf->counter);
+		}
+	}
+
+	fprintf(fp, "};\n\n");
+
+
+
 /*
 	fprintf(fp, "struct fennec_event eventsTable[%d] = {\n", event_counter);
 

@@ -32,9 +32,8 @@ void initialize(void);
 void gc(void);
 void checkForRemotePath(struct libtab*);
 
-int event_counter	= 1; 
 int policy_counter	= 0;
-int event_id_counter	= 0;
+int event_id_counter	= 1;
 FILE *fcode		= NULL;
 
 int state_id_counter	= 0;
@@ -336,6 +335,13 @@ configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines modu
 			}
 
 			$2->value	= conf_id_counter;
+
+			if (!(strcmp($1, "event_id"))) {
+				$2->value = event_id_counter;
+				event_id_counter++;
+			}
+
+
 			$$->counter	= conf_id_counter;
 
 			conftab[conf_id_counter].conf = $$;
@@ -751,9 +757,8 @@ definition: USE type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_types CLOS
 			if (!strcmp($3->type, "source")) {
 				/* source */
 				$4->type = TYPE_EVENT;
-				event_id_counter++;
 				$4->used = 0;
-				$4->id = event_id_counter;
+				$4->id = 0;
 			}
 
 		}
