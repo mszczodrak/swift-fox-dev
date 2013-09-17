@@ -218,18 +218,7 @@ global_variable: param_type IDENTIFIER array_part assign_value newlines
 			$$->type 	= $1;
 			$$->name	= $2;
 			$$->length	= $3;
-			
-
-			printf("def value %f\n", $4);
-		
-			printf("hello type %d\n", $$->type);
-			printf("hello type %s\n", $$->name->name);
-			
-			//$2->type	= "global_variable_type";
-			//$3->type	= "global_variable_name";
-
-			//$$->var_type	= $2;
-			//$$->name	= $3;
+			$$->value	= $4;
 		}
 
 array_part: OPEN_SQUARE_BRACE CONSTANT CLOSE_SQUARE_BRACE

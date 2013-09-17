@@ -65,7 +65,10 @@ void addGlobalVariable(struct variable *sh) {
 	}
 
 	sh->name->type = strdup("global_variable");
-	fprintf(fp, "%s %s[%d];\n\n", type_name(sh->type), sh->name->name, sh->length);
+	fprintf(fp, "%s %s[%d] = {%f};\n\n", type_name(sh->type), 
+						sh->name->name,
+						sh->length,
+						sh->value);
 
 	free(full_path);
 	fclose(fp);

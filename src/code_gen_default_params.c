@@ -40,7 +40,7 @@ void generateDefaultParams() {
 	fprintf(fp, "#ifndef _FF_DEFAULTS_H_\n");
 	fprintf(fp, "#define _FF_DEFAULTS_H_\n\n");
 	fprintf(fp, "#include <Fennec.h>\n");
-	fprintf(fp, "#include ff_globals.h\n");
+	fprintf(fp, "#include \"ff_globals.h\"\n");
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
@@ -151,7 +151,7 @@ void generateDefaultParams() {
 							pt->name);
 			} else {
 				/* this is global variable */
-				fprintf(fp, "\t&%s", pv->value->name);
+				fprintf(fp, "\t%s", pv->value->name);
 
 			}
 
