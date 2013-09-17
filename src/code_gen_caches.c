@@ -52,9 +52,10 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "#ifndef __FF_CACHES_H__\n");
 	fprintf(fp, "#define __FF_CACHES_H__\n\n");
 
-	fprintf(fp, "#define NUMBER_OF_CONFIGURATIONS  %d\n", conf_id_counter);
-	fprintf(fp, "#define NUMBER_OF_STATES  %d\n", state_id_counter);
-	fprintf(fp, "#define NUMBER_OF_POLICIES  %d\n", policy_counter);
+	fprintf(fp, "#define NUMBER_OF_CONFIGURATIONS\t\t%d\n", conf_id_counter);
+	fprintf(fp, "#define NUMBER_OF_STATES\t\t%d\n", state_id_counter);
+	fprintf(fp, "#define NUMBER_OF_EVENTS\t\t%d\n", 0);
+	fprintf(fp, "#define NUMBER_OF_POLICIES\t\t%d\n", policy_counter);
 	fprintf(fp, "#include <Fennec.h>\n");
 	fprintf(fp, "#include \"ff_defaults.h\"\n\n");
 
@@ -100,7 +101,7 @@ void generateCaches(int event_counter, int policy_counter) {
 	/* Generate States */
 
 	struct conf_ids *conf_ptr;
-	int confs_per_state = 0;
+	//int confs_per_state = 0;
 
 
 	for( i = 0; i < state_id_counter; i++ ) {

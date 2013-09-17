@@ -37,6 +37,8 @@
 #define TYPE_MAC		5
 #define TYPE_RADIO		6
 #define TYPE_TYPE		8
+#define TYPE_CONFIGURATION	9
+#define TYPE_PROCESS		10
 
 #define TYPE_UINT8_T		20
 #define TYPE_UINT16_T		21
