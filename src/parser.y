@@ -27,7 +27,6 @@
 #include "traverse.h"
 
 char *relopToLetter(int i);
-int editConst(struct symtab *entry);
 int negateOperator(int i);
 void initialize(void);
 void gc(void);
@@ -1322,21 +1321,6 @@ negateOperator(int i) {
 			yyerror("unknown RELOP operator");
 			return -1;
 	}
-}
-
-/* parse constants */
-int
-editConst(struct symtab *entry ) {
-	
-	/* get the constant */
-	char *sp = entry->name;
-
-	/* extract the integer part */
-	int v = atoi(sp);
-
-	/* default */
-	entry->type = strdup("number");
-	return v;
 }
 
 void printTable() {
