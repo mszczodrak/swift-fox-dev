@@ -103,14 +103,6 @@ void generateEventP(int event_counter) {
 	fprintf(fp, "    signal Mgmt.stopDone(SUCCESS);\n");
 	fprintf(fp, "    return SUCCESS;\n");
 	fprintf(fp, "  }\n\n");
-	fprintf(fp, "  void turnEvents(bool flag) {\n");
-	fprintf(fp, "    uint8_t i;\n");
-	fprintf(fp, "    for(i = 0 ; i < %d; i++ ) {\n", event_counter);
-	fprintf(fp, "      if ( call EventCache.eventStatus(i)) {\n");
-	fprintf(fp, "        setEvent(i + 1, flag);\n");
-	fprintf(fp, "      }\n");
-	fprintf(fp, "    }\n");
-	fprintf(fp, "  }\n\n");
 	fprintf(fp, "  void setEvent(uint8_t ev_num, bool flag) {\n\n");
 	fprintf(fp, "    switch(ev_num) {\n\n");
 	fprintf(fp, "      case 0:\n");
