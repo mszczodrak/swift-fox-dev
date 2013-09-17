@@ -35,7 +35,7 @@ void module_params_interface_app(struct modtab *mp) {
 //	fprintf(fp, "\tevent void receive_status(uint16_t status_flag);\n");
 //	fprintf(fp, "\tcommand void send_status(uint16_t status_flag);\n");
 
-	
+
 	if (mp->lib->params == NULL) {
 		/**
 		nesC does not allow empty interfaces, so if there
@@ -58,9 +58,6 @@ void module_params_interface_app(struct modtab *mp) {
 	free(full_path);
 }
 
-void module_params_c(struct modtab *mp) {
-
-}
 
 void module_params_h(struct modtab *mp) {
 	char *full_path = get_sfc_path(mp->lib->full_name, "Params.h");

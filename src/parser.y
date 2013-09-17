@@ -801,6 +801,16 @@ definition: USE type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_types CLOS
 				$4->used = 0;
 				$4->id = 0;
 			}
+
+			if (!strcmp($3->type, "source")) {
+			        char *full_name =  malloc(strlen($4->name)+strlen("App")+1);
+			        sprintf(full_name, "%sApp", $4->name);
+				$4->full_name = full_name;
+				$4->type = TYPE_EVENT;
+				$4->used = 0;
+				$4->id = 0;
+			}
+
 			if (!strcmp($3->type, "network")) {
 				/* network */
 			        char *full_name =  malloc(strlen($4->name)+strlen("Net")+1);

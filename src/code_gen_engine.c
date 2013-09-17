@@ -49,7 +49,7 @@ void generateFennecEngineC() {
   	fprintf(fp, "/* Defined and linked applications */\n\n");
 
   	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+    		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && ((mp->lib->type == TYPE_APPLICATION) || (mp->lib->type == TYPE_EVENT))) {
       			fprintf(fp, "components %sC as %s;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
@@ -60,7 +60,7 @@ void generateFennecEngineC() {
 						mp->lib->full_name, 
 						mp->lib->full_name, 
 						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkAMSend <- %s.NetworkAMSend;\n",
+     			fprintf(fp, "FennecEngineP.%sNetworkAMSend <- %s.NetworkAMSend;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sNetworkReceive <- %s.NetworkReceive;\n",
@@ -81,6 +81,11 @@ void generateFennecEngineC() {
       			fprintf(fp, "FennecEngineP.%sNetworkStatus <- %s.NetworkStatus;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
+			if (mp->lib->type == TYPE_EVENT) {
+				fprintf(fp, "FennecEngineP.%sEvent -> %s.Event;\n",
+							mp->lib->full_name,
+							mp->lib->full_name);
+			}
 			fprintf(fp, "\n");
     		}
   	}
@@ -310,7 +315,7 @@ void generateFennecEngineP() {
   	fprintf(fp, "\n\t/* Application Modules */\n\n");
 
   	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
+    		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && ((mp->lib->type == TYPE_APPLICATION) || (mp->lib->type == TYPE_EVENT))) {
       			fprintf(fp, "/* Application  Module: %s */\n",
 						mp->lib->full_name);
       			fprintf(fp, "uses interface Mgmt as %sControl;\n", 
@@ -331,6 +336,10 @@ void generateFennecEngineP() {
 						mp->lib->full_name);
       			fprintf(fp, "provides interface ModuleStatus as %sNetworkStatus;\n", 
 						mp->lib->full_name);
+			if (mp->lib->type == TYPE_EVENT) {
+				fprintf(fp, "uses interface Event as %sEvent;\n",
+						mp->lib->full_name);
+			}
 			fprintf(fp, "\n");
     		}
   	}
@@ -1099,6 +1108,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\treturn 0;\n");
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
+
 
 
 	fprintf(fp,"void RadioConfig_setAutoAck(uint16_t module_id, uint8_t to_layer, bool enableAutoAck, bool hwAutoAck) {\n");

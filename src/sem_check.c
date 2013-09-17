@@ -148,7 +148,8 @@ checkConfiguration(struct confnode* c) {
 			if (sp->name &&
 				!strcmp(sp->name, c->app->lib->def)) 
 				if (sp->type &&
-					!strcmp(sp->type, "application")) {
+					(!strcmp(sp->type, "application") ||
+					(!strcmp(sp->type, "source")))) {
 					/* found */
 					found = 1;
 					break;
