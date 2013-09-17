@@ -291,25 +291,25 @@ configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines modu
 			
 			if ($6->id == 0) {
 				$6->id = module_id_counter;
-				$6->conf = $$;
+				//$6->conf = $$;
 				++module_id_counter;
 			}
 
 			if ($8->id == 0) {
 				$8->id = module_id_counter;
-				$8->conf = $$;
+				//$8->conf = $$;
 				++module_id_counter;
 			}
 
 			if ($10->id == 0) {
 				$10->id = module_id_counter;
-				$10->conf = $$;
+				//$10->conf = $$;
 				++module_id_counter;
 			}
 
 			if ($12->id == 0) {
 				$12->id = module_id_counter;
-				$12->conf = $$;
+				//$12->conf = $$;
 				++module_id_counter;
 			}
 
@@ -1069,7 +1069,7 @@ proc_module(char *s) {
 			mp->type = sp->type;
 			mp->lib = sp->lib;
 			mp->params = NULL;
-			mp->conf = NULL;
+			//mp->conf = NULL;
 			mp->conf_num = 0;
                         return mp;
                 }

@@ -138,7 +138,7 @@ struct modtab {
         char            	*type;
         struct libtab   	*lib;
 	struct paramvalue	*params;
-        struct confnode 	*conf;
+//        struct confnode 	*conf;
         int             	conf_num;
         int             	confs[NCONFS];
 } modtab[NMODS];

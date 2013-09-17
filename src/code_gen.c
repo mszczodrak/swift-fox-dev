@@ -79,8 +79,7 @@ void setFennecExtra() {
 
 	struct modtab *mp;
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->conf != NULL && 
-							mp->conf->counter > 0) {
+		if (mp->lib != NULL && mp->lib->path) {
 			fprintf(fp_fe, "CFLAGS+=-I%s\n", mp->lib->path);
 		}
 	}
@@ -122,10 +121,8 @@ void finishCodeGeneration(int policy_counter) {
 	generateDefaultParams();
 
 	generateFennecEngineC();
-	generateEventC();
 
 	generateFennecEngineP();
-	generateEventP(event_counter);
 
 	generateParams();
 

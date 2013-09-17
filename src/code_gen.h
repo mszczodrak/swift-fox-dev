@@ -56,10 +56,8 @@ void generateDefaultParams();
 void generateInitial(struct initnode *i);
 
 void generateFennecEngineC();
-void generateEventC();
 
 void generateFennecEngineP();
-void generateEventP();
 
 void generateParams();
 void generateGlobals();

@@ -483,19 +483,6 @@ adds configuration module
 
 void
 addConfModule(struct confnode *c, struct modtab **m, struct paramvalue **p, char *module_name ) {
-        *m = proc_module(module_name);
-        if (m == NULL) {
-                fprintf(stderr, "%s is missing\n", module_name);
-                exit(1);
-        }
-        (*m)->params = NULL;
-        (*m)->lib->used = 1;
-        *p = NULL;
-        if ((*m)->id == 0) {
-                (*m)->id = module_id_counter;
-                (*m)->conf = c;
-                ++module_id_counter;
-        }
 }
 
 /**
