@@ -37,17 +37,15 @@
 
 delim		[ \v\f\r]
 tab		\t+
-fixed_keys	[NODE|BRIDGE|UNKNOWN|BROADCAST]
 whitespace	{delim}+
 letter		[A-Za-z]
 digit		[0-9]
 number		[1-9]{digit}*
 newline		\n.*
 identifier	({letter}|_)({letter}|{digit}|_)*
-module_param	{digit}|,|{whitespace}|{fixed_keys}
+constant	{digit}|{number}
+module_param	{constant}|{identifier}
 modules		{identifier}\({module_param}*\)
-numtype		(C|F|msec|sec|min|hr)
-constant	{digit}|{number}{numtype}?|ON|OFF
 env_const	\$\(({letter}|{digit}|_)*\)
 path		(http:\/\/|\.|\/|{env_const})({letter}|{digit}|\.|\/|_|-|~)*
 comment		#.*
@@ -353,9 +351,6 @@ double		{
 
 
 
-
-virtual-network	{
-			return VIRTUAL_NETWORK;		}
 
 %%
 

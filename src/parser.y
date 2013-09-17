@@ -35,7 +35,6 @@ void checkForRemotePath(struct libtab*);
 
 int event_counter	= 1; 
 int policy_counter	= 0;
-int virtual_counter 	= 0;
 int event_id_counter	= 0;
 FILE *fcode		= NULL;
 
@@ -93,7 +92,7 @@ int yylex(void);
 %token STATE CONFIGURATION COMMA EVENT_CONDITION 
 %token FROM GOTO START USE WHEN 
 %token APPLICATION NETWORK MAC RADIO ADDRESS
-%token SOURCE LF VIRTUAL_NETWORK
+%token SOURCE LF 
 %token LT GT LE GE NE EQ
 %token OPEN_BRACE CLOSE_BRACE OPEN_PARENTHESIS CLOSE_PARENTHESIS ONCE
 %token OPEN_SQUARE_BRACE CLOSE_SQUARE_BRACE
@@ -134,8 +133,6 @@ int yylex(void);
 %type <str>	type
 %type <ival>	when_events
 %type <ival>	one_event
-%type <ival>	virtual_network
-%type <ival>	virtual_networks
 %type <symp>	configuration_ids
 %type <symp> 	conf_level
 %type <ival> 	array_part
@@ -171,7 +168,7 @@ swiftfox: library program
 		}
 	;
 
-program: global_variables defined_configurations defined_states defined_events policies virtual_networks initial_configuration 
+program: global_variables defined_configurations defined_states defined_events policies initial_configuration 
 		{
 			/* root node */
 			$$		= calloc(1, sizeof(struct program));
@@ -191,7 +188,7 @@ program: global_variables defined_configurations defined_states defined_events p
 			$$->defstate	= $3;
 			$$->defeve	= $4;
 			$$->defpol	= $5;
-			$$->init	= $7;
+			$$->init	= $6;
 		}
 	;
 
@@ -783,27 +780,6 @@ initial_configuration: START IDENTIFIER newlines
 	;
 
 
-virtual_networks: virtual_networks virtual_network
-                {
-                        $$              = $1;
-                }
-        |       
-                {
-                        $$ = 0;
-                }    
-        ;
-
-virtual_network: VIRTUAL_NETWORK IDENTIFIER OPEN_BRACE configuration_ids CLOSE_BRACE newlines
-                {
-                        $$              = 0;
-                        $2->type        = "virtual_id";
-                        $2->value       = virtual_counter;
-
-
-			++virtual_counter;
-                }
-        ;
-
 configuration_ids: configuration_ids IDENTIFIER         
                 {
                         $$ = $1;
@@ -1318,7 +1294,7 @@ initialize(void) {
 	char *keywords[] = {"configuration", "start", "use", "application",
 			"network", "source", "event-condition", "from", "goto",
 			"none", "conf", "event", "on", "off", 			
-			"mac", "radio", "virtual-network",   // new keywords
+			"mac", "radio", // new keywords
 			"when", "nothing", "once", "event"};
 	
 	/* size of the keywords set */

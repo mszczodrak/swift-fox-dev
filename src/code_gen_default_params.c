@@ -62,6 +62,7 @@ void generateDefaultParams() {
 
                 for (pv = conftab[i].conf->app_params; pv != NULL; ) {
                         fprintf(fp, "\t%s", pv->value->name);
+			printf("type %s\n", pv->value->type);
 
                         pv = pv->child;
                         if (pv == NULL)

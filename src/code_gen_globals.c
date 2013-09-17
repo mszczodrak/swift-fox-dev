@@ -37,7 +37,6 @@ void startGlobalVariables() {
 }
 
 
-
 void endGlobalVariables() {
 	char *full_path = get_sfc_path("", "ff_globals.h");
 	FILE *fp = fopen(full_path, "a");

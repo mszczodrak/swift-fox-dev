@@ -195,14 +195,6 @@ struct statenode {
 	struct statenodes	*parent;
 	struct symtab		*id;
 	struct conf_ids		*confs;
-//	struct modtab		*app;
-//	struct modtab		*net;
-//	struct modtab		*mac;
-//	struct modtab		*radio;
-//	struct paramvalue	*app_params;
-//	struct paramvalue	*net_params;
-//	struct paramvalue	*mac_params;
-//	struct paramvalue	*radio_params;
 	int			counter;
 	int 			level;
 	int 			confs_counter;
