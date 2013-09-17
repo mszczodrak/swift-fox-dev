@@ -333,7 +333,6 @@ configuration: CONFIGURATION IDENTIFIER conf_level OPEN_BRACE newlines module ne
 			$$->mac_params		= $10->params;
 			if ($10) $$->mac->lib->used = 1;
 
-
 			$$->radio		= $12;
 			$$->radio_params	= $12->params;
 			if ($12) $$->radio->lib->used = 1;

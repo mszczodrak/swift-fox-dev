@@ -1743,8 +1743,8 @@ void generateFennecEngineP() {
 
 			if (mp->lib->type == TYPE_EVENT) {
 				fprintf(fp, "\t/* Event Interface */\n\n");	
-				fprintf(fp, "event void %sEvent.occured(bool oc) {\n", mp->lib->full_name);
-				fprintf(fp, "\t//module_stopDone(%d, err);\n", mp->id);
+				fprintf(fp, "event void %sEvent.occured(uint16_t oc) {\n", mp->lib->full_name);
+				fprintf(fp, "\tevent_occured(%d, oc);\n", mp->id);
 				fprintf(fp, "}\n\n");
 			}
 
