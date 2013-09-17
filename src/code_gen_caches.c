@@ -172,7 +172,7 @@ void generateCaches(int event_counter, int policy_counter) {
 		fprintf(fp, "\t\t.value = %d,\n", evtab[i].value);
 
 		if (evtab[i].addr == UNKNOWN) {
-			fprintf(fp, "\t\t.addr = TOS_NODE_ID,\n");
+			fprintf(fp, "\t\t.addr = TOS_NODE_ID\n");
 		} else {
 			fprintf(fp, "\t\t.addr = %d\n", evtab[i].addr);
 		}
