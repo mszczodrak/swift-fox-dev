@@ -23,6 +23,8 @@
 /* Generate Events */
 void generateEventC() {
 
+	return;
+
         char *full_path = get_sfc_path("", "EventsC.nc");
         FILE *fp = fopen(full_path, "w");
 
@@ -60,6 +62,8 @@ void generateEventC() {
 }
 
 void generateEventP(int event_counter) {
+
+	return;
 
         char *full_path = get_sfc_path("", "EventsP.nc");
         FILE *fp = fopen(full_path, "w");
