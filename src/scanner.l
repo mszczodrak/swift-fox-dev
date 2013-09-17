@@ -44,8 +44,6 @@ number		[1-9]{digit}*
 newline		\n.*
 identifier	({letter}|_)({letter}|{digit}|_)*
 constant	{digit}|{number}
-module_param	{constant}|{identifier}
-modules		{identifier}\({module_param}*\)
 env_const	\$\(({letter}|{digit}|_)*\)
 path		(http:\/\/|\.|\/|{env_const})({letter}|{digit}|\.|\/|_|-|~)*
 comment		#.*
@@ -135,12 +133,6 @@ start		{
                         tokenpos += yyleng;
 #endif
                         return AT;                   }
-
-shared           {
-#ifndef __DEBUG__
-                        tokenpos += yyleng;
-#endif
-                        return SHARED;                   }
 
 level           {
 #ifndef __DEBUG__
