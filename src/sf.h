@@ -129,7 +129,6 @@ struct evtab {
 	int			op;	
 	int			value;
 	int			addr;
-	struct symtab 		*scale;
 } evtab[NEVS];
 
 struct evtab *evlook(char *);

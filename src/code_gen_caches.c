@@ -270,12 +270,6 @@ void generateCaches(int event_counter, int policy_counter) {
 		fprintf(fp, "\t\t.operation = %s,\n", relopToLetter(evtab[i].op));
 		fprintf(fp, "\t\t.value = %d,\n", evtab[i].value);
 
-		if (evtab[i].scale == NULL) {
-			fprintf(fp, "\t\t.scale = TYPE_NODE,\n");
-		} else {
-			fprintf(fp, "\t\t.scale = %s,\n", evtab[i].scale->name);
-		}
-
 		if (evtab[i].addr == UNKNOWN) {
 			fprintf(fp, "\t\t.addr = TOS_NODE_ID,\n");
 		} else {

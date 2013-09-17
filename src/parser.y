@@ -566,7 +566,7 @@ defined_events: defined_events event_condition
 		}	
 	;
 
-event_condition: EVENT_CONDITION IDENTIFIER OPEN_BRACE IDENTIFIER RELOP CONSTANT IDENTIFIER event_location CLOSE_BRACE newlines
+event_condition: EVENT_CONDITION IDENTIFIER OPEN_BRACE IDENTIFIER RELOP CONSTANT event_location CLOSE_BRACE newlines
 		{
 			/* event-condition node */
 			$2->value	= event_counter;
@@ -586,10 +586,9 @@ event_condition: EVENT_CONDITION IDENTIFIER OPEN_BRACE IDENTIFIER RELOP CONSTANT
                         ev->num 	= event_counter;
                         ev->op		= $5;
                         ev->value 	= $$->cst;
-			ev->scale	= $7;
 
                         /* event location */
-                        ev->addr        = $8;
+                        ev->addr        = $7;
 
 			event_counter++;
 		}
