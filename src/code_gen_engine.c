@@ -1731,13 +1731,24 @@ void generateFennecEngineP() {
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && ((mp->lib->type == TYPE_APPLICATION) || (mp->lib->type == TYPE_EVENT))) {
 			fprintf(fp, "\n/* Linking Application %s */\n", mp->lib->full_name);
+
+			fprintf(fp, "\t/* Module Control Interface */\n\n");	
+
 			fprintf(fp, "event void %sControl.startDone(error_t err){\n", mp->lib->full_name);
 			fprintf(fp, "\tmodule_startDone(%d, err);\n", mp->id);
 			fprintf(fp, "}\n\n");
 			fprintf(fp, "event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
 			fprintf(fp, "\tmodule_stopDone(%d, err);\n", mp->id);
 			fprintf(fp, "}\n\n");
-			fprintf(fp, "\t/* Parameter Interfaces */\n\n");	
+
+			if (mp->lib->type == TYPE_EVENT) {
+				fprintf(fp, "\t/* Event Interface */\n\n");	
+				fprintf(fp, "event void %sEvent.occured(bool oc) {\n", mp->lib->full_name);
+				fprintf(fp, "\t//module_stopDone(%d, err);\n", mp->id);
+				fprintf(fp, "}\n\n");
+			}
+
+			fprintf(fp, "\t/* Parameter Interface */\n\n");	
 
 			/* check if the interface is empty, if it is add dummy call */
 			if (mp->lib->params == NULL) {
