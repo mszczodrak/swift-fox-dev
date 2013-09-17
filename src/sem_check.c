@@ -433,7 +433,7 @@ checkPolicy(struct policy *p) {
 	int found		= 0;
 	
 	/** 
-	check the from configuration 
+	check the __from__ state 
 	*/
 	if (strcmp(p->from->name, "any")) {	
 		/* loop */
@@ -442,7 +442,7 @@ checkPolicy(struct policy *p) {
 			if (sp->name &&
 				!strcmp(sp->name, p->from->name))
 				if (sp->type &&
-					!strcmp(sp->type, "configuration_id")) {
+					!strcmp(sp->type, "state_id")) {
 					/* found */
 					found = 1;
 					break;
@@ -459,13 +459,13 @@ checkPolicy(struct policy *p) {
 		if (sp->name &&
 			!strcmp(sp->name, p->to->name))
 			if (sp->type &&
-				!strcmp(sp->type, "configuration_id")) {
+				!strcmp(sp->type, "state_id")) {
 				/* found */
 				found = 1;
 				break;
 			}
 
-	/* check the to configuration */
+	/* check the __to__ state */
 	if (!found)
 		goto to_conf_err;
 	
@@ -473,15 +473,15 @@ checkPolicy(struct policy *p) {
 	return;
 
 from_conf_err:
-	/* undeclared from configuration */
-	(void)fprintf(stderr, "error: undeclared 'from' configuration %s\n",
+	/* undeclared __from__  state */
+	(void)fprintf(stderr, "error: undeclared 'from' state %s\n",
 			p->from->name);
 	/* terminate */
 	exit(1);
 
 to_conf_err:
-	/* undeclared to configuration */
-	(void)fprintf(stderr, "error: undeclared 'to' configuration %s\n",
+	/* undeclared __to__ state */
+	(void)fprintf(stderr, "error: undeclared 'to' state %s\n",
 			p->to->name);
 	/* terminate */
 	exit(1);
