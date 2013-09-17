@@ -246,6 +246,8 @@ struct variables {
 	struct variable		*var;
 };
 
+
+
 struct policy {
 	/** pointer to parent policy */
 	struct policies		*parent;
@@ -255,6 +257,8 @@ struct policy {
 	struct symtab		*to;
 	/** an event mast that must take place to trigger reconfiguration */
 	int 			mask_r;
+	/** points to configurations that process events */
+	struct conf_ids		*event_confs;
 	/** policy counter, and this policy number */
 	int 			counter;
 };

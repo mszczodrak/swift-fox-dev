@@ -115,8 +115,6 @@ int yylex(void);
 %type <confsp>	configurations
 %type <confid>	conf_id
 %type <confids> conf_ids
-%type <eventid>	event_id
-%type <eventids> event_ids
 %type <confsp>	defined_configurations
 %type <statep>	state
 %type <statesp>	states
@@ -579,7 +577,7 @@ policies: policies policy
 		}		
 	;
 
-policy: FROM from_states GOTO IDENTIFIER WHEN event_ids newlines
+policy: FROM from_states GOTO IDENTIFIER WHEN conf_ids newlines
 		{
 			/* policy node */
 			$$ 		= calloc(1, sizeof(struct policy));
@@ -590,6 +588,7 @@ policy: FROM from_states GOTO IDENTIFIER WHEN event_ids newlines
 
 			//$$->mask_r	= $6;
 			$$->mask_r	= 0;
+			$$->event_confs	= $6; 
 			$$->counter	= policy_counter;
 
 			if (proc_policy($$)) {
@@ -609,46 +608,6 @@ from_states: IDENTIFIER
 			$$ = $1;
 		}
 	;
-
-
-
-event_ids: event_ids newlines event_id
-		{
-			/* states set */
-			$$		= calloc(1, sizeof(struct event_ids));
-			
-			/* link the child nodes */
-			if ($1 != NULL) { 
-				$1->parent = $$;
-				//$$->count = $1->count + 1;
-			} else {
-				//$$->count = 1;
-			}
-			$3->parent	= $$;
-
-			$$->events	= $1;
-			$$->event	= $3;
-
-		}
-	| 	
-		{ 
-			$$ = NULL; 
-		}			
-	;
-
-
-
-event_id: IDENTIFIER
-		{
-
-			$$		= calloc(1, sizeof(struct event_id));
-
-			$$->event_id	= 12; //$1;
-			$$->conf	= conflook($1);	
-
-		}
-	;
-
 
 
 

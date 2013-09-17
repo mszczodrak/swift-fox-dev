@@ -323,6 +323,7 @@ traverse_policy(struct policy* p, int f) {
 
        		case TREE_CHECK_SEMANTIC:
 			checkPolicy(p);
+			updateStatesWithEvents(p);
 			break;
         
        		case TREE_GENERATE_CODE:
