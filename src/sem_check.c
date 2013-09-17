@@ -55,8 +55,9 @@ init_sem_evt(void) {
 void
 checkState(struct statenode *s) {
 	int i;
-	struct statenode *state;
-	struct statetab		*stateptr;
+//	struct statenode *state;
+//	struct statetab		*stateptr;
+	struct conf_ids *conf_ptr;
 
 	/*
 	check for redclarations
@@ -70,11 +71,14 @@ checkState(struct statenode *s) {
 	}
 
 
-	/*
-	count how many configurations this state has 
-	*/
-
-	
+	/* check if every configuration is defined */
+	for (i = 0; i < state_id_counter; i++) {
+		for (conf_ptr = statetab[i].state->confs; conf_ptr != NULL; conf_ptr = conf_ptr->confs) {
+			if (strcmp(conf_ptr->conf->id->type, "configuration_id")) {
+				goto undef_conf;
+			}
+		}
+	}
 
 
 	/* OK, no problems found */
@@ -90,6 +94,12 @@ state_err:
 
 
 
+undef_conf:
+	/* undefined configuration */
+	(void)fprintf(stderr, "error: undefined configuration %s in state %s\n",
+			conf_ptr->conf->id->name, statetab[i].state->id->name);
+	/* terminate */
+	exit(1);
 }
 
 
