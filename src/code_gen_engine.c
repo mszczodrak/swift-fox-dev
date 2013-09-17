@@ -1722,8 +1722,21 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
 
-	struct paramtype *pt;
+/*
+	fprintf(fp,"error_t setEvent(uint16_t module_id, uint16_t flag) {\n");
+	fprintf(fp,"\tswitch( module_id ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_EVENT) {
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn flag ? %sEvent.start(NULL) : call %sEvent.stop();\n", mp->lib->full_name, mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
+*/
 
+
+	struct paramtype *pt;
 
 	/* Interfaces with Applications */
 
