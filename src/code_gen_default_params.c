@@ -60,6 +60,7 @@ void generateDefaultParams() {
         	        conftab[i].conf->app->lib->full_name, conftab[i].conf->id->name,
                 	conftab[i].conf->app->lib->full_name);
 
+
                 for (pv = conftab[i].conf->app_params; pv != NULL; ) {
                        	fprintf(fp, "\t%f", pv->num_value);
 
@@ -139,8 +140,19 @@ void generateDefaultParams() {
         	        conftab[i].conf->app->lib->full_name, conftab[i].conf->id->name,
                 	conftab[i].conf->app->lib->full_name);
 
-                for (pt = conftab[i].conf->app->lib->params; pt != NULL; ) {
-                        fprintf(fp, "\t&%s_%s.%s", conftab[i].conf->id->name, conftab[i].conf->app->lib->full_name, pt->name);
+                for (pv = conftab[i].conf->app_params, pt = conftab[i].conf->app->lib->params;
+			pv != NULL && pt != NULL; pv = pv->child) {
+                //for (pt = conftab[i].conf->app->lib->params; pt != NULL; ) {
+			if (pv->value == NULL) {
+				/* this is fixed number so point to module's struct params */
+                        	fprintf(fp, "\t&%s_%s.%s", conftab[i].conf->id->name,
+							conftab[i].conf->app->lib->full_name, 
+							pt->name);
+			} else {
+				/* this is global variable */
+				fprintf(fp, "\t&%s", pv->value->name);
+
+			}
 
                         pt = pt->child;
                         if (pt == NULL)
