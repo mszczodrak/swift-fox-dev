@@ -28,8 +28,6 @@ void traverse_confnodes(struct confnodes* c, int f);
 void traverse_confnode(struct confnode* c, int f);
 void traverse_statenodes(struct statenodes* s, int f);
 void traverse_statenode(struct statenode* s, int f);
-void traverse_eventnodes(struct eventnodes* e, int f);
-void traverse_eventnode(struct eventnode* e, int f);
 void traverse_policies(struct policies* p, int f);
 void traverse_policy(struct policy* p, int f);
 void traverse_initnode(struct initnode* i, int f);

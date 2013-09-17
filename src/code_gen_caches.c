@@ -159,10 +159,7 @@ void generateCaches(int event_counter, int policy_counter) {
 	}
 	fprintf(fp, "};\n\n");
 
-
-
-
-
+/*
 	fprintf(fp, "struct fennec_event eventsTable[%d] = {\n", event_counter);
 
 	for ( i = 0; i < event_counter; ) {
@@ -184,6 +181,8 @@ void generateCaches(int event_counter, int policy_counter) {
 	}
 
 	fprintf(fp, "};\n\n");
+*/
+
 
         fprintf(fp, "struct fennec_policy policies[%d] = {\n", policy_counter);
 	for(i = 0; i < policy_counter; ) {
@@ -204,6 +203,9 @@ void generateCaches(int event_counter, int policy_counter) {
 	}
 
 	fprintf(fp, "};\n\n");
+
+
+	printf("pass\n");
 
 	fprintf(fp, "bool control_unit_support;\n\n");
 	fprintf(fp, "nxle_uint16_t event_mask;\n\n");

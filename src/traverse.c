@@ -42,7 +42,6 @@ traverse_program(struct program* p, int f, int policy_counter){
 			case TREE_TRAVERSE:
 				traverse_confnodes(p->defcon, f);
 				traverse_statenodes(p->defstate, f);
-				traverse_eventnodes(p->defeve, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
 				break;
@@ -61,7 +60,6 @@ traverse_program(struct program* p, int f, int policy_counter){
 				
 				traverse_confnodes(p->defcon, f);
 				traverse_statenodes(p->defstate, f);
-				traverse_eventnodes(p->defeve, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
 				break;
@@ -77,7 +75,6 @@ traverse_program(struct program* p, int f, int policy_counter){
 				endGlobalVariables();
 				traverse_confnodes(p->defcon, f);
 				traverse_statenodes(p->defstate, f);
-				traverse_eventnodes(p->defeve, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
 				finishCodeGeneration(policy_counter);
@@ -278,65 +275,6 @@ traverse_statenode(struct statenode* s, int f) {
 	}
 }
 
-
-
-/** 
-event-condition traversal
-
-\param e pointer to header of a list of events
-
-\param f type of traversar (TREE_TRAVERSE, TREE_CHECK_SEMANTIC, TREE_GENERATE_CODE)
-*/
-void
-traverse_eventnodes(struct eventnodes* e, int f) {
-	if (e != NULL){
-		switch (f) {
-			case TREE_TRAVERSE:
-				traverse_eventnodes(e->evens, f);
-				traverse_eventnode(e->even, f);
-                                break;
-
-			case TREE_CHECK_SEMANTIC:
-				traverse_eventnodes(e->evens, f);
-				traverse_eventnode(e->even, f);
-                                break;
-        
-			case TREE_GENERATE_CODE:
-				traverse_eventnodes(e->evens, f);
-				traverse_eventnode(e->even, f);
-                                break;
-
-			default:
-				break;
-		}
-	}
-}
-  
-/** 
-visit single event
-
-\param e pointer to an event structure
-
-\param f type of traversar (TREE_TRAVERSE, TREE_CHECK_SEMANTIC, TREE_GENERATE_CODE)
-*/
-void
-traverse_eventnode(struct eventnode* e, int f) {
-	switch (f) {
-        	case TREE_TRAVERSE:
-			break;
-
-		case TREE_CHECK_SEMANTIC:
-			checkEventCondition(e);
-			break;
-        
-		case TREE_GENERATE_CODE:
-			e->src->lib->used = 1;
-			break;
-
-       		default:
-			break;
-	}
-}
 
 
 /** 

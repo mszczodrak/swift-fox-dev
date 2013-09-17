@@ -187,8 +187,18 @@ struct conf_ids {
 	int 			count;
 };
 
+struct event_id {
+	struct event_ids	*parent;
+	struct confnode		*conf;
+	int			event_id;
+};
 
-
+struct event_ids {
+	struct event_ids	*parent;
+	struct event_ids	*events;
+	struct event_id		*event;
+	int 			count;
+};
 
 struct statenode {
 	struct statenodes	*parent;
@@ -210,32 +220,6 @@ struct statenodes {
 	struct statenode	*state;
 };
 
-
-
-
-struct eventnode {
-	/** pointer to the parent event node */
-	struct eventnodes	*parent;
-	/** pointer to a symtab storing event's id */
-	struct symtab		*id;
-	/** pointer to a symtab with name of the event's source */
-	struct symtab		*src;
-	/** relation operator for the event */
-	int 			op;
-	/** event's counter */
-	int 			counter;
-	/** pointer to a symtab with ... */
-	double			cst;
-};
-
-struct eventnodes {
-	/** pointer to parent event nodes */
-	struct eventnodes	*parent;
-	/** pointer to further events */
-        struct eventnodes	*evens;
-	/** pointer to a particular event structure */
-        struct eventnode	*even;
-};
 
 struct variable {
 	/** pointer to the structure with parent variables */
@@ -291,7 +275,6 @@ struct program {
 	struct variables	*vars;
 	struct confnodes	*defcon;
 	struct statenodes	*defstate;
-	struct eventnodes	*defeve;
 	struct policies		*defpol;
 	struct initnode		*init;
 };

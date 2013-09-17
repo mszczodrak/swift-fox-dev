@@ -52,7 +52,6 @@ char *conf_state_radio = "cc2420";
 
 int conf_id_counter	= 0;
 
-struct eventnodes *last_evens = NULL;
 int file_status;
 char *file_name;
 char *error_location;
@@ -73,10 +72,10 @@ int yylex(void);
 	struct confnodes	*confsp;
 	struct conf_id		*confid;
 	struct conf_ids		*confids;
+	struct event_id		*eventid;
+	struct event_ids	*eventids;
 	struct statenode	*statep;
 	struct statenodes	*statesp;
-	struct eventnode	*evep;
-	struct eventnodes	*evesp;
 	struct policy		*pol;
 	struct policies		*pols;
 	struct initnode		*initp;
@@ -112,16 +111,17 @@ int yylex(void);
 %token <symp>	ANY
 %token <modp>	MODULES
 %type <modp>	module
-%type <symp>	from_configurations
+%type <symp>	from_states
 %type <confp>	configuration
 %type <confsp>	configurations
 %type <confid>	conf_id
 %type <confids> conf_ids
+%type <eventid>	event_id
+%type <eventids> event_ids
 %type <confsp>	defined_configurations
 %type <statep>	state
 %type <statesp>	states
 %type <statesp>	defined_states
-%type <evesp>	defined_events
 %type <vars>	global_variables
 %type <var>	global_variable
 %type <pol>	policy;
@@ -129,8 +129,6 @@ int yylex(void);
 %type <initp>	initial_configuration
 %type <prog>	program
 %type <str>	type
-%type <ival>	when_events
-%type <ival>	one_event
 %type <ival> 	conf_level
 %type <ival> 	array_part
 %type <dval> 	assign_value
@@ -165,7 +163,7 @@ swiftfox: library program
 		}
 	;
 
-program: global_variables defined_configurations defined_states defined_events policies initial_configuration 
+program: global_variables defined_configurations defined_states policies initial_configuration 
 		{
 			/* root node */
 			$$		= calloc(1, sizeof(struct program));
@@ -176,16 +174,13 @@ program: global_variables defined_configurations defined_states defined_events p
 				$3->parent = NULL;
 			if ($4 != NULL ) 
 				$4->parent = NULL;
-			if ($5 != NULL ) 
-				$5->parent = NULL;
 			
 			/* init */
 			$$->vars	= $1;
 			$$->defcon	= $2;
 			$$->defstate	= $3;
-			$$->defeve	= $4;
-			$$->defpol	= $5;
-			$$->init	= $6;
+			$$->defpol	= $4;
+			$$->init	= $5;
 		}
 	;
 
@@ -553,13 +548,10 @@ conf_id: IDENTIFIER
 			$$->conf	= conflook($1);	
 
 		}
-
-
-defined_events: 
-		{ 
-			$$ = NULL; 
-		}	
 	;
+
+
+
 
 
 policies: policies policy 
@@ -581,7 +573,7 @@ policies: policies policy
 		}		
 	;
 
-policy: FROM from_configurations GOTO IDENTIFIER WHEN when_events newlines
+policy: FROM from_states GOTO IDENTIFIER WHEN event_ids newlines
 		{
 			/* policy node */
 			$$ 		= calloc(1, sizeof(struct policy));
@@ -590,7 +582,8 @@ policy: FROM from_configurations GOTO IDENTIFIER WHEN when_events newlines
 			$$->from	= $2;
 			$$->to		= $4;
 
-			$$->mask_r	= $6;
+			//$$->mask_r	= $6;
+			$$->mask_r	= 0;
 			$$->counter	= policy_counter;
 
 			if (proc_policy($$)) {
@@ -600,7 +593,7 @@ policy: FROM from_configurations GOTO IDENTIFIER WHEN when_events newlines
 			++policy_counter;
 		}
 
-from_configurations: IDENTIFIER 	
+from_states: IDENTIFIER 	
 		{
 			$$ = $1;
 		}
@@ -611,85 +604,46 @@ from_configurations: IDENTIFIER
 		}
 	;
 
-when_events: one_event AND when_events 
+
+
+event_ids: event_ids newlines event_id
 		{
-			$$ = $1 + $3;	
-		}
-	| 	one_event
-		{
-			$$ = $1;
-		}
-	;
-
-
-one_event: IDENTIFIER
-		{
-			/* iterator */
-			struct evtab *ep = NULL;
-			/* flag */
-			int found = 0;
+			/* states set */
+			$$		= calloc(1, sizeof(struct event_ids));
 			
-			/* check for undeclared identifiers */
-			for (ep = evtab; ep < &evtab[NEVS]; ep++)
-				if (ep->name && !strcmp(ep->name, $1->name)) {
-                                        	/* found */
-                                        	found = 1;
-                                        	break;
-                                }
-			
-			/* undeclared event identifier */
-			if (!found)
-				yyerror("undeclared event-condition identifier");
-
-			$$ = 1 << (($1->value) - 1);
-		}
-	| NOT IDENTIFIER
-		{
-			/* iterator */
-			struct evtab *ep = NULL;
-			/* flag */
-			int found = 0;
-			
-			/* check for undeclared identifiers */
-			for (ep = evtab; ep < &evtab[NEVS]; ep++)
-				if (ep->name && !strcmp(ep->name, $2->name)) {
-                                        	/* found */
-                                        	found = 1;
-                                        	break;
-                                }
-			
-			/* undeclared event identifier */
-			if (!found)
-				yyerror("undeclared identifier");
-
-			/* create new event in symtab */
-			int len = strlen($2->name) + strlen("not_") + 1;
-			char *new = calloc(len, 1);
-			(void)snprintf(new, len, "not_%s", $2->name);
-			struct symtab *sp = symlook(new);
-
-			if (!sp->type) {
-				sp->value = event_counter;
-				sp->type = strdup($2->type);
-				sp->lib = $2->lib;
-
-				/* 
-				 * make a new event entry by negating the 
-				 * operator 
-				 */
-        	                struct evtab *ev_old = evlook($2->name);
-                	        struct evtab *ev_new = evlook(sp->name);
-
-                        	ev_new->num = event_counter;
-	                        ev_new->op = negateOperator(ev_old->op);
-        	                ev_new->value = ev_old->value;
-				
-                	        event_counter++;
+			/* link the child nodes */
+			if ($1 != NULL) { 
+				$1->parent = $$;
+				//$$->count = $1->count + 1;
+			} else {
+				//$$->count = 1;
 			}
+			$3->parent	= $$;
 
-			$$ = 1 << ((sp->value) - 1);
+			$$->events	= $1;
+			$$->event	= $3;
+
+		}
+	| 	
+		{ 
+			$$ = NULL; 
+		}			
+	;
+
+
+
+event_id: IDENTIFIER
+		{
+
+			$$		= calloc(1, sizeof(struct event_id));
+
+			$$->event_id	= 12; //$1;
+			$$->conf	= conflook($1);	
+
 		}
 	;
+
+
 
 
 initial_configuration: START IDENTIFIER newlines
