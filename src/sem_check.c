@@ -74,8 +74,7 @@ checkState(struct statenode *s) {
 	/* check if every configuration is defined */
 	for (i = 0; i < state_id_counter; i++) {
 		for (conf_ptr = statetab[i].state->confs; conf_ptr != NULL; conf_ptr = conf_ptr->confs) {
-			if ((conf_ptr->conf->id->type == TYPE_PROCESS_REGULAR) &&
-				(conf_ptr->conf->id->type = TYPE_PROCESS_EVENT) ) {
+			if (conf_ptr->conf->id->type == TYPE_UNKNOWN) {
 				goto undef_conf;
 			}
 		}

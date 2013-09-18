@@ -248,7 +248,6 @@ defined_configurations: configurations configuration
 			
 			$$->confs	= $1;
 			$$->conf	= $2;
-			printf("done\n");
 		}	
 	;
 
@@ -374,6 +373,10 @@ configuration_type: CONFIGURATION
 	| EVENT
 		{
 			$$ = TYPE_PROCESS_EVENT;
+		}
+	|
+		{
+			$$ = TYPE_UNKNOWN;
 		}
 	;
 
@@ -562,13 +565,10 @@ conf_ids: conf_ids newlines conf_id
 
 conf_id: IDENTIFIER
 		{
-
 			$$		= calloc(1, sizeof(struct conf_id));
 
 			$$->id		= $1;
 			$$->conf	= conflook($1);	
-			printf("Conf type %d\n", $$->conf->id->type);
-
 		}
 	;
 
