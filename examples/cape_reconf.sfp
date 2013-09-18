@@ -12,7 +12,7 @@ configuration count {
 }
 
 configuration blinking {
-			blinkhh(2, 1024)
+			blink(2, 1024)
 			nullNet()
 			nullMac()
 			nullRadio()
@@ -26,13 +26,13 @@ configuration controller {
 }
 
 
-event timerMonitor { 	timerEvent()
+event timerMonitor { 	timerMilliE()
 			nullNet()
 			nullMac()
 			nullRadio()
 }
 
-event timerMonitor2 { 	timerEvent()
+event timerMonitor2 { 	timerMilliE()
 			nullNet()
 			nullMac()
 			nullRadio()

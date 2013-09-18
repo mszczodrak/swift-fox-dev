@@ -277,12 +277,9 @@ configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines modu
 			/* configuration node */
 			$$		= calloc(1, sizeof(struct confnode));
 
-			printf("do conf\n");
-
 			/* init */
 			$2->type	= $1;
 			$$->id		= $2;
-			printf("do conf - 2\n");
 	
 			/* level */
 			$$->level	= $3;
@@ -313,27 +310,44 @@ configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines modu
 				++module_id_counter;
 			}
 
-			/* link child nodes */
+			/* link application module */
+			if (($6 == NULL) || (($6->type != TYPE_APPLICATION && $6->type != TYPE_EVENT))) {
+				fprintf(stderr, "Undefined application module in %s\n", $2->name);
+				yyerror("expecting application module");
+			}
 			$$->app			= $6;
 			$$->app_params		= $6->params;
-			if ($6) $$->app->lib->used = 1;
+			$$->app->lib->used 	= 1;
 
+
+			/* link network module */
+			if (($8 == NULL) || ($8->type != TYPE_NETWORK)) {
+				fprintf(stderr, "Undefined network module in %s\n", $2->name);
+				yyerror("expecting network module");
+			}
 			$$->net			= $8;
 			$$->net_params		= $8->params;
-			if ($8) $$->net->lib->used = 1;
+			$$->net->lib->used 	= 1;
 
 
+			/* link mac module */
+			if (($10 == NULL) || ($10->type != TYPE_MAC)) {
+				fprintf(stderr, "Undefined mac module in %s\n", $2->name);
+				yyerror("expecting mac module");
+			}
 			$$->mac			= $10;
 			$$->mac_params		= $10->params;
-			if ($10) $$->mac->lib->used = 1;
+			$$->mac->lib->used 	= 1;
 
+
+			/* link radio module */
+			if (($12 == NULL) || ($12->type != TYPE_RADIO)) {
+				fprintf(stderr, "Undefined radio module in %s\n", $2->name);
+				yyerror("expecting radio module");
+			}
 			$$->radio		= $12;
 			$$->radio_params	= $12->params;
-			if ($12) $$->radio->lib->used = 1;
-
-			if (!strcmp($2->name, conf_state_name)) {
-				conf_state_redefined = 1;
-			}
+			$$->radio->lib->used 	= 1;
 
 			$2->value	= conf_id_counter;
 
@@ -553,6 +567,7 @@ conf_id: IDENTIFIER
 
 			$$->id		= $1;
 			$$->conf	= conflook($1);	
+			printf("Conf type %d\n", $$->conf->id->type);
 
 		}
 	;
