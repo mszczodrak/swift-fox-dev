@@ -101,22 +101,6 @@ code can be generated.
 \param policy_counter number of policies found in Swift Fox program.
 */
 void finishCodeGeneration(int policy_counter) {
-	struct symtab *sp;
-
-	for(sp = symtab; sp < &symtab[NSYMS]; sp++) {
-/*
-		if (sp->name && sp->type != NULL) {
-			if (!strcmp(sp->type == TYPE_PROCESS_EVENT)) {
-				event_counter++;
-			}
-			if (sp->type == TYPE_PROCESS_REGULAR) {
-				conf_id_counter++;
-			}
-		}
-*/
-	}
-
-
 	generateCaches(0, policy_counter);
 	generateDefaultParams();
 
