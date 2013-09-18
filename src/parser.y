@@ -33,12 +33,12 @@ void gc(void);
 void checkForRemotePath(struct libtab*);
 
 int policy_counter	= 0;
-int event_id_counter	= 1;
 FILE *fcode		= NULL;
 
 int state_id_counter	= 0;
-
-int module_id_counter = 1;
+int module_id_counter 	= 1;
+int event_id_counter	= 1;
+int conf_id_counter	= 0;
 
 int active_state;
 char *conf_state_name = "control";
@@ -49,7 +49,6 @@ char *conf_state_net = "cuNet";
 char *conf_state_mac = "cuMac";
 char *conf_state_radio = "cc2420";
 
-int conf_id_counter	= 0;
 
 int file_status;
 char *file_name;

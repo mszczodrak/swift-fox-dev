@@ -74,6 +74,12 @@ extern char *conf_state_net;
 extern char *conf_state_mac;
 extern char *conf_state_radio;
 
+extern int state_id_counter;    
+extern int module_id_counter;
+extern int event_id_counter;
+extern int conf_id_counter;
+
+
 int start_parser(int argc, char *argv[]);
 
 int lineno;

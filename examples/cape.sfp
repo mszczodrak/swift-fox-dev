@@ -11,6 +11,12 @@ configuration count {
 #			nullRadio() 
 }
 
+event tiMo { timerMilliE()
+		nullNet()
+		nullMac()
+		nullRadio()
+}
+
 state simple { count }
 
 state notsimple { count count }
