@@ -202,19 +202,6 @@ struct conf_ids {
 	int 			count;
 };
 
-struct event_id {
-	struct event_ids	*parent;
-	struct confnode		*conf;
-	int			event_id;
-};
-
-struct event_ids {
-	struct event_ids	*parent;
-	struct event_ids	*events;
-	struct event_id		*event;
-	int 			count;
-};
-
 struct statenode {
 	struct statenodes	*parent;
 	struct symtab		*id;

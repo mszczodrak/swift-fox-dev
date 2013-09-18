@@ -753,7 +753,6 @@ module_type: APPLICATION 	{ $$ = TYPE_APPLICATION; }
 
 module_types: param_type IDENTIFIER default_value next_module_type
 		{
-
 			struct symtab *sp = symlook($2->name);
 			if (sp == NULL)
                                 yyerror("symtab pointer not found");

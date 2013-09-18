@@ -449,6 +449,8 @@ updateStatesWithEvents(struct policy *p) {
 				}
 				cids->confs = p->event_confs;
 			}
+			statetab[i].state->confs_counter = statetab[i].state->confs_counter + 
+						p->event_confs->count;
 		}
 	}	
 }
