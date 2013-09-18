@@ -43,7 +43,8 @@ digit		[0-9]
 number		[1-9]{digit}*
 newline		\n.*
 identifier	({letter}|_)({letter}|{digit}|_)*
-constant	{digit}|{number}
+hex		0x([A-Fa-f]|{digit})+
+constant	{digit}|{number}|{hex}
 env_const	\$\(({letter}|{digit}|_)*\)
 path		(http:\/\/|\.|\/|{env_const})({letter}|{digit}|\.|\/|_|-|~)*
 comment		#.*
