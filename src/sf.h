@@ -47,6 +47,7 @@
 #define TYPE_PROCESS_EVENT	12
 #define TYPE_STATE		13
 #define TYPE_KEYWORD		14
+#define TYPE_VARIABLE_GLOBAL	15
 
 #define TYPE_UINT8_T		20
 #define TYPE_UINT16_T		21

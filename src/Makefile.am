@@ -1,7 +1,7 @@
 BUILT_SOURCES = parser.h
 AM_YFLAGS = -d
 
-AM_CFLAGS= -g -O3 -Wall
+AM_CFLAGS= -g -O3 -Wall -Wunused-but-set-variable
 
 bin_PROGRAMS=sfc fennec
 

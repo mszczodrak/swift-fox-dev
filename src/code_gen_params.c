@@ -23,7 +23,6 @@ void module_params_interface_app(struct modtab *mp) {
 	char *full_path = get_sfc_path(mp->lib->full_name, "Params.nc");
 	FILE *fp = fopen(full_path, "w");
 	struct paramtype *pt;
-	int count = 0;
 
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write \

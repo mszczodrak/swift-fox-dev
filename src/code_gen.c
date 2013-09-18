@@ -101,8 +101,6 @@ code can be generated.
 \param policy_counter number of policies found in Swift Fox program.
 */
 void finishCodeGeneration(int policy_counter) {
-	int conf_id_counter = 0;
-	int event_counter = 0;
 	struct symtab *sp;
 
 	for(sp = symtab; sp < &symtab[NSYMS]; sp++) {
@@ -119,7 +117,7 @@ void finishCodeGeneration(int policy_counter) {
 	}
 
 
-	generateCaches(event_counter, policy_counter);
+	generateCaches(0, policy_counter);
 	generateDefaultParams();
 
 	generateFennecEngineC();
