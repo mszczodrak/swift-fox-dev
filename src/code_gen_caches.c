@@ -52,6 +52,7 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "#ifndef __FF_CACHES_H__\n");
 	fprintf(fp, "#define __FF_CACHES_H__\n\n");
 
+
 	fprintf(fp, "#define NUMBER_OF_CONFIGURATIONS\t\t%d\n", conf_id_counter);
 	fprintf(fp, "#define NUMBER_OF_STATES\t\t%d\n", state_id_counter);
 	fprintf(fp, "#define NUMBER_OF_EVENTS\t\t%d\n", event_id_counter - 1);
@@ -165,7 +166,7 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "uint8_t event_module[NUMBER_OF_EVENTS][2] = {\n");
 	fprintf(fp, "\t/* [event_id, conf_id */\n");
 	for ( i = 0; i < conf_id_counter; i++ ) {
-		if (!strcmp(conftab[i].conf->id->type, "event_id")) {
+		if (conftab[i].conf->id->type == TYPE_PROCESS_EVENT) {
 			fprintf(fp, "\t{%d, %d},\n",
 					conftab[i].conf->id->value,
 					conftab[i].conf->app->id);

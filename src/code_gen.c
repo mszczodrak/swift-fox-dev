@@ -106,14 +106,16 @@ void finishCodeGeneration(int policy_counter) {
 	struct symtab *sp;
 
 	for(sp = symtab; sp < &symtab[NSYMS]; sp++) {
+/*
 		if (sp->name && sp->type != NULL) {
-			if (!strcmp(sp->type, "event_id")) {
+			if (!strcmp(sp->type == TYPE_PROCESS_EVENT)) {
 				event_counter++;
 			}
-			if (!strcmp(sp->type, "configuration_id")) {
+			if (sp->type == TYPE_PROCESS_REGULAR) {
 				conf_id_counter++;
 			}
 		}
+*/
 	}
 
 

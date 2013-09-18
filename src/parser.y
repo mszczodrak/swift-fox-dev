@@ -124,7 +124,7 @@ int yylex(void);
 %type <pols>	policies;
 %type <initp>	initial_configuration
 %type <prog>	program
-%type <str>	type
+%type <ival>	module_type
 %type <ival> 	conf_level
 %type <ival> 	array_part
 %type <dval> 	assign_value
@@ -135,7 +135,7 @@ int yylex(void);
 %type <parv>	next_parameter
 %type <ival>	param_type
 %type <defv>	default_value
-%type <str>	configuration_type
+%type <ival>	configuration_type
 
 %%
 
@@ -248,6 +248,7 @@ defined_configurations: configurations configuration
 			
 			$$->confs	= $1;
 			$$->conf	= $2;
+			printf("done\n");
 		}	
 	;
 
@@ -276,9 +277,12 @@ configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines modu
 			/* configuration node */
 			$$		= calloc(1, sizeof(struct confnode));
 
+			printf("do conf\n");
+
 			/* init */
 			$2->type	= $1;
 			$$->id		= $2;
+			printf("do conf - 2\n");
 	
 			/* level */
 			$$->level	= $3;
@@ -333,7 +337,7 @@ configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines modu
 
 			$2->value	= conf_id_counter;
 
-			if (!(strcmp($1, "event_id"))) {
+			if ($1 == TYPE_PROCESS_EVENT) {
 				$2->value = event_id_counter;
 				event_id_counter++;
 			}
@@ -351,11 +355,11 @@ configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines modu
 
 configuration_type: CONFIGURATION
 		{
-			$$ = "configuration_id";
+			$$ = TYPE_PROCESS_REGULAR;
 		}
 	| EVENT
 		{
-			$$ = "event_id";
+			$$ = TYPE_PROCESS_EVENT;
 		}
 	;
 
@@ -483,7 +487,7 @@ state: STATE IDENTIFIER state_level OPEN_BRACE newlines conf_ids newlines CLOSE_
 			$$		= calloc(1, sizeof(struct statenode));
 
 			/* init */
-			$2->type	= "state_id";
+			$2->type	= TYPE_STATE;
 			$$->id		= $2;
 
 			/* level */
@@ -632,17 +636,17 @@ definitions: definitions definition
         |
         ;
 
-definition: USE type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_types CLOSE_PARENTHESIS
+definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_types CLOSE_PARENTHESIS
 		{
 			/* iterator */
 			char *p = NULL;
 			
 			/* lookup */
 			struct symtab *sp = NULL;
+			char *full_name = NULL;
 		
 			/* check for library re-declarations */
-			if ((sp = symlook($3->name)) != NULL &&
-						sp->type != NULL)
+			if ((sp = symlook($3->name)) != NULL && sp->type != TYPE_UNKNOWN)
 				/* failed */
 				yyerror("redeclaration of library");
 
@@ -664,70 +668,71 @@ definition: USE type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_types CLOS
                         /* save the name as it was defined */
                         $4->def = $3->name;
 
-
 			/* differentiate based on the definition type */
-			if (!strcmp($3->type, "application")) {
+			switch($3->type) {
+			case TYPE_APPLICATION:
 				/* application */
-			        char *full_name =  malloc(strlen($4->name)+strlen("App")+1);
+			        full_name = malloc(strlen($4->name)+strlen("App")+1);
 			        sprintf(full_name, "%sApp", $4->name);
 				$4->full_name = full_name;
 				$4->type = TYPE_APPLICATION;
 				$4->used = 0;
 				$4->id = 0;
-			}
+				break;
 
-			if (!strcmp($3->type, "source")) {
-			        char *full_name =  malloc(strlen($4->name)+strlen("App")+1);
+			case TYPE_EVENT:
+			        full_name = malloc(strlen($4->name)+strlen("App")+1);
 			        sprintf(full_name, "%sApp", $4->name);
 				$4->full_name = full_name;
 				$4->type = TYPE_EVENT;
 				$4->used = 0;
 				$4->id = 0;
-			}
+				break;
 
-			if (!strcmp($3->type, "network")) {
+			case TYPE_NETWORK:
 				/* network */
-			        char *full_name =  malloc(strlen($4->name)+strlen("Net")+1);
+			        full_name = malloc(strlen($4->name)+strlen("Net")+1);
 			        sprintf(full_name, "%sNet", $4->name);
 				$4->full_name = full_name;
 				$4->type = TYPE_NETWORK;
 				$4->used = 0;
 				$4->id = 0;
-			}
-                        if (!strcmp($3->type, "mac")) {
+				break;
+
+			case TYPE_MAC:
                                 /* mac */
-			        char *full_name =  malloc(strlen($4->name)+strlen("Mac")+1);
+			        full_name = malloc(strlen($4->name)+strlen("Mac")+1);
 			        sprintf(full_name, "%sMac", $4->name);
 				$4->full_name = full_name;
                                 $4->type = TYPE_MAC;
 				$4->used = 0;
                                 $4->id = 0;
-                        }
-                        if (!strcmp($3->type, "radio")) {
+				break;
+                        
+			case TYPE_RADIO:
                                 /* radio */
-			        char *full_name =  malloc(strlen($4->name)+strlen("Radio")+1);
+			        full_name = malloc(strlen($4->name)+strlen("Radio")+1);
 			        sprintf(full_name, "%sRadio", $4->name);
 				$4->full_name = full_name;
                                 $4->type = TYPE_RADIO;
 				$4->used = 0;
                                 $4->id = 0;
-                        }
-			if (!strcmp($3->type, "source")) {
-				/* source */
-				$4->type = TYPE_EVENT;
-				$4->used = 0;
-				$4->id = 0;
+				break;
+                       
+			default:
+				printf("UNKNOWN TYPE\n"); 
 			}
 
 		}
 		newlines
         ;
 
-type: APPLICATION { $$ = "application"; }
-        | NETWORK { $$ = "network"; }
-        | MAC { $$ = "mac"; }
-        | RADIO { $$ = "radio"; }
-	| SOURCE { $$ = "source"; }
+module_type: APPLICATION 	{ $$ = TYPE_APPLICATION; }
+        | NETWORK 		{ $$ = TYPE_NETWORK; }
+        | MAC 			{ $$ = TYPE_MAC; }
+        | RADIO 		{ $$ = TYPE_RADIO; }
+	| SOURCE 		{ $$ = TYPE_EVENT; }
+	|			{ $$ = TYPE_UNKNOWN; }
         ;
 
 
@@ -795,27 +800,6 @@ param_type: VARIABLE_TYPE
 		{
 			$$ = 0;
 		}
-		
-/*
-		{
-			$$ = 0;
-
-			if (!strcmp($1->name, "uint8_t"))
-
-			if (!strcmp($1->name, "uint16_t"))
-				$$ = TYPE_UINT16_T;
-
-			if (!strcmp($1->name, "uint32_t"))
-				$$ = TYPE_UINT32_T;
-
-			if (!strcmp($1->name, "float"))
-				$$ = TYPE_FLOAT;
-
-			if (!strcmp($1->name, "double"))
-				$$ = TYPE_DOUBLE;
-
-		}
-*/
 	;
 
 
@@ -1148,11 +1132,11 @@ initialize(void) {
 	for(i = 0, sp = symtab; i < k_num; i++, sp++) {
 		sp->name = keywords[i];
 		sp->value = 0;
-		sp->type = "keyword";
+		sp->type = TYPE_KEYWORD;
 	}
 	sp->name = "any";
 	sp->value = 253;
-	sp->type = "keyword";
+	sp->type = TYPE_KEYWORD;
 }
 
 /* get the negation of an operator */
@@ -1183,7 +1167,7 @@ void printTable() {
         for(sp = symtab; sp < &symtab[NSYMS]; sp++) {
                 /* is it already here? */
                 if (sp->name ) {
-	                        printf("%s   %s   %d\n", sp->name, sp->type, sp->value);
+	                        printf("%s   %d   %d\n", sp->name, sp->type, sp->value);
                 } else {
 			printf("\n\n");
 			break;

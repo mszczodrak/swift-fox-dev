@@ -12,7 +12,7 @@ configuration count {
 }
 
 configuration blinking {
-			blink(2, 1024)
+			blinkhh(2, 1024)
 			nullNet()
 			nullMac()
 			nullRadio()

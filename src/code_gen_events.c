@@ -25,45 +25,13 @@ void generateEventC() {
 
 	return;
 
-        char *full_path = get_sfc_path("", "EventsC.nc");
-        FILE *fp = fopen(full_path, "w");
-
-	struct symtab *sp;
-
-        if (fp == NULL) {
-                fprintf(stderr, "You do not have a permission to write into file: %s\n", 
-									full_path);
-                exit(1);
-        }
-
-	fprintf(fp, "\n#include <Fennec.h>\n\n");
-	fprintf(fp, "configuration EventsC {\n");
-	fprintf(fp, "  provides interface Mgmt;\n");
-	fprintf(fp, "}\n\n");
-	fprintf(fp, "implementation {\n\n");
-	fprintf(fp, "  components EventsP;\n");
-	fprintf(fp, "  Mgmt = EventsP;\n\n");
-	fprintf(fp, "  components CachesC;\n");
-	fprintf(fp, "  EventsP.EventCache -> CachesC;\n");
-	fprintf(fp, "  /* Defined and linked event handlers */\n");
-
-	for(sp = symtab; sp < &symtab[NSYMS]; sp++) {
-		if (sp->name && sp->type != NULL && !strcmp(sp->type, "event_id")) {
-			fprintf(fp, "\n  components new %sEventC() as %sEvent%dC;\n", 
-					sp->lib->name, sp->lib->name, sp->value);
-			fprintf(fp, "  EventsP.%sEvent%d -> %sEvent%dC;\n", 
-					sp->lib->name, sp->value, sp->lib->name, 
-									sp->value);
-		}
-	}
-
-	fprintf(fp, "\n}\n");
-	fclose(fp);
 }
 
 void generateEventP(int event_counter) {
 
 	return;
+
+/*
 
         char *full_path = get_sfc_path("", "EventsP.nc");
         FILE *fp = fopen(full_path, "w");
@@ -134,5 +102,6 @@ void generateEventP(int event_counter) {
 
 	fprintf(fp, "\n}\n");
 	fclose(fp);
+*/
 }
 

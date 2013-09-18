@@ -31,14 +31,22 @@
 #define NSTATES			256
 #define NPOLS			256
 
+#define TYPE_UNKNOWN		0
+
 #define TYPE_APPLICATION	1
 #define TYPE_NETWORK		2
 #define TYPE_EVENT		3
 #define TYPE_MAC		5
 #define TYPE_RADIO		6
+
 #define TYPE_TYPE		8
+
 #define TYPE_CONFIGURATION	9
 #define TYPE_PROCESS		10
+#define TYPE_PROCESS_REGULAR	11
+#define TYPE_PROCESS_EVENT	12
+#define TYPE_STATE		13
+#define TYPE_KEYWORD		14
 
 #define TYPE_UINT8_T		20
 #define TYPE_UINT16_T		21
@@ -93,7 +101,7 @@ stores all symbols passed from lexer
 struct symtab {
 	char			*name;
 	int			value;
-	char 			*type;
+	int			type;
 	struct libtab		*lib;
 } symtab[NSYMS];
 
@@ -143,12 +151,12 @@ struct evtab *evlook(char *);
 
 struct modtab {
         int            		 id;
-        char            	*type;
+        int            		type;
         struct libtab   	*lib;
 	struct paramvalue	*params;
 //        struct confnode 	*conf;
         int             	conf_num;
-        int             	confs[NCONFS];
+//        int             	confs[NCONFS];
 } modtab[NMODS];
 
 struct modtab *proc_module(char *);

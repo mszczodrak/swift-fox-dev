@@ -74,8 +74,8 @@ checkState(struct statenode *s) {
 	/* check if every configuration is defined */
 	for (i = 0; i < state_id_counter; i++) {
 		for (conf_ptr = statetab[i].state->confs; conf_ptr != NULL; conf_ptr = conf_ptr->confs) {
-			if (strcmp(conf_ptr->conf->id->type, "configuration_id") &&
-				strcmp(conf_ptr->conf->id->type, "event_id") ) {
+			if ((conf_ptr->conf->id->type == TYPE_PROCESS_REGULAR) &&
+				(conf_ptr->conf->id->type = TYPE_PROCESS_EVENT) ) {
 				goto undef_conf;
 			}
 		}
@@ -139,18 +139,17 @@ checkConfiguration(struct confnode* c) {
 	/** 
 	check for undeclared application 
 	*/
-	if (c->app == NULL || c->app->type == NULL || c->app->lib == NULL)
+	if (c->app == NULL || c->app->type == TYPE_UNKNOWN || c->app->lib == NULL)
 		goto app_err;
 
-	if (strcmp(c->app->type, "keyword")) {
+	if (c->app->type == TYPE_KEYWORD) {
 		/* loop */
 		found = 0;
 		for (sp = symtab; sp < &symtab[NSYMS]; sp++) 
 			if (sp->name &&
 				!strcmp(sp->name, c->app->lib->def)) 
-				if (sp->type &&
-					(!strcmp(sp->type, "application") ||
-					(!strcmp(sp->type, "source")))) {
+				if (sp->type && ( (sp->type == TYPE_APPLICATION) ||
+					(sp->type == TYPE_EVENT))) {
 					/* found */
 					found = 1;
 					break;
@@ -164,10 +163,10 @@ checkConfiguration(struct confnode* c) {
 	/** 
 	check for undeclared network 
 	*/
-	if (c->net == NULL || c->net->type == NULL || c->net->lib == NULL)
+	if (c->net == NULL || c->net->type == TYPE_UNKNOWN || c->net->lib == NULL)
 		goto net_err;
 	
-	if (strcmp(c->net->type, "keyword")) {
+	if (c->net->type == TYPE_KEYWORD) {
 		if (c->net->lib == NULL)
 			goto net_err;
 		/* loop */
@@ -175,8 +174,7 @@ checkConfiguration(struct confnode* c) {
 		for (sp = symtab; sp < &symtab[NSYMS]; sp++)
 			if (sp->name &&
 				!strcmp(sp->name, c->net->lib->def))
-				if (sp->type &&
-					!strcmp(sp->type, "network")) {
+				if (sp->type && (sp->type == TYPE_NETWORK)) {
 					/* found */
 					found = 1;
 					break;
@@ -190,18 +188,17 @@ checkConfiguration(struct confnode* c) {
 	/** 
 	check for undeclared mac 
 	*/
-	if (c->mac == NULL || c->mac->type == NULL || c->mac->lib == NULL)
+	if (c->mac == NULL || c->mac->type == TYPE_UNKNOWN || c->mac->lib == NULL)
 		goto mac_err;
 
         /* check for undeclared mac */
-        if (strcmp(c->mac->type, "keyword")) {
+        if (c->mac->type == TYPE_KEYWORD) {
                 /* loop */
                 found = 0;
                 for (sp = symtab; sp < &symtab[NSYMS]; sp++)
                         if (sp->name &&
                                 !strcmp(sp->name, c->mac->lib->def))
-                                if (sp->type &&
-                                        !strcmp(sp->type, "mac")) {
+                                if (sp->type && (sp->type == TYPE_MAC)) {
                                         /* found */
                                         found = 1;
                                         break;
@@ -215,11 +212,11 @@ checkConfiguration(struct confnode* c) {
 	/** 
 	check for undeclared network 
 	*/
-	if (c->radio == NULL || c->radio->type == NULL || c->radio->lib == NULL)
+	if (c->radio == NULL || c->radio->type == TYPE_UNKNOWN || c->radio->lib == NULL)
 		goto radio_err;
 
         /* check for undeclared radio */
-        if (strcmp(c->radio->type, "keyword")) {
+        if (c->radio->type == TYPE_KEYWORD) {
 		if (c->radio->lib == NULL)
 			goto radio_err;
 
@@ -228,8 +225,7 @@ checkConfiguration(struct confnode* c) {
                 for (sp = symtab; sp < &symtab[NSYMS]; sp++)
                         if (sp->name &&
                                 !strcmp(sp->name, c->radio->lib->def))
-                                if (sp->type &&
-                                        !strcmp(sp->type, "radio")) {
+                                if (sp->type && (sp->type == TYPE_RADIO)) {
                                         /* found */
                                         found = 1;
                                         break;
@@ -387,8 +383,7 @@ checkPolicy(struct policy *p) {
 		for (sp = symtab; sp < &symtab[NSYMS]; sp++)
 			if (sp->name &&
 				!strcmp(sp->name, p->from->name))
-				if (sp->type &&
-					!strcmp(sp->type, "state_id")) {
+				if (sp->type && (sp->type == TYPE_STATE)) {
 					/* found */
 					found = 1;
 					break;
@@ -404,8 +399,7 @@ checkPolicy(struct policy *p) {
 	for (sp = symtab; sp < &symtab[NSYMS]; sp++)
 		if (sp->name &&
 			!strcmp(sp->name, p->to->name))
-			if (sp->type &&
-				!strcmp(sp->type, "state_id")) {
+			if (sp->type && (sp->type == TYPE_STATE)) {
 				/* found */
 				found = 1;
 				break;
@@ -478,8 +472,7 @@ checkInitial(struct initnode *i) {
 	for (sp = symtab; sp < &symtab[NSYMS]; sp++)
 		if (sp->name &&
 			!strcmp(sp->name, i->id->name))
-			if (sp->type &&
-				!strcmp(sp->type, "state_id")) {
+			if (sp->type && (sp->type == TYPE_STATE)) {
 				/* found */
 				found = 1;
 				break;
