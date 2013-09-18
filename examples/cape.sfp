@@ -17,9 +17,19 @@ event tiMo { timerMilliE()
 		nullRadio()
 }
 
+event tiMo2  { timerMilliE(5000, 0xFFFF)
+		nullNet()
+		nullMac()
+		nullRadio()
+}
+
+
 state simple { count }
 
 state notsimple { count count }
+
+from simple goto notsimple when tiMo
+from notsimple goto simple when tiMo2
 
 start simple
 

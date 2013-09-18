@@ -71,7 +71,7 @@ void generateDefaultParams() {
                         else
                                 fprintf(fp, ",\n");
                 }
-                fprintf(fp, "};\n");
+                fprintf(fp, "};\n\n");
 
                 /** 
 		network default parameter values 
@@ -89,7 +89,7 @@ void generateDefaultParams() {
                         else
                                 fprintf(fp, ",\n");
                 }
-                fprintf(fp, "};\n");
+                fprintf(fp, "};\n\n");
 
 		/** 
 		mac default parameter values 
@@ -107,7 +107,7 @@ void generateDefaultParams() {
                         else    
                                 fprintf(fp, ",\n");
                 }               
-                fprintf(fp, "};\n");
+                fprintf(fp, "};\n\n");
 
 		/** 
 		radio default parameter values 
@@ -125,7 +125,7 @@ void generateDefaultParams() {
                         else    
                                 fprintf(fp, ",\n");
                 }
-                fprintf(fp, "};\n");
+                fprintf(fp, "};\n\n");
 	}
 
 
@@ -161,7 +161,7 @@ void generateDefaultParams() {
                         else
                                 fprintf(fp, ",\n");
                 }
-                fprintf(fp, "};\n");
+                fprintf(fp, "};\n\n");
 
                 /** 
 		network default parameter values 
@@ -179,7 +179,7 @@ void generateDefaultParams() {
                         else
                                 fprintf(fp, ",\n");
                 }
-                fprintf(fp, "};\n");
+                fprintf(fp, "};\n\n");
 
 		/** 
 		mac default parameter values 
@@ -197,7 +197,7 @@ void generateDefaultParams() {
                         else    
                                 fprintf(fp, ",\n");
                 }               
-                fprintf(fp, "};\n");
+                fprintf(fp, "};\n\n");
 
 		/** 
 		radio default parameter values 
@@ -215,7 +215,7 @@ void generateDefaultParams() {
                         else    
                                 fprintf(fp, ",\n");
                 }
-                fprintf(fp, "};\n");
+                fprintf(fp, "};\n\n");
 	}
 
 
