@@ -7,11 +7,21 @@ configuration count {
                         # always ON, delay_after_receive, backoff, min_backoff
                         # ack, cca, crc
 			cape() 
-#                        cc2420(26, 31, 1, 1) 
+#			cc2420(26, 31, 1, 1) 
 #			nullRadio() 
 }
 
-event tiMo { timerMilliE()
+configuration unc {	counter(10, 1024, 1, dest_node)
+                        ctp(dest_node)
+                        csmaca(dest_node, 0, 10, 10, 1, 1, 1)
+                        # always ON, delay_after_receive, backoff, min_backoff
+                        # ack, cca, crc
+			cape() 
+#			cc2420(26, 31, 1, 1) 
+#			nullRadio() 
+}
+
+event tiMo { timerMilliE(8500, 0xFFFF)
 		nullNet()
 		nullMac()
 		nullRadio()
@@ -26,7 +36,7 @@ event tiMo2  { timerMilliE(5000, 0xFFFF)
 
 state simple { count }
 
-state notsimple { count count }
+state notsimple { count unc }
 
 from simple goto notsimple when tiMo
 from notsimple goto simple when tiMo2

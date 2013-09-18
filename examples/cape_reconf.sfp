@@ -40,7 +40,7 @@ event timerMonitor2 { 	timerMilliE()
 
 
 
-state monitor { count controller }
+state monitor { count blinking }
 state light { blinking controller }
 
 from monitor goto light when timerMonitor
