@@ -1,0 +1,50 @@
+uint16_t dest_node = 3
+
+configuration count { 
+			counter(10, 1024, 1, dest_node)
+                        ctp(dest_node)
+                        csmaca(dest_node, 0, 10, 10, 1, 1, 1)
+                        # always ON, delay_after_receive, backoff, min_backoff
+                        # ack, cca, crc
+			cape() 
+#                        cc2420(26, 31, 1, 1) 
+#			nullRadio() 
+}
+
+configuration blinking {
+			blink(2, 1024)
+			nullNet()
+			nullMac()
+			nullRadio()
+}
+
+configuration controller {
+			cuApp()
+			cuNet()
+			cuMac()
+			cape()
+}
+
+
+event timerMonitor { 	timerEvent()
+			nullNet()
+			nullMac()
+			nullRadio()
+}
+
+event timerMonitor2 { 	timerEvent()
+			nullNet()
+			nullMac()
+			nullRadio()
+}
+
+
+
+state monitor { count controller }
+state light { blinking controller }
+
+from monitor goto light when timerMonitor
+from light goto monitor when timerMonitor2
+
+start monitor
+
