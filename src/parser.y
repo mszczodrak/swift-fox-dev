@@ -92,7 +92,6 @@ int yylex(void);
 %token <ival>	RELOP
 %token <ival>	AND
 %token <ival>	OR
-%token <ival>	NOT
 %token <ival>	VARIABLE_TYPE
 %token <symp>	ANY
 %token <modp>	MODULES
