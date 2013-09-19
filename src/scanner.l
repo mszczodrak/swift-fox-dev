@@ -100,12 +100,6 @@ state			{
 #endif
 			return STATE;			}
 
-(nothing|none)	{
-#ifndef __DEBUG__
-			tokenpos += yyleng;
-			yylval.symp = symlook(yytext);
-#endif
-			return NOTHING;			}
 (event-condition|event)	{
 #ifndef __DEBUG__
 			tokenpos += yyleng;
@@ -188,42 +182,6 @@ or		{
 			yylval.ival = OR; 
 #endif
 			return OR;			}
-not		{
-#ifndef __DEBUG__
-			tokenpos += yyleng;
-			yylval.ival = NOT; 
-#endif
-			return NOT;			}
-"<"		{
-#ifndef __DEBUG__
-			tokenpos += yyleng;
-			yylval.ival = LT;
-#endif
-			return RELOP;			}
-">"		{
-#ifndef __DEBUG__
-			tokenpos += yyleng;
-			yylval.ival = GT;
-#endif
-			return RELOP;			}
-"<="		{
-#ifndef __DEBUG__
-			tokenpos += yyleng;
-			yylval.ival = LE;
-#endif
-			return RELOP;			}
-">="		{
-#ifndef __DEBUG__
-			tokenpos += yyleng;
-			yylval.ival = GE;
-#endif
-			return RELOP;			}
-"<>"		{
-#ifndef __DEBUG__
-			tokenpos += yyleng;
-			yylval.ival = NE;
-#endif
-			return RELOP;			}
 "="		{
 #ifndef __DEBUG__
 			tokenpos += yyleng;

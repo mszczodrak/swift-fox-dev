@@ -26,7 +26,6 @@
 #include "sf.h"
 #include "traverse.h"
 
-int negateOperator(int i);
 void initialize(void);
 void gc(void);
 void checkForRemotePath(struct libtab*);
@@ -79,8 +78,7 @@ int yylex(void);
 %token STATE CONFIGURATION COMMA EVENT 
 %token FROM GOTO START USE WHEN 
 %token APPLICATION NETWORK MAC RADIO 
-%token SOURCE LF 
-%token LT GT LE GE NE EQ
+%token EQ SOURCE LF 
 %token OPEN_BRACE CLOSE_BRACE OPEN_PARENTHESIS CLOSE_PARENTHESIS
 %token OPEN_SQUARE_BRACE CLOSE_SQUARE_BRACE
 %token LEVEL AT 
@@ -96,7 +94,6 @@ int yylex(void);
 %token <ival>	OR
 %token <ival>	NOT
 %token <ival>	VARIABLE_TYPE
-%token <modp>	NOTHING
 %token <symp>	ANY
 %token <modp>	MODULES
 %type <modp>	module
@@ -1109,9 +1106,9 @@ initialize(void) {
 	/* keywords set */
 	char *keywords[] = {"configuration", "start", "use", "application",
 			"network", "source", "event-condition", "from", "goto",
-			"none", "conf", "event", "on", "off", 			
+			"conf", "event", "on", "off", 			
 			"mac", "radio", // new keywords
-			"when", "nothing", "event"};
+			"when", "event"};
 	
 	/* size of the keywords set */
 	int k_num 		= sizeof(keywords)/sizeof(char*);
@@ -1129,28 +1126,6 @@ initialize(void) {
 	sp->name = "any";
 	sp->value = 253;
 	sp->type = TYPE_KEYWORD;
-}
-
-/* get the negation of an operator */
-int
-negateOperator(int i) {
-	switch(i) {
-		case LT:
-			return GE;
-		case GT:
-			return LE;
-		case LE:
-			return GT;
-		case GE:
-			return LT;
-		case NE:
-			return EQ;
-		case EQ:
-			return NE;
-		default:
-			yyerror("unknown RELOP operator");
-			return -1;
-	}
 }
 
 void printTable() {
