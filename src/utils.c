@@ -154,3 +154,7 @@ char *relopToLetter(int i) {
 	}
 }
 
+int get_policy_mask(struct policy *p) {
+
+	return 0;
+}

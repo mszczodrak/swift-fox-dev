@@ -33,7 +33,6 @@ void generateCaches(int event_counter, int policy_counter) {
 	FILE *fp = fopen(full_path, "w");
 
 	struct modtab *mp;
-	struct policy *pp;
 	struct conf_ids *conf_ptr;
 	int i;
 
@@ -204,11 +203,10 @@ void generateCaches(int event_counter, int policy_counter) {
 
         fprintf(fp, "struct fennec_policy policies[%d] = {\n", policy_counter);
 	for(i = 0; i < policy_counter; ) {
-		pp = poltab[i].policy;
 		fprintf(fp, "\t{\n");
-		fprintf(fp, "\t\t.src_conf = %d,\n", pp->from);
-		fprintf(fp, "\t\t.event_mask = %d,\n", 0); //pp->event_confs);
-		fprintf(fp, "\t\t.dst_conf = %d\n\n", pp->to);
+		fprintf(fp, "\t\t.src_conf = %d,\n", poltab[i].policy->from->value);
+		fprintf(fp, "\t\t.event_mask = %d,\n", get_policy_mask(poltab[i].policy));
+		fprintf(fp, "\t\t.dst_conf = %d\n\n", poltab[i].policy->to->value);
 
 		if (++i < policy_counter) {
 			fprintf(fp, "\t},\n");

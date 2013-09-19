@@ -26,6 +26,6 @@ char *get_full_path(char *ffsrc_relative);
 char *get_sfc_path(char *file1, char *file2);
 int create_dir(char *ffsrc_relative);
 char *relopToLetter(int i);
-
+int get_policy_mask(struct policy *p);
 
 #endif

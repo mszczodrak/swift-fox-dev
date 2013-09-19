@@ -42,7 +42,6 @@ int conf_id_counter	= 0;
 
 int active_state;
 
-
 int file_status;
 char *file_name;
 char *error_location;
@@ -512,6 +511,7 @@ state: STATE IDENTIFIER state_level OPEN_BRACE newlines conf_ids newlines CLOSE_
 			}
 	
 			$$->counter	= state_id_counter;
+			$2->value	= state_id_counter;
 			++state_id_counter;
 
 			statetab[$$->counter].state = $$;
