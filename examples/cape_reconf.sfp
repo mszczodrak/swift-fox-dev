@@ -1,7 +1,8 @@
 uint16_t dest_node = 3
+uint16_t src_node = 0xFFFF
 
 configuration count { 
-			counter(10, 1024, 1, dest_node)
+			counter(10, 1024, src_node, dest_node)
                         ctp(dest_node)
                         csmaca(dest_node, 0, 10, 10, 1, 1, 1)
                         # always ON, delay_after_receive, backoff, min_backoff
@@ -41,8 +42,8 @@ event timerMonitor2 { 	timerMilliE()
 
 
 
-state monitor { count controller }
-state light { blinking controller }
+state monitor { count  }
+state light { blinking }
 
 from monitor goto light when timerMonitor
 from light goto monitor when timerMonitor2

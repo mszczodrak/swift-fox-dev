@@ -7,8 +7,8 @@ configuration count {
                         csmaca(dest_node, 0, 10, 10, 1, 1, 1)
                         # always ON, delay_after_receive, backoff, min_backoff
                         # ack, cca, crc
-			cape() 
-#			cc2420(26, 31, 1, 1) 
+#			cape() 
+			cc2420(26, 31, 1, 1) 
 #			nullRadio() 
 }
 
