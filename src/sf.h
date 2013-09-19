@@ -75,13 +75,6 @@
 
 extern char *ffmodules;
 extern int active_state;
-extern char *conf_state_name;
-extern int conf_state_redefined;
-
-extern char *conf_state_app;
-extern char *conf_state_net;
-extern char *conf_state_mac;
-extern char *conf_state_radio;
 
 extern int state_id_counter;    
 extern int module_id_counter;
@@ -255,8 +248,6 @@ struct policy {
 	struct symtab		*from;
 	/** pointer to a symtab with configuration that is the destination of reconfiguration */
 	struct symtab		*to;
-	/** an event mast that must take place to trigger reconfiguration */
-	int 			mask_r;
 	/** points to configurations that process events */
 	struct conf_ids		*event_confs;
 	/** policy counter, and this policy number */
@@ -287,10 +278,7 @@ struct program {
 
 
 struct poltab {
-        int                     policy_num;
-        int                     *src_conf;
-        int                     *event_mask;
-        int                     *dst_conf;
+	struct policy		*policy;
 } poltab[NPOLS];
 
 int proc_policy(struct policy *p);

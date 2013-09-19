@@ -41,13 +41,6 @@ int event_id_counter	= 1;
 int conf_id_counter	= 0;
 
 int active_state;
-char *conf_state_name = "control";
-int conf_state_redefined = 0;
-
-char *conf_state_app = "cuApp";
-char *conf_state_net = "cuNet";
-char *conf_state_mac = "cuMac";
-char *conf_state_radio = "cc2420";
 
 
 int file_status;
@@ -109,7 +102,6 @@ int yylex(void);
 %token <symp>	ANY
 %token <modp>	MODULES
 %type <modp>	module
-%type <symp>	from_states
 %type <confp>	configuration
 %type <confsp>	configurations
 %type <confid>	conf_id
@@ -595,7 +587,7 @@ policies: policies policy
 		}		
 	;
 
-policy: FROM from_states GOTO IDENTIFIER WHEN conf_ids newlines
+policy: FROM IDENTIFIER GOTO IDENTIFIER WHEN conf_ids newlines
 		{
 			/* policy node */
 			$$ 		= calloc(1, sizeof(struct policy));
@@ -604,8 +596,6 @@ policy: FROM from_states GOTO IDENTIFIER WHEN conf_ids newlines
 			$$->from	= $2;
 			$$->to		= $4;
 
-			//$$->mask_r	= $6;
-			$$->mask_r	= 0;
 			$$->event_confs	= $6; 
 			$$->counter	= policy_counter;
 
@@ -615,18 +605,6 @@ policy: FROM from_states GOTO IDENTIFIER WHEN conf_ids newlines
 			}
 			++policy_counter;
 		}
-
-from_states: IDENTIFIER 	
-		{
-			$$ = $1;
-		}
-		
-	| 	ANY
-		{
-			$$ = $1;
-		}
-	;
-
 
 
 initial_configuration: START IDENTIFIER newlines
@@ -1046,10 +1024,11 @@ proc_module(char *s) {
 int
 proc_policy(struct policy *p) {
 
-	poltab[policy_counter].policy_num = policy_counter;
-	poltab[policy_counter].src_conf = &p->from->value;
-	poltab[policy_counter].event_mask = &p->mask_r;
-	poltab[policy_counter].dst_conf = &p->to->value;
+	poltab[policy_counter].policy = p;
+
+//	poltab[policy_counter].src_conf = &p->from->value;
+//	poltab[policy_counter].event_mask = &p->mask_r;
+//	poltab[policy_counter].dst_conf = &p->to->value;
 
 	return 0;	
 }

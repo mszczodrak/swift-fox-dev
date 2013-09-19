@@ -33,7 +33,8 @@ void generateCaches(int event_counter, int policy_counter) {
 	FILE *fp = fopen(full_path, "w");
 
 	struct modtab *mp;
-	struct poltab *pp;
+	struct policy *pp;
+	struct conf_ids *conf_ptr;
 	int i;
 
 	if (fp == NULL) {
@@ -101,7 +102,6 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	/* Generate States */
 
-	struct conf_ids *conf_ptr;
 	//int confs_per_state = 0;
 
 
@@ -204,19 +204,16 @@ void generateCaches(int event_counter, int policy_counter) {
 
         fprintf(fp, "struct fennec_policy policies[%d] = {\n", policy_counter);
 	for(i = 0; i < policy_counter; ) {
-		pp = &poltab[i];
-		if (pp->src_conf != NULL && pp->event_mask != NULL && 
-							pp->dst_conf != NULL) {
-			fprintf(fp, "\t{\n");
-			fprintf(fp, "\t\t.src_conf = %d,\n", *pp->src_conf);
-			fprintf(fp, "\t\t.event_mask = %d,\n", *pp->event_mask);
-			fprintf(fp, "\t\t.dst_conf = %d\n\n", *pp->dst_conf);
+		pp = poltab[i].policy;
+		fprintf(fp, "\t{\n");
+		fprintf(fp, "\t\t.src_conf = %d,\n", pp->from);
+		fprintf(fp, "\t\t.event_mask = %d,\n", 0); //pp->event_confs);
+		fprintf(fp, "\t\t.dst_conf = %d\n\n", pp->to);
 
-			if (++i < policy_counter) {
-				fprintf(fp, "\t},\n");
-			} else {
-				fprintf(fp, "\t}\n");
-			}
+		if (++i < policy_counter) {
+			fprintf(fp, "\t},\n");
+		} else {
+			fprintf(fp, "\t}\n");
 		}
 	}
 
