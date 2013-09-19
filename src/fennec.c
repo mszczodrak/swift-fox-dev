@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 /**
 implementation of the fennec 
@@ -26,23 +27,32 @@ calls underlying TinyOS make
 */
 int main(int argc, char *argv[]) {
 
+	int i = 1;
+	struct stat s;
         char *fennec_fox_lib = getenv("FENNEC_FOX_LIB");
+	char *buff = malloc(strlen(fennec_fox_lib) + 15 );
 
         if (fennec_fox_lib == NULL) {
                 fprintf(stderr, "\n\nFENNEC_FOX_LIB is not set!\n");
                 exit(1);
         }
 
-	int i = 1;
-	char *command = malloc(strlen(fennec_fox_lib) + 9 );
-	sprintf(command, "make -C %s", fennec_fox_lib);
+	sprintf(buff, "%s/Fennec/sfc", fennec_fox_lib);
+
+	if (stat(buff, &s) == -1) {
+		perror(buff);
+                fprintf(stderr, "Swift Fox was not compiled!\n");
+                exit(1);
+	}
+
+	sprintf(buff, "make -C %s", fennec_fox_lib);
 
 	while(argv[i]!=NULL) {
-		strcat(command, " ");
-		strcat(command, argv[i]);
+		strcat(buff, " ");
+		strcat(buff, argv[i]);
 		i++;
 	}
 
-	printf("%s\n", command);
-	return system(command);
+	printf("%s\n", buff);
+	return system(buff);
 }
