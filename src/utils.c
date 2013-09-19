@@ -121,6 +121,10 @@ int create_dir(char *ffsrc_relative) {
 }
 
 int get_policy_mask(struct policy *p) {
-
-	return 0;
+	struct conf_ids *cids = NULL;
+	int mask = 0;
+	for (cids = p->event_confs; cids != NULL; cids = cids->confs) {
+		mask |= 1 << cids->conf->conf->id->value;
+	}
+	return mask;
 }
