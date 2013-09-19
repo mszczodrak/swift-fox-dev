@@ -120,40 +120,6 @@ int create_dir(char *ffsrc_relative) {
 	return status;
 }
 
-/**
-converts consting intiger to its string relation operator representation
-
-\param i the intiger value of a relation operator
-
-\return string with representation of the relation operator according
-	to Fennec Fox standard
-*/
-char *relopToLetter(int i) {
-	switch(i) {
-	case LT:
-		return "LT";
-
-	case GT:
-		return "GT";
-
-	case LE:
-		return "LE";
-
-	case GE:
-		return "GE";
-
-	case NE:
-		return "NE";
-
-	case EQ:
-		return "EQ";
-
-	default:
-		fprintf(stderr, "Unknown RELOP operator\n");
-		exit(1);
-	}
-}
-
 int get_policy_mask(struct policy *p) {
 
 	return 0;

@@ -26,7 +26,6 @@
 #include "sf.h"
 #include "traverse.h"
 
-char *relopToLetter(int i);
 int negateOperator(int i);
 void initialize(void);
 void gc(void);
