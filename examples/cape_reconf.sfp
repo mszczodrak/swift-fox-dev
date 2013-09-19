@@ -19,6 +19,7 @@ configuration blinking {
 }
 
 configuration controller {
+#			nullApp()
 			cuApp()
 			cuNet()
 			cuMac()
@@ -40,7 +41,7 @@ event timerMonitor2 { 	timerMilliE()
 
 
 
-state monitor { count blinking }
+state monitor { count controller }
 state light { blinking controller }
 
 from monitor goto light when timerMonitor

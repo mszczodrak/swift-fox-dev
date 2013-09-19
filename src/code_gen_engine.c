@@ -78,9 +78,6 @@ void generateFennecEngineC() {
       			fprintf(fp, "FennecEngineP.%sNetworkPacketAcknowledgements <- %s.NetworkPacketAcknowledgements;\n",
 						mp->lib->full_name, 
 						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkStatus <- %s.NetworkStatus;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
 			if (mp->lib->type == TYPE_EVENT) {
 				fprintf(fp, "FennecEngineP.%sEvent -> %s.Event;\n",
 							mp->lib->full_name,
@@ -122,9 +119,6 @@ void generateFennecEngineC() {
       			fprintf(fp, "FennecEngineP.%sNetworkPacketAcknowledgements -> %s.NetworkPacketAcknowledgements;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkStatus -> %s.NetworkStatus;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sMacAMSend <- %s.MacAMSend;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
@@ -141,9 +135,6 @@ void generateFennecEngineC() {
 						mp->lib->full_name,
 						mp->lib->full_name);
       			fprintf(fp, "FennecEngineP.%sMacPacketAcknowledgements <- %s.MacPacketAcknowledgements;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sMacStatus <- %s.MacStatus;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
 			fprintf(fp, "\n");
@@ -182,14 +173,8 @@ void generateFennecEngineC() {
 			fprintf(fp, "FennecEngineP.%sMacPacketAcknowledgements -> %s.MacPacketAcknowledgements;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sMacStatus -> %s.MacStatus;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sRadioReceive <- %s.RadioReceive;\n",
 						mp->lib->full_name,
-						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sRadioStatus <- %s.RadioStatus;\n",
-						mp->lib->full_name, 
 						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sRadioResource <- %s.RadioResource;\n", 
 						mp->lib->full_name, 
@@ -243,9 +228,6 @@ void generateFennecEngineC() {
 						mp->lib->full_name, 
 						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sRadioReceive -> %s.RadioReceive;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sRadioStatus -> %s.RadioStatus;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sRadioResource -> %s.RadioResource;\n", 
@@ -307,7 +289,6 @@ void generateFennecEngineP() {
   	fprintf(fp, "#define RADIO_STOP_DELAY         100\n\n");
   	fprintf(fp, "module FennecEngineP {\n\n");
   	fprintf(fp, "provides interface ModuleCtrl;\n");
-  	fprintf(fp, "provides interface Module;\n\n");
 
   	fprintf(fp, "uses interface Leds;\n");
   	fprintf(fp, "uses interface Timer<TMilli> as RadioActivityTimer;\n");
@@ -334,8 +315,6 @@ void generateFennecEngineP() {
 						mp->lib->full_name);
       			fprintf(fp, "provides interface PacketAcknowledgements as %sNetworkPacketAcknowledgements;\n", 
 						mp->lib->full_name);
-      			fprintf(fp, "provides interface ModuleStatus as %sNetworkStatus;\n", 
-						mp->lib->full_name);
 			if (mp->lib->type == TYPE_EVENT) {
 				fprintf(fp, "uses interface Event as %sEvent;\n",
 						mp->lib->full_name);
@@ -360,14 +339,12 @@ void generateFennecEngineP() {
 			fprintf(fp, "uses interface AMPacket as %sNetworkAMPacket;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface Packet as %sNetworkPacket;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface PacketAcknowledgements as %sNetworkPacketAcknowledgements;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface ModuleStatus as %sNetworkStatus;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface AMSend as %sMacAMSend;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface Receive as %sMacReceive;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface Receive as %sMacSnoop;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface Packet as %sMacPacket;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface AMPacket as %sMacAMPacket;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface PacketAcknowledgements as %sMacPacketAcknowledgements;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface ModuleStatus as %sMacStatus;\n", mp->lib->full_name);
 			fprintf(fp, "\n");
 		}
 	}
@@ -389,9 +366,7 @@ void generateFennecEngineP() {
 			fprintf(fp, "uses interface Packet as %sMacPacket;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface AMPacket as %sMacAMPacket;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface PacketAcknowledgements as %sMacPacketAcknowledgements;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface ModuleStatus as %sMacStatus;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface Receive as %sRadioReceive;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface ModuleStatus as %sRadioStatus;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface Resource as %sRadioResource;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface RadioConfig as %sRadioConfig;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface RadioPower as %sRadioPower;\n", mp->lib->full_name);
@@ -419,7 +394,6 @@ void generateFennecEngineP() {
 
 
 			fprintf(fp, "uses interface Receive as %sRadioReceive;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface ModuleStatus as %sRadioStatus;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface Resource as %sRadioResource;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface RadioConfig as %sRadioConfig;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface RadioPower as %sRadioPower;\n", mp->lib->full_name);
@@ -1562,36 +1536,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"void status(uint16_t module_id, uint8_t to_layer, uint8_t layer, uint8_t status_flag) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_EVENT) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sNetworkStatus.status(layer, status_flag);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sNetworkStatus.status(layer, status_flag);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sMacStatus.status(layer, status_flag);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sRadioStatus.status(layer, status_flag);\n\n", mp->lib->full_name);
-		}
-	}
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
 	fprintf(fp,"void syncDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
 	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -1930,9 +1874,6 @@ void generateFennecEngineP() {
 			fprintf(fp, "event message_t* %sNetworkSnoop.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
 			fprintf(fp, "\treturn snoop(%d, F_APPLICATION, msg, payload, len);\n", mp->id);
 			fprintf(fp, "}\n\n");
-			fprintf(fp, "event void %sNetworkStatus.status(uint8_t layer, uint8_t status_flag) {\n", mp->lib->full_name);
-			fprintf(fp, "\treturn status(%d, F_APPLICATION, layer, status_flag);\n", mp->id);
-			fprintf(fp, "}\n\n");
 			fprintf(fp, "command error_t %sMacAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n", mp->lib->full_name);
 			fprintf(fp, "\treturn AMSend_send(%d, F_MAC, addr, msg, len);\n", mp->id);
 			fprintf(fp, "}\n\n");
@@ -2060,9 +2001,6 @@ void generateFennecEngineP() {
 			fprintf(fp, "}\n\n");
 			fprintf(fp, "event message_t* %sMacSnoop.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
 			fprintf(fp, "\treturn snoop(%d, F_NETWORK, msg, payload, len);\n", mp->id);
-			fprintf(fp, "}\n\n");
-			fprintf(fp, "event void %sMacStatus.status(uint8_t layer, uint8_t status_flag) {\n", mp->lib->full_name);
-			fprintf(fp, "\treturn status(%d, F_NETWORK, layer, status_flag);\n", mp->id);
 			fprintf(fp, "}\n\n");
 
 			fprintf(fp, "command error_t %sRadioConfig.sync() {\n", mp->lib->full_name);
@@ -2242,10 +2180,6 @@ void generateFennecEngineP() {
 			fprintf(fp, "\treturn snoop(%d, F_MAC, msg, payload, len);\n", mp->id);
 			fprintf(fp, "}\n\n");
 */
-			fprintf(fp, "event void %sRadioStatus.status(uint8_t layer, uint8_t status_flag) {\n", mp->lib->full_name);
-			fprintf(fp, "\treturn status(%d, F_MAC, layer, status_flag);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
 			fprintf(fp, "event void %sRadioConfig.syncDone(error_t error) {\n", mp->lib->full_name);
 			fprintf(fp, "\treturn syncDone(%d, F_MAC, error);\n", mp->id);
 			fprintf(fp, "}\n\n");
