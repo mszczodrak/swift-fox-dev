@@ -1003,7 +1003,6 @@ proc_module(char *s) {
 			mp->type = sp->type;
 			mp->lib = sp->lib;
 			mp->params = NULL;
-			mp->symtab = sp;
                         return mp;
                 }
 		if (strcmp(mp->lib->def, sp->name) == 0) {
