@@ -467,8 +467,8 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"error_t AMSend_send(uint16_t module_id, uint8_t to_layer, am_addr_t addr, message_t* msg, uint8_t len) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -488,8 +488,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t AMSend_cancel(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -509,8 +509,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void* AMSend_getPayload(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -530,7 +530,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"uint8_t AMSend_maxPayloadLength(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -550,7 +550,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_addr_t AMPacket_address(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -570,8 +570,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_addr_t AMPacket_destination(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -591,8 +591,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_addr_t AMPacket_source(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -612,8 +612,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void AMPacket_setDestination(uint16_t module_id, uint8_t to_layer, message_t *msg, am_addr_t addr) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -633,8 +633,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void AMPacket_setSource(uint16_t module_id, uint8_t to_layer, message_t *msg, am_addr_t addr) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -655,8 +655,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"bool AMPacket_isForMe(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -676,8 +676,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_id_t AMPacket_type(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -697,8 +697,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void AMPacket_setType(uint16_t module_id, uint8_t to_layer, message_t *msg, am_id_t t) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -718,8 +718,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_group_t AMPacket_group(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -739,8 +739,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void AMPacket_setGroup(uint16_t module_id, uint8_t to_layer, message_t *msg, am_group_t grp) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -760,8 +760,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void* Packet_getPayload(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -781,7 +781,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"uint8_t Packet_maxPayloadLength(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -801,7 +801,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_group_t AMPacket_localGroup(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -821,8 +821,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void Packet_clear(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -842,8 +842,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"uint8_t Packet_payloadLength(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -863,8 +863,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void Packet_setPayloadLength(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -884,8 +884,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t PacketAcknowledgements_requestAck(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -905,8 +905,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t PacketAcknowledgements_noAck(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -926,8 +926,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"bool PacketAcknowledgements_wasAcked(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -949,7 +949,7 @@ void generateFennecEngineP() {
 	/* Radio Only Interfaces */
 
 	fprintf(fp,"error_t RadioConfig_sync(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -963,7 +963,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"uint8_t RadioConfig_getChannel(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -977,7 +977,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void RadioConfig_setChannel(uint16_t module_id, uint8_t to_layer, uint8_t channel) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -991,7 +991,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"uint16_t RadioConfig_getShortAddr(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1005,7 +1005,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void RadioConfig_setShortAddr(uint16_t module_id, uint8_t to_layer, uint16_t address) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1019,7 +1019,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"uint16_t RadioConfig_getPanAddr(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1033,7 +1033,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void RadioConfig_setPanAddr(uint16_t module_id, uint8_t to_layer, uint16_t address) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1047,7 +1047,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void RadioConfig_setAddressRecognition(uint16_t module_id, uint8_t to_layer, bool enableAddressRecognition, bool useHwAddressRecognition) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1061,7 +1061,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"bool RadioConfig_isAddressRecognitionEnabled(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1075,7 +1075,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"bool RadioConfig_isHwAddressRecognitionDefault(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1090,7 +1090,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void RadioConfig_setAutoAck(uint16_t module_id, uint8_t to_layer, bool enableAutoAck, bool hwAutoAck) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1104,7 +1104,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"bool RadioConfig_isHwAutoAckDefault(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1118,7 +1118,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"bool RadioConfig_isAutoAckEnabled(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1132,7 +1132,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioPower_startVReg(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1146,7 +1146,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioPower_stopVReg(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1160,7 +1160,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioPower_startOscillator(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1174,7 +1174,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioPower_stopOscillator(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1188,7 +1188,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioPower_rxOn(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1202,7 +1202,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioPower_rfOff(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1216,7 +1216,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t ReadRssi_read(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1230,7 +1230,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioResource_request(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1244,7 +1244,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioResource_immediateRequest(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1258,7 +1258,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioResource_release(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1272,7 +1272,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"bool RadioResource_isOwner(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1286,7 +1286,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioControl_start(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1300,7 +1300,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioControl_stop(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1314,8 +1314,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioSend_cancel(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1330,8 +1330,8 @@ void generateFennecEngineP() {
 
 	fprintf(fp,"error_t RadioSend_send(uint16_t module_id, uint8_t to_layer, message_t* msg, bool useCca) {\n");
 	fprintf(fp,"error_t err;\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1348,7 +1348,7 @@ void generateFennecEngineP() {
 
 	fprintf(fp,"uint8_t RadioPacket_maxPayloadLength(uint16_t module_id, uint8_t to_layer) {\n");
 	fprintf(fp,"uint8_t s;\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1365,8 +1365,8 @@ void generateFennecEngineP() {
 
 	fprintf(fp,"void* RadioPacket_getPayload(uint16_t module_id, uint8_t to_layer, message_t* msg, uint8_t len) {\n");
 	fprintf(fp,"void *ptr;\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1383,8 +1383,8 @@ void generateFennecEngineP() {
 
 	fprintf(fp,"error_t RadioBuffer_load(uint16_t module_id, uint8_t to_layer, message_t* msg) {\n");
 	fprintf(fp,"error_t err;\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1401,7 +1401,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"bool PacketIndicator_isReceiving(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1415,7 +1415,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"bool EnergyIndicator_isReceiving(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1429,7 +1429,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"bool ByteIndicator_isReceiving(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1443,8 +1443,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void sendDone(uint16_t module_id, uint8_t to_layer, message_t* msg, error_t error) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_EVENT) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1473,12 +1473,12 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"message_t* receive(uint16_t module_id, uint8_t to_layer, message_t* msg, void* payload, uint8_t len) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	fprintf(fp,"\t\treturn msg;\n");
 	fprintf(fp,"}\n\n");
 
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_EVENT) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1511,11 +1511,11 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"message_t* snoop(uint16_t module_id, uint8_t to_layer, message_t* msg, void* payload, uint8_t len) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	fprintf(fp,"\t\treturn msg;\n");
 	fprintf(fp,"}\n\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_EVENT) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1541,7 +1541,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void syncDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1553,7 +1553,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void startVRegDone(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1565,7 +1565,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void startOscillatorDone(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1577,7 +1577,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void readRssiDone(uint16_t module_id, uint8_t to_layer, error_t error, uint16_t rssi) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1590,7 +1590,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void granted(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1602,8 +1602,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void transmitLoadDone(uint16_t module_id, uint8_t to_layer, message_t *msg, error_t error) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1615,8 +1615,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void transmitSendDone(uint16_t module_id, uint8_t to_layer, message_t *msg, error_t error) {\n");
-	fprintf(fp,"\tmsg->conf = get_conf_id(module_id);\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1629,7 +1629,7 @@ void generateFennecEngineP() {
 
 	fprintf(fp,"void radioControlStartDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
 	/* Let Control Unit MAC know about the radio status */
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1638,7 +1638,7 @@ void generateFennecEngineP() {
 		}
 	}
 	fprintf(fp,"\t}\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1651,7 +1651,7 @@ void generateFennecEngineP() {
 
 	fprintf(fp,"void radioControlStopDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
 	/* Let Control Unit MAC know about the radio status */
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1660,7 +1660,7 @@ void generateFennecEngineP() {
 		}
 	}
 	fprintf(fp,"\t}\n");
-	fprintf(fp,"\tswitch( get_next_module_id(module_id, to_layer) ) {\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
@@ -1721,7 +1721,7 @@ void generateFennecEngineP() {
 						type_name(pt->type), 
 						mp->lib->full_name, 
 						pt->name);
-				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) get_conf_params(%d).application;\n", 
+				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).application;\n", 
 							mp->lib->full_name, 
 							mp->lib->full_name, 
 							mp->id);
@@ -1733,7 +1733,7 @@ void generateFennecEngineP() {
 						pt->name, 
 						type_name(pt->type), 
 						pt->name);
-				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) get_conf_params(%d).application;\n", 
+				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).application;\n", 
 							mp->lib->full_name, 
 							mp->lib->full_name, 
 							mp->id);
@@ -1845,7 +1845,7 @@ void generateFennecEngineP() {
 						type_name(pt->type), 
 						mp->lib->full_name, 
 						pt->name);
-				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) get_conf_params(%d).network;\n", 
+				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).network;\n", 
 							mp->lib->full_name, 
 							mp->lib->full_name, 
 							mp->id);
@@ -1856,7 +1856,7 @@ void generateFennecEngineP() {
 						pt->name, 
 						type_name(pt->type), 
 						pt->name);
-				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) get_conf_params(%d).network;\n", 
+				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).network;\n", 
 							mp->lib->full_name, 
 							mp->lib->full_name, 
 							mp->id);
@@ -1974,7 +1974,7 @@ void generateFennecEngineP() {
 						type_name(pt->type), 
 						mp->lib->full_name, 
 						pt->name);
-				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) get_conf_params(%d).mac;\n", 
+				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).mac;\n", 
 							mp->lib->full_name, 
 							mp->lib->full_name, 
 							mp->id);
@@ -1985,7 +1985,7 @@ void generateFennecEngineP() {
 						pt->name, 
 						type_name(pt->type), 
 						pt->name);
-				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) get_conf_params(%d).mac;\n", 
+				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).mac;\n", 
 							mp->lib->full_name, 
 							mp->lib->full_name, 
 							mp->id);
@@ -2148,7 +2148,7 @@ void generateFennecEngineP() {
 						type_name(pt->type), 
 						mp->lib->full_name, 
 						pt->name);
-				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) get_conf_params(%d).radio;\n", 
+				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).radio;\n", 
 							mp->lib->full_name, 
 							mp->lib->full_name, 
 							mp->id);
@@ -2159,7 +2159,7 @@ void generateFennecEngineP() {
 						pt->name, 
 						type_name(pt->type), 
 						pt->name);
-				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) get_conf_params(%d).radio;\n", 
+				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).radio;\n", 
 							mp->lib->full_name, 
 							mp->lib->full_name, 
 							mp->id);
