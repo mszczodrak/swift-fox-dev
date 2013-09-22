@@ -148,7 +148,7 @@ struct modtab {
         int            		type;
         struct libtab   	*lib;
 	struct paramvalue	*params;
-        int             	conf_num;
+	struct symtab		*symtab;
 } modtab[NMODS];
 
 struct modtab *proc_module(char *);
