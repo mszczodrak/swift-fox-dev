@@ -43,6 +43,9 @@ void generateFennecEngineC() {
 	fprintf(fp, "components LedsC;\n");
   	fprintf(fp, "FennecEngineP.Leds -> LedsC;\n\n");
 
+	fprintf(fp, "components CashesC;\n");
+  	fprintf(fp, "FennecEngineP.Fennec -> CachesC;\n\n");
+
   	fprintf(fp, "components new TimerMilliC() as RadioActivityTimer;\n");
   	fprintf(fp, "FennecEngineP.RadioActivityTimer -> RadioActivityTimer;\n\n");
 
@@ -291,6 +294,7 @@ void generateFennecEngineP() {
   	fprintf(fp, "provides interface ModuleCtrl;\n");
 
   	fprintf(fp, "uses interface Leds;\n");
+  	fprintf(fp, "uses interface Fennec;\n");
   	fprintf(fp, "uses interface Timer<TMilli> as RadioActivityTimer;\n");
 
   	fprintf(fp, "\n\t/* Application Modules */\n\n");
@@ -1701,7 +1705,7 @@ void generateFennecEngineP() {
 			if (mp->lib->type == TYPE_EVENT) {
 				fprintf(fp, "\t/* Event Interface */\n\n");	
 				fprintf(fp, "event void %sEvent.occured(uint16_t oc) {\n", mp->lib->full_name);
-				fprintf(fp, "\tevent_occured(%d, oc);\n", mp->id);
+				fprintf(fp, "\tcall Fennec.event_occured(%d, oc);\n", mp->id);
 				fprintf(fp, "}\n\n");
 			}
 
