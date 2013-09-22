@@ -35,7 +35,7 @@ FILE *fcode		= NULL;
 
 int state_id_counter	= 0;
 int module_id_counter 	= 1;
-int event_id_counter	= 1;
+int event_id_counter	= 0;
 int conf_id_counter	= 0;
 
 int active_state;
