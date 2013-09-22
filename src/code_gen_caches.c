@@ -162,7 +162,7 @@ void generateCaches(int event_counter, int policy_counter) {
 
 
 	/* module_t to event_id */
-	fprintf(fp, "uint8_t event_module[NUMBER_OF_EVENTS][2] = {\n");
+	fprintf(fp, "uint8_t event_conf[NUMBER_OF_EVENTS][2] = {\n");
 	fprintf(fp, "\t/* [event_id, conf_id */\n");
 	for ( i = 0; i < conf_id_counter; i++ ) {
 		if (conftab[i].conf->id->type == TYPE_PROCESS_EVENT) {
