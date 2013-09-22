@@ -168,7 +168,8 @@ void generateCaches(int event_counter, int policy_counter) {
 		if (conftab[i].conf->id->type == TYPE_PROCESS_EVENT) {
 			fprintf(fp, "\t{%d, %d},\n",
 					conftab[i].conf->id->value,
-					conftab[i].conf->app->id);
+					//conftab[i].conf->app->id);
+					conftab[i].conf->counter);
 		}
 	}
 
