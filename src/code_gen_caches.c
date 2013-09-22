@@ -218,8 +218,6 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	fprintf(fp, "};\n\n");
 
-	fprintf(fp, "bool control_unit_support;\n\n");
-	fprintf(fp, "nxle_uint16_t event_mask;\n\n");
 	fprintf(fp, "#endif\n\n");
 
 	fclose(fp);
