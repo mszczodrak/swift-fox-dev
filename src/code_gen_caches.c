@@ -201,7 +201,7 @@ void generateCaches(int event_counter, int policy_counter) {
 */
 
 
-        fprintf(fp, "struct fennec_policy policies[%d] = {\n", policy_counter);
+        fprintf(fp, "struct fennec_policy policies[NUMBER_OF_POLICIES] = {\n");
 	for(i = 0; i < policy_counter; ) {
 		fprintf(fp, "\t{\n");
 		fprintf(fp, "\t\t.src_conf = %d,\n", poltab[i].policy->from->value);

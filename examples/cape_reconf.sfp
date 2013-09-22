@@ -40,8 +40,6 @@ event timerMonitor2 { 	timerMilliE()
 			nullRadio()
 }
 
-
-
 state monitor { count  }
 state light { blinking }
 
