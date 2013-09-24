@@ -1329,7 +1329,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioSend_send(uint16_t module_id, uint8_t to_layer, message_t* msg, bool useCca) {\n");
-	fprintf(fp,"error_t err;\n");
+	fprintf(fp,"\terror_t err;\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -1347,7 +1347,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"uint8_t RadioPacket_maxPayloadLength(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"uint8_t s;\n");
+	fprintf(fp,"\tuint8_t s;\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
@@ -1364,7 +1364,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void* RadioPacket_getPayload(uint16_t module_id, uint8_t to_layer, message_t* msg, uint8_t len) {\n");
-	fprintf(fp,"void *ptr;\n");
+	fprintf(fp,"\tvoid *ptr;\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -1382,7 +1382,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioBuffer_load(uint16_t module_id, uint8_t to_layer, message_t* msg) {\n");
-	fprintf(fp,"error_t err;\n");
+	fprintf(fp,"\terror_t err;\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
