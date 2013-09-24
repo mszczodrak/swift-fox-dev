@@ -1,5 +1,6 @@
-uint16_t dest_node = 3
+uint16_t dest_node = 73
 uint16_t src_node = 0xFFFF
+uint16_t event_src = 2
 
 configuration count { 
 			counter(10, 1024, src_node, dest_node)
@@ -20,21 +21,26 @@ configuration blinking {
 }
 
 configuration controller {
-#			nullApp()
-			cuApp()
+			nullApp()
+#			cuApp()
 			cuNet()
 			cuMac()
-			cape()
+			nullRadio()
+#			cape()
 }
 
 
-event timerMonitor { 	timerMilliE()
+event timerMonitor { 	
+			timerMilliE(3000, 0xFFFF)
+			#timerMilliE(3000, event_src)
 			nullNet()
 			nullMac()
 			nullRadio()
 }
 
-event timerMonitor2 { 	timerMilliE()
+event timerMonitor2 { 	
+			timerMilliE(1000, 0xFFFF)
+			#timerMilliE(4000, event_src)
 			nullNet()
 			nullMac()
 			nullRadio()

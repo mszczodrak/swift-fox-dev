@@ -985,6 +985,8 @@ find_sym(char *s) {
 /* process_module */
 struct modtab *
 proc_module(char *s) {
+	char * c;
+
 	/* symtab ptr */
 	struct symtab *sp = find_sym(s);
 
@@ -1003,6 +1005,10 @@ proc_module(char *s) {
 			mp->type = sp->type;
 			mp->lib = sp->lib;
 			mp->params = NULL;
+			mp->name = strdup(sp->lib->full_name);
+			for(c = mp->name; *c != '\0'; c++ ) {
+				*c = toupper(*c);
+			}
                         return mp;
                 }
 		if (strcmp(mp->lib->def, sp->name) == 0) {

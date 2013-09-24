@@ -68,6 +68,14 @@ void generateCaches(int event_counter, int policy_counter) {
         }
         fprintf(fp, "\n");
 
+        for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+                if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
+                        fprintf(fp, "#define %s\t%d\n", mp->name, mp->id);
+                }
+        }
+        fprintf(fp, "\n");
+
+
 
 
 	/* Generate Configurations */
@@ -81,10 +89,10 @@ void generateCaches(int event_counter, int policy_counter) {
 		fprintf(fp, "\t{\n");
     
 		fprintf(fp, "\t\t.conf_id = %d,\n", conftab[i].conf->counter);
-		fprintf(fp, "\t\t.application = %d,\n", conftab[i].conf->app->id);
-		fprintf(fp, "\t\t.network = %d,\n", conftab[i].conf->net->id);
-		fprintf(fp, "\t\t.mac = %d,\n", conftab[i].conf->mac->id);
-		fprintf(fp, "\t\t.radio = %d,\n", conftab[i].conf->radio->id);
+		fprintf(fp, "\t\t.application = %s,\n", conftab[i].conf->app->name);
+		fprintf(fp, "\t\t.network = %s,\n", conftab[i].conf->net->name);
+		fprintf(fp, "\t\t.mac = %s,\n", conftab[i].conf->mac->name);
+		fprintf(fp, "\t\t.radio = %s,\n", conftab[i].conf->radio->name);
 		if (conftab[i].conf->level == UNKNOWN) {
 			fprintf(fp, "\t\t.level = F_MINIMUM_STATE_LEVEL\n");
 		} else {
