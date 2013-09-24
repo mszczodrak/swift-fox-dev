@@ -419,10 +419,12 @@ void generateFennecEngineP() {
 	fprintf(fp,"bool pending_radio_stop = 0;\n\n");
 
 	fprintf(fp,"void module_startDone(uint8_t module_id, error_t error) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP module_startDone(%%d, %%d)\", module_id, error);\n");
 	fprintf(fp,"\tsignal ModuleCtrl.startDone(module_id, error);\n");
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"void module_stopDone(uint8_t module_id, error_t error) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP module_stopDone(%%d, %%d)\", module_id, error);\n");
 	fprintf(fp,"\tsignal ModuleCtrl.stopDone(module_id, error);\n");
 	fprintf(fp,"}\n\n");
 
@@ -436,12 +438,13 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"command error_t ModuleCtrl.start(uint8_t module_id) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP ModuleCtrl.start(%%d)\", module_id);\n");
 	fprintf(fp,"\tpending_radio_stop = 0;\n");
-
 	fprintf(fp,"\tswitch(module_id) {\n\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
         	if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
                 	fprintf(fp, "\tcase %d:\n", mp->id);
+			fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %sControl.start()\");\n", mp->lib->full_name);
 	                fprintf(fp, "\t\treturn call %sControl.start();\n", mp->lib->full_name);
         	}
 	}
@@ -450,6 +453,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"command error_t ModuleCtrl.stop(uint8_t module_id) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP ModuleCtrl.stop(%%d)\", module_id);\n");
 	fprintf(fp,"\tcall RadioActivityTimer.stop();\n");
 	fprintf(fp,"\tif (pending_radio_stop == 1) {\n");
 	fprintf(fp,"\t\tsignal RadioActivityTimer.fired();\n");
@@ -459,6 +463,7 @@ void generateFennecEngineP() {
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 	        if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
         	        fprintf(fp, "\tcase %d:\n", mp->id);
+			fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %sControl.stop()\");\n", mp->lib->full_name);
                 	fprintf(fp, "\t\treturn call %sControl.stop();\n", mp->lib->full_name);
 	        }
 	}
@@ -1753,75 +1758,143 @@ void generateFennecEngineP() {
 
 			fprintf(fp, "command error_t %sNetworkAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n",
 						mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMSend.send()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn AMSend_send(%d, F_NETWORK, addr, msg, len);\n", 
 						mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command error_t %sNetworkAMSend.cancel(message_t* msg) {\n",
+						mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMSend.cancel()\");\n",
 						mp->lib->full_name);
 			fprintf(fp, "\treturn AMSend_cancel(%d, F_NETWORK, msg);\n",
 						mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command uint8_t %sNetworkAMSend.maxPayloadLength() {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMSend.maxPayloadLength()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn AMSend_maxPayloadLength(%d, F_NETWORK);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command void* %sNetworkAMSend.getPayload(message_t* msg, uint8_t len) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMSend.getPayload()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn AMSend_getPayload(%d, F_NETWORK, msg, len);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command am_addr_t %sNetworkAMPacket.address() {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.address()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn AMPacket_address(%d, F_NETWORK);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command am_addr_t %sNetworkAMPacket.destination(message_t* msg) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.destination()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn AMPacket_destination(%d, F_NETWORK, msg);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command am_addr_t %sNetworkAMPacket.source(message_t* msg) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.source()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn AMPacket_source(%d, F_NETWORK, msg);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command void %sNetworkAMPacket.setDestination(message_t* msg, am_addr_t addr) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.setDestination()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn AMPacket_setDestination(%d, F_NETWORK, msg, addr);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command void %sNetworkAMPacket.setSource(message_t* msg, am_addr_t addr) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.setSource()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn AMPacket_setSource(%d, F_NETWORK, msg, addr);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command bool %sNetworkAMPacket.isForMe(message_t* msg) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.isForMe()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn AMPacket_isForMe(%d, F_NETWORK, msg);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command am_id_t %sNetworkAMPacket.type(message_t* msg) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.type()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn AMPacket_type(%d, F_NETWORK, msg);\n",mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command void %sNetworkAMPacket.setType(message_t* msg, am_id_t t) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.setType()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn AMPacket_setType(%d, F_NETWORK, msg, t);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command am_group_t %sNetworkAMPacket.group(message_t* msg) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.group()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn AMPacket_group(%d, F_NETWORK, msg);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command void %sNetworkAMPacket.setGroup(message_t* msg, am_group_t grp) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.setGroup()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn AMPacket_setGroup(%d, F_NETWORK, msg, grp);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command am_group_t %sNetworkAMPacket.localGroup() {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.localGroup()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn AMPacket_localGroup(%d, F_NETWORK);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command void %sNetworkPacket.clear(message_t* msg) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.clear()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn Packet_clear(%d, F_NETWORK, msg);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command uint8_t %sNetworkPacket.payloadLength(message_t* msg) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.payloadLength()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn Packet_payloadLength(%d, F_NETWORK, msg);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command void %sNetworkPacket.setPayloadLength(message_t* msg, uint8_t len) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.setPayloadLength()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn Packet_setPayloadLength(%d, F_NETWORK, msg, len);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command uint8_t %sNetworkPacket.maxPayloadLength() {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.maxPayloadLength()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn Packet_maxPayloadLength(%d, F_NETWORK);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "command void* %sNetworkPacket.getPayload(message_t* msg, uint8_t len) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.getPayload()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn Packet_getPayload(%d, F_NETWORK, msg, len);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "async command error_t %sNetworkPacketAcknowledgements.requestAck( message_t* msg ) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.requestAck()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn PacketAcknowledgements_requestAck(%d, F_NETWORK, msg);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "async command error_t %sNetworkPacketAcknowledgements.noAck( message_t* msg ) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.noAck()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn PacketAcknowledgements_noAck(%d, F_NETWORK, msg);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
 			fprintf(fp, "async command bool %sNetworkPacketAcknowledgements.wasAcked(message_t* msg) {\n", mp->lib->full_name);
+			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.wasAcked()\");\n",
+						mp->lib->full_name);
 			fprintf(fp, "\treturn PacketAcknowledgements_wasAcked(%d, F_NETWORK, msg);\n", mp->id);
 			fprintf(fp, "}\n\n");
 		}
