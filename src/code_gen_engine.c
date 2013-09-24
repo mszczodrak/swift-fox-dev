@@ -472,6 +472,8 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"error_t AMSend_send(uint16_t module_id, uint8_t to_layer, am_addr_t addr, message_t* msg, uint8_t len) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMSend_send(%%d, %%d, %%d, 0x%%1x, %%d)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer, addr, msg, len);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -493,6 +495,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t AMSend_cancel(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMSend_cancel(%%d, %%d, 0x%%1x)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -514,6 +518,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void* AMSend_getPayload(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMSend_getPayload(%%d, %%d, 0x%%1x, %%d)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, len);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -535,6 +541,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"uint8_t AMSend_maxPayloadLength(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMSend_maxPayloadLength(%%d, %%d)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -555,6 +563,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_addr_t AMPacket_address(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMPacket_address(%%d, %%d)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
@@ -575,6 +585,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_addr_t AMPacket_destination(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMPacket_destination(%%d, %%d, 0x%%1x)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -596,6 +608,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_addr_t AMPacket_source(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMPacket_source(%%d, %%d, 0x%%1x)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -617,6 +631,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void AMPacket_setDestination(uint16_t module_id, uint8_t to_layer, message_t *msg, am_addr_t addr) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMPacket_setDestination(%%d, %%d, 0x%%1x, %%d)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, addr);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -638,6 +654,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void AMPacket_setSource(uint16_t module_id, uint8_t to_layer, message_t *msg, am_addr_t addr) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMPacket_setSource(%%d, %%d, 0x%%1x, %%d)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, addr);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -660,6 +678,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"bool AMPacket_isForMe(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMPacket_isForMe(%%d, %%d, 0x%%1x)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -681,6 +701,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_id_t AMPacket_type(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMPacket_type(%%d, %%d, 0x%%1x)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -702,6 +724,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void AMPacket_setType(uint16_t module_id, uint8_t to_layer, message_t *msg, am_id_t t) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMPacket_setType(%%d, %%d, 0x%%1x, %%d)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, t);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -723,6 +747,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"am_group_t AMPacket_group(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMPacket_group(%%d, %%d, 0x%%1x)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -744,6 +770,8 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void AMPacket_setGroup(uint16_t module_id, uint8_t to_layer, message_t *msg, am_group_t grp) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMPacket_setGroup(%%d, %%d, 0x%%1x, %%d)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, grp);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
