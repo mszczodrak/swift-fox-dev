@@ -1473,10 +1473,13 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"message_t* receive(uint16_t module_id, uint8_t to_layer, message_t* msg, void* payload, uint8_t len) {\n");
+	fprintf(fp,"\tif (call Fennec.checkPacket(msg, len) != SUCCESS) {\n");
+	fprintf(fp,"\t\t return msg;\n");
+	fprintf(fp,"\t}\n\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	fprintf(fp,"\t\treturn msg;\n");
-	fprintf(fp,"}\n\n");
+	fprintf(fp,"\t}\n\n");
 
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
@@ -1511,10 +1514,13 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"message_t* snoop(uint16_t module_id, uint8_t to_layer, message_t* msg, void* payload, uint8_t len) {\n");
+	fprintf(fp,"\tif (call Fennec.checkPacket(msg, len) != SUCCESS) {\n");
+	fprintf(fp,"\t\t return msg;\n");
+	fprintf(fp,"\t}\n\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	fprintf(fp,"\t\treturn msg;\n");
-	fprintf(fp,"}\n\n");
+	fprintf(fp,"\t}\n\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_EVENT) {
