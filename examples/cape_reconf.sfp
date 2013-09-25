@@ -1,4 +1,4 @@
-uint16_t dest_node = 73
+uint16_t dest_node = 2
 uint16_t src_node = 0xFFFF
 uint16_t event_src = 2
 
@@ -21,12 +21,14 @@ configuration blinking {
 }
 
 configuration controller {
-			nullApp()
-#			cuApp()
+			cuApp()
+#			nullApp()
 			cuNet()
+#			nullNet()
 			cuMac()
-			nullRadio()
-#			cape()
+#			nullMac()
+#			nullRadio()
+			cape()
 }
 
 
