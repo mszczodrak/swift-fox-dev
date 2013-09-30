@@ -37,6 +37,7 @@ int state_id_counter	= 0;
 int module_id_counter 	= 1;
 int event_id_counter	= 0;
 int conf_id_counter	= 0;
+int state_defined	= 0;
 
 int active_state;
 
@@ -510,6 +511,8 @@ state: STATE IDENTIFIER state_level OPEN_BRACE newlines conf_ids newlines CLOSE_
 			++state_id_counter;
 
 			statetab[$$->counter].state = $$;
+
+			state_defined	= 1;
 		}
 	;
 

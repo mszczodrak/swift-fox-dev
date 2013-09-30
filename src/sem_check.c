@@ -235,6 +235,13 @@ checkConfiguration(struct confnode* c) {
                         goto radio_err;
         }
 
+
+	/* check if states are defined */
+
+	if (state_defined == 0) {
+		addConfState(c);
+	}
+
         /* success */
         return;
 
@@ -512,4 +519,13 @@ checks control state
 */
 void
 checkControlState(void) {
+}
+
+
+
+void
+addConfState(struct confnode *c) {
+
+
+
 }

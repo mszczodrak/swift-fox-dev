@@ -37,5 +37,6 @@ void updateStatesWithEvents(struct policy *p);
 void checkInitial(struct initnode *i);
 void checkControlState(void);
 void checkState(struct statenode *s);
+void addConfState(struct confnode *c);
 
 #endif
