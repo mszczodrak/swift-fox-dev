@@ -82,6 +82,7 @@ extern int event_id_counter;
 extern int conf_id_counter;
 extern int state_defined;
 
+extern char *conf_state_suffix;
 
 int start_parser(int argc, char *argv[]);
 

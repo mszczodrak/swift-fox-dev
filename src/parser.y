@@ -44,6 +44,7 @@ int active_state;
 int file_status;
 char *file_name;
 char *error_location;
+char *conf_state_suffix = "_cts";
 
 void yyerror(char *errmsg);
 int yylex(void);

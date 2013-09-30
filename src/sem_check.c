@@ -529,7 +529,7 @@ addConfState(struct confnode *c) {
 	struct statenode *newstate = calloc(1, sizeof(struct statenode));
 	struct conf_id *ci = calloc(1, sizeof(struct conf_id));
 	struct conf_ids *cis = calloc(1, sizeof(struct conf_ids));
-	char *state_name = calloc(1, sizeof(c->id->name) + 5);
+	char *state_name = calloc(1, sizeof(c->id->name) + strlen(conf_state_suffix) + 2);
 
 	if ((newstate == NULL) || (cis == NULL) || (ci == NULL) ||
 						(state_name == NULL)) {
@@ -537,7 +537,7 @@ addConfState(struct confnode *c) {
 		exit(1);
 	}
 
-	sprintf(state_name, "%s_cts", c->id->name);
+	sprintf(state_name, "%s%s", c->id->name, conf_state_suffix);
 	struct symtab *st = symlook(state_name);
 
 	if (st == NULL) {
