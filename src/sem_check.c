@@ -526,6 +526,44 @@ checkControlState(void) {
 void
 addConfState(struct confnode *c) {
 
+	struct statenode *newstate = calloc(1, sizeof(struct statenode));
+	struct conf_id *ci = calloc(1, sizeof(struct conf_id));
+	struct conf_ids *cis = calloc(1, sizeof(struct conf_ids));
+	char *state_name = calloc(1, sizeof(c->id->name) + 5);
+
+	if ((newstate == NULL) || (cis == NULL) || (ci == NULL) ||
+						(state_name == NULL)) {
+		fprintf(stderr, "addConfState: malloc failed\n");
+		exit(1);
+	}
+
+	sprintf(state_name, "%s_cts", c->id->name);
+	struct symtab *st = symlook(state_name);
+
+	if (st == NULL) {
+		fprintf(stderr, "addConfState: symlook failed\n");
+		exit(1);
+	}
 
 
+	/* create conf_id */
+	ci->conf = c;
+	ci->id = c->id;
+
+	/* create conf_ids with one conf_id */
+	cis->count = 1;
+	cis->confs = NULL;
+	cis->conf = ci;
+
+	/* create state entry */
+	st->type = TYPE_STATE;
+	newstate->id = st;
+	newstate->level = UNKNOWN;
+	newstate->confs = cis;
+	newstate->confs_counter = 1;
+	newstate->counter = state_id_counter;
+	st->value = state_id_counter;
+	++state_id_counter;
+
+	statetab[newstate->counter].state = newstate;
 }
