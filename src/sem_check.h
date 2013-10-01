@@ -25,6 +25,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "traverse.h"
+#include "sf.h"
 
 /* adapted from code_gen.h for semantic checking */
 

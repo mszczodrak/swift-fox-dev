@@ -16,9 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "sem_check.h"
 #include "code_gen.h"
-#include "sf.h"
+#include "sem_check.h"
 
 /** 
 map configurations to names 
