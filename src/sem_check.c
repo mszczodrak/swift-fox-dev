@@ -18,6 +18,7 @@
 
 #include "sem_check.h"
 #include "code_gen.h"
+#include "sf.h"
 
 /** 
 map configurations to names 
@@ -473,27 +474,23 @@ checkInitial(struct initnode *i) {
 
 	/* iterator */
 	struct symtab *sp	= NULL;
-	/* flag */
-	int found		= 0;
 	
 	/* loop */
-	for (sp = symtab; sp < &symtab[NSYMS]; sp++)
-		if (sp->name &&
-			!strcmp(sp->name, i->id->name))
+	for (sp = symtab; sp < &symtab[NSYMS]; sp++) {
+		if (sp->name && !strcmp(sp->name, i->id->name)) {
 			if (sp->type && (sp->type == TYPE_STATE)) {
 				/* found */
-				found = 1;
-				break;
+				return;
 			}
+			if ((state_defined == 0) && sp->type &&
+				(sp->type == TYPE_PROCESS_REGULAR)) {
+				/* found */
+				return;
+			}
+		}
+	}
 	
-	/* check the initial configuration */
-	if (!found)
-		goto conf_err;
-	
-	/* done */	
-	return;
 
-conf_err:
 	/* undeclared initial configuration */
 	(void)fprintf(stderr, "error: undeclared 'initial' state %s\n",
 			i->id->name);
