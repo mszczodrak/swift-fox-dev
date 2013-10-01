@@ -238,7 +238,7 @@ checkConfiguration(struct confnode* c) {
 
 	/* check if states are defined */
 
-	if (state_defined == 0) {
+	if (state_id_counter == 0) {
 		addConfState(c);
 	}
 
@@ -561,9 +561,8 @@ addConfState(struct confnode *c) {
 	newstate->level = UNKNOWN;
 	newstate->confs = cis;
 	newstate->confs_counter = 1;
-	newstate->counter = state_id_counter;
-	st->value = state_id_counter;
-	++state_id_counter;
+	newstate->counter = c->counter;
+	st->value = c->counter;
 
 	statetab[newstate->counter].state = newstate;
 }
