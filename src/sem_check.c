@@ -238,7 +238,7 @@ checkConfiguration(struct confnode* c) {
 
 	/* check if states are defined */
 
-	if (state_id_counter == 0) {
+	if (state_defined == 0) {
 		addConfState(c);
 	}
 
@@ -477,25 +477,15 @@ checkInitial(struct initnode *i) {
 	int found		= 0;
 	
 	/* loop */
-	for (sp = symtab; sp < &symtab[NSYMS]; sp++) {
+	for (sp = symtab; sp < &symtab[NSYMS]; sp++)
 		if (sp->name &&
-			!strcmp(sp->name, i->id->name)) {
-		
-			printf("type: %d\n", sp->type);
-	
+			!strcmp(sp->name, i->id->name))
 			if (sp->type && (sp->type == TYPE_STATE)) {
 				/* found */
 				found = 1;
-				return;
+				break;
 			}
-			if (sp->type && (state_id_counter == 0) &&
-					(sp->type == TYPE_PROCESS_REGULAR)) {
-				/* found */
-				found = 1;
-				return;
-			}
-		}
-	}
+	
 	/* check the initial configuration */
 	if (!found)
 		goto conf_err;
@@ -571,8 +561,9 @@ addConfState(struct confnode *c) {
 	newstate->level = UNKNOWN;
 	newstate->confs = cis;
 	newstate->confs_counter = 1;
-	newstate->counter = c->counter;
-	st->value = c->counter;
+	newstate->counter = state_id_counter;
+	st->value = state_id_counter;
+	++state_id_counter;
 
 	statetab[newstate->counter].state = newstate;
 }

@@ -41,7 +41,7 @@
 
 #define TYPE_TYPE		8
 
-//#define TYPE_CONFIGURATION	9
+#define TYPE_CONFIGURATION	9
 #define TYPE_PROCESS		10
 #define TYPE_PROCESS_REGULAR	11
 #define TYPE_PROCESS_EVENT	12
@@ -80,6 +80,7 @@ extern int state_id_counter;
 extern int module_id_counter;
 extern int event_id_counter;
 extern int conf_id_counter;
+extern int state_defined;
 
 extern char *conf_state_suffix;
 
