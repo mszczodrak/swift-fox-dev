@@ -477,15 +477,25 @@ checkInitial(struct initnode *i) {
 	int found		= 0;
 	
 	/* loop */
-	for (sp = symtab; sp < &symtab[NSYMS]; sp++)
+	for (sp = symtab; sp < &symtab[NSYMS]; sp++) {
 		if (sp->name &&
-			!strcmp(sp->name, i->id->name))
+			!strcmp(sp->name, i->id->name)) {
+		
+			printf("type: %d\n", sp->type);
+	
 			if (sp->type && (sp->type == TYPE_STATE)) {
 				/* found */
 				found = 1;
-				break;
+				return;
 			}
-	
+			if (sp->type && (state_id_counter == 0) &&
+					(sp->type == TYPE_PROCESS_REGULAR)) {
+				/* found */
+				found = 1;
+				return;
+			}
+		}
+	}
 	/* check the initial configuration */
 	if (!found)
 		goto conf_err;
