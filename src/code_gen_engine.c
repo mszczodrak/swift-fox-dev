@@ -260,9 +260,6 @@ void generateFennecEngineC() {
 			fprintf(fp, "FennecEngineP.%sByteIndicator -> %s.ByteIndicator;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sRadioControl -> %s.RadioControl;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
 			fprintf(fp, "\n");
 		}
 	}
@@ -403,7 +400,6 @@ void generateFennecEngineP() {
 			fprintf(fp, "uses interface ReceiveIndicator as %sPacketIndicator;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface ReceiveIndicator as %sEnergyIndicator;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface ReceiveIndicator as %sByteIndicator;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface SplitControl as %sRadioControl;\n", mp->lib->full_name);
 			fprintf(fp, "\n");
 		}
 	}
@@ -418,8 +414,8 @@ void generateFennecEngineP() {
 	fprintf(fp,"void module_startDone(uint8_t module_id, error_t error) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP module_startDone(%%d, %%d)\", module_id, error);\n");
 	fprintf(fp,"\tif (layer_request) {\n");
-	fprintf(fp,"\t\tlayer_request = 0;\n");
 	fprintf(fp,"\t\tradioControlStartDone(module_id, layer_request, error);\n");
+	fprintf(fp,"\t\tlayer_request = 0;\n");
 	fprintf(fp,"\t} else {\n");
 	fprintf(fp,"\t\tsignal ModuleCtrl.startDone(module_id, error);\n");
 	fprintf(fp,"\t}\n");
@@ -428,8 +424,8 @@ void generateFennecEngineP() {
 	fprintf(fp,"void module_stopDone(uint8_t module_id, error_t error) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP module_stopDone(%%d, %%d)\", module_id, error);\n");
 	fprintf(fp,"\tif (layer_request) {\n");
-	fprintf(fp,"\t\tlayer_request = 0;\n");
 	fprintf(fp,"\t\tradioControlStopDone(module_id, layer_request, error);\n");
+	fprintf(fp,"\t\tlayer_request = 0;\n");
 	fprintf(fp,"\t} else {\n");
 	fprintf(fp,"\t\tsignal ModuleCtrl.stopDone(module_id, error);\n");
 	fprintf(fp,"\t}\n");
@@ -2342,14 +2338,6 @@ void generateFennecEngineP() {
 			fprintf(fp, "}\n\n");
 			fprintf(fp, "async event void %sRadioSend.sendDone(message_t *msg, error_t error) {\n", mp->lib->full_name);
 			fprintf(fp, "\treturn transmitSendDone(%d, F_MAC, msg, error);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "event void %sRadioControl.startDone(error_t error) {\n", mp->lib->full_name);
-			fprintf(fp, "\treturn radioControlStartDone(%d, F_MAC, error);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "event void %sRadioControl.stopDone(error_t error) {\n", mp->lib->full_name);
-			fprintf(fp, "\treturn radioControlStopDone(%d, F_MAC, error);\n", mp->id);
 			fprintf(fp, "}\n\n");
 		}
 	}
