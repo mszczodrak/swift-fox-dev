@@ -411,14 +411,28 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 	fprintf(fp,"implementation {\n\n");
 
+	fprintf(fp,"uint8_t layer_request = 0;\n\n");
+	fprintf(fp,"void radioControlStartDone(uint16_t module_id, uint8_t to_layer, error_t error);\n");
+	fprintf(fp,"void radioControlStopDone(uint16_t module_id, uint8_t to_layer, error_t error);\n\n");
+
 	fprintf(fp,"void module_startDone(uint8_t module_id, error_t error) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP module_startDone(%%d, %%d)\", module_id, error);\n");
-	fprintf(fp,"\tsignal ModuleCtrl.startDone(module_id, error);\n");
+	fprintf(fp,"\tif (layer_request) {\n");
+	fprintf(fp,"\t\tlayer_request = 0;\n");
+	fprintf(fp,"\t\tradioControlStartDone(module_id, layer_request, error);\n");
+	fprintf(fp,"\t} else {\n");
+	fprintf(fp,"\t\tsignal ModuleCtrl.startDone(module_id, error);\n");
+	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"void module_stopDone(uint8_t module_id, error_t error) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP module_stopDone(%%d, %%d)\", module_id, error);\n");
-	fprintf(fp,"\tsignal ModuleCtrl.stopDone(module_id, error);\n");
+	fprintf(fp,"\tif (layer_request) {\n");
+	fprintf(fp,"\t\tlayer_request = 0;\n");
+	fprintf(fp,"\t\tradioControlStopDone(module_id, layer_request, error);\n");
+	fprintf(fp,"\t} else {\n");
+	fprintf(fp,"\t\tsignal ModuleCtrl.stopDone(module_id, error);\n");
+	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"command error_t ModuleCtrl.start(uint8_t module_id) {\n");
@@ -1366,32 +1380,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"error_t RadioControl_start(uint16_t module_id, uint8_t to_layer) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioControl_start(%%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sRadioControl.start();\n\n", mp->lib->full_name);
-		}
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn FAIL;\n");
-	fprintf(fp,"\t}\n");
+	fprintf(fp,"\tlayer_request = F_MAC;\n");
+	fprintf(fp,"\treturn call ModuleCtrl.start( call Fennec.getNextModuleId(module_id, to_layer) );\n");
 	fprintf(fp,"}\n\n");
 
 
 	fprintf(fp,"error_t RadioControl_stop(uint16_t module_id, uint8_t to_layer) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioControl_stop(%%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sRadioControl.stop();\n\n", mp->lib->full_name);
-		}
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn FAIL;\n");
-	fprintf(fp,"\t}\n");
+	fprintf(fp,"\tlayer_request = F_MAC;\n");
+	fprintf(fp,"\treturn call ModuleCtrl.start( call Fennec.getNextModuleId(module_id, to_layer) );\n");
 	fprintf(fp,"}\n\n");
 
 
