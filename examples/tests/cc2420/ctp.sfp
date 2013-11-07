@@ -4,7 +4,7 @@ uint16_t src_node = 0xFFFF
 configuration count { counter(20, 1024, src_node, dest_node) 
 			#nullNet()
 			ctp(dest_node)
-                        csmaca(dest_node, 0, 10, 10, 1, 1, 1)
+                        csmaca(dest_node, 100, 10, 10, 1, 1, 1)
                         # always ON, delay_after_receive, backoff, min_backoff
                         # ack, cca, crc
                         cc2420(26, 31, 1, 1)
