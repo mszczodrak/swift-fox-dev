@@ -1389,7 +1389,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioControl_stop(%%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
 	fprintf(fp,"\tlayer_request = F_MAC;\n");
-	fprintf(fp,"\treturn call ModuleCtrl.start( call Fennec.getNextModuleId(module_id, to_layer) );\n");
+	fprintf(fp,"\treturn call ModuleCtrl.stop( call Fennec.getNextModuleId(module_id, to_layer) );\n");
 	fprintf(fp,"}\n\n");
 
 
