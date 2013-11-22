@@ -1,17 +1,14 @@
-uint16_t dest_node = 73
-uint16_t src_node = 0xFFFF
-
-configuration count { counter(60, 1024, src_node, dest_node) 
-			#nullNet()
-			ctp(dest_node)
-                        csmaca(dest_node, 300, 10, 10, 1, 1, 1)
+configuration disseminate { maxTest(0) 
+			tricklePlus(1, 1024, 1, 6)
+                        csmaca(0, 0, 10, 10, 1, 1, 1)
                         # always ON, delay_after_receive, backoff, min_backoff
                         # ack, cca, crc
+#			cape()
                         cc2420(26, 31, 1, 1)
                         # channel, power, ack, crc
 			}
 
-state test { count }
+state test {disseminate}
 
 start test
 
