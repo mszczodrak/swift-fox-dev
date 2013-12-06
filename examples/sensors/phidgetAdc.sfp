@@ -1,5 +1,8 @@
 
-configuration tester { phidget_adc(25, 0, 40, 25, 7, 40, NODE) # Send to itself 
+uint16_t dest_node = 1
+uint16_t src_node = 0xFFFF
+
+configuration sensor_raw { phidget_adc(1024, 0, 10, 1024, 7, 10, dest_node) # Send to itself 
 			# freq1 ch1 count1 freq2 ch2 count2 dest
 			nullNet()
 			nullMac()
@@ -11,5 +14,8 @@ configuration tester { phidget_adc(25, 0, 40, 25, 7, 40, NODE) # Send to itself
                         #cc2420(26, 31, 1, 1)
                                 # channel, power, ack, crc
 }
-start tester
+
+state test { sensor_raw }
+
+start test
 

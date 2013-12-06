@@ -1,5 +1,5 @@
 
-configuration generic_sensor { genericSensor(1000)
+configuration generic_sensor { goali(1024)
 			nullNet()
 			nullMac()
 			nullRadio()
