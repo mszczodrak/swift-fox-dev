@@ -1,4 +1,4 @@
-uint16_t dest_node = 30
+uint16_t dest_node = 10
 
 configuration hello { phidget_adc(1024, 0, 1, 1024, 7, 1, dest_node) 
                         ctp(dest_node)
