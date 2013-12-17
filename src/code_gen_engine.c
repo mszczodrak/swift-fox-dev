@@ -173,37 +173,31 @@ void generateFennecEngineC() {
 			fprintf(fp, "FennecEngineP.%sMacPacketAcknowledgements -> %s.MacPacketAcknowledgements;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sRadioReceive <- %s.RadioReceive;\n",
+			fprintf(fp, "FennecEngineP.%sRadioSend <- %s.RadioSend;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sRadioResource <- %s.RadioResource;\n", 
+			fprintf(fp, "FennecEngineP.%sRadioReceive <- %s.RadioReceive;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sRadioConfig <- %s.RadioConfig;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sRadioPower <- %s.RadioPower;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sReadRssi <- %s.ReadRssi;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sRadioBuffer <- %s.RadioBuffer;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sRadioSend <- %s.RadioSend;\n", 
+			fprintf(fp, "FennecEngineP.%sRadioCCA <- %s.RadioCCA;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sRadioPacket <- %s.RadioPacket;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sPacketIndicator <- %s.PacketIndicator;\n", 
+			fprintf(fp, "FennecEngineP.%sPacketTransmitPower <- %s.PacketTransmitPower;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sEnergyIndicator <- %s.EnergyIndicator;\n", 
+			fprintf(fp, "FennecEngineP.%sPacketRSSI <- %s.PacketRSSI;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sByteIndicator <- %s.ByteIndicator;\n", 
+			fprintf(fp, "FennecEngineP.%sPacketTimeSyncOffset <- %s.PacketTimeSyncOffset;\n", 
+						mp->lib->full_name, 
+						mp->lib->full_name);
+			fprintf(fp, "FennecEngineP.%sPacketLinkQuality <- %s.PacketLinkQuality;\n", 
+						mp->lib->full_name, 
+						mp->lib->full_name);
+			fprintf(fp, "FennecEngineP.%sLinkPacketMetadata <- %s.LinkPacketMetadata;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sRadioControl <- %s.RadioControl;\n", 
@@ -227,39 +221,41 @@ void generateFennecEngineC() {
 						mp->lib->full_name, 
 						mp->lib->full_name, 
 						mp->lib->full_name);
+			fprintf(fp, "FennecEngineP.%sRadioSend -> %s.RadioSend;\n", 
+						mp->lib->full_name, 
+						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sRadioReceive -> %s.RadioReceive;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sRadioResource -> %s.RadioResource;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sRadioConfig -> %s.RadioConfig;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sRadioPower -> %s.RadioPower;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sReadRssi -> %s.ReadRssi;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sRadioBuffer -> %s.RadioBuffer;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sRadioSend -> %s.RadioSend;\n", 
+			fprintf(fp, "FennecEngineP.%sRadioCCA -> %s.RadioCCA;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sRadioPacket -> %s.RadioPacket;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sPacketIndicator -> %s.PacketIndicator;\n", 
+			fprintf(fp, "FennecEngineP.%sPacketTransmitPower -> %s.PacketTransmitPower;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
+			fprintf(fp, "FennecEngineP.%sPacketRSSI -> %s.PacketRSSI;\n", 
+						mp->lib->full_name, 
+						mp->lib->full_name);
+			fprintf(fp, "FennecEngineP.%sPacketTimeSyncOffset -> %s.PacketTimeSyncOffset;\n", 
+						mp->lib->full_name, 
+						mp->lib->full_name);
+			fprintf(fp, "FennecEngineP.%sPacketLinkQuality -> %s.PacketLinkQuality;\n", 
+						mp->lib->full_name, 
+						mp->lib->full_name);
+			fprintf(fp, "FennecEngineP.%sLinkPacketMetadata -> %s.LinkPacketMetadata;\n", 
+						mp->lib->full_name, 
+						mp->lib->full_name);
+/*
 			fprintf(fp, "FennecEngineP.%sEnergyIndicator -> %s.EnergyIndicator;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sByteIndicator -> %s.ByteIndicator;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
+*/
 			fprintf(fp, "\n");
 		}
 	}
@@ -293,27 +289,17 @@ void generateFennecEngineP() {
 
   	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
     		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && ((mp->lib->type == TYPE_APPLICATION) || (mp->lib->type == TYPE_EVENT))) {
-      			fprintf(fp, "/* Application  Module: %s */\n",
-						mp->lib->full_name);
-      			fprintf(fp, "uses interface SplitControl as %sControl;\n", 
-						mp->lib->full_name);
-      			fprintf(fp, "provides interface %sParams;\n", 
-						mp->lib->full_name);
-      			fprintf(fp, "provides interface AMSend as %sNetworkAMSend;\n", 
-						mp->lib->full_name);
-      			fprintf(fp, "provides interface Receive as %sNetworkReceive;\n", 
-						mp->lib->full_name);
-      			fprintf(fp, "provides interface Receive as %sNetworkSnoop;\n", 
-						mp->lib->full_name);
-      			fprintf(fp, "provides interface Packet as %sNetworkPacket;\n", 
-						mp->lib->full_name);
-      			fprintf(fp, "provides interface AMPacket as %sNetworkAMPacket;\n", 
-						mp->lib->full_name);
-      			fprintf(fp, "provides interface PacketAcknowledgements as %sNetworkPacketAcknowledgements;\n", 
-						mp->lib->full_name);
+      			fprintf(fp, "/* Application  Module: %s */\n", mp->lib->full_name);
+      			fprintf(fp, "uses interface SplitControl as %sControl;\n", mp->lib->full_name);
+      			fprintf(fp, "provides interface %sParams;\n", mp->lib->full_name);
+      			fprintf(fp, "provides interface AMSend as %sNetworkAMSend;\n", mp->lib->full_name);
+      			fprintf(fp, "provides interface Receive as %sNetworkReceive;\n", mp->lib->full_name);
+      			fprintf(fp, "provides interface Receive as %sNetworkSnoop;\n", mp->lib->full_name);
+      			fprintf(fp, "provides interface Packet as %sNetworkPacket;\n", mp->lib->full_name);
+      			fprintf(fp, "provides interface AMPacket as %sNetworkAMPacket;\n", mp->lib->full_name);
+      			fprintf(fp, "provides interface PacketAcknowledgements as %sNetworkPacketAcknowledgements;\n", mp->lib->full_name);
 			if (mp->lib->type == TYPE_EVENT) {
-				fprintf(fp, "uses interface Event as %sEvent;\n",
-						mp->lib->full_name);
+				fprintf(fp, "uses interface Event as %sEvent;\n", mp->lib->full_name);
 			}
 			fprintf(fp, "\n");
     		}
@@ -325,10 +311,7 @@ void generateFennecEngineP() {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
 			fprintf(fp, "/* Network Module: %s */\n", mp->lib->full_name);
 			fprintf(fp, "uses interface SplitControl as %sControl;\n", mp->lib->full_name);
-      			fprintf(fp, "provides interface %sParams;\n", 
-						mp->lib->full_name);
-
-
+      			fprintf(fp, "provides interface %sParams;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface AMSend as %sNetworkAMSend;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface Receive as %sNetworkReceive;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface Receive as %sNetworkSnoop;\n", mp->lib->full_name);
@@ -362,17 +345,15 @@ void generateFennecEngineP() {
 			fprintf(fp, "uses interface Packet as %sMacPacket;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface AMPacket as %sMacAMPacket;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface PacketAcknowledgements as %sMacPacketAcknowledgements;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface Receive as %sRadioReceive;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface Resource as %sRadioResource;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface RadioConfig as %sRadioConfig;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface RadioPower as %sRadioPower;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface Read<uint16_t> as %sReadRssi;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface RadioBuffer as %sRadioBuffer;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface RadioSend as %sRadioSend;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface RadioReceive as %sRadioReceive;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface RadioCCA as %sRadioCCA;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface RadioPacket as %sRadioPacket;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface ReceiveIndicator as %sPacketIndicator;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface ReceiveIndicator as %sEnergyIndicator;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface ReceiveIndicator as %sByteIndicator;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface PacketField<uint8_t> as %sPacketTransmitPower;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface PacketField<uint8_t> as %sPacketRSSI;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface PacketField<uint8_t> as %sPacketTimeSyncOffset;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface PacketField<uint8_t> as %sPacketLinkQuality;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface LinkPacketMetadata as %sLinkPacketMetadata;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface SplitControl as %sRadioControl;\n", mp->lib->full_name);
 			fprintf(fp, "\n");
 		}
@@ -384,22 +365,16 @@ void generateFennecEngineP() {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp, "/* Radio Module: %s */\n", mp->lib->full_name);
 			fprintf(fp, "uses interface SplitControl as %sControl;\n", mp->lib->full_name);
-
-      			fprintf(fp, "provides interface %sParams;\n", 
-						mp->lib->full_name);
-
-
-			fprintf(fp, "uses interface Receive as %sRadioReceive;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface Resource as %sRadioResource;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface RadioConfig as %sRadioConfig;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface RadioPower as %sRadioPower;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface Read<uint16_t> as %sReadRssi;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface RadioBuffer as %sRadioBuffer;\n", mp->lib->full_name);
+      			fprintf(fp, "provides interface %sParams;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface RadioSend as %sRadioSend;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface RadioReceive as %sRadioReceive;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface RadioCCA as %sRadioCCA;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface RadioPacket as %sRadioPacket;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface ReceiveIndicator as %sPacketIndicator;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface ReceiveIndicator as %sEnergyIndicator;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface ReceiveIndicator as %sByteIndicator;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface PacketField<uint8_t> as %sPacketTransmitPower;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface PacketField<uint8_t> as %sPacketRSSI;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface PacketField<uint8_t> as %sPacketTimeSyncOffset;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface PacketField<uint8_t> as %sPacketLinkQuality;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface LinkPacketMetadata as %sLinkPacketMetadata;\n", mp->lib->full_name);
 			fprintf(fp, "\n");
 		}
 	}
