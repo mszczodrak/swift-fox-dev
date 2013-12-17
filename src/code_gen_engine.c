@@ -2293,6 +2293,28 @@ void generateFennecEngineP() {
 		        }
 
 
+
+			fprintf(fp, "tasklet_async event void %sRadioSend.sendDone(error_t error) {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn transmitSendDone(%d, F_MAC, error);\n", mp->id);
+			fprintf(fp, "}\n\n");
+
+			fprintf(fp, "tasklet_async event void %sRadioSend.ready() {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn transmitReady(%d, F_MAC);\n", mp->id);
+			fprintf(fp, "}\n\n");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			fprintf(fp, "event message_t* %sRadioReceive.receive(message_t *msg, void* payload, uint8_t len) {\n", mp->lib->full_name);
 			fprintf(fp, "\treturn receive(%d, F_MAC, msg, payload, len);\n", mp->id);
 			fprintf(fp, "}\n\n");
@@ -2316,12 +2338,12 @@ void generateFennecEngineP() {
 			fprintf(fp, "\treturn granted(%d, F_MAC);\n", mp->id);
 			fprintf(fp, "}\n\n");
 
-			fprintf(fp, "tasklet_async event void %sRadioSend.sendDone(error_t error) {\n", mp->lib->full_name);
-			fprintf(fp, "\treturn transmitSendDone(%d, F_MAC, error);\n", mp->id);
-			fprintf(fp, "}\n\n");
-			fprintf(fp, "tasklet_async event void %sRadioSend.ready() {\n", mp->lib->full_name);
-			fprintf(fp, "\treturn transmitReady(%d, F_MAC);\n", mp->id);
-			fprintf(fp, "}\n\n");
+
+
+
+
+
+
 		}
 	}
 
