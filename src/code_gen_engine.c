@@ -1511,6 +1511,8 @@ void generateFennecEngineP() {
 			fprintf(fp,"\t\treturn signal %sRadioSend.sendDone(error);\n\n", mp->lib->full_name);
 		}
 	}
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn;\n");
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
 
@@ -1525,6 +1527,8 @@ void generateFennecEngineP() {
 			fprintf(fp,"\t\treturn signal %sRadioSend.ready();\n\n", mp->lib->full_name);
 		}
 	}
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn;\n");
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
 
@@ -1540,6 +1544,8 @@ void generateFennecEngineP() {
 			fprintf(fp,"\t\treturn signal %sRadioReceive.header(msg);\n\n", mp->lib->full_name);
 		}
 	}
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn FALSE;\n");
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
 
@@ -1555,6 +1561,8 @@ void generateFennecEngineP() {
 			fprintf(fp,"\t\treturn signal %sRadioReceive.receive(msg);\n\n", mp->lib->full_name);
 		}
 	}
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn msg;\n");
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
 
@@ -1569,6 +1577,8 @@ void generateFennecEngineP() {
 			fprintf(fp,"\t\treturn signal %sRadioCCA.done(error);\n\n", mp->lib->full_name);
 		}
 	}
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn;\n");
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
 
@@ -1588,8 +1598,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tlayer_request = F_MAC;\n");
 	fprintf(fp,"\treturn call ModuleCtrl.stop( call Fennec.getNextModuleId(module_id, to_layer) );\n");
 	fprintf(fp,"}\n\n");
-
-
 
 
 	fprintf(fp,"void radioControlStartDone(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
