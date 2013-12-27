@@ -1,21 +1,11 @@
 uint16_t dest_node = 73
 uint16_t src_node = 0xFFFF
 
-configuration count { randBeacon(2, 1024) 
-			nullNet()
-			#ctp(dest_node)
-                        csmaca(dest_node, 300, 10, 10, 1, 1, 1)
-                        # always ON, delay_after_receive, backoff, min_backoff
-                        # ack, cca, crc
-                        cc2420(26, 31, 1, 1)
-                        # channel, power, ack, crc
-			}
-
-configuration control { cuApp()
+configuration control { cuApp(1,1,10,10,1)
                         cuNet()
                         #nullMac()
                         cuMac(10, 10, 1, 1, 1)
-                        #cuMac(2, 200, 10, 10, 1, 1, 1)
+			#csmaca(0, 0, 10, 10, 1, 1, 1)
                         cc2420(26, 31, 1, 1)
                         #nullRadio()
 }
@@ -35,7 +25,7 @@ configuration blinking2 { blink(2, 500)
 
 
 event timerMonitor {
-                        timerMilliE(3000, 12)
+                        timerMilliE(5000, 12)
                         #timerMilliE(3000, 0xFFFF)
                         #timerMilliE(3000, event_src)
                         nullNet()
@@ -43,10 +33,8 @@ event timerMonitor {
                         nullRadio()
 }
 
-
-state monitor { count }
-state light1 { blinking1 }
-state light2 { blinking2 }
+state light1 { blinking1 control }
+state light2 { blinking2 control }
 
 from light1 goto light2 when timerMonitor
 from light2 goto light1 when timerMonitor
