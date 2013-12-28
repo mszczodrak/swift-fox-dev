@@ -1,7 +1,7 @@
 uint16_t dest_node = 73
 uint16_t src_node = 0xFFFF
 
-configuration count { counter(6, 1024, src_node, dest_node) 
+configuration count { counter(45, 1024, src_node, dest_node) 
 			#nullNet()
 			ctp(dest_node)
                         csmaca(dest_node, 300, 10, 10, 1, 1, 1)
