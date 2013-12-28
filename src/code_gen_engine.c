@@ -2403,6 +2403,28 @@ void generateFennecEngineP() {
 			fprintf(fp, "async command bool %sByteIndicator.isReceiving() {\n", mp->lib->full_name);
 			fprintf(fp, "\treturn ByteIndicator_isReceiving(%d, F_RADIO);\n", mp->id);
 			fprintf(fp, "}\n\n");
+
+			fprintf(fp, "command error_t %sRadioState.turnOff() {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn RadioState_turnOff(%d, F_RADIO);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "command error_t %sRadioState.standby() {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn RadioState_standby(%d, F_RADIO);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "command error_t %sRadioState.turnOn() {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn RadioState_turnOn(%d, F_RADIO);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "command error_t %sRadioState.setChannel(uint8_t channel) {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn RadioState_setChannel(%d, F_RADIO, channel);\n", mp->id);
+			fprintf(fp, "}\n\n");
+			fprintf(fp, "command uint8_t %sRadioState.getChannel() {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn RadioState_getChannel(%d, F_RADIO);\n", mp->id);
+			fprintf(fp, "}\n\n");
+
+			fprintf(fp, "async command bool %sLinkPacketMetadata.highChannelQuality() {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn LinkPacketMetadata.highChannelQuality(%d, F_RADIO);\n", mp->id);
+			fprintf(fp, "}\n\n");
+
+
 		}
 	}
 
