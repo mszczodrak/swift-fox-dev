@@ -260,6 +260,12 @@ void generateFennecEngineC() {
 			fprintf(fp, "FennecEngineP.%sByteIndicator -> %s.ByteIndicator;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
+			fprintf(fp, "FennecEngineP.%sRadioState -> %s.RadioState;\n", 
+						mp->lib->full_name, 
+						mp->lib->full_name);
+			fprintf(fp, "FennecEngineP.%sLinkPacketMetadata -> %s.LinkPacketMetadata;\n", 
+						mp->lib->full_name, 
+						mp->lib->full_name);
 			fprintf(fp, "\n");
 		}
 	}
@@ -400,6 +406,8 @@ void generateFennecEngineP() {
 			fprintf(fp, "uses interface ReceiveIndicator as %sPacketIndicator;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface ReceiveIndicator as %sEnergyIndicator;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface ReceiveIndicator as %sByteIndicator;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface RadioState as %sRadioState;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface LinkPacketMetadata as %sLinkPacketMetadata;\n", mp->lib->full_name);
 			fprintf(fp, "\n");
 		}
 	}
@@ -1520,6 +1528,64 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\treturn 0;\n");
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
+
+
+	fprintf(fp,"error_t RadioState_turnOff() {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioState_turnOff()\",\n");
+	fprintf(fp,"\t\t\t);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioState.turnOff();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn FALSE;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
+
+
+	fprintf(fp,"error_t RadioState_standby() {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioState_standby()\",\n");
+	fprintf(fp,"\t\t\t);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioState.standby();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn FALSE;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
+
+
+	fprintf(fp,"error_t RadioState_turnOn() {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioState_turnOn()\",\n");
+	fprintf(fp,"\t\t\t);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sRadioState.turnOn();\n\n", mp->lib->full_name);
+		}
+	}
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn FALSE;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
+
+
+
+
+
+
+
+
+
+
 
 
 	fprintf(fp,"void sendDone(uint16_t module_id, uint8_t to_layer, message_t* msg, error_t error) {\n");
