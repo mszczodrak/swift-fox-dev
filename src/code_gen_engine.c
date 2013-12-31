@@ -173,6 +173,9 @@ void generateFennecEngineC() {
 			fprintf(fp, "FennecEngineP.%sMacPacketAcknowledgements -> %s.MacPacketAcknowledgements;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
+			fprintf(fp, "FennecEngineP.%sMacLinkPacketMetadata -> %s.MacLinkPacketMetadata;\n",
+						mp->lib->full_name,
+						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sRadioReceive <- %s.RadioReceive;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
@@ -227,7 +230,7 @@ void generateFennecEngineC() {
 			fprintf(fp, "FennecEngineP.%sRadioState <- %s.RadioState;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sLinkPacketMetadata <- %s.LinkPacketMetadata;\n", 
+			fprintf(fp, "FennecEngineP.%sRadioLinkPacketMetadata <- %s.RadioLinkPacketMetadata;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
 			fprintf(fp, "\n");
@@ -299,7 +302,7 @@ void generateFennecEngineC() {
 			fprintf(fp, "FennecEngineP.%sRadioState -> %s.RadioState;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sLinkPacketMetadata -> %s.LinkPacketMetadata;\n", 
+			fprintf(fp, "FennecEngineP.%sRadioLinkPacketMetadata -> %s.RadioLinkPacketMetadata;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
 			fprintf(fp, "\n");
@@ -404,6 +407,7 @@ void generateFennecEngineP() {
 			fprintf(fp, "uses interface Packet as %sMacPacket;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface AMPacket as %sMacAMPacket;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface PacketAcknowledgements as %sMacPacketAcknowledgements;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface LinkPacketMetadata as %sMacLinkPacketMetadata;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface RadioReceive as %sRadioReceive;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface Resource as %sRadioResource;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface RadioConfig as %sRadioConfig;\n", mp->lib->full_name);
@@ -422,7 +426,7 @@ void generateFennecEngineP() {
 			fprintf(fp, "provides interface PacketField<uint8_t> as %sPacketLinkQuality;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface SplitControl as %sRadioControl;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface RadioState as %sRadioState;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface LinkPacketMetadata as %sLinkPacketMetadata;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface LinkPacketMetadata as %sRadioLinkPacketMetadata;\n", mp->lib->full_name);
 			fprintf(fp, "\n");
 		}
 	}
@@ -455,7 +459,7 @@ void generateFennecEngineP() {
 			fprintf(fp, "uses interface PacketField<uint8_t> as %sPacketLinkQuality;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface RadioCCA as %sRadioCCA;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface RadioState as %sRadioState;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface LinkPacketMetadata as %sLinkPacketMetadata;\n", mp->lib->full_name);
+			fprintf(fp, "uses interface LinkPacketMetadata as %sRadioLinkPacketMetadata;\n", mp->lib->full_name);
 			fprintf(fp, "\n");
 		}
 	}
@@ -1047,20 +1051,21 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
+			fprintf(fp,"\tcase %d:\n", mp->id);
+			fprintf(fp,"\t\treturn call %sMacLinkPacketMetadata.highChannelQuality(msg);\n\n", mp->lib->full_name);
+		}
+	}
+	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
 			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sLinkPacketMetadata.highChannelQuality(msg);\n\n", mp->lib->full_name);
+			fprintf(fp,"\t\treturn call %sRadioLinkPacketMetadata.highChannelQuality(msg);\n\n", mp->lib->full_name);
 		}
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn FALSE;\n");
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
-
-
-
-
-
 
 
 	/* Radio Only Interfaces */
@@ -2941,7 +2946,7 @@ void generateFennecEngineP() {
 			fprintf(fp, "\treturn RadioState_getChannel(%d, F_RADIO);\n", mp->id);
 			fprintf(fp, "}\n\n");
 
-			fprintf(fp, "async command bool %sLinkPacketMetadata.highChannelQuality(message_t *msg) {\n", mp->lib->full_name);
+			fprintf(fp, "async command bool %sRadioLinkPacketMetadata.highChannelQuality(message_t *msg) {\n", mp->lib->full_name);
 			fprintf(fp, "\treturn LinkPacketMetadata_highChannelQuality(%d, F_RADIO, msg);\n", mp->id);
 			fprintf(fp, "}\n\n");
 
