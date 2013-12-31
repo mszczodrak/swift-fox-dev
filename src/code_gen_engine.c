@@ -137,6 +137,9 @@ void generateFennecEngineC() {
       			fprintf(fp, "FennecEngineP.%sMacPacketAcknowledgements <- %s.MacPacketAcknowledgements;\n",
 						mp->lib->full_name,
 						mp->lib->full_name);
+      			fprintf(fp, "FennecEngineP.%sMacLinkPacketMetadata <- %s.MacLinkPacketMetadata;\n",
+						mp->lib->full_name,
+						mp->lib->full_name);
 			fprintf(fp, "\n");
     		}
   	}
@@ -386,6 +389,7 @@ void generateFennecEngineP() {
 			fprintf(fp, "provides interface Packet as %sMacPacket;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface AMPacket as %sMacAMPacket;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface PacketAcknowledgements as %sMacPacketAcknowledgements;\n", mp->lib->full_name);
+			fprintf(fp, "provides interface LinkPacketMetadata as %sMacLinkPacketMetadata;\n", mp->lib->full_name);
 			fprintf(fp, "\n");
 		}
 	}
@@ -2681,6 +2685,10 @@ void generateFennecEngineP() {
 			fprintf(fp, "}\n\n");
 			fprintf(fp, "async command bool %sMacPacketAcknowledgements.wasAcked(message_t* msg) {\n", mp->lib->full_name);
 			fprintf(fp, "\treturn PacketAcknowledgements_wasAcked(%d, F_MAC, msg);\n", mp->id);
+			fprintf(fp, "}\n\n");
+
+			fprintf(fp, "async command bool %sMacLinkPacketMetadata.highChannelQuality(message_t *msg) {\n", mp->lib->full_name);
+			fprintf(fp, "\treturn LinkPacketMetadata_highChannelQuality(%d, F_MAC, msg);\n", mp->id);
 			fprintf(fp, "}\n\n");
 		}
 	}
