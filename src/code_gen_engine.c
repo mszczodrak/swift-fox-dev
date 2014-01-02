@@ -193,12 +193,6 @@ void generateFennecEngineC() {
 			fprintf(fp, "FennecEngineP.%sRadioPacket <- %s.RadioPacket;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sPacketIndicator <- %s.PacketIndicator;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sEnergyIndicator <- %s.EnergyIndicator;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sPacketTransmitPower <- %s.PacketTransmitPower;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
@@ -251,12 +245,6 @@ void generateFennecEngineC() {
 						mp->lib->full_name, 
 						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sRadioPacket -> %s.RadioPacket;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sPacketIndicator -> %s.PacketIndicator;\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-			fprintf(fp, "FennecEngineP.%sEnergyIndicator -> %s.EnergyIndicator;\n", 
 						mp->lib->full_name, 
 						mp->lib->full_name);
 			fprintf(fp, "FennecEngineP.%sPacketTransmitPower -> %s.PacketTransmitPower;\n", 
@@ -389,8 +377,6 @@ void generateFennecEngineP() {
 			fprintf(fp, "provides interface RadioBuffer as %sRadioBuffer;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface RadioSend as %sRadioSend;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface RadioPacket as %sRadioPacket;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface ReceiveIndicator as %sPacketIndicator;\n", mp->lib->full_name);
-			fprintf(fp, "provides interface ReceiveIndicator as %sEnergyIndicator;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface RadioCCA as %sRadioCCA;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface PacketField<uint8_t> as %sPacketTransmitPower;\n", mp->lib->full_name);
 			fprintf(fp, "provides interface PacketField<uint8_t> as %sPacketRSSI;\n", mp->lib->full_name);
@@ -418,8 +404,6 @@ void generateFennecEngineP() {
 			fprintf(fp, "uses interface RadioBuffer as %sRadioBuffer;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface RadioSend as %sRadioSend;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface RadioPacket as %sRadioPacket;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface ReceiveIndicator as %sPacketIndicator;\n", mp->lib->full_name);
-			fprintf(fp, "uses interface ReceiveIndicator as %sEnergyIndicator;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface PacketField<uint8_t> as %sPacketTransmitPower;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface PacketField<uint8_t> as %sPacketRSSI;\n", mp->lib->full_name);
 			fprintf(fp, "uses interface PacketField<uint8_t> as %sPacketTimeSyncOffset;\n", mp->lib->full_name);
@@ -1222,39 +1206,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\treturn FAIL;\n");
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"bool PacketIndicator_isReceiving(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketIndicator_isReceiving(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sPacketIndicator.isReceiving();\n\n", mp->lib->full_name);
-		}
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"bool EnergyIndicator_isReceiving(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP EnergyIndicator_isReceiving(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sEnergyIndicator.isReceiving();\n\n", mp->lib->full_name);
-		}
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
 
 
 	fprintf(fp,"bool PacketTransmitPower_isSet(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
@@ -2305,14 +2256,6 @@ void generateFennecEngineP() {
 
 			fprintf(fp, "async command error_t %sRadioBuffer.load(message_t* msg) {\n", mp->lib->full_name);
 			fprintf(fp, "\treturn RadioBuffer_load(%d, F_RADIO, msg);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-
-			fprintf(fp, "async command bool %sPacketIndicator.isReceiving() {\n", mp->lib->full_name);
-			fprintf(fp, "\treturn PacketIndicator_isReceiving(%d, F_RADIO);\n", mp->id);
-			fprintf(fp, "}\n\n");
-			fprintf(fp, "async command bool %sEnergyIndicator.isReceiving() {\n", mp->lib->full_name);
-			fprintf(fp, "\treturn EnergyIndicator_isReceiving(%d, F_RADIO);\n", mp->id);
 			fprintf(fp, "}\n\n");
 
 
