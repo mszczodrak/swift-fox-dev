@@ -31,7 +31,6 @@ void generateFennecEngineC() {
 		exit(1);
 	}
 
-
 	fprintf(fp, "\n#include <Fennec.h>\n\n");
 	fprintf(fp, "configuration FennecEngineC {\n");
 	fprintf(fp, "provides interface ModuleCtrl;\n");
