@@ -6,3 +6,5 @@ Important new features:
     * Add default values for parameters of each module library definition
     * Check for default values when user does not declare own
     * 'config' state can be redefined	
+
+
