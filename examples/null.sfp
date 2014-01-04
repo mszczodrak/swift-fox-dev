@@ -1,5 +1,5 @@
 configuration control { cuApp()
-                        cuNet()
+                        nullNet()
 			nullMac()
                         #cuMac(10, 10, 1, 1, 1)
                         #cuMac(2, 200, 10, 10, 1, 1, 1)
