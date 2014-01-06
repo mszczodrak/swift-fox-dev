@@ -1,4 +1,4 @@
-uint16_t dest_node = 73
+uint16_t dest_node = 75
 uint16_t src_node = 0xFFFF
 
 configuration count { counter(5, 1024, src_node, dest_node) 
