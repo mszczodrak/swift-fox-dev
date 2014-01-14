@@ -47,16 +47,17 @@ void generateFennecEngineC() {
 	fprintf(fp, "components CachesC;\n");
   	fprintf(fp, "FennecEngineP.Fennec -> CachesC;\n\n");
 
-  	fprintf(fp, "/* Defined and linked applications */\n\n");
 
 	for( i = 0; i < conf_id_counter; i++ ) {
+  		fprintf(fp, "/* Defined and linked application module %s */\n\n", 
+					conftab[i].conf->app->lib->full_name);
  		fprintf(fp, "components %sC as %s;\n",
 					conftab[i].conf->app->lib->full_name,
 					conftab[i].conf->app->lib->full_name);
-      		fprintf(fp, "FennecEngineP.%sControl -> %s;\n\n",
+      		fprintf(fp, "FennecEngineP.%sControl -> %s;\n",
 					conftab[i].conf->app->lib->full_name,
 					conftab[i].conf->app->lib->full_name);
-      		fprintf(fp, "FennecEngineP.%sParams <- %s.%sParams;\n\n", 
+      		fprintf(fp, "FennecEngineP.%sParams <- %s.%sParams;\n", 
 					conftab[i].conf->app->lib->full_name, 
 					conftab[i].conf->app->lib->full_name, 
 					conftab[i].conf->app->lib->full_name);
