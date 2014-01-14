@@ -26,8 +26,6 @@ void generateFennecEngineC() {
 	FILE *fp = fopen(full_path, "w");
 	int i;
 
-	struct modtab *mp;
-
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write into file: %s\n", full_path);
 		exit(1);
@@ -644,12 +642,39 @@ void generateFennecEngineP() {
 	fprintf(fp,"command error_t ModuleCtrl.start(uint8_t module_id) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP ModuleCtrl.start(%%d)\", module_id);\n");
 	fprintf(fp,"\tswitch(module_id) {\n\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-        	if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
-                	fprintf(fp, "\tcase %d:\n", mp->id);
-			fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %sControl.start()\");\n", mp->lib->full_name);
-	                fprintf(fp, "\t\treturn call %sControl.start();\n", mp->lib->full_name);
-        	}
+
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_APPLICATION):\n", i);
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%sControl.start()\");\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name);
+		fprintf(fp, "\t\treturn call %s_%sControl.start();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%sControl.start()\");\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+		fprintf(fp, "\t\treturn call %s_%sControl.start();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%sControl.start()\");\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\t\treturn call %s_%sControl.start();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_RADIO):\n", i);
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%sControl.start()\");\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "\t\treturn call %s_%sControl.start();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
 	}
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"\treturn FAIL;\n");
@@ -659,12 +684,38 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP ModuleCtrl.stop(%%d)\", module_id);\n");
 
 	fprintf(fp,"\tswitch(module_id) {\n\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-	        if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
-        	        fprintf(fp, "\tcase %d:\n", mp->id);
-			fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %sControl.stop()\");\n", mp->lib->full_name);
-                	fprintf(fp, "\t\treturn call %sControl.stop();\n", mp->lib->full_name);
-	        }
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_APPLICATION):\n", i);
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%sControl.stop()\");\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name);
+		fprintf(fp, "\t\treturn call %s_%sControl.stop();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%sControl.stop()\");\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+		fprintf(fp, "\t\treturn call %s_%sControl.stop();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%sControl.stop()\");\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\t\treturn call %s_%sControl.stop();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_RADIO):\n", i);
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%sControl.stop()\");\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "\t\treturn call %s_%sControl.stop();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
 	}
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"\treturn FAIL;\n");
