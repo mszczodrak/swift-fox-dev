@@ -426,7 +426,8 @@ void generateFennecEngineP() {
       		fprintf(fp, "uses interface SplitControl as %s_%sControl;\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name);
-      		fprintf(fp, "provides interface %s_%sParams;\n", 
+      		fprintf(fp, "provides interface %sParams as %s_%sParams;\n", 
+					conftab[i].conf->app->lib->full_name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name);
 		fprintf(fp, "provides interface AMSend as %s_%sNetworkAMSend;\n", 
@@ -460,7 +461,8 @@ void generateFennecEngineP() {
 		fprintf(fp, "uses interface SplitControl as %s_%sControl;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-      		fprintf(fp, "provides interface %s_%sParams;\n", 
+      		fprintf(fp, "provides interface %sParams as %s_%sParams;\n", 
+					conftab[i].conf->net->lib->full_name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
 		fprintf(fp, "uses interface AMSend as %s_%sNetworkAMSend;\n",
@@ -510,7 +512,8 @@ void generateFennecEngineP() {
 		fprintf(fp, "uses interface SplitControl as %s_%sControl;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->full_name);
-      		fprintf(fp, "provides interface %s_%sParams;\n", 
+      		fprintf(fp, "provides interface %sParams as %s_%sParams;\n", 
+					conftab[i].conf->mac->lib->full_name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->full_name);
 		fprintf(fp, "uses interface AMSend as %s_%sMacAMSend;\n",
@@ -579,7 +582,8 @@ void generateFennecEngineP() {
 		fprintf(fp, "uses interface SplitControl as %s_%sControl;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name);
-    		fprintf(fp, "provides interface %s_%sParams;\n", 
+    		fprintf(fp, "provides interface %sParams as %s_%sParams;\n", 
+					conftab[i].conf->radio->lib->full_name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name);
 		fprintf(fp, "uses interface RadioReceive as %s_%sRadioReceive;\n",
