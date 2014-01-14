@@ -573,28 +573,52 @@ void generateFennecEngineP() {
 		fprintf(fp, "\n\n");
 
 
-
-
-		fprintf(fp, "/* Radio Module: %s */\n", conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "uses interface SplitControl as %sControl;\n", conftab[i].conf->radio->lib->full_name);
-
-    		fprintf(fp, "provides interface %sParams;\n", 
-				conftab[i].conf->radio->lib->full_name);
-
-
-		fprintf(fp, "uses interface RadioReceive as %sRadioReceive;\n", conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "uses interface Resource as %sRadioResource;\n", conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "uses interface RadioBuffer as %sRadioBuffer;\n", conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "uses interface RadioSend as %sRadioSend;\n", conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "uses interface RadioPacket as %sRadioPacket;\n", conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "uses interface PacketField<uint8_t> as %sPacketTransmitPower;\n", conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "uses interface PacketField<uint8_t> as %sPacketRSSI;\n", conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "uses interface PacketField<uint32_t> as %sPacketTimeSync;\n", conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "uses interface PacketField<uint8_t> as %sPacketLinkQuality;\n", conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "uses interface RadioCCA as %sRadioCCA;\n", conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "uses interface RadioState as %sRadioState;\n", conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "uses interface LinkPacketMetadata as %sRadioLinkPacketMetadata;\n", conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\n");
+    		fprintf(fp, "/* Radio Module %s with %s process */\n",
+					conftab[i].conf->radio->lib->full_name,
+					conftab[i].conf->id->name);
+		fprintf(fp, "uses interface SplitControl as %s_%sControl;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+    		fprintf(fp, "provides interface %s_%sParams;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "uses interface RadioReceive as %s_%sRadioReceive;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "uses interface Resource as %s_%sRadioResource;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "uses interface RadioBuffer as %s_%sRadioBuffer;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "uses interface RadioSend as %s_%sRadioSend;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "uses interface RadioPacket as %s_%sRadioPacket;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "uses interface PacketField<uint8_t> as %s_%sPacketTransmitPower;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "uses interface PacketField<uint8_t> as %s_%sPacketRSSI;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "uses interface PacketField<uint32_t> as %s_%sPacketTimeSync;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "uses interface PacketField<uint8_t> as %s_%sPacketLinkQuality;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "uses interface RadioCCA as %s_%sRadioCCA;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "uses interface RadioState as %s_%sRadioState;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "uses interface LinkPacketMetadata as %s_%sRadioLinkPacketMetadata;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
+		fprintf(fp, "\n\n");
 	}
 
 	fprintf(fp,"}\n\n");
