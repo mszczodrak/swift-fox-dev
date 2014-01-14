@@ -723,17 +723,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t\tmodule_id, to_layer, addr, msg, len);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sNetworkAMSend.send(addr, msg, len);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacAMSend.send(addr, msg, len);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sNetworkAMSend.send(addr, msg, len);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sMacAMSend.send(addr, msg, len);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn FAIL;\n");
@@ -746,17 +745,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sNetworkAMSend.cancel(msg);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacAMSend.cancel(msg);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sNetworkAMSend.cancel(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sMacAMSend.cancel(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn FAIL;\n");
@@ -769,17 +767,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, len);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sNetworkAMSend.getPayload(msg, len);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacAMSend.getPayload(msg, len);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sNetworkAMSend.getPayload(msg, len);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sMacAMSend.getPayload(msg, len);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn NULL;\n");
@@ -791,17 +788,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP AMSend_maxPayloadLength(%%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sNetworkAMSend.maxPayloadLength();\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacAMSend.maxPayloadLength();\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sNetworkAMSend.maxPayloadLength();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sMacAMSend.maxPayloadLength();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn 0;\n");
