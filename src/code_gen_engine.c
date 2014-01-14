@@ -727,7 +727,7 @@ void generateFennecEngineP() {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
 		fprintf(fp,"\t\treturn call %s_%sNetworkAMSend.send(addr, msg, len);\n\n",
 					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->full_name);
+					conftab[i].conf->net->lib->full_name);
 
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
 		fprintf(fp,"\t\treturn call %s_%sMacAMSend.send(addr, msg, len);\n\n",
@@ -749,7 +749,7 @@ void generateFennecEngineP() {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
 		fprintf(fp,"\t\treturn call %s_%sNetworkAMSend.cancel(msg);\n\n",
 					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->full_name);
+					conftab[i].conf->net->lib->full_name);
 
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
 		fprintf(fp,"\t\treturn call %s_%sMacAMSend.cancel(msg);\n\n",
@@ -771,7 +771,7 @@ void generateFennecEngineP() {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
 		fprintf(fp,"\t\treturn call %s_%sNetworkAMSend.getPayload(msg, len);\n\n",
 					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->full_name);
+					conftab[i].conf->net->lib->full_name);
 
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
 		fprintf(fp,"\t\treturn call %s_%sMacAMSend.getPayload(msg, len);\n\n",
@@ -792,7 +792,7 @@ void generateFennecEngineP() {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
 		fprintf(fp,"\t\treturn call %s_%sNetworkAMSend.maxPayloadLength();\n\n",
 					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->full_name);
+					conftab[i].conf->net->lib->full_name);
 
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
 		fprintf(fp,"\t\treturn call %s_%sMacAMSend.maxPayloadLength();\n\n",
