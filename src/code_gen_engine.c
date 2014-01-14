@@ -309,6 +309,10 @@ void generateFennecEngineC() {
 					conftab[i].conf->mac->lib->full_name);
 		fprintf(fp, "\n\n");
 		
+  		fprintf(fp, "/* Defined and linked radio module %s with %s state */\n\n", 
+					conftab[i].conf->radio->lib->full_name,
+					conftab[i].conf->id->name);
+
 		fprintf(fp, "components %sC as %s_%s;\n", 
 					conftab[i].conf->radio->lib->full_name, 
 					conftab[i].conf->id->name,
