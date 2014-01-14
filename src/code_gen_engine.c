@@ -206,7 +206,7 @@ void generateFennecEngineC() {
 					conftab[i].conf->mac->lib->full_name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->full_name);
-      		fprintf(fp, "FennecEngineP.%s_%sParams <- %s_%s.%sParams;\n\n", 
+      		fprintf(fp, "FennecEngineP.%s_%sParams <- %s_%s.%sParams;\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->full_name, 
 					conftab[i].conf->id->name,
@@ -322,7 +322,7 @@ void generateFennecEngineC() {
 					conftab[i].conf->radio->lib->full_name, 
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name);
-      		fprintf(fp, "FennecEngineP.%s_%sParams <- %s_%s.%sParams;\n\n", 
+      		fprintf(fp, "FennecEngineP.%s_%sParams <- %s_%s.%sParams;\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name, 
 					conftab[i].conf->id->name,
