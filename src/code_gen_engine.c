@@ -107,7 +107,6 @@ void generateFennecEngineC() {
   		fprintf(fp, "/* Defined and linked network module %s with %s state */\n\n", 
 					conftab[i].conf->net->lib->full_name,
 					conftab[i].conf->id->name);
-
 		fprintf(fp, "components %sC as %s_%s;\n",
 					conftab[i].conf->net->lib->full_name,
 					conftab[i].conf->id->name,
@@ -194,7 +193,6 @@ void generateFennecEngineC() {
   		fprintf(fp, "/* Defined and linked MAC module %s with %s state */\n\n", 
 					conftab[i].conf->mac->lib->full_name,
 					conftab[i].conf->id->name);
-
 		fprintf(fp, "components %sC as %s_%s;\n",
 					conftab[i].conf->mac->lib->full_name,
 					conftab[i].conf->id->name,
@@ -310,7 +308,6 @@ void generateFennecEngineC() {
   		fprintf(fp, "/* Defined and linked radio module %s with %s state */\n\n", 
 					conftab[i].conf->radio->lib->full_name,
 					conftab[i].conf->id->name);
-
 		fprintf(fp, "components %sC as %s_%s;\n", 
 					conftab[i].conf->radio->lib->full_name, 
 					conftab[i].conf->id->name,
