@@ -51,37 +51,56 @@ void generateFennecEngineC() {
 	for( i = 0; i < conf_id_counter; i++ ) {
   		fprintf(fp, "/* Defined and linked application module %s */\n\n", 
 					conftab[i].conf->app->lib->full_name);
- 		fprintf(fp, "components %sC as %s;\n",
+ 		fprintf(fp, "components %sC as %s_%s;\n",
 					conftab[i].conf->app->lib->full_name,
+					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name);
-      		fprintf(fp, "FennecEngineP.%sControl -> %s;\n",
+      		fprintf(fp, "FennecEngineP.%s_%sControl -> %s_%s;\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name,
+					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name);
-      		fprintf(fp, "FennecEngineP.%sParams <- %s.%sParams;\n", 
+      		fprintf(fp, "FennecEngineP.%s_%sParams <- %s_%s.%sParams;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name,
+					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name, 
+					conftab[i].conf->app->lib->full_name);
+     		fprintf(fp, "FennecEngineP.%s_%sNetworkAMSend <- %s_%s.NetworkAMSend;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sNetworkReceive <- %s_%s.NetworkReceive;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sNetworkSnoop <- %s_%s.NetworkSnoop;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sNetworkPacket <- %s_%s.NetworkPacket;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sNetworkAMPacket <- %s_%s.NetworkAMPacket;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sNetworkPacketAcknowledgements <- %s_%s.NetworkPacketAcknowledgements;\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name, 
-					conftab[i].conf->app->lib->full_name);
-     		fprintf(fp, "FennecEngineP.%sNetworkAMSend <- %s.NetworkAMSend;\n",
-					conftab[i].conf->app->lib->full_name,
-					conftab[i].conf->app->lib->full_name);
-      		fprintf(fp, "FennecEngineP.%sNetworkReceive <- %s.NetworkReceive;\n",
-					conftab[i].conf->app->lib->full_name,
-					conftab[i].conf->app->lib->full_name);
-      		fprintf(fp, "FennecEngineP.%sNetworkSnoop <- %s.NetworkSnoop;\n",
-					conftab[i].conf->app->lib->full_name,
-					conftab[i].conf->app->lib->full_name);
-      		fprintf(fp, "FennecEngineP.%sNetworkPacket <- %s.NetworkPacket;\n",
-					conftab[i].conf->app->lib->full_name,
-					conftab[i].conf->app->lib->full_name);
-      		fprintf(fp, "FennecEngineP.%sNetworkAMPacket <- %s.NetworkAMPacket;\n",
-					conftab[i].conf->app->lib->full_name,
-					conftab[i].conf->app->lib->full_name);
-      		fprintf(fp, "FennecEngineP.%sNetworkPacketAcknowledgements <- %s.NetworkPacketAcknowledgements;\n",
-					conftab[i].conf->app->lib->full_name, 
+					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name);
 		if (conftab[i].conf->app->lib->type == TYPE_EVENT) {
-			fprintf(fp, "FennecEngineP.%sEvent -> %s.Event;\n",
+			fprintf(fp, "FennecEngineP.%s_%sEvent -> %s_%s.Event;\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name,
+					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name);
 		}
 		fprintf(fp, "\n");
