@@ -103,64 +103,92 @@ void generateFennecEngineC() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name);
 		}
+		fprintf(fp, "\n\n");
+
+  		fprintf(fp, "/* Defined and linked network module %s */\n\n", 
+					conftab[i].conf->app->lib->full_name);
+
+		fprintf(fp, "components %sC as %s_%s;\n",
+					conftab[i].conf->net->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sControl -> %s_%s;\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name); 
+      		fprintf(fp, "FennecEngineP.%s_%sParams <- %s_%s.%sParams;\n\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name, 
+					conftab[i].conf->net->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sNetworkAMSend -> %s_%s.NetworkAMSend;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sNetworkReceive -> %s_%s.NetworkReceive;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sNetworkSnoop -> %s_%s.NetworkSnoop;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sNetworkAMPacket -> %s_%s.NetworkAMPacket;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sNetworkPacket -> %s_%s.NetworkPacket;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sNetworkPacketAcknowledgements -> %s_%s.NetworkPacketAcknowledgements;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sMacAMSend <- %s_%s.MacAMSend;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sMacReceive <- %s_%s.MacReceive;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sMacSnoop <- %s_%s.MacSnoop;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sMacAMPacket <- %s_%s.MacAMPacket;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sMacPacket <- %s_%s.MacPacket;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sMacPacketAcknowledgements <- %s_%s.MacPacketAcknowledgements;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+      		fprintf(fp, "FennecEngineP.%s_%sMacLinkPacketMetadata <- %s_%s.MacLinkPacketMetadata;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
 		fprintf(fp, "\n");
-  	}
-
-  	fprintf(fp, "/* Defined and linked network modules */\n\n");
-
-  	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-    		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-      			fprintf(fp, "components %sC as %s;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sControl -> %s;\n\n",
-						mp->lib->full_name,
-						mp->lib->full_name); 
-      			fprintf(fp, "FennecEngineP.%sParams <- %s.%sParams;\n\n", 
-						mp->lib->full_name, 
-						mp->lib->full_name, 
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkAMSend -> %s.NetworkAMSend;\n",
-						mp->lib->full_name, 
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkReceive -> %s.NetworkReceive;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkSnoop -> %s.NetworkSnoop;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkAMPacket -> %s.NetworkAMPacket;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkPacket -> %s.NetworkPacket;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sNetworkPacketAcknowledgements -> %s.NetworkPacketAcknowledgements;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sMacAMSend <- %s.MacAMSend;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sMacReceive <- %s.MacReceive;\n",
-						mp->lib->full_name, 
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sMacSnoop <- %s.MacSnoop;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sMacAMPacket <- %s.MacAMPacket;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sMacPacket <- %s.MacPacket;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sMacPacketAcknowledgements <- %s.MacPacketAcknowledgements;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
-      			fprintf(fp, "FennecEngineP.%sMacLinkPacketMetadata <- %s.MacLinkPacketMetadata;\n",
-						mp->lib->full_name,
-						mp->lib->full_name);
-			fprintf(fp, "\n");
-    		}
   	}
 
 	fprintf(fp, "/* Defined and linked mac */\n\n");
