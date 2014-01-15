@@ -298,7 +298,7 @@ void generateFennecEngineC() {
 					conftab[i].conf->mac->lib->full_name, 
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "FennecEngineP.%s_%s_MacLinkPacketMetadata <- %s_%s.RadioLinkPacketMetadata;\n", 
+		fprintf(fp, "FennecEngineP.%s_%s_RadioLinkPacketMetadata <- %s_%s.RadioLinkPacketMetadata;\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->full_name, 
 					conftab[i].conf->id->name,
