@@ -1162,17 +1162,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sNetworkPacketAcknowledgements.requestAck(msg);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacPacketAcknowledgements.requestAck(msg);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sNetworkPacketAcknowledgements.requestAck(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sMacPacketAcknowledgements.requestAck(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn FAIL;\n");
@@ -1185,17 +1184,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sNetworkPacketAcknowledgements.noAck(msg);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacPacketAcknowledgements.noAck(msg);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sNetworkPacketAcknowledgements.noAck(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sMacPacketAcknowledgements.noAck(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn FAIL;\n");
@@ -1208,17 +1206,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sNetworkPacketAcknowledgements.wasAcked(msg);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacPacketAcknowledgements.wasAcked(msg);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sNetworkPacketAcknowledgements.wasAcked(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sMacPacketAcknowledgements.wasAcked(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn 0;\n");
@@ -1230,17 +1227,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP LinkPacketMetadata_highChannelQuality(%%d, %%d, 0x%%1x)\",\n");
 	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacLinkPacketMetadata.highChannelQuality(msg);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_RADIO) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sRadioLinkPacketMetadata.highChannelQuality(msg);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sMackLinkPacketMetadata.highChannelQuality(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_RADIO):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sRadioLinkPacketMetadata.highChannelQuality(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn FALSE;\n");
