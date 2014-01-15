@@ -2049,7 +2049,7 @@ void generateFennecEngineP() {
 
 		/* check if the interface is empty, if it is add dummy call */
 		if (conftab[i].conf->app->lib->params == NULL) {
-			fprintf(fp, "command void %s_%sParams.dummy() {}\n\b",
+			fprintf(fp, "command void %s_%s_Params.dummy() {}\n\b",
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name);
 		}
@@ -2853,7 +2853,7 @@ void generateFennecEngineP() {
 		}
 
 		for(pt = conftab[i].conf->radio->lib->params; pt != NULL; pt = pt->child ) {
-			fprintf(fp, "command %s %s_%sParams.get_%s() {\n",
+			fprintf(fp, "command %s %s_%s_Params.get_%s() {\n",
 					type_name(pt->type), 
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name, 
@@ -2862,7 +2862,7 @@ void generateFennecEngineP() {
 					conftab[i].conf->radio_id_name,
 					pt->name);
 			fprintf(fp, "}\n\n");
-			fprintf(fp, "command error_t %s_%sParams.set_%s(%s new_%s) {\n",
+			fprintf(fp, "command error_t %s_%s_Params.set_%s(%s new_%s) {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name, 
 					pt->name, 
