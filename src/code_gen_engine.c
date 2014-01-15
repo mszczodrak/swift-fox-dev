@@ -1814,26 +1814,18 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, error);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_EVENT) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\tsignal %sNetworkAMSend.sendDone(msg, error);\n", mp->lib->full_name);
-			fprintf(fp,"\t\treturn;\n\n");
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\tsignal %sNetworkAMSend.sendDone(msg, error);\n", mp->lib->full_name);
-			fprintf(fp,"\t\treturn;\n\n");
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\tsignal %sMacAMSend.sendDone(msg, error);\n", mp->lib->full_name);
-			fprintf(fp,"\t\treturn;\n\n");
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_APPLICATION):\n", i);
+		fprintf(fp,"\t\tsignal %s_%s_NetworkAMSend.sendDone(msg, error);\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name);
+		fprintf(fp,"\t\treturn;\n\n");
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\tsignal %s_%s_MacAMSend.sendDone(msg, error);\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+		fprintf(fp,"\t\treturn;\n\n");
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn;\n");
@@ -1853,23 +1845,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t}\n\n");
 
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_EVENT) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sNetworkReceive.receive(msg, payload, len);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sNetworkReceive.receive(msg, payload, len);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sMacReceive.receive(msg, payload, len);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_APPLICATION):\n", i);
+		fprintf(fp,"\t\treturn signal %s_%s_NetworkReceive.receive(msg, payload, len);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn signal %s_%s_MacReceive.receive(msg, payload, len);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn msg;\n\n");
@@ -1888,23 +1873,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\treturn msg;\n");
 	fprintf(fp,"\t}\n\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_EVENT) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sNetworkSnoop.receive(msg, payload, len);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_APPLICATION) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sNetworkSnoop.receive(msg, payload, len);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sMacSnoop.receive(msg, payload, len);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_APPLICATION):\n", i);
+		fprintf(fp,"\t\treturn signal %s_%s_NetworkSnoop.receive(msg, payload, len);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn signal %s_%s_MacSnoop.receive(msg, payload, len);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn msg;\n\n");
@@ -1920,11 +1898,11 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP granted(%%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sRadioResource.granted();\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn signal %s_%s_RadioResource.granted();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
@@ -1935,11 +1913,11 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, error);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sRadioBuffer.loadDone(msg, error);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn signal %s_%s_RadioBuffer.loadDone(msg, error);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
@@ -1950,11 +1928,11 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, error);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sRadioSend.sendDone(msg, error);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn signal %s_%s_RadioSend.sendDone(msg, error);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
@@ -1964,11 +1942,11 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioSend_ready(%%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sRadioSend.ready();\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn signal %s_%s_RadioSend.ready();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
@@ -1978,12 +1956,12 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioState_done(%%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\tsignal %sRadioState.done();\n", mp->lib->full_name);
-			fprintf(fp,"\t\treturn;\n\n");
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\tsignal %s_%s_RadioState.done();\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp,"\t\treturn;\n\n");
 	}
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
@@ -1993,12 +1971,12 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioCCA_done(%%d, %%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tmodule_id, to_layer, error);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\tsignal %sRadioCCA.done(error);\n", mp->lib->full_name);
-			fprintf(fp,"\t\treturn;\n\n");
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\tsignal %s_%s_RadioCCA.done(error);\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp,"\t\treturn;\n\n");
 	}
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
@@ -2016,11 +1994,11 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t}\n\n");
 
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sRadioReceive.receive(msg);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn signal %s_%s_RadioReceive.receive(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn msg;\n\n");
@@ -2040,19 +2018,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t}\n\n");
 
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn signal %sRadioReceive.header(msg);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn signal %s_%s_RadioReceive.header(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn 0;\n\n");
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
-
-
-
 
 
 	struct paramtype *pt;
