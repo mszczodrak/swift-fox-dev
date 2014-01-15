@@ -152,7 +152,6 @@ struct evtab {
 struct evtab *evlook(char *);
 
 struct modtab {
-        int            		 id;
 	char			*name;
         int            		type;
         struct libtab   	*lib;

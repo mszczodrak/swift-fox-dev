@@ -69,15 +69,6 @@ void setFennecExtra() {
 		exit(1);
 	}
 
-/*
-	struct modtab *mp;
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path) {
-			fprintf(fp_fe, "PFLAGS+=-I%s\n", mp->lib->path);
-		}
-	}
-*/
-
 	struct libtab *lp;
 	for(lp = libtab; lp < &libtab[NSYMS]; lp++) {
 		if (lp->path && lp->used == 1) {

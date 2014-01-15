@@ -61,7 +61,7 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "#include \"ff_defaults.h\"\n\n");
 
         for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-                if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
+                if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
                         fprintf(fp, "#include \"%sParams.h\"\n",
                                                 mp->lib->full_name);
                 }
@@ -183,7 +183,7 @@ void generateCaches(int event_counter, int policy_counter) {
 		if (conftab[i].conf->id->type == TYPE_PROCESS_EVENT) {
 			fprintf(fp, "\t{%d, %d, %d},\n",
 					conftab[i].conf->id->value,
-					conftab[i].conf->app->id,
+					conftab[i].conf->app_id_value,
 					conftab[i].conf->counter);
 		}
 	}

@@ -33,7 +33,6 @@ int policy_counter	= 0;
 FILE *fcode		= NULL;
 
 int state_id_counter	= 0;
-int module_id_counter 	= 1;
 int event_id_counter	= 0;
 int conf_id_counter	= 0;
 int state_defined	= 0;
@@ -268,32 +267,6 @@ configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines modu
 	
 			/* level */
 			$$->level	= $3;
-
-			/* set ids */
-			
-			if ($6->id == 0) {
-				$6->id = module_id_counter;
-				//$6->conf = $$;
-				++module_id_counter;
-			}
-
-			if ($8->id == 0) {
-				$8->id = module_id_counter;
-				//$8->conf = $$;
-				++module_id_counter;
-			}
-
-			if ($10->id == 0) {
-				$10->id = module_id_counter;
-				//$10->conf = $$;
-				++module_id_counter;
-			}
-
-			if ($12->id == 0) {
-				$12->id = module_id_counter;
-				//$12->conf = $$;
-				++module_id_counter;
-			}
 
 			/* link application module */
 			if (($6 == NULL) || (($6->type != TYPE_APPLICATION && $6->type != TYPE_EVENT))) {
@@ -1024,7 +997,6 @@ proc_module(char *s) {
         for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
                 /* is it free */
                 if(!mp->lib) {
-			mp->id = 0;
 			mp->type = sp->type;
 			mp->lib = sp->lib;
 			mp->params = NULL;

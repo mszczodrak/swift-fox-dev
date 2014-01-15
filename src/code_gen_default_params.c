@@ -43,7 +43,7 @@ void generateDefaultParams() {
 	fprintf(fp, "#include \"ff_globals.h\"\n");
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
+		if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
 			fprintf(fp, "#include \"%sParams.h\"\n", 
 						mp->lib->full_name);
 		}
