@@ -2903,57 +2903,57 @@ void generateFennecEngineP() {
 		fprintf(fp, "async event message_t* %s_%s_RadioReceive.receive(message_t *msg) {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn RadioReceive_receive(%d, F_MAC, msg);\n",
-					conftab[i].conf->radio_id_value);
+		fprintf(fp, "\treturn RadioReceive_receive(%s, F_MAC, msg);\n",
+					conftab[i].conf->radio_id_name);
 		fprintf(fp, "}\n\n");
 
 		fprintf(fp, "async event bool %s_%s_RadioReceive.header(message_t *msg) {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn RadioReceive_header(%d, F_MAC, msg);\n",
-					conftab[i].conf->radio_id_value);
+		fprintf(fp, "\treturn RadioReceive_header(%s, F_MAC, msg);\n",
+					conftab[i].conf->radio_id_name);
 		fprintf(fp, "}\n\n");
 
 
 		fprintf(fp, "event void %s_%s_RadioResource.granted() {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn granted(%d, F_MAC);\n",
-					conftab[i].conf->radio_id_value);
+		fprintf(fp, "\treturn granted(%s, F_MAC);\n",
+					conftab[i].conf->radio_id_name);
 		fprintf(fp, "}\n\n");
 
 		fprintf(fp, "async event void %s_%s_RadioBuffer.loadDone(message_t* msg, error_t error) {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn transmitLoadDone(%d, F_MAC, msg, error);\n",
-					conftab[i].conf->radio_id_value);
+		fprintf(fp, "\treturn transmitLoadDone(%s, F_MAC, msg, error);\n",
+					conftab[i].conf->radio_id_name);
 		fprintf(fp, "}\n\n");
 
 		fprintf(fp, "async event void %s_%s_RadioSend.sendDone(message_t *msg, error_t error) {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn RadioSend_sendDone(%d, F_MAC, msg, error);\n",
-					conftab[i].conf->radio_id_value);
+		fprintf(fp, "\treturn RadioSend_sendDone(%s, F_MAC, msg, error);\n",
+					conftab[i].conf->radio_id_name);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async event void %s_%s_RadioSend.ready() {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn RadioSend_ready(%d, F_MAC);\n",
-					conftab[i].conf->radio_id_value);
+		fprintf(fp, "\treturn RadioSend_ready(%s, F_MAC);\n",
+					conftab[i].conf->radio_id_name);
 		fprintf(fp, "}\n\n");
 
 		fprintf(fp, "event void %s_%s_RadioState.done() {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn RadioState_done(%d, F_MAC);\n",
-					conftab[i].conf->radio_id_value);
+		fprintf(fp, "\treturn RadioState_done(%s, F_MAC);\n",
+					conftab[i].conf->radio_id_name);
 		fprintf(fp, "}\n\n");
 
 		fprintf(fp, "async event void %s_%s_RadioCCA.done(error_t error) {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn RadioCCA_done(%d, F_MAC, error);\n",
-					conftab[i].conf->radio_id_value);
+		fprintf(fp, "\treturn RadioCCA_done(%s, F_MAC, error);\n",
+					conftab[i].conf->radio_id_name);
 		fprintf(fp, "}\n\n");
 	}
 
