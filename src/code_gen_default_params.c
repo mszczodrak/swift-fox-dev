@@ -57,7 +57,7 @@ void generateDefaultParams() {
 		/** 
 		application default parameter values 
 		*/
-		fprintf(fp, "struct %s_params %s = {\n",
+		fprintf(fp, "struct %s_params %s_params = {\n",
         	        conftab[i].conf->app->lib->full_name,
 			conftab[i].conf->app_id_name);
 
@@ -76,7 +76,7 @@ void generateDefaultParams() {
                 /** 
 		network default parameter values 
 		*/
-                fprintf(fp, "struct %s_params %s = {\n",
+                fprintf(fp, "struct %s_params %s_params = {\n",
                         conftab[i].conf->net->lib->full_name,
 			conftab[i].conf->net_id_name);
 
@@ -94,7 +94,7 @@ void generateDefaultParams() {
 		/** 
 		mac default parameter values 
 		*/
-                fprintf(fp, "struct %s_params %s = {\n",
+                fprintf(fp, "struct %s_params %s_params = {\n",
                         conftab[i].conf->mac->lib->full_name,
 			conftab[i].conf->mac_id_name);
 
@@ -112,7 +112,7 @@ void generateDefaultParams() {
 		/** 
 		radio default parameter values 
 		*/
-                fprintf(fp, "struct %s_params %s = {\n",
+                fprintf(fp, "struct %s_params %s_params = {\n",
                         conftab[i].conf->radio->lib->full_name,
 			conftab[i].conf->radio_id_name);
 
@@ -145,7 +145,7 @@ void generateDefaultParams() {
 			pv != NULL && pt != NULL; pv = pv->child) {
 			if (pv->value == NULL) {
 				/* this is fixed number so point to module's struct params */
-                        	fprintf(fp, "\t&%s.%s",
+                        	fprintf(fp, "\t&%s_params.%s",
 					conftab[i].conf->app_id_name,
 					pt->name);
 			} else {
@@ -173,7 +173,7 @@ void generateDefaultParams() {
 			pv != NULL && pt != NULL; pv = pv->child) {
 			if (pv->value == NULL) {
 				/* this is fixed number so point to module's struct params */
-                        	fprintf(fp, "\t&%s.%s",
+                        	fprintf(fp, "\t&%s_params.%s",
 					conftab[i].conf->net_id_name,
 					pt->name);
 			} else {
@@ -201,7 +201,7 @@ void generateDefaultParams() {
 			pv != NULL && pt != NULL; pv = pv->child) {
 			if (pv->value == NULL) {
 				/* this is fixed number so point to module's struct params */
-                        	fprintf(fp, "\t&%s.%s",
+                        	fprintf(fp, "\t&%s_params.%s",
 					conftab[i].conf->mac_id_name,
 					pt->name);
 			} else {
@@ -229,7 +229,7 @@ void generateDefaultParams() {
 			pv != NULL && pt != NULL; pv = pv->child) {
 			if (pv->value == NULL) {
 				/* this is fixed number so point to module's struct params */
-                        	fprintf(fp, "\t&%s.%s",
+                        	fprintf(fp, "\t&%s_params.%s",
 					conftab[i].conf->radio_id_name,
 					pt->name);
 			} else {

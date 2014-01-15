@@ -2051,7 +2051,7 @@ void generateFennecEngineP() {
 
 		/* check if the interface is empty, if it is add dummy call */
 		if (conftab[i].conf->app->lib->params == NULL) {
-			fprintf(fp, "command void %s_%sParams.dummy() {}\n",
+			fprintf(fp, "command void %s_%sParams.dummy() {}\n\b",
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name);
 		}
@@ -2062,11 +2062,9 @@ void generateFennecEngineP() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name, 
 					pt->name);
-			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%s)).application;\n", 
-					conftab[i].conf->app->lib->full_name, 
-					conftab[i].conf->app->lib->full_name, 
-					conftab[i].conf->app_id_name);
-			fprintf(fp, "\treturn *(params->%s);\n", pt->name);
+			fprintf(fp, "\treturn *(%s_ptr.%s);\n",
+					conftab[i].conf->app_id_name,
+					pt->name);
 			fprintf(fp, "}\n\n");
 
 			fprintf(fp, "command error_t %s_%s_Params.set_%s(%s new_%s) {\n",
@@ -2075,12 +2073,8 @@ void generateFennecEngineP() {
 					pt->name, 
 					type_name(pt->type), 
 					pt->name);
-			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%s)).application;\n", 
-					conftab[i].conf->app->lib->full_name, 
-					conftab[i].conf->app->lib->full_name, 
-					conftab[i].conf->app_id_name);
-
-			fprintf(fp, "\t*params->%s = new_%s;\n", 
+			fprintf(fp, "\t*(%s_ptr.%s) = new_%s;\n", 
+					conftab[i].conf->app_id_name,
 					pt->name,
 					pt->name);
 			fprintf(fp, "\treturn SUCCESS;\n");
@@ -2349,11 +2343,9 @@ void generateFennecEngineP() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name, 
 					pt->name);
-			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%s)).network;\n", 
-					conftab[i].conf->net->lib->full_name, 
-					conftab[i].conf->net->lib->full_name, 
-					conftab[i].conf->net_id_name);
-			fprintf(fp, "\treturn *(params->%s);\n", pt->name);
+			fprintf(fp, "\treturn *(%s_ptr.%s);\n",
+					conftab[i].conf->net_id_name,
+					pt->name);
 			fprintf(fp, "}\n\n");
 			fprintf(fp, "command error_t %s_%s_Params.set_%s(%s new_%s) {\n",
 					conftab[i].conf->id->name,
@@ -2361,12 +2353,8 @@ void generateFennecEngineP() {
 					pt->name, 
 					type_name(pt->type), 
 					pt->name);
-			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%s)).network;\n", 
-					conftab[i].conf->net->lib->full_name, 
-					conftab[i].conf->net->lib->full_name, 
-					conftab[i].conf->net_id_name);
-
-			fprintf(fp, "\t*params->%s = new_%s;\n", 
+			fprintf(fp, "\t*(%s_ptr.%s) = new_%s;\n", 
+					conftab[i].conf->net_id_name,
 					pt->name,
 					pt->name);
 			fprintf(fp, "\treturn SUCCESS;\n");
@@ -2571,11 +2559,9 @@ void generateFennecEngineP() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->full_name, 
 					pt->name);
-			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%s)).mac;\n", 
-					conftab[i].conf->mac->lib->full_name, 
-					conftab[i].conf->mac->lib->full_name, 
-					conftab[i].conf->mac_id_name);
-			fprintf(fp, "\treturn *(params->%s);\n", pt->name);
+			fprintf(fp, "\treturn *(%s_ptr.%s);\n",
+					conftab[i].conf->mac_id_name,
+					pt->name);
 			fprintf(fp, "}\n\n");
 			fprintf(fp, "command error_t %s_%s_Params.set_%s(%s new_%s) {\n",
 					conftab[i].conf->id->name,
@@ -2583,11 +2569,8 @@ void generateFennecEngineP() {
 					pt->name, 
 					type_name(pt->type), 
 					pt->name);
-			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%s)).mac;\n", 
-					conftab[i].conf->mac->lib->full_name, 
-					conftab[i].conf->mac->lib->full_name, 
-					conftab[i].conf->mac_id_name);
-			fprintf(fp, "\t*params->%s = new_%s;\n", 
+			fprintf(fp, "\t*(%s_ptr.%s) = new_%s;\n", 
+					conftab[i].conf->mac_id_name,
 					pt->name,
 					pt->name);
 			fprintf(fp, "\treturn SUCCESS;\n");
@@ -2877,11 +2860,9 @@ void generateFennecEngineP() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->full_name, 
 					pt->name);
-			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%s)).radio;\n", 
-					conftab[i].conf->radio->lib->full_name, 
-					conftab[i].conf->radio->lib->full_name, 
-					conftab[i].conf->radio_id_name);
-			fprintf(fp, "\treturn *(params->%s);\n", pt->name);
+			fprintf(fp, "\treturn *(%s_ptr.%s);\n",
+					conftab[i].conf->radio_id_name,
+					pt->name);
 			fprintf(fp, "}\n\n");
 			fprintf(fp, "command error_t %s_%sParams.set_%s(%s new_%s) {\n",
 					conftab[i].conf->id->name,
@@ -2889,11 +2870,8 @@ void generateFennecEngineP() {
 					pt->name, 
 					type_name(pt->type), 
 					pt->name);
-			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%s)).radio;\n", 
-					conftab[i].conf->radio->lib->full_name, 
-					conftab[i].conf->radio->lib->full_name, 
-					conftab[i].conf->radio_id_name);
-			fprintf(fp, "\t*params->%s = new_%s;\n", 
+			fprintf(fp, "\t*(%s_ptr.%s) = new_%s;\n", 
+					conftab[i].conf->radio_id_name,
 					pt->name,
 					pt->name);
 			fprintf(fp, "\treturn SUCCESS;\n");
