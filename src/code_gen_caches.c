@@ -217,32 +217,6 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "};\n\n");
 
 
-
-/*
-	fprintf(fp, "struct fennec_event eventsTable[%d] = {\n", event_counter);
-
-	for ( i = 0; i < event_counter; ) {
-
-		fprintf(fp, "\t{\n");
-		fprintf(fp, "\t\t.operation = %s,\n", relopToLetter(evtab[i].op));
-		fprintf(fp, "\t\t.value = %d,\n", evtab[i].value);
-
-		if (evtab[i].addr == UNKNOWN) {
-			fprintf(fp, "\t\t.addr = TOS_NODE_ID\n");
-		} else {
-			fprintf(fp, "\t\t.addr = %d\n", evtab[i].addr);
-		}
-		if (++i < event_counter) {
-			fprintf(fp, "\t},\n");
-		} else {
-			fprintf(fp, "\t}\n");
-		}
-	}
-
-	fprintf(fp, "};\n\n");
-*/
-
-
         fprintf(fp, "struct fennec_policy policies[NUMBER_OF_POLICIES] = {\n");
 	for(i = 0; i < policy_counter; ) {
 		fprintf(fp, "\t{\n");

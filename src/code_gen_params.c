@@ -72,11 +72,6 @@ void module_params_h(struct modtab *mp) {
 	fprintf(fp, "#ifndef _FF_MODULE_%s_H_\n", mp->lib->full_name);
 	fprintf(fp, "#define _FF_MODULE_%s_H_\n\n", mp->lib->full_name);
 
-//	for(pt = mp->lib->params; pt != NULL; pt = pt->child) {
-//        	fprintf(fp, "%s %s_%s;\n", type_name(pt->type), mp->lib->full_name, pt->name);
-//	}
-//	fprintf(fp, "\n");
-
 	fprintf(fp, "struct %s_params {\n", mp->lib->full_name);
 
 	for(pt = mp->lib->params; pt != NULL; pt = pt->child) {
@@ -93,10 +88,6 @@ void module_params_h(struct modtab *mp) {
 
 	fprintf(fp, "};\n\n");
 
-
-
-	//fprintf(fp, "struct %s_params %s_data;\n", mp->lib->full_name, mp->lib->full_name);
-
 	fprintf(fp, "#endif\n");
 
 	fclose(fp);
@@ -104,12 +95,16 @@ void module_params_h(struct modtab *mp) {
 }
 
 void generateParams() {
-	struct modtab *mp;
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if ((mp->lib != NULL) && (mp->lib->path) && (mp->id > 0) && (mp->lib->used == 1)) {
-			module_params_interface_app(mp);
-			module_params_h(mp);
-		}
+	int i;
+	for( i = 0; i < conf_id_counter; i++ ) {
+		module_params_interface_app(conftab[i].conf->app);
+		module_params_h(conftab[i].conf->app);
+		module_params_interface_app(conftab[i].conf->net);
+		module_params_h(conftab[i].conf->net);
+		module_params_interface_app(conftab[i].conf->mac);
+		module_params_h(conftab[i].conf->mac);
+		module_params_interface_app(conftab[i].conf->radio);
+		module_params_h(conftab[i].conf->radio);
 	}
 }
 
