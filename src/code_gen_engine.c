@@ -1839,10 +1839,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t}\n\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	fprintf(fp,"\t\treturn msg;\n");
-	fprintf(fp,"\t}\n\n");
-
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_APPLICATION):\n", i);
 		fprintf(fp,"\t\treturn signal %s_%s_NetworkReceive.receive(msg, payload, len);\n\n",
@@ -1867,9 +1863,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t return msg;\n");
 	fprintf(fp,"\t}\n\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	fprintf(fp,"\t\treturn msg;\n");
-	fprintf(fp,"\t}\n\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_APPLICATION):\n", i);
@@ -1988,10 +1981,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t}\n\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	fprintf(fp,"\t\treturn msg;\n");
-	fprintf(fp,"\t}\n\n");
-
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
 		fprintf(fp,"\t\treturn signal %s_%s_RadioReceive.receive(msg);\n\n",
@@ -2011,10 +2000,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t return 0;\n");
 	fprintf(fp,"\t}\n\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n\n");
-
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
