@@ -2034,205 +2034,245 @@ void generateFennecEngineP() {
 
 	/* Interfaces with Applications */
 
+	for( i = 0; i < conf_id_counter; i++ ) {
 
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && ((mp->lib->type == TYPE_APPLICATION) || (mp->lib->type == TYPE_EVENT))) {
-			fprintf(fp, "\n/* Linking Application %s */\n", mp->lib->full_name);
+		fprintf(fp, "\n/* Linking Application %s */\n", conftab[i].conf->mac->lib->full_name);
 
-			fprintf(fp, "\t/* Module Control Interface */\n\n");	
+		fprintf(fp, "\t/* Module Control Interface */\n\n");	
 
-			fprintf(fp, "event void %sControl.startDone(error_t err){\n", mp->lib->full_name);
-			fprintf(fp, "\tmodule_startDone(%d, err);\n", mp->id);
-			fprintf(fp, "}\n\n");
-			fprintf(fp, "event void %sControl.stopDone(error_t err) {\n", mp->lib->full_name);
-			fprintf(fp, "\tmodule_stopDone(%d, err);\n", mp->id);
-			fprintf(fp, "}\n\n");
+		fprintf(fp, "event void %sControl.startDone(error_t err){\n", conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tmodule_startDone(%d, err);\n", mp->id);
+		fprintf(fp, "}\n\n");
+		fprintf(fp, "event void %sControl.stopDone(error_t err) {\n", conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tmodule_stopDone(%d, err);\n", mp->id);
+		fprintf(fp, "}\n\n");
 
-			if (mp->lib->type == TYPE_EVENT) {
-				fprintf(fp, "\t/* Event Interface */\n\n");	
-				fprintf(fp, "event void %sEvent.occured(uint16_t oc) {\n", mp->lib->full_name);
-				fprintf(fp, "\tcall Fennec.eventOccured(%d, oc);\n", mp->id);
-				fprintf(fp, "}\n\n");
-			}
-
-			fprintf(fp, "\t/* Parameter Interface */\n\n");	
-
-			/* check if the interface is empty, if it is add dummy call */
-			if (mp->lib->params == NULL) {
-				fprintf(fp, "command void %sParams.dummy() {}\n", mp->lib->full_name);
-			}
-
-			for(pt = mp->lib->params; pt != NULL; pt = pt->child ) {
-				fprintf(fp, "command %s %sParams.get_%s() {\n",
-						type_name(pt->type), 
-						mp->lib->full_name, 
-						pt->name);
-				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).application;\n", 
-							mp->lib->full_name, 
-							mp->lib->full_name, 
-							mp->id);
-				fprintf(fp, "\treturn *(params->%s);\n", pt->name);
-				fprintf(fp, "}\n\n");
-
-				fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
-						mp->lib->full_name, 
-						pt->name, 
-						type_name(pt->type), 
-						pt->name);
-				fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).application;\n", 
-							mp->lib->full_name, 
-							mp->lib->full_name, 
-							mp->id);
-
-				fprintf(fp, "\t*params->%s = new_%s;\n", 
-						pt->name,
-						pt->name);
-				fprintf(fp, "\treturn SUCCESS;\n");
-		                fprintf(fp, "}\n\n");
-		        }
-
-			fprintf(fp, "command error_t %sNetworkAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n",
-						mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMSend.send()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMSend_send(%d, F_NETWORK, addr, msg, len);\n", 
-						mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command error_t %sNetworkAMSend.cancel(message_t* msg) {\n",
-						mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMSend.cancel()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMSend_cancel(%d, F_NETWORK, msg);\n",
-						mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command uint8_t %sNetworkAMSend.maxPayloadLength() {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMSend.maxPayloadLength()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMSend_maxPayloadLength(%d, F_NETWORK);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command void* %sNetworkAMSend.getPayload(message_t* msg, uint8_t len) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMSend.getPayload()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMSend_getPayload(%d, F_NETWORK, msg, len);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command am_addr_t %sNetworkAMPacket.address() {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.address()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMPacket_address(%d, F_NETWORK);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command am_addr_t %sNetworkAMPacket.destination(message_t* msg) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.destination()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMPacket_destination(%d, F_NETWORK, msg);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command am_addr_t %sNetworkAMPacket.source(message_t* msg) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.source()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMPacket_source(%d, F_NETWORK, msg);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command void %sNetworkAMPacket.setDestination(message_t* msg, am_addr_t addr) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.setDestination()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMPacket_setDestination(%d, F_NETWORK, msg, addr);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command void %sNetworkAMPacket.setSource(message_t* msg, am_addr_t addr) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.setSource()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMPacket_setSource(%d, F_NETWORK, msg, addr);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command bool %sNetworkAMPacket.isForMe(message_t* msg) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.isForMe()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMPacket_isForMe(%d, F_NETWORK, msg);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command am_id_t %sNetworkAMPacket.type(message_t* msg) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.type()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMPacket_type(%d, F_NETWORK, msg);\n",mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command void %sNetworkAMPacket.setType(message_t* msg, am_id_t t) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.setType()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMPacket_setType(%d, F_NETWORK, msg, t);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command am_group_t %sNetworkAMPacket.group(message_t* msg) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.group()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMPacket_group(%d, F_NETWORK, msg);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command void %sNetworkAMPacket.setGroup(message_t* msg, am_group_t grp) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.setGroup()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMPacket_setGroup(%d, F_NETWORK, msg, grp);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command am_group_t %sNetworkAMPacket.localGroup() {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.localGroup()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn AMPacket_localGroup(%d, F_NETWORK);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command void %sNetworkPacket.clear(message_t* msg) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.clear()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn Packet_clear(%d, F_NETWORK, msg);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command uint8_t %sNetworkPacket.payloadLength(message_t* msg) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.payloadLength()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn Packet_payloadLength(%d, F_NETWORK, msg);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command void %sNetworkPacket.setPayloadLength(message_t* msg, uint8_t len) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.setPayloadLength()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn Packet_setPayloadLength(%d, F_NETWORK, msg, len);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command uint8_t %sNetworkPacket.maxPayloadLength() {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.maxPayloadLength()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn Packet_maxPayloadLength(%d, F_NETWORK);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command void* %sNetworkPacket.getPayload(message_t* msg, uint8_t len) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.getPayload()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn Packet_getPayload(%d, F_NETWORK, msg, len);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "async command error_t %sNetworkPacketAcknowledgements.requestAck( message_t* msg ) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.requestAck()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn PacketAcknowledgements_requestAck(%d, F_NETWORK, msg);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "async command error_t %sNetworkPacketAcknowledgements.noAck( message_t* msg ) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.noAck()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn PacketAcknowledgements_noAck(%d, F_NETWORK, msg);\n", mp->id);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "async command bool %sNetworkPacketAcknowledgements.wasAcked(message_t* msg) {\n", mp->lib->full_name);
-			fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.wasAcked()\");\n",
-						mp->lib->full_name);
-			fprintf(fp, "\treturn PacketAcknowledgements_wasAcked(%d, F_NETWORK, msg);\n", mp->id);
+		if (conftab[i].conf->mac->lib->type == TYPE_EVENT) {
+			fprintf(fp, "\t/* Event Interface */\n\n");	
+			fprintf(fp, "event void %sEvent.occured(uint16_t oc) {\n", conftab[i].conf->mac->lib->full_name);
+			fprintf(fp, "\tcall Fennec.eventOccured(%d, oc);\n", mp->id);
 			fprintf(fp, "}\n\n");
 		}
+
+		fprintf(fp, "\t/* Parameter Interface */\n\n");	
+
+		/* check if the interface is empty, if it is add dummy call */
+		if (conftab[i].conf->mac->lib->params == NULL) {
+			fprintf(fp, "command void %sParams.dummy() {}\n", conftab[i].conf->mac->lib->full_name);
+		}
+
+		for(pt = conftab[i].conf->mac->lib->params; pt != NULL; pt = pt->child ) {
+			fprintf(fp, "command %s %sParams.get_%s() {\n",
+					type_name(pt->type), 
+					conftab[i].conf->mac->lib->full_name, 
+					pt->name);
+			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).application;\n", 
+					conftab[i].conf->mac->lib->full_name, 
+					conftab[i].conf->mac->lib->full_name, 
+					mp->id);
+			fprintf(fp, "\treturn *(params->%s);\n", pt->name);
+			fprintf(fp, "}\n\n");
+
+			fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
+					conftab[i].conf->mac->lib->full_name, 
+					pt->name, 
+					type_name(pt->type), 
+					pt->name);
+			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).application;\n", 
+					conftab[i].conf->mac->lib->full_name, 
+					conftab[i].conf->mac->lib->full_name, 
+					mp->id);
+
+			fprintf(fp, "\t*params->%s = new_%s;\n", 
+					pt->name,
+					pt->name);
+			fprintf(fp, "\treturn SUCCESS;\n");
+	                fprintf(fp, "}\n\n");
+	        }
+
+		fprintf(fp, "command error_t %sNetworkAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMSend.send()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMSend_send(%d, F_NETWORK, addr, msg, len);\n", 
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command error_t %sNetworkAMSend.cancel(message_t* msg) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMSend.cancel()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMSend_cancel(%d, F_NETWORK, msg);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command uint8_t %sNetworkAMSend.maxPayloadLength() {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMSend.maxPayloadLength()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMSend_maxPayloadLength(%d, F_NETWORK);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command void* %sNetworkAMSend.getPayload(message_t* msg, uint8_t len) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMSend.getPayload()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMSend_getPayload(%d, F_NETWORK, msg, len);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command am_addr_t %sNetworkAMPacket.address() {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.address()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMPacket_address(%d, F_NETWORK);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command am_addr_t %sNetworkAMPacket.destination(message_t* msg) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.destination()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMPacket_destination(%d, F_NETWORK, msg);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command am_addr_t %sNetworkAMPacket.source(message_t* msg) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.source()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMPacket_source(%d, F_NETWORK, msg);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command void %sNetworkAMPacket.setDestination(message_t* msg, am_addr_t addr) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.setDestination()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMPacket_setDestination(%d, F_NETWORK, msg, addr);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command void %sNetworkAMPacket.setSource(message_t* msg, am_addr_t addr) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.setSource()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMPacket_setSource(%d, F_NETWORK, msg, addr);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command bool %sNetworkAMPacket.isForMe(message_t* msg) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.isForMe()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMPacket_isForMe(%d, F_NETWORK, msg);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command am_id_t %sNetworkAMPacket.type(message_t* msg) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.type()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMPacket_type(%d, F_NETWORK, msg);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command void %sNetworkAMPacket.setType(message_t* msg, am_id_t t) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.setType()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMPacket_setType(%d, F_NETWORK, msg, t);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command am_group_t %sNetworkAMPacket.group(message_t* msg) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.group()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMPacket_group(%d, F_NETWORK, msg);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command void %sNetworkAMPacket.setGroup(message_t* msg, am_group_t grp) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.setGroup()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMPacket_setGroup(%d, F_NETWORK, msg, grp);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command am_group_t %sNetworkAMPacket.localGroup() {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkAMPacket.localGroup()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn AMPacket_localGroup(%d, F_NETWORK);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command void %sNetworkPacket.clear(message_t* msg) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.clear()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn Packet_clear(%d, F_NETWORK, msg);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command uint8_t %sNetworkPacket.payloadLength(message_t* msg) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.payloadLength()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn Packet_payloadLength(%d, F_NETWORK, msg);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command void %sNetworkPacket.setPayloadLength(message_t* msg, uint8_t len) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.setPayloadLength()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn Packet_setPayloadLength(%d, F_NETWORK, msg, len);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command uint8_t %sNetworkPacket.maxPayloadLength() {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.maxPayloadLength()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn Packet_maxPayloadLength(%d, F_NETWORK);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "command void* %sNetworkPacket.getPayload(message_t* msg, uint8_t len) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.getPayload()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn Packet_getPayload(%d, F_NETWORK, msg, len);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "async command error_t %sNetworkPacketAcknowledgements.requestAck( message_t* msg ) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.requestAck()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn PacketAcknowledgements_requestAck(%d, F_NETWORK, msg);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "async command error_t %sNetworkPacketAcknowledgements.noAck( message_t* msg ) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.noAck()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn PacketAcknowledgements_noAck(%d, F_NETWORK, msg);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
+
+		fprintf(fp, "async command bool %sNetworkPacketAcknowledgements.wasAcked(message_t* msg) {\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %sNetworkPacket.wasAcked()\");\n",
+					conftab[i].conf->mac->lib->full_name);
+		fprintf(fp, "\treturn PacketAcknowledgements_wasAcked(%d, F_NETWORK, msg);\n",
+					mp->id);
+		fprintf(fp, "}\n\n");
 	}
 
   /* Interfaces with Networks */
