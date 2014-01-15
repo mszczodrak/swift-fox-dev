@@ -68,11 +68,43 @@ void generateCaches(int event_counter, int policy_counter) {
         }
         fprintf(fp, "\n");
 
-        for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-                if (mp->lib != NULL && mp->lib->path && mp->id > 0) {
-			fprintf(fp, "/* %s - %s */\n", mp->lib->full_name, mp->lib->path);
-                        fprintf(fp, "#define %s\t%d\n", mp->name, mp->id);
-                }
+	for( i = 0; i < conf_id_counter; i++ ) {
+		fprintf(fp, "/* %s for process %s\n"
+				"Application module located at %s */\n\n",
+			conftab[i].conf->app->lib->full_name,
+			conftab[i].conf->id->name,
+			conftab[i].conf->app->lib->path);
+		fprintf(fp, "#define %s\t%d\n\n",
+			conftab[i].conf->app_id_name,
+			conftab[i].conf->app_id_value);
+
+		fprintf(fp, "/* %s for process %s\n"
+				"Network module located at %s */\n",
+			conftab[i].conf->net->lib->full_name,
+			conftab[i].conf->id->name,
+			conftab[i].conf->net->lib->path);
+		fprintf(fp, "#define %s\t%d\n\n",
+			conftab[i].conf->net_id_name,
+			conftab[i].conf->net_id_value);
+
+		fprintf(fp, "/* %s for process %s\n"
+				"MAC module located at %s */\n",
+			conftab[i].conf->mac->lib->full_name,
+			conftab[i].conf->id->name,
+			conftab[i].conf->mac->lib->path);
+		fprintf(fp, "#define %s\t%d\n\n",
+			conftab[i].conf->mac_id_name,
+			conftab[i].conf->mac_id_value);
+
+		fprintf(fp, "/* %s for process %s\n"
+				"Radio module located at %s */\n",
+			conftab[i].conf->radio->lib->full_name,
+			conftab[i].conf->id->name,
+			conftab[i].conf->radio->lib->path);
+		fprintf(fp, "#define %s\t%d\n\n",
+			conftab[i].conf->radio_id_name,
+			conftab[i].conf->radio_id_value);
+
         }
         fprintf(fp, "\n");
 
@@ -90,10 +122,10 @@ void generateCaches(int event_counter, int policy_counter) {
 		fprintf(fp, "\t{\n");
    		fprintf(fp, "\t\t/* %s */\n", conftab[i].conf->id->name); 
 		fprintf(fp, "\t\t.conf_id = %d,\n", conftab[i].conf->counter);
-		fprintf(fp, "\t\t.application = %s,\n", conftab[i].conf->app->name);
-		fprintf(fp, "\t\t.network = %s,\n", conftab[i].conf->net->name);
-		fprintf(fp, "\t\t.mac = %s,\n", conftab[i].conf->mac->name);
-		fprintf(fp, "\t\t.radio = %s,\n", conftab[i].conf->radio->name);
+		fprintf(fp, "\t\t.application = %s,\n", conftab[i].conf->app_id_name);
+		fprintf(fp, "\t\t.network = %s,\n", conftab[i].conf->net_id_name);
+		fprintf(fp, "\t\t.mac = %s,\n", conftab[i].conf->mac_id_name);
+		fprintf(fp, "\t\t.radio = %s,\n", conftab[i].conf->radio_id_name);
 		if (conftab[i].conf->level == UNKNOWN) {
 			fprintf(fp, "\t\t.level = F_MINIMUM_STATE_LEVEL\n");
 		} else {

@@ -259,7 +259,6 @@ configurations: configurations configuration
 
 configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines module newlines module newlines module newlines module newlines CLOSE_BRACE newlines
 		{
-
 			/* configuration node */
 			$$		= calloc(1, sizeof(struct confnode));
 
@@ -342,8 +341,17 @@ configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines modu
 				event_id_counter++;
 			}
 
+			$$->name = $2->name;
 
 			$$->counter	= conf_id_counter;
+			$$->app_id_value = conf_id_counter * F_LAYERS + F_APPLICATION; 	
+			$$->net_id_value = conf_id_counter * F_LAYERS + F_NETWORK; 	
+			$$->mac_id_value = conf_id_counter * F_LAYERS + F_MAC; 	
+			$$->radio_id_value = conf_id_counter * F_LAYERS + F_RADIO; 	
+			$$->app_id_name = conf_module_name($$->name, $$->app->lib->full_name);
+			$$->net_id_name = conf_module_name($$->name, $$->net->lib->full_name);
+			$$->mac_id_name = conf_module_name($$->name, $$->mac->lib->full_name);
+			$$->radio_id_name = conf_module_name($$->name, $$->radio->lib->full_name);
 
 			conftab[conf_id_counter].conf = $$;
 
