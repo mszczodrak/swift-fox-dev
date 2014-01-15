@@ -182,7 +182,7 @@ void generateFennecEngineC() {
 					conftab[i].conf->net->lib->full_name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-      		fprintf(fp, "FennecEngineP.%s_%sMacLinkPacketMetadata <- %s_%s.MacLinkPacketMetadata;\n",
+      		fprintf(fp, "FennecEngineP.%s_%sMacLinkPacketMetadata <- %s_%s.RadioLinkPacketMetadata;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name,
 					conftab[i].conf->id->name,
@@ -298,7 +298,7 @@ void generateFennecEngineC() {
 					conftab[i].conf->mac->lib->full_name, 
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "FennecEngineP.%s_%sRadioLinkPacketMetadata <- %s_%s.RadioLinkPacketMetadata;\n", 
+		fprintf(fp, "FennecEngineP.%s_%sMacLinkPacketMetadata <- %s_%s.MacLinkPacketMetadata;\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->full_name, 
 					conftab[i].conf->id->name,
@@ -1229,7 +1229,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
-		fprintf(fp,"\t\treturn call %s_%sMackLinkPacketMetadata.highChannelQuality(msg);\n\n",
+		fprintf(fp,"\t\treturn call %s_%sMacLinkPacketMetadata.highChannelQuality(msg);\n\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->full_name);
 
