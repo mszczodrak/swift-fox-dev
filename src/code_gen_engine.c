@@ -1055,7 +1055,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
-		fprintf(fp,"\t\treturn call %s_%sNetworPacket.getPayload(msg, len);\n\n",
+		fprintf(fp,"\t\treturn call %s_%sNetworkPacket.getPayload(msg, len);\n\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
 
@@ -1076,7 +1076,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
-		fprintf(fp,"\t\treturn call %s_%sNetworPacket.maxPayloadLength();\n\n",
+		fprintf(fp,"\t\treturn call %s_%sNetworkPacket.maxPayloadLength();\n\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
 
@@ -1098,7 +1098,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
-		fprintf(fp,"\t\treturn call %s_%sNetworPacket.clear(msg);\n\n",
+		fprintf(fp,"\t\treturn call %s_%sNetworkPacket.clear(msg);\n\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
 
@@ -1120,7 +1120,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
-		fprintf(fp,"\t\treturn call %s_%sNetworPacket.payloadLength(msg);\n\n",
+		fprintf(fp,"\t\treturn call %s_%sNetworkPacket.payloadLength(msg);\n\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
 
@@ -1142,7 +1142,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
-		fprintf(fp,"\t\treturn call %s_%sNetworPacket.setPayloadLength(msg, len);\n\n",
+		fprintf(fp,"\t\treturn call %s_%sNetworkPacket.setPayloadLength(msg, len);\n\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
 
