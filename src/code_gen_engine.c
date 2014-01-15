@@ -408,9 +408,7 @@ void generateFennecEngineP() {
   	fprintf(fp, "provides interface ModuleCtrl;\n");
 
   	fprintf(fp, "uses interface Leds;\n");
-  	fprintf(fp, "uses interface Fennec;\n");
-
-  	fprintf(fp, "\n\t/* Application Modules */\n\n");
+  	fprintf(fp, "uses interface Fennec;\n\n");
 
 	for( i = 0; i < conf_id_counter; i++ ) {
     		fprintf(fp, "/* Application Module %s with %s process */\n",

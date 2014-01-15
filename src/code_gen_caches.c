@@ -142,9 +142,6 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	/* Generate States */
 
-	//int confs_per_state = 0;
-
-
 	for( i = 0; i < state_id_counter; i++ ) {
 		fprintf(fp, "conf_t %s_confs[%d] = {", statetab[i].state->id->name, statetab[i].state->confs_counter);
 		conf_ptr = statetab[i].state->confs;
@@ -159,28 +156,7 @@ void generateCaches(int event_counter, int policy_counter) {
 			}
 		}
 		fprintf(fp, "};\n\n");
-
-   		fprintf(fp, "/* %s */\n", statetab[i].state->id->name); 
-		fprintf(fp, "struct stack_params %s_params[%d] = {\n", statetab[i].state->id->name, statetab[i].state->confs_counter);
-		conf_ptr = statetab[i].state->confs;
-		while (conf_ptr) { 
-			if (conf_ptr->conf) {
-				fprintf(fp, "\t{\n");
-				fprintf(fp, "\t\t&%s_ptr,\n", conf_ptr->conf->conf->app_id_name);
-				fprintf(fp, "\t\t&%s_ptr,\n", conf_ptr->conf->conf->net_id_name);
-				fprintf(fp, "\t\t&%s_ptr,\n", conf_ptr->conf->conf->mac_id_name);
-				fprintf(fp, "\t\t&%s_ptr\n", conf_ptr->conf->conf->radio_id_name);
-				fprintf(fp, "\t}\n");
-			}
-			conf_ptr = conf_ptr->confs;
-			if (conf_ptr != NULL) {
-				fprintf(fp, ", ");
-
-			}
-		}
-		fprintf(fp, "};\n\n");
 	}
-
 
 
 	fprintf(fp, "struct state states[NUMBER_OF_STATES] = {\n");
@@ -189,9 +165,7 @@ void generateCaches(int event_counter, int policy_counter) {
    		fprintf(fp, "\t\t/* %s */\n", statetab[i].state->id->name); 
                 fprintf(fp, "\t\t.state_id = %d,\n", statetab[i].state->counter);
                 fprintf(fp, "\t\t.num_confs = %d,\n", statetab[i].state->confs_counter);
-		fprintf(fp, "\t\t.conf_list = %s_confs,\n", statetab[i].state->id->name);
-		fprintf(fp, "\t\t.conf_params = %s_params\n", statetab[i].state->id->name);
-		
+		fprintf(fp, "\t\t.conf_list = %s_confs\n", statetab[i].state->id->name);
 
 		fprintf(fp, "\t}\n");
 		if (i+1 < state_id_counter) {
@@ -237,16 +211,6 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	fclose(fp);
 	fclose(tmp_confs);
-}
-
-/** Prepares SF configuration for the output. Each configuration's
-module is marked as used and the configuration is added to the 
-conftab list of all configurations.
-
-\param c pointer to configuration structure
-*/
-void generateConfiguration(struct confnode* c) {
-
 }
 
 /** Marks the initial state.
