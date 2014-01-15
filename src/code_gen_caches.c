@@ -166,10 +166,10 @@ void generateCaches(int event_counter, int policy_counter) {
 		while (conf_ptr) { 
 			if (conf_ptr->conf) {
 				fprintf(fp, "\t{\n");
-				fprintf(fp, "\t\t&%s_%s_ptr,\n", conf_ptr->conf->conf->id->name, conf_ptr->conf->conf->app->lib->full_name);
-				fprintf(fp, "\t\t&%s_%s_ptr,\n", conf_ptr->conf->conf->id->name, conf_ptr->conf->conf->net->lib->full_name);
-				fprintf(fp, "\t\t&%s_%s_ptr,\n", conf_ptr->conf->conf->id->name, conf_ptr->conf->conf->mac->lib->full_name);
-				fprintf(fp, "\t\t&%s_%s_ptr\n", conf_ptr->conf->conf->id->name, conf_ptr->conf->conf->radio->lib->full_name);
+				fprintf(fp, "\t\t&%s_ptr,\n", conf_ptr->conf->conf->app_id_name);
+				fprintf(fp, "\t\t&%s_ptr,\n", conf_ptr->conf->conf->net_id_name);
+				fprintf(fp, "\t\t&%s_ptr,\n", conf_ptr->conf->conf->mac_id_name);
+				fprintf(fp, "\t\t&%s_ptr\n", conf_ptr->conf->conf->radio_id_name);
 				fprintf(fp, "\t}\n");
 			}
 			conf_ptr = conf_ptr->confs;
