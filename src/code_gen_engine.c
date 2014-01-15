@@ -1010,29 +1010,14 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
-		fprintf(fp,"\t\treturn call %s_%sNetworkAMSend.type(msg);\n\n",
+		fprintf(fp,"\t\treturn call %s_%sNetworkAMPacket.setGroup(msg, grp);\n\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
 
                 fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
-		fprintf(fp,"\t\treturn call %s_%sMacAMSend.type(msg);\n\n",
+		fprintf(fp,"\t\treturn call %s_%sMacAMPacket.setGroup(msg, grp);\n\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->full_name);
-	}
-
-
-
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sNetworkAMPacket.setGroup(msg, grp);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacAMPacket.setGroup(msg, grp);\n\n", mp->lib->full_name);
-		}
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn;\n");
@@ -1040,22 +1025,44 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 
+
+	fprintf(fp,"am_group_t AMPacket_localGroup(uint16_t module_id, uint8_t to_layer) {\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP Packet_localGroup(%%d, %%d)\",\n");
+	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
+	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sNetworkAMPacket.localGroup();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sMacAMPacket.localGroup();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
+	}
+	fprintf(fp,"\tdefault:\n");
+	fprintf(fp,"\t\treturn 0;\n");
+	fprintf(fp,"\t}\n");
+	fprintf(fp,"}\n\n");
+
+
+
 	fprintf(fp,"void* Packet_getPayload(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t len) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP Packet_getPayload(%%d, %%d, 0x%%1x, %%d)\",\n");
 	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, len);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sNetworkPacket.getPayload(msg, len);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacPacket.getPayload(msg, len);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sNetworPacket.getPayload(msg, len);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sMacPacket.getPayload(msg, len);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn NULL;\n");
@@ -1067,39 +1074,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP Packet_maxPayloadLength(%%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sNetworkPacket.maxPayloadLength();\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacPacket.maxPayloadLength();\n\n", mp->lib->full_name);
-		}
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sNetworPacket.maxPayloadLength();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
 
-
-	fprintf(fp,"am_group_t AMPacket_localGroup(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP Packet_localGroup(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sNetworkAMPacket.localGroup();\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacAMPacket.localGroup();\n\n", mp->lib->full_name);
-		}
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sMacPacket.maxPayloadLength();\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn 0;\n");
@@ -1112,17 +1096,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sNetworkPacket.clear(msg);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacPacket.clear(msg);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sNetworPacket.clear(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sMacPacket.clear(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn;\n");
@@ -1135,17 +1118,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sNetworkPacket.payloadLength(msg);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacPacket.payloadLength(msg);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sNetworPacket.payloadLength(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sMacPacket.payloadLength(msg);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn 0;\n");
@@ -1158,17 +1140,16 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, len);\n");
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_NETWORK) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sNetworkPacket.setPayloadLength(msg, len);\n\n", mp->lib->full_name);
-		}
-	}
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->id > 0 && mp->lib->type == TYPE_MAC) {
-			fprintf(fp,"\tcase %d:\n", mp->id);
-			fprintf(fp,"\t\treturn call %sMacPacket.setPayloadLength(msg, len);\n\n", mp->lib->full_name);
-		}
+	for( i = 0; i < conf_id_counter; i++ ) {
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_NETWORK):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sNetworPacket.setPayloadLength(msg, len);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->full_name);
+
+                fprintf(fp, "\tcase (%d * F_LAYERS + F_MAC):\n", i);
+		fprintf(fp,"\t\treturn call %s_%sMacPacket.setPayloadLength(msg, len);\n\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->full_name);
 	}
 	fprintf(fp,"\tdefault:\n");
 	fprintf(fp,"\t\treturn;\n");
