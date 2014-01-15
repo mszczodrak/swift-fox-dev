@@ -397,8 +397,6 @@ void generateFennecEngineP() {
         FILE *fp = fopen(full_path, "w");
 	int i;
 
-        struct modtab *mp;
-
         if (fp == NULL) {
                 fprintf(stderr, "You do not have a permission to write into file: %s\n", full_path);
                 exit(1);
@@ -2041,19 +2039,22 @@ void generateFennecEngineP() {
 
 		fprintf(fp, "\t/* Module Control Interface */\n\n");	
 
-		fprintf(fp, "event void %sControl.startDone(error_t err){\n", 
+		fprintf(fp, "event void %s_%s_Control.startDone(error_t err){\n", 
+					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name);
 		fprintf(fp, "\tmodule_startDone((%d * F_LAYERS + F_APPLICATION), err);\n",
 					i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "event void %sControl.stopDone(error_t err) {\n",
+		fprintf(fp, "event void %s_%s_Control.stopDone(error_t err) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name);
 		fprintf(fp, "\tmodule_stopDone((%d * F_LAYERS + F_APPLICATION), err);\n", i);
 		fprintf(fp, "}\n\n");
 
 		if (conftab[i].conf->app->lib->type == TYPE_EVENT) {
 			fprintf(fp, "\t/* Event Interface */\n\n");	
-			fprintf(fp, "event void %sEvent.occured(uint16_t oc) {\n",
+			fprintf(fp, "event void %s_%s_Event.occured(uint16_t oc) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name);
 			fprintf(fp, "\tcall Fennec.eventOccured((%d * F_LAYERS + F_APPLICATION), oc);\n",
 					i);
@@ -2064,7 +2065,8 @@ void generateFennecEngineP() {
 
 		/* check if the interface is empty, if it is add dummy call */
 		if (conftab[i].conf->app->lib->params == NULL) {
-			fprintf(fp, "command void %sParams.dummy() {}\n",
+			fprintf(fp, "command void %s_%sParams.dummy() {}\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name);
 		}
 
@@ -2309,13 +2311,15 @@ void generateFennecEngineP() {
 
 
 
-		fprintf(fp, "event void %sControl.startDone(error_t err) {\n",
+		fprintf(fp, "event void %s_%s_Control.startDone(error_t err) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\tmodule_startDone(%d, err);\n", i);
+		fprintf(fp, "\tmodule_startDone((%d * F_LAYERS + F_NETWORK), err);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "event void %sControl.stopDone(error_t err) {\n",
+		fprintf(fp, "event void %s_%s_Control.stopDone(error_t err) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\tmodule_stopDone(%d, err);\n", i);
+		fprintf(fp, "\tmodule_stopDone((%d * F_LAYERS + F_NETWORK), err);\n", i);
 		fprintf(fp, "}\n\n");
 
 
@@ -2323,27 +2327,30 @@ void generateFennecEngineP() {
 
 		/* check if the interface is empty, if it is add dummy call */
 		if (conftab[i].conf->net->lib->params == NULL) {
-			fprintf(fp, "command void %sParams.dummy() {}\n",
+			fprintf(fp, "command void %s_%s_Params.dummy() {}\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
 		}
 
 		for(pt = conftab[i].conf->net->lib->params; pt != NULL; pt = pt->child ) {
-			fprintf(fp, "command %s %sParams.get_%s() {\n",
+			fprintf(fp, "command %s %s_%s_Params.get_%s() {\n",
 					type_name(pt->type), 
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name, 
 					pt->name);
-			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).network;\n", 
+			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams((%d * F_LAYERS + F_NETWORK))).network;\n", 
 					conftab[i].conf->net->lib->full_name, 
 					conftab[i].conf->net->lib->full_name, 
 					i);
 			fprintf(fp, "\treturn *(params->%s);\n", pt->name);
 			fprintf(fp, "}\n\n");
-			fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
+			fprintf(fp, "command error_t %s_%s_Params.set_%s(%s new_%s) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name, 
 					pt->name, 
 					type_name(pt->type), 
 					pt->name);
-			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).network;\n", 
+			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams((%d * F_LAYERS + F_NETWORK))).network;\n", 
 					conftab[i].conf->net->lib->full_name, 
 					conftab[i].conf->net->lib->full_name, 
 					i);
@@ -2356,113 +2363,140 @@ void generateFennecEngineP() {
 	        }
 
 
-		fprintf(fp, "event void %sNetworkAMSend.sendDone(message_t *msg, error_t error) {\n",
+		fprintf(fp, "event void %s_%s_NetworkAMSend.sendDone(message_t *msg, error_t error) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\tsendDone(%d, F_APPLICATION, msg, error);\n", i);
+		fprintf(fp, "\tsendDone((%d * F_LAYERS + F_NETWORK), F_APPLICATION, msg, error);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "event message_t* %sNetworkReceive.receive(message_t *msg, void* payload, uint8_t len) {\n",
+		fprintf(fp, "event message_t* %s_%s_NetworkReceive.receive(message_t *msg, void* payload, uint8_t len) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn receive(%d, F_APPLICATION, msg, payload, len);\n", i);
+		fprintf(fp, "\treturn receive((%d * F_LAYERS + F_NETWORK), F_APPLICATION, msg, payload, len);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "event message_t* %sNetworkSnoop.receive(message_t *msg, void* payload, uint8_t len) {\n",
+		fprintf(fp, "event message_t* %s_%s_NetworkSnoop.receive(message_t *msg, void* payload, uint8_t len) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn snoop(%d, F_APPLICATION, msg, payload, len);\n", i);
+		fprintf(fp, "\treturn snoop((%d * F_LAYERS + F_NETWORK), F_APPLICATION, msg, payload, len);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command error_t %sMacAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n",
+		fprintf(fp, "command error_t %s_%s_MacAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMSend_send(%d, F_MAC, addr, msg, len);\n", i);
+		fprintf(fp, "\treturn AMSend_send((%d * F_LAYERS + F_NETWORK), F_MAC, addr, msg, len);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command error_t %sMacAMSend.cancel(message_t* msg) {\n",
+		fprintf(fp, "command error_t %s_%s_MacAMSend.cancel(message_t* msg) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMSend_cancel(%d, F_MAC, msg);\n", i);
+		fprintf(fp, "\treturn AMSend_cancel((%d * F_LAYERS + F_NETWORK), F_MAC, msg);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command uint8_t %sMacAMSend.maxPayloadLength() {\n",
+		fprintf(fp, "command uint8_t %s_%s_MacAMSend.maxPayloadLength() {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMSend_maxPayloadLength(%d, F_MAC);\n", i);
+		fprintf(fp, "\treturn AMSend_maxPayloadLength((%d * F_LAYERS + F_NETWORK), F_MAC);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command void* %sMacAMSend.getPayload(message_t* msg, uint8_t len) {\n",
+		fprintf(fp, "command void* %s_%s_MacAMSend.getPayload(message_t* msg, uint8_t len) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMSend_getPayload(%d, F_MAC, msg, len);\n", i);
+		fprintf(fp, "\treturn AMSend_getPayload((%d * F_LAYERS + F_NETWORK), F_MAC, msg, len);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command am_addr_t %sMacAMPacket.address() {\n",
+		fprintf(fp, "command am_addr_t %s_%s_MacAMPacket.address() {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMPacket_address(%d, F_MAC);\n", i);
+		fprintf(fp, "\treturn AMPacket_address((%d * F_LAYERS + F_NETWORK), F_MAC);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command am_addr_t %sMacAMPacket.destination(message_t* msg) {\n",
+		fprintf(fp, "command am_addr_t %s_%s_MacAMPacket.destination(message_t* msg) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMPacket_destination(%d, F_MAC, msg);\n", i);
+		fprintf(fp, "\treturn AMPacket_destination((%d * F_LAYERS + F_NETWORK), F_MAC, msg);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command am_addr_t %sMacAMPacket.source(message_t* msg) {\n",
+		fprintf(fp, "command am_addr_t %s_%s_MacAMPacket.source(message_t* msg) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMPacket_source(%d, F_MAC, msg);\n", i);
+		fprintf(fp, "\treturn AMPacket_source((%d * F_LAYERS + F_NETWORK), F_MAC, msg);\n", i);
 		fprintf(fp, "}\n");
-		fprintf(fp, "command void %sMacAMPacket.setDestination(message_t* msg, am_addr_t addr) {\n",
+		fprintf(fp, "command void %s_%s_MacAMPacket.setDestination(message_t* msg, am_addr_t addr) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMPacket_setDestination(%d, F_MAC, msg, addr);\n", i);
+		fprintf(fp, "\treturn AMPacket_setDestination((%d * F_LAYERS + F_NETWORK), F_MAC, msg, addr);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command void %sMacAMPacket.setSource(message_t* msg, am_addr_t addr) {\n",
+		fprintf(fp, "command void %s_%s_MacAMPacket.setSource(message_t* msg, am_addr_t addr) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMPacket_setSource(%d, F_MAC, msg, addr);\n", i);
+		fprintf(fp, "\treturn AMPacket_setSource((%d * F_LAYERS + F_NETWORK), F_MAC, msg, addr);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command bool %sMacAMPacket.isForMe(message_t* msg) {\n",
+		fprintf(fp, "command bool %s_%s_MacAMPacket.isForMe(message_t* msg) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMPacket_isForMe(%d, F_MAC, msg);\n", i);
+		fprintf(fp, "\treturn AMPacket_isForMe((%d * F_LAYERS + F_NETWORK), F_MAC, msg);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command am_id_t %sMacAMPacket.type(message_t* msg) {\n",
+		fprintf(fp, "command am_id_t %s_%s_MacAMPacket.type(message_t* msg) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMPacket_type(%d, F_MAC, msg);\n", i);
+		fprintf(fp, "\treturn AMPacket_type((%d * F_LAYERS + F_NETWORK), F_MAC, msg);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command void %sMacAMPacket.setType(message_t* msg, am_id_t t) {\n",
+		fprintf(fp, "command void %s_%s_MacAMPacket.setType(message_t* msg, am_id_t t) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMPacket_setType(%d, F_MAC, msg, t);\n", i);
+		fprintf(fp, "\treturn AMPacket_setType((%d * F_LAYERS + F_NETWORK), F_MAC, msg, t);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command am_group_t %sMacAMPacket.group(message_t* msg) {\n",
+		fprintf(fp, "command am_group_t %s_%s_MacAMPacket.group(message_t* msg) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMPacket_group(%d, F_MAC, msg);\n", i);
+		fprintf(fp, "\treturn AMPacket_group((%d * F_LAYERS + F_NETWORK), F_MAC, msg);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command void %sMacAMPacket.setGroup(message_t* msg, am_group_t grp) {\n",
+		fprintf(fp, "command void %s_%s_MacAMPacket.setGroup(message_t* msg, am_group_t grp) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMPacket_setGroup(%d, F_MAC, msg, grp);\n", i);
+		fprintf(fp, "\treturn AMPacket_setGroup((%d * F_LAYERS + F_NETWORK), F_MAC, msg, grp);\n", i);
 		fprintf(fp, "}\n");
-		fprintf(fp, "command am_group_t %sMacAMPacket.localGroup() {\n",
+		fprintf(fp, "command am_group_t %s_%s_MacAMPacket.localGroup() {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn AMPacket_localGroup(%d, F_MAC);\n", i);
+		fprintf(fp, "\treturn AMPacket_localGroup((%d * F_LAYERS + F_NETWORK), F_MAC);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command void %sMacPacket.clear(message_t* msg) {\n",
+		fprintf(fp, "command void %s_%s_MacPacket.clear(message_t* msg) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn Packet_clear(%d, F_MAC, msg);\n", i);
+		fprintf(fp, "\treturn Packet_clear((%d * F_LAYERS + F_NETWORK), F_MAC, msg);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command uint8_t %sMacPacket.payloadLength(message_t* msg) {\n",
+		fprintf(fp, "command uint8_t %s_%s_MacPacket.payloadLength(message_t* msg) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn Packet_payloadLength(%d, F_MAC, msg);\n", i);
+		fprintf(fp, "\treturn Packet_payloadLength((%d * F_LAYERS + F_NETWORK), F_MAC, msg);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command void %sMacPacket.setPayloadLength(message_t* msg, uint8_t len) {\n",
+		fprintf(fp, "command void %s_%s_MacPacket.setPayloadLength(message_t* msg, uint8_t len) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn Packet_setPayloadLength(%d, F_MAC, msg, len);\n", i);
+		fprintf(fp, "\treturn Packet_setPayloadLength((%d * F_LAYERS + F_NETWORK), F_MAC, msg, len);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command uint8_t %sMacPacket.maxPayloadLength() {\n",
+		fprintf(fp, "command uint8_t %s_%s_MacPacket.maxPayloadLength() {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn Packet_maxPayloadLength(%d, F_MAC);\n", i);
+		fprintf(fp, "\treturn Packet_maxPayloadLength((%d * F_LAYERS + F_NETWORK), F_MAC);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "command void* %sMacPacket.getPayload(message_t* msg, uint8_t len) {\n",
+		fprintf(fp, "command void* %s_%s_MacPacket.getPayload(message_t* msg, uint8_t len) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn Packet_getPayload(%d, F_MAC, msg, len);\n", i);
+		fprintf(fp, "\treturn Packet_getPayload((%d * F_LAYERS + F_NETWORK), F_MAC, msg, len);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command error_t %sMacPacketAcknowledgements.requestAck( message_t* msg ) {\n",
+		fprintf(fp, "async command error_t %s_%s_MacPacketAcknowledgements.requestAck( message_t* msg ) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn PacketAcknowledgements_requestAck(%d, F_MAC, msg);\n", i);
+		fprintf(fp, "\treturn PacketAcknowledgements_requestAck((%d * F_LAYERS + F_NETWORK), F_MAC, msg);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command error_t %sMacPacketAcknowledgements.noAck( message_t* msg ) {\n",
+		fprintf(fp, "async command error_t %s_%s_MacPacketAcknowledgements.noAck( message_t* msg ) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn PacketAcknowledgements_noAck(%d, F_MAC, msg);\n", i);
+		fprintf(fp, "\treturn PacketAcknowledgements_noAck((%d * F_LAYERS + F_NETWORK), F_MAC, msg);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command bool %sMacPacketAcknowledgements.wasAcked(message_t* msg) {\n",
+		fprintf(fp, "async command bool %s_%s_MacPacketAcknowledgements.wasAcked(message_t* msg) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn PacketAcknowledgements_wasAcked(%d, F_MAC, msg);\n", i);
+		fprintf(fp, "\treturn PacketAcknowledgements_wasAcked((%d * F_LAYERS + F_NETWORK), F_MAC, msg);\n", i);
 		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command bool %sMacLinkPacketMetadata.highChannelQuality(message_t *msg) {\n",
+		fprintf(fp, "async command bool %s_%s_MacLinkPacketMetadata.highChannelQuality(message_t *msg) {\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
-		fprintf(fp, "\treturn LinkPacketMetadata_highChannelQuality(%d, F_MAC, msg);\n", i);
+		fprintf(fp, "\treturn LinkPacketMetadata_highChannelQuality((%d * F_LAYERS + F_NETWORK), F_MAC, msg);\n", i);
 		fprintf(fp, "}\n\n");
 
 
