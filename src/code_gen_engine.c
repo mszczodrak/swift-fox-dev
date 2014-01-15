@@ -2506,11 +2506,11 @@ void generateFennecEngineP() {
 
 		fprintf(fp, "event void %sControl.startDone(error_t err) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\tmodule_startDone(%d, err);\n", i);
+		fprintf(fp, "\tmodule_startDone((%d * F_LAYERS + F_MAC), err);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "event void %sControl.stopDone(error_t err) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\tmodule_stopDone(%d, err);\n", i);
+		fprintf(fp, "\tmodule_stopDone((%d * F_LAYERS + F_MAC), err);\n", i);
 		fprintf(fp, "}\n\n");
 
 
@@ -2527,7 +2527,7 @@ void generateFennecEngineP() {
 					type_name(pt->type), 
 					conftab[i].conf->mac->lib->full_name, 
 					pt->name);
-			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).mac;\n", 
+			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams((%d * F_LAYERS + F_MAC))).mac;\n", 
 					conftab[i].conf->mac->lib->full_name, 
 					conftab[i].conf->mac->lib->full_name, 
 					i);
@@ -2538,7 +2538,7 @@ void generateFennecEngineP() {
 					pt->name, 
 					type_name(pt->type), 
 					pt->name);
-			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).mac;\n", 
+			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams((%d * F_LAYERS + F_MAC))).mac;\n", 
 					conftab[i].conf->mac->lib->full_name, 
 					conftab[i].conf->mac->lib->full_name, 
 					i);
@@ -2552,174 +2552,174 @@ void generateFennecEngineP() {
 
 		fprintf(fp, "event void %sMacAMSend.sendDone(message_t *msg, error_t error) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\tsendDone(%d, F_NETWORK, msg, error);\n", i);
+		fprintf(fp, "\tsendDone((%d * F_LAYERS + F_MAC), F_NETWORK, msg, error);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "event message_t* %sMacReceive.receive(message_t *msg, void* payload, uint8_t len) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn receive(%d, F_NETWORK, msg, payload, len);\n", i);
+		fprintf(fp, "\treturn receive((%d * F_LAYERS + F_MAC), F_NETWORK, msg, payload, len);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "event message_t* %sMacSnoop.receive(message_t *msg, void* payload, uint8_t len) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn snoop(%d, F_NETWORK, msg, payload, len);\n", i);
+		fprintf(fp, "\treturn snoop((%d * F_LAYERS + F_MAC), F_NETWORK, msg, payload, len);\n", i);
 		fprintf(fp, "}\n\n");
 
 
 		fprintf(fp, "async command error_t %sRadioResource.request() {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioResource_request(%d, F_RADIO);\n", i);
+		fprintf(fp, "\treturn RadioResource_request((%d * F_LAYERS + F_MAC), F_RADIO);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command error_t %sRadioResource.immediateRequest() {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioResource_immediateRequest(%d, F_RADIO);\n", i);
+		fprintf(fp, "\treturn RadioResource_immediateRequest((%d * F_LAYERS + F_MAC), F_RADIO);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command error_t %sRadioResource.release() {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioResource_release(%d, F_RADIO);\n", i);
+		fprintf(fp, "\treturn RadioResource_release((%d * F_LAYERS + F_MAC), F_RADIO);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command error_t %sRadioResource.isOwner() {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioResource_isOwner(%d, F_RADIO);\n", i);
+		fprintf(fp, "\treturn RadioResource_isOwner((%d * F_LAYERS + F_MAC), F_RADIO);\n", i);
 		fprintf(fp, "}\n\n");
 
 
 		fprintf(fp, "async command error_t %sRadioSend.send(message_t* msg, bool useCca) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioSend_send(%d, F_RADIO, msg, useCca);\n", i);
+		fprintf(fp, "\treturn RadioSend_send((%d * F_LAYERS + F_MAC), F_RADIO, msg, useCca);\n", i);
 		fprintf(fp, "}\n\n");
 
 
 		fprintf(fp, "async command uint8_t %sRadioPacket.maxPayloadLength() {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioPacket_maxPayloadLength(%d, F_RADIO);\n", i);
+		fprintf(fp, "\treturn RadioPacket_maxPayloadLength((%d * F_LAYERS + F_MAC), F_RADIO);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command uint8_t %sRadioPacket.headerLength(message_t* msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioPacket_headerLength(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn RadioPacket_headerLength((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command uint8_t %sRadioPacket.payloadLength(message_t* msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioPacket_payloadLength(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn RadioPacket_payloadLength((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command void %sRadioPacket.setPayloadLength(message_t* msg, uint8_t length) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioPacket_setPayloadLength(%d, F_RADIO, msg, length);\n", i);
+		fprintf(fp, "\treturn RadioPacket_setPayloadLength((%d * F_LAYERS + F_MAC), F_RADIO, msg, length);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command uint8_t %sRadioPacket.metadataLength(message_t* msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioPacket_metadataLength(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn RadioPacket_metadataLength((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command void %sRadioPacket.clear(message_t* msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioPacket_clear(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn RadioPacket_clear((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 
 
 		fprintf(fp, "async command error_t %sRadioBuffer.load(message_t* msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioBuffer_load(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn RadioBuffer_load((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 
 
 		fprintf(fp, "async command bool %sPacketTransmitPower.isSet(message_t *msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketTransmitPower_isSet(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn PacketTransmitPower_isSet((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command uint8_t %sPacketTransmitPower.get(message_t *msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketTransmitPower_get(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn PacketTransmitPower_get((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command void %sPacketTransmitPower.clear(message_t *msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketTransmitPower_clear(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn PacketTransmitPower_clear((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command void %sPacketTransmitPower.set(message_t *msg, uint8_t value) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketTransmitPower_set(%d, F_RADIO, msg, value);\n", i);
+		fprintf(fp, "\treturn PacketTransmitPower_set((%d * F_LAYERS + F_MAC), F_RADIO, msg, value);\n", i);
 		fprintf(fp, "}\n\n");
 
 
 		fprintf(fp, "async command bool %sPacketRSSI.isSet(message_t *msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketRSSI_isSet(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn PacketRSSI_isSet((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command uint8_t %sPacketRSSI.get(message_t *msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketRSSI_get(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn PacketRSSI_get((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command void %sPacketRSSI.clear(message_t *msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketRSSI_clear(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn PacketRSSI_clear((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command void %sPacketRSSI.set(message_t *msg, uint8_t value) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketRSSI_set(%d, F_RADIO, msg, value);\n", i);
+		fprintf(fp, "\treturn PacketRSSI_set((%d * F_LAYERS + F_MAC), F_RADIO, msg, value);\n", i);
 		fprintf(fp, "}\n\n");
 
 
 		fprintf(fp, "async command bool %sPacketTimeSync.isSet(message_t *msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketTimeSync_isSet(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn PacketTimeSync_isSet((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command uint32_t %sPacketTimeSync.get(message_t *msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketTimeSync_get(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn PacketTimeSync_get((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command void %sPacketTimeSync.clear(message_t *msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketTimeSync_clear(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn PacketTimeSync_clear((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command void %sPacketTimeSync.set(message_t *msg, uint32_t value) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketTimeSync_set(%d, F_RADIO, msg, value);\n", i);
+		fprintf(fp, "\treturn PacketTimeSync_set((%d * F_LAYERS + F_MAC), F_RADIO, msg, value);\n", i);
 		fprintf(fp, "}\n\n");
 
 
 		fprintf(fp, "async command bool %sPacketLinkQuality.isSet(message_t *msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketLinkQuality_isSet(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn PacketLinkQuality_isSet((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command uint8_t %sPacketLinkQuality.get(message_t *msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketLinkQuality_get(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn PacketLinkQuality_get((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command void %sPacketLinkQuality.clear(message_t *msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketLinkQuality_clear(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn PacketLinkQuality_clear((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command void %sPacketLinkQuality.set(message_t *msg, uint8_t value) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn PacketLinkQuality_set(%d, F_RADIO, msg, value);\n", i);
+		fprintf(fp, "\treturn PacketLinkQuality_set((%d * F_LAYERS + F_MAC), F_RADIO, msg, value);\n", i);
 		fprintf(fp, "}\n\n");
 
 		fprintf(fp, "async command error_t %sRadioCCA.request() {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioCCA_request(%d, F_RADIO);\n", i);
+		fprintf(fp, "\treturn RadioCCA_request((%d * F_LAYERS + F_MAC), F_RADIO);\n", i);
 		fprintf(fp, "}\n\n");
 
 
 		fprintf(fp, "command error_t %sRadioState.turnOff() {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioState_turnOff(%d, F_RADIO);\n", i);
+		fprintf(fp, "\treturn RadioState_turnOff((%d * F_LAYERS + F_MAC), F_RADIO);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "command error_t %sRadioState.standby() {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioState_standby(%d, F_RADIO);\n", i);
+		fprintf(fp, "\treturn RadioState_standby((%d * F_LAYERS + F_MAC), F_RADIO);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "command error_t %sRadioState.turnOn() {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioState_turnOn(%d, F_RADIO);\n", i);
+		fprintf(fp, "\treturn RadioState_turnOn((%d * F_LAYERS + F_MAC), F_RADIO);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "command error_t %sRadioState.setChannel(uint8_t channel) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioState_setChannel(%d, F_RADIO, channel);\n", i);
+		fprintf(fp, "\treturn RadioState_setChannel((%d * F_LAYERS + F_MAC), F_RADIO, channel);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "command uint8_t %sRadioState.getChannel() {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn RadioState_getChannel(%d, F_RADIO);\n", i);
+		fprintf(fp, "\treturn RadioState_getChannel((%d * F_LAYERS + F_MAC), F_RADIO);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async command bool %sRadioLinkPacketMetadata.highChannelQuality(message_t *msg) {\n",
 					conftab[i].conf->mac->lib->full_name);
-		fprintf(fp, "\treturn LinkPacketMetadata_highChannelQuality(%d, F_RADIO, msg);\n", i);
+		fprintf(fp, "\treturn LinkPacketMetadata_highChannelQuality((%d * F_LAYERS + F_MAC), F_RADIO, msg);\n", i);
 		fprintf(fp, "}\n\n");
 	
 
@@ -2729,11 +2729,11 @@ void generateFennecEngineP() {
 
 		fprintf(fp, "event void %sControl.startDone(error_t err) {\n",
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\tmodule_startDone(%d, err);\n", i);
+		fprintf(fp, "\tmodule_startDone((%d * F_LAYERS + F_RADIO), err);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "event void %sControl.stopDone(error_t err) {\n",
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\tmodule_stopDone(%d, err);\n", i);
+		fprintf(fp, "\tmodule_stopDone((%d * F_LAYERS + F_RADIO), err);\n", i);
 		fprintf(fp, "}\n\n");
 
 
@@ -2750,7 +2750,7 @@ void generateFennecEngineP() {
 					type_name(pt->type), 
 					conftab[i].conf->radio->lib->full_name, 
 					pt->name);
-			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).radio;\n", 
+			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams((%d * F_LAYERS + F_RADIO))).radio;\n", 
 					conftab[i].conf->radio->lib->full_name, 
 					conftab[i].conf->radio->lib->full_name, 
 					i);
@@ -2761,7 +2761,7 @@ void generateFennecEngineP() {
 					pt->name, 
 					type_name(pt->type), 
 					pt->name);
-			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams(%d)).radio;\n", 
+			fprintf(fp, "\tstruct %s_params_ptr *params = (struct %s_params_ptr*) (call Fennec.getConfParams((%d * F_LAYERS + F_RADIO))).radio;\n", 
 					conftab[i].conf->radio->lib->full_name, 
 					conftab[i].conf->radio->lib->full_name, 
 					i);
@@ -2774,42 +2774,42 @@ void generateFennecEngineP() {
 
 		fprintf(fp, "async event message_t* %sRadioReceive.receive(message_t *msg) {\n",
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn RadioReceive_receive(%d, F_MAC, msg);\n", i);
+		fprintf(fp, "\treturn RadioReceive_receive((%d * F_LAYERS + F_RADIO), F_MAC, msg);\n", i);
 		fprintf(fp, "}\n\n");
 
 		fprintf(fp, "async event bool %sRadioReceive.header(message_t *msg) {\n",
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn RadioReceive_header(%d, F_MAC, msg);\n", i);
+		fprintf(fp, "\treturn RadioReceive_header((%d * F_LAYERS + F_RADIO), F_MAC, msg);\n", i);
 		fprintf(fp, "}\n\n");
 
 
 		fprintf(fp, "event void %sRadioResource.granted() {\n",
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn granted(%d, F_MAC);\n", i);
+		fprintf(fp, "\treturn granted((%d * F_LAYERS + F_RADIO), F_MAC);\n", i);
 		fprintf(fp, "}\n\n");
 
 		fprintf(fp, "async event void %sRadioBuffer.loadDone(message_t* msg, error_t error) {\n",
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn transmitLoadDone(%d, F_MAC, msg, error);\n", i);
+		fprintf(fp, "\treturn transmitLoadDone((%d * F_LAYERS + F_RADIO), F_MAC, msg, error);\n", i);
 		fprintf(fp, "}\n\n");
 
 		fprintf(fp, "async event void %sRadioSend.sendDone(message_t *msg, error_t error) {\n",
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn RadioSend_sendDone(%d, F_MAC, msg, error);\n", i);
+		fprintf(fp, "\treturn RadioSend_sendDone((%d * F_LAYERS + F_RADIO), F_MAC, msg, error);\n", i);
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "async event void %sRadioSend.ready() {\n",
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn RadioSend_ready(%d, F_MAC);\n", i);
+		fprintf(fp, "\treturn RadioSend_ready((%d * F_LAYERS + F_RADIO), F_MAC);\n", i);
 		fprintf(fp, "}\n\n");
 
 		fprintf(fp, "event void %sRadioState.done() {\n",
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn RadioState_done(%d, F_MAC);\n", i);
+		fprintf(fp, "\treturn RadioState_done((%d * F_LAYERS + F_RADIO), F_MAC);\n", i);
 		fprintf(fp, "}\n\n");
 
 		fprintf(fp, "async event void %sRadioCCA.done(error_t error) {\n",
 					conftab[i].conf->radio->lib->full_name);
-		fprintf(fp, "\treturn RadioCCA_done(%d, F_MAC, error);\n", i);
+		fprintf(fp, "\treturn RadioCCA_done((%d * F_LAYERS + F_RADIO), F_MAC, error);\n", i);
 		fprintf(fp, "}\n\n");
 	}
 
