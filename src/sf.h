@@ -132,7 +132,6 @@ struct libtab {
         char			*path;
 	char			*def;
 	char			*name;
-	char			*full_name;
 	struct paramtype	*params;
 	int			used;
 	int			type;

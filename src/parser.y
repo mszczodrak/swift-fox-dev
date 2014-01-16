@@ -321,10 +321,10 @@ configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines modu
 			$$->net_id_value = conf_id_counter * F_LAYERS + F_NETWORK; 	
 			$$->mac_id_value = conf_id_counter * F_LAYERS + F_MAC; 	
 			$$->radio_id_value = conf_id_counter * F_LAYERS + F_RADIO; 	
-			$$->app_id_name = conf_module_name($$->name, $$->app->lib->full_name);
-			$$->net_id_name = conf_module_name($$->name, $$->net->lib->full_name);
-			$$->mac_id_name = conf_module_name($$->name, $$->mac->lib->full_name);
-			$$->radio_id_name = conf_module_name($$->name, $$->radio->lib->full_name);
+			$$->app_id_name = conf_module_name($$->name, $$->app->lib->name);
+			$$->net_id_name = conf_module_name($$->name, $$->net->lib->name);
+			$$->mac_id_name = conf_module_name($$->name, $$->mac->lib->name);
+			$$->radio_id_name = conf_module_name($$->name, $$->radio->lib->name);
 
 			conftab[conf_id_counter].conf = $$;
 
@@ -615,7 +615,6 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_typ
 			
 			/* lookup */
 			struct symtab *sp = NULL;
-			char *full_name = NULL;
 		
 			/* check for library re-declarations */
 			if ((sp = symlook($3->name)) != NULL && sp->type != TYPE_UNKNOWN)
@@ -644,18 +643,12 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_typ
 			switch($3->type) {
 			case TYPE_APPLICATION:
 				/* application */
-			        full_name = malloc(strlen($4->name)+strlen("App")+1);
-			        sprintf(full_name, "%sApp", $4->name);
-				$4->full_name = full_name;
 				$4->type = TYPE_APPLICATION;
 				$4->used = 0;
 				$4->id = 0;
 				break;
 
 			case TYPE_EVENT:
-			        full_name = malloc(strlen($4->name)+strlen("App")+1);
-			        sprintf(full_name, "%sApp", $4->name);
-				$4->full_name = full_name;
 				$4->type = TYPE_EVENT;
 				$4->used = 0;
 				$4->id = 0;
@@ -663,9 +656,6 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_typ
 
 			case TYPE_NETWORK:
 				/* network */
-			        full_name = malloc(strlen($4->name)+strlen("Net")+1);
-			        sprintf(full_name, "%sNet", $4->name);
-				$4->full_name = full_name;
 				$4->type = TYPE_NETWORK;
 				$4->used = 0;
 				$4->id = 0;
@@ -673,9 +663,6 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_typ
 
 			case TYPE_MAC:
                                 /* mac */
-			        full_name = malloc(strlen($4->name)+strlen("Mac")+1);
-			        sprintf(full_name, "%sMac", $4->name);
-				$4->full_name = full_name;
                                 $4->type = TYPE_MAC;
 				$4->used = 0;
                                 $4->id = 0;
@@ -683,9 +670,6 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_typ
                         
 			case TYPE_RADIO:
                                 /* radio */
-			        full_name = malloc(strlen($4->name)+strlen("Radio")+1);
-			        sprintf(full_name, "%sRadio", $4->name);
-				$4->full_name = full_name;
                                 $4->type = TYPE_RADIO;
 				$4->used = 0;
                                 $4->id = 0;
@@ -1000,7 +984,7 @@ proc_module(char *s) {
 			mp->type = sp->type;
 			mp->lib = sp->lib;
 			mp->params = NULL;
-			mp->name = strdup(sp->lib->full_name);
+			mp->name = strdup(sp->lib->name);
 			for(c = mp->name; *c != '\0'; c++ ) {
 				*c = toupper(*c);
 			}

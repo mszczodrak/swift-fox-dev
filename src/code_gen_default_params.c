@@ -45,7 +45,7 @@ void generateDefaultParams() {
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
 			fprintf(fp, "#include \"%sParams.h\"\n", 
-						mp->lib->full_name);
+						mp->lib->name);
 		}
 	}
 	fprintf(fp, "\n");
@@ -58,7 +58,7 @@ void generateDefaultParams() {
 		application default parameter values 
 		*/
 		fprintf(fp, "struct %s_params %s_params = {\n",
-        	        conftab[i].conf->app->lib->full_name,
+        	        conftab[i].conf->app->lib->name,
 			conftab[i].conf->app_id_name);
 
 
@@ -77,7 +77,7 @@ void generateDefaultParams() {
 		network default parameter values 
 		*/
                 fprintf(fp, "struct %s_params %s_params = {\n",
-                        conftab[i].conf->net->lib->full_name,
+                        conftab[i].conf->net->lib->name,
 			conftab[i].conf->net_id_name);
 
                 for (pv = conftab[i].conf->net_params; pv != NULL; ) {
@@ -95,7 +95,7 @@ void generateDefaultParams() {
 		mac default parameter values 
 		*/
                 fprintf(fp, "struct %s_params %s_params = {\n",
-                        conftab[i].conf->mac->lib->full_name,
+                        conftab[i].conf->mac->lib->name,
 			conftab[i].conf->mac_id_name);
 
                 for (pv = conftab[i].conf->mac_params; pv != NULL; ) {
@@ -113,7 +113,7 @@ void generateDefaultParams() {
 		radio default parameter values 
 		*/
                 fprintf(fp, "struct %s_params %s_params = {\n",
-                        conftab[i].conf->radio->lib->full_name,
+                        conftab[i].conf->radio->lib->name,
 			conftab[i].conf->radio_id_name);
 
                 for (pv = conftab[i].conf->radio_params; pv != NULL; ) {
@@ -138,7 +138,7 @@ void generateDefaultParams() {
 		application default parameter values 
 		*/
 		fprintf(fp, "struct %s_params_ptr %s_ptr = {\n",
-        	        conftab[i].conf->app->lib->full_name,
+        	        conftab[i].conf->app->lib->name,
 			conftab[i].conf->app_id_name);
 
                 for (pv = conftab[i].conf->app_params, pt = conftab[i].conf->app->lib->params;
@@ -166,7 +166,7 @@ void generateDefaultParams() {
 		network default parameter values 
 		*/
                 fprintf(fp, "struct %s_params_ptr %s_ptr = {\n",
-                        conftab[i].conf->net->lib->full_name,
+                        conftab[i].conf->net->lib->name,
 			conftab[i].conf->net_id_name);
 
                 for (pv = conftab[i].conf->net_params, pt = conftab[i].conf->net->lib->params;
@@ -194,7 +194,7 @@ void generateDefaultParams() {
 		mac default parameter values 
 		*/
                 fprintf(fp, "struct %s_params_ptr %s_ptr = {\n",
-                        conftab[i].conf->mac->lib->full_name,
+                        conftab[i].conf->mac->lib->name,
 			conftab[i].conf->mac_id_name);
 
                 for (pv = conftab[i].conf->mac_params, pt = conftab[i].conf->mac->lib->params;
@@ -222,7 +222,7 @@ void generateDefaultParams() {
 		radio default parameter values 
 		*/
                 fprintf(fp, "struct %s_params_ptr %s_ptr = {\n",
-                        conftab[i].conf->radio->lib->full_name,
+                        conftab[i].conf->radio->lib->name,
 			conftab[i].conf->radio_id_name);
 
                 for (pv = conftab[i].conf->radio_params, pt = conftab[i].conf->radio->lib->params;

@@ -63,15 +63,15 @@ void generateCaches(int event_counter, int policy_counter) {
         for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
                 if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
                         fprintf(fp, "#include \"%sParams.h\"\n",
-                                                mp->lib->full_name);
+                                                mp->lib->name);
                 }
         }
         fprintf(fp, "\n");
 
 	for( i = 0; i < conf_id_counter; i++ ) {
 		fprintf(fp, "/* %s for process %s\n"
-				"Application module located at %s */\n\n",
-			conftab[i].conf->app->lib->full_name,
+				"Computation module located at %s */\n\n",
+			conftab[i].conf->app->lib->name,
 			conftab[i].conf->id->name,
 			conftab[i].conf->app->lib->path);
 		fprintf(fp, "#define %s\t%d\n\n",
@@ -80,7 +80,7 @@ void generateCaches(int event_counter, int policy_counter) {
 
 		fprintf(fp, "/* %s for process %s\n"
 				"Network module located at %s */\n",
-			conftab[i].conf->net->lib->full_name,
+			conftab[i].conf->net->lib->name,
 			conftab[i].conf->id->name,
 			conftab[i].conf->net->lib->path);
 		fprintf(fp, "#define %s\t%d\n\n",
@@ -89,7 +89,7 @@ void generateCaches(int event_counter, int policy_counter) {
 
 		fprintf(fp, "/* %s for process %s\n"
 				"MAC module located at %s */\n",
-			conftab[i].conf->mac->lib->full_name,
+			conftab[i].conf->mac->lib->name,
 			conftab[i].conf->id->name,
 			conftab[i].conf->mac->lib->path);
 		fprintf(fp, "#define %s\t%d\n\n",
@@ -98,7 +98,7 @@ void generateCaches(int event_counter, int policy_counter) {
 
 		fprintf(fp, "/* %s for process %s\n"
 				"Radio module located at %s */\n",
-			conftab[i].conf->radio->lib->full_name,
+			conftab[i].conf->radio->lib->name,
 			conftab[i].conf->id->name,
 			conftab[i].conf->radio->lib->path);
 		fprintf(fp, "#define %s\t%d\n\n",
