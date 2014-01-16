@@ -50,7 +50,7 @@ void generateFennecEngineC() {
   		fprintf(fp, "/* Defined and linked application module %s with %s state */\n\n", 
 					conftab[i].conf->app->lib->full_name,
 					conftab[i].conf->id->name);
- 		fprintf(fp, "components %sC as %s_%s;\n",
+ 		fprintf(fp, "components new %sC() as %s_%s;\n",
 					conftab[i].conf->app->lib->full_name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->full_name);
@@ -107,7 +107,7 @@ void generateFennecEngineC() {
   		fprintf(fp, "/* Defined and linked network module %s with %s state */\n\n", 
 					conftab[i].conf->net->lib->full_name,
 					conftab[i].conf->id->name);
-		fprintf(fp, "components %sC as %s_%s;\n",
+		fprintf(fp, "components new %sC() as %s_%s;\n",
 					conftab[i].conf->net->lib->full_name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->full_name);
