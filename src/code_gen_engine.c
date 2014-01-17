@@ -193,7 +193,7 @@ void generateFennecEngineC() {
   		fprintf(fp, "/* Defined and linked MAC module %s with %s state */\n\n", 
 					conftab[i].conf->mac->lib->name,
 					conftab[i].conf->id->name);
-		fprintf(fp, "components %sC as %s_%s;\n",
+		fprintf(fp, "components new %sC() as %s_%s;\n",
 					conftab[i].conf->mac->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name);
