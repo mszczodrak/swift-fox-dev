@@ -1,26 +1,24 @@
 #!/bin/bash
 # Marcin Szczodrak
 
-DEV=./
-PUB=../swift-fox
+DEV_REPO=./
+PUB_REPO=../swift-fox
 MAIN_FOLDER=src
 PUBS=pubs
 
-echo "Delete pub repo files"
-rm -rf $PUB/$MAIN_FOLDER
-
-
+echo "Clean Repo"
 make maintainer-clean
+
+echo "Delete all files from $PUB_REPO"
+rm -rf $PUB_REPO/*
 
 while read -r path
 do
-	
-	echo "Removing - $path"
-	rm -R $PUB/$path 
 	echo "Copying - $path"
-	cp -R  --parents $path $PUB
+	cp -R  --parents $path $PUB_REPO
 done < "$PUBS"
 
-cd $PUB
-#git add *
+cd $PUB_REPO
+git add *
+git commit -am "Sync from `date`"
 
