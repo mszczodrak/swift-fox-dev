@@ -3,7 +3,7 @@
 # This program syncs swift-fox-dev repo with the public one
 
 DEV_REPO=`pwd`
-PUB_REPO=`pwd`/swift-fox
+PUB_REPO=`pwd`/../swift-fox
 PUB_CODE=pubs
 
 echo $PUB_REPO
