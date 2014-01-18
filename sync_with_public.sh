@@ -14,6 +14,9 @@ make maintainer-clean
 
 while read -r path
 do
+	
+	echo "Removing - $path"
+	rm -R $PUB/$path 
 	echo "Copying - $path"
 	cp -R  --parents $path $PUB
 done < "$PUBS"
