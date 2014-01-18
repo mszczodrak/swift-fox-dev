@@ -1,5 +1,6 @@
 #!/bin/bash
 # Marcin Szczodrak
+# This program syncs swift-fox-dev repo with the public one
 
 DEV_REPO=./
 PUB_REPO=../swift-fox
@@ -21,4 +22,5 @@ done < "$PUBS"
 cd $PUB_REPO
 git add *
 git commit -am "Sync from `date`"
+git push
 
