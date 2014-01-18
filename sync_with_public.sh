@@ -9,7 +9,8 @@ PUBS=pubs
 echo "Delete pub repo files"
 rm -rf $PUB/$MAIN_FOLDER
 
-make distclean
+
+make maintainer-clean
 
 while read -r path
 do
