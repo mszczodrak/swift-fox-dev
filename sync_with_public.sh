@@ -2,10 +2,9 @@
 # Marcin Szczodrak
 # This program syncs swift-fox-dev repo with the public one
 
-DEV_REPO=./
-PUB_REPO=../swift-fox
-MAIN_FOLDER=src
-PUBS=pubs
+DEV_REPO=`pwd`
+PUB_REPO=`pwd`/swift-fox
+PUB_CODE=pubs
 
 echo "Clean Repo"
 make maintainer-clean
@@ -17,7 +16,7 @@ while read -r path
 do
 	echo "Copying - $path"
 	cp -R  --parents $path $PUB_REPO
-done < "$PUBS"
+done < "$PUB_CODE"
 
 cd $PUB_REPO
 git add *
