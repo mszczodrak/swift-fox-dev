@@ -1,9 +1,0 @@
-*.tar.gz
-parser.c
-parser.h
-scanner.c
-*.o
-fennec
-sfc
-Makefile
-.deps
