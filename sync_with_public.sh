@@ -6,7 +6,10 @@ DEV_REPO=`pwd`
 PUB_REPO=`pwd`/../swift-fox
 PUB_CODE=pubs
 
-echo $PUB_REPO
+cd $PUB_REPO
+git pull
+
+cd $DEV_REPO
 
 echo "Clean Repo"
 make maintainer-clean
