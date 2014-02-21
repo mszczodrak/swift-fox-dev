@@ -1,5 +1,5 @@
 
-configuration sensor { telosSens(1024) 
+configuration sensor { telosSens(1, 1024) 
 			nullNet()
 			nullMac()
 			nullRadio()
