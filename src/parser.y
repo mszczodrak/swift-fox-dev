@@ -39,6 +39,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <ctype.h>
+#include <stdarg.h>
 #include "sf.h"
 #include "utils.h"
 #include "traverse.h"
@@ -60,7 +61,7 @@ char *file_name;
 char *error_location;
 char *conf_state_suffix = "_cts";
 
-void yyerror(char *errmsg);
+void yyerror(const char *errmsg, ...);
 int yylex(void);
 
 %}
@@ -850,16 +851,22 @@ start_parser(int argc, char *argv[]) {
 
 /* error reporting */
 void
-yyerror(char *errmsg) {
-	
+yyerror(const char *format, ...) {
+
+	va_list arg;
+
 	/* error in program */
-	(void)fprintf(stderr, "\nsfc in %s %s\n", error_location, file_name);
+	(void)fprintf(stderr, "\nsfc in %s %s at line %d, position %d:\n", error_location, file_name, lineno,
+                                                        tokenpos - yyleng + 1);
+
+	va_start (arg, format);
+        (void)fprintf(stderr, format, arg);
+	va_end (arg);
 
 	/* line */
-        (void)fprintf(stderr, "%s at line %d, position %d:\n", errmsg, lineno, 
-							tokenpos - yyleng + 1);
 	(void)fprintf(stderr, "%s\n", linebuf);
 	(void)fprintf(stderr, "%*s\n", tokenpos - yyleng + 1, "^");
+
 
 	/* terminate */
 	exit(1);
