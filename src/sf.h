@@ -114,7 +114,6 @@ int start_parser(int argc, char *argv[]);
 extern int yylineno;
 extern int yycolumn;
 
-int lineno;
 char linebuf[BUF_SZ];
 
 /**
