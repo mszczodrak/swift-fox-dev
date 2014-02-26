@@ -47,9 +47,15 @@
 #define YY_NO_INPUT
 #endif
 
-%}
+/* handle locations */
+int yycolumn = 1;
 
+#define YY_USER_ACTION yycolumn += yyleng; printf("%s %d\n", yytext, yycolumn);
+
+
+%}
 %option nounput
+%option yylineno
 
 delim		[ \v\f\r]
 tab		\t+
@@ -67,15 +73,27 @@ comment		#.*
 
 %%
 
+
+^.* {
+			yycolumn = 1;
+			(void)memset(linebuf, 0, BUF_SZ);
+			strncpy(linebuf, yytext, BUF_SZ - 1);  
+//	printf("%d\n", yyleng);
+			yyless(0);
+			yycolumn = 1;
+}
+
 {newline}       {
 #ifndef __DEBUG__
 			(void)memset(linebuf, 0, BUF_SZ);
 			strncpy(linebuf, yytext + 1, BUF_SZ - 1); lineno++; 
-			tokenpos = 0; yyless(1);
-#else
-			yyless(1);
+			tokenpos = 0;
 #endif
-			return LF;    				}
+			yyless(1);
+			yycolumn = 1;
+                        return LF;                              }
+
+
 {tab}		{
 #ifndef __DEBUG__
 			tokenpos += ((yyleng*5) + (yyleng - 1) * 3);
