@@ -116,7 +116,6 @@ extern int yycolumn;
 
 int lineno;
 char linebuf[BUF_SZ];
-int tokenpos;
 
 /**
 Symbol Table 

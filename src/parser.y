@@ -825,8 +825,6 @@ start_parser(int argc, char *argv[]) {
 	initialize();
 	
 	/* process libraries */
-	//lineno = 1;
-	tokenpos = 0;
 	
 	/* try fennec fox standart libray located at ($FENNEC_FOX_LIB)/STD_FENNEC_FOX_LIB */
 	yyin = fopen(fennec_library_file, "r");
@@ -858,9 +856,11 @@ yyerror(const char *format, ...) {
 	va_list arg;
 
 	/* error in program */
-	(void)fprintf(stderr, "\nsfc in %s %s at line %d, position %d: ", error_location,
-							file_name, yylineno,
-                                                        yycolumn - yyleng + 1);
+//	(void)fprintf(stderr, "\nsfc in %s %s at line %d, position %d: ", error_location,
+//							file_name, yylineno,
+//                                                      yycolumn - yyleng + 1);
+
+	(void)fprintf(stderr, "\n\nsfc in %s %s: ", error_location, file_name);
 
 	va_start (arg, format);
         (void)fprintf(stderr, format, arg);
@@ -868,7 +868,6 @@ yyerror(const char *format, ...) {
 
 	/* line */
 	(void)fprintf(stderr, "\n\n%d: %s\n", yylineno, linebuf);
-	//(void)fprintf(stderr, "%*s\n", tokenpos - yyleng + 1, "^");
 	(void)fprintf(stderr, "%*s\n", yycolumn - yyleng + 1, "^");
 
 
@@ -886,7 +885,6 @@ yywrap(void) {
 		case 1:
 			/* re-init */
 			yylineno		= 1;
-			tokenpos	= 0;
 			file_status 	= 2;
 			file_name 	= library_file;
 
@@ -908,7 +906,6 @@ yywrap(void) {
 		case 2:
 			/* re-init */
 			yylineno	= 1;
-			tokenpos	= 0;
 			file_status 	= 3;
 			file_name 	= program_file;
 
