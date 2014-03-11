@@ -62,8 +62,7 @@ void generateFennecEngineC() {
 
 
 	for( i = 0; i < conf_id_counter; i++ ) {
-  		fprintf(fp, "/* Defined and linked application module %s with %s state */\n\n", 
-					conftab[i].conf->app->lib->name,
+  		fprintf(fp, "/* Process %s */\n\n", 
 					conftab[i].conf->id->name);
  		fprintf(fp, "components new %sC() as %s_%s;\n",
 					conftab[i].conf->app->lib->name,
@@ -80,48 +79,7 @@ void generateFennecEngineC() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name, 
 					conftab[i].conf->app->lib->name);
-     		fprintf(fp, "FennecEngineP.%s_%s_NetworkAMSend <- %s_%s.NetworkAMSend;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_NetworkReceive <- %s_%s.NetworkReceive;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_NetworkSnoop <- %s_%s.NetworkSnoop;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_NetworkPacket <- %s_%s.NetworkPacket;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_NetworkAMPacket <- %s_%s.NetworkAMPacket;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_NetworkPacketAcknowledgements <- %s_%s.NetworkPacketAcknowledgements;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		if (conftab[i].conf->app->lib->type == TYPE_EVENT) {
-			fprintf(fp, "FennecEngineP.%s_%s_Event -> %s_%s.Event;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		}
-		fprintf(fp, "\n\n");
 
-  		fprintf(fp, "/* Defined and linked network module %s with %s state */\n\n", 
-					conftab[i].conf->net->lib->name,
-					conftab[i].conf->id->name);
 		fprintf(fp, "components new %sC() as %s_%s;\n",
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->id->name,
@@ -137,36 +95,50 @@ void generateFennecEngineC() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name, 
 					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_NetworkAMSend -> %s_%s.NetworkAMSend;\n",
+
+     		fprintf(fp, "%s_%s.NetworkAMSend -> %s_%s.NetworkAMSend;\n",
 					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_NetworkReceive -> %s_%s.NetworkReceive;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name,
+					conftab[i].conf->app->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_NetworkSnoop -> %s_%s.NetworkSnoop;\n",
+      		fprintf(fp, "%s_%s.NetworkReceive -> %s_%s.NetworkReceive;;\n",
 					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_NetworkAMPacket -> %s_%s.NetworkAMPacket;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name,
+					conftab[i].conf->app->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_NetworkPacket -> %s_%s.NetworkPacket;\n",
+      		fprintf(fp, "%s_%s.NetworkSnoop -> %s_%s.NetworkSnoop;\n",
 					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_NetworkPacketAcknowledgements -> %s_%s.NetworkPacketAcknowledgements;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name,
+					conftab[i].conf->app->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
+      		fprintf(fp, "%s_%s.NetworkPacket -> %s_%s.NetworkPacket;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->name);
+      		fprintf(fp, "%s_%s.NetworkAMPacket -> %s_%s.NetworkAMPacket;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->name);
+      		fprintf(fp, "%s_%s.NetworkPacketAcknowledgements -> %s_%s.NetworkPacketAcknowledgements;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->name);
+
+
+		if (conftab[i].conf->app->lib->type == TYPE_EVENT) {
+			fprintf(fp, "FennecEngineP.%s_%s_Event -> %s_%s.Event;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->name);
+		}
+		fprintf(fp, "\n\n");
+
+
+
       		fprintf(fp, "FennecEngineP.%s_%s_MacAMSend <- %s_%s.MacAMSend;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
@@ -436,15 +408,6 @@ void generateFennecEngineP() {
 					conftab[i].conf->app->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
-		fprintf(fp, "provides interface AMSend as %s_%s_NetworkAMSend;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp, "provides interface Receive as %s_%s_NetworkReceive;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp, "provides interface Receive as %s_%s_NetworkSnoop;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
 		fprintf(fp, "provides interface Packet as %s_%s_NetworkPacket;\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
@@ -469,15 +432,6 @@ void generateFennecEngineP() {
 					conftab[i].conf->net->lib->name);
       		fprintf(fp, "provides interface %sParams as %s_%s_Params;\n", 
 					conftab[i].conf->net->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-		fprintf(fp, "uses interface AMSend as %s_%s_NetworkAMSend;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-		fprintf(fp, "uses interface Receive as %s_%s_NetworkReceive;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-		fprintf(fp, "uses interface Receive as %s_%s_NetworkSnoop;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
 		fprintf(fp, "uses interface AMPacket as %s_%s_NetworkAMPacket;\n",
@@ -735,10 +689,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->net_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_NetworkAMSend.send(addr, msg, len);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
 
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
 		fprintf(fp,"\t\treturn call %s_%s_MacAMSend.send(addr, msg, len);\n\n",
@@ -757,11 +707,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->net_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_NetworkAMSend.cancel(msg);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
 		fprintf(fp,"\t\treturn call %s_%s_MacAMSend.cancel(msg);\n\n",
 					conftab[i].conf->id->name,
@@ -779,10 +724,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->net_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_NetworkAMSend.getPayload(msg, len);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
 
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
 		fprintf(fp,"\t\treturn call %s_%s_MacAMSend.getPayload(msg, len);\n\n",
@@ -800,10 +741,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->net_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_NetworkAMSend.maxPayloadLength();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
 
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
 		fprintf(fp,"\t\treturn call %s_%s_MacAMSend.maxPayloadLength();\n\n",
@@ -1826,11 +1763,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->app_id_name);
-		fprintf(fp,"\t\tsignal %s_%s_NetworkAMSend.sendDone(msg, error);\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp,"\t\treturn;\n\n");
 
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->net_id_name);
 		fprintf(fp,"\t\tsignal %s_%s_MacAMSend.sendDone(msg, error);\n",
@@ -1853,11 +1785,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->app_id_name);
-		fprintf(fp,"\t\treturn signal %s_%s_NetworkReceive.receive(msg, payload, len);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->net_id_name);
 		fprintf(fp,"\t\treturn signal %s_%s_MacReceive.receive(msg, payload, len);\n\n",
 					conftab[i].conf->id->name,
@@ -1878,11 +1805,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
 	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->app_id_name);
-		fprintf(fp,"\t\treturn signal %s_%s_NetworkSnoop.receive(msg, payload, len);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->net_id_name);
 		fprintf(fp,"\t\treturn signal %s_%s_MacSnoop.receive(msg, payload, len);\n\n",
 					conftab[i].conf->id->name,
@@ -2093,46 +2015,6 @@ void generateFennecEngineP() {
 			fprintf(fp, "\treturn SUCCESS;\n");
 	                fprintf(fp, "}\n\n");
 	        }
-
-		fprintf(fp, "command error_t %s_%s_NetworkAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%s_NetworkAMSend.send()\");\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp, "\treturn AMSend_send(%s, F_NETWORK, addr, msg, len);\n",
-					conftab[i].conf->app_id_name);
-		fprintf(fp, "}\n\n");
-
-		fprintf(fp, "command error_t %s_%s_NetworkAMSend.cancel(message_t* msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%s_NetworkAMSend.cancel()\");\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp, "\treturn AMSend_cancel(%s, F_NETWORK, msg);\n",
-					conftab[i].conf->app_id_name);
-		fprintf(fp, "}\n\n");
-
-		fprintf(fp, "command uint8_t %s_%s_NetworkAMSend.maxPayloadLength() {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%s_NetworkAMSend.maxPayloadLength()\");\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp, "\treturn AMSend_maxPayloadLength(%s, F_NETWORK);\n",
-					conftab[i].conf->app_id_name);
-		fprintf(fp, "}\n\n");
-
-		fprintf(fp, "command void* %s_%s_NetworkAMSend.getPayload(message_t* msg, uint8_t len) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp, "\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%s_NetworkAMSend.getPayload()\");\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp, "\treturn AMSend_getPayload(%s, F_NETWORK, msg, len);\n",
-					conftab[i].conf->app_id_name);
-		fprintf(fp, "}\n\n");
 
 		fprintf(fp, "command am_addr_t %s_%s_NetworkAMPacket.address() {\n",
 					conftab[i].conf->id->name,
@@ -2375,24 +2257,6 @@ void generateFennecEngineP() {
 	        }
 
 
-		fprintf(fp, "event void %s_%s_NetworkAMSend.sendDone(message_t *msg, error_t error) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-		fprintf(fp, "\tsendDone(%s, F_APPLICATION, msg, error);\n",
-					conftab[i].conf->net_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "event message_t* %s_%s_NetworkReceive.receive(message_t *msg, void* payload, uint8_t len) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-		fprintf(fp, "\treturn receive(%s, F_APPLICATION, msg, payload, len);\n",
-					conftab[i].conf->net_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "event message_t* %s_%s_NetworkSnoop.receive(message_t *msg, void* payload, uint8_t len) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-		fprintf(fp, "\treturn snoop(%s, F_APPLICATION, msg, payload, len);\n",
-					conftab[i].conf->net_id_name);
-		fprintf(fp, "}\n\n");
 		fprintf(fp, "command error_t %s_%s_MacAMSend.send(am_addr_t addr, message_t* msg, uint8_t len) {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
