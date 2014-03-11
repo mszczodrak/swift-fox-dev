@@ -80,6 +80,8 @@ void generateFennecEngineC() {
 					conftab[i].conf->app->lib->name, 
 					conftab[i].conf->app->lib->name);
 
+		fprintf(fp, "\n");
+
 		fprintf(fp, "components new %sC() as %s_%s;\n",
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->id->name,
@@ -95,6 +97,54 @@ void generateFennecEngineC() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name, 
 					conftab[i].conf->net->lib->name);
+
+		fprintf(fp, "\n");
+
+		fprintf(fp, "components new %sC() as %s_%s;\n",
+					conftab[i].conf->mac->lib->name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name);
+		fprintf(fp, "FennecEngineP.%s_%s_Control -> %s_%s;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name);
+      		fprintf(fp, "FennecEngineP.%s_%s_Params <- %s_%s.%sParams;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->mac->lib->name);
+
+		fprintf(fp, "\n");
+
+		fprintf(fp, "components %sC as %s_%s;\n", 
+					conftab[i].conf->radio->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "FennecEngineP.%s_%s_Control -> %s_%s;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+      		fprintf(fp, "FennecEngineP.%s_%s_Params <- %s_%s.%sParams;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name, 
+					conftab[i].conf->radio->lib->name);
+
+		fprintf(fp, "\n");
+
+		if (conftab[i].conf->app->lib->type == TYPE_EVENT) {
+			fprintf(fp, "FennecEngineP.%s_%s_Event -> %s_%s.Event;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->name);
+		}
+
+		fprintf(fp, "\n");
 
      		fprintf(fp, "%s_%s.NetworkAMSend -> %s_%s.NetworkAMSend;\n",
 					conftab[i].conf->id->name,
@@ -127,109 +177,46 @@ void generateFennecEngineC() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
 
+		fprintf(fp, "\n");
 
-		if (conftab[i].conf->app->lib->type == TYPE_EVENT) {
-			fprintf(fp, "FennecEngineP.%s_%s_Event -> %s_%s.Event;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		}
-		fprintf(fp, "\n\n");
-
-
-
-      		fprintf(fp, "FennecEngineP.%s_%s_MacAMSend <- %s_%s.MacAMSend;\n",
+      		fprintf(fp, "%s_%s.MacAMSend -> %s_%s.MacAMSend;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_MacReceive <- %s_%s.MacReceive;\n",
+					conftab[i].conf->mac->lib->name);
+      		fprintf(fp, "%s_%s.MacReceive -> %s_%s.MacReceive;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name, 
 					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_MacSnoop <- %s_%s.MacSnoop;\n",
+					conftab[i].conf->mac->lib->name);
+      		fprintf(fp, "%s_%s.MacSnoop -> %s_%s.MacSnoop;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_MacAMPacket <- %s_%s.MacAMPacket;\n",
+					conftab[i].conf->mac->lib->name);
+      		fprintf(fp, "%s_%s.MacAMPacket -> %s_%s.MacAMPacket;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_MacPacket <- %s_%s.MacPacket;\n",
+					conftab[i].conf->mac->lib->name);
+      		fprintf(fp, "%s_%s.MacPacket -> %s_%s.MacPacket;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_MacPacketAcknowledgements <- %s_%s.MacPacketAcknowledgements;\n",
+					conftab[i].conf->mac->lib->name);
+      		fprintf(fp, "%s_%s.MacPacketAcknowledgements -> %s_%s.MacPacketAcknowledgements;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_MacLinkPacketMetadata <- %s_%s.MacLinkPacketMetadata;\n",
+					conftab[i].conf->mac->lib->name);
+      		fprintf(fp, "%s_%s.MacLinkPacketMetadata -> %s_%s.MacLinkPacketMetadata;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
+					conftab[i].conf->mac->lib->name);
 
-		fprintf(fp, "\n\n");
+		fprintf(fp, "\n");
 
-  		fprintf(fp, "/* Defined and linked MAC module %s with %s state */\n\n", 
-					conftab[i].conf->mac->lib->name,
-					conftab[i].conf->id->name);
-		fprintf(fp, "components new %sC() as %s_%s;\n",
-					conftab[i].conf->mac->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_Control -> %s_%s;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_Params <- %s_%s.%sParams;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_MacAMSend -> %s_%s.MacAMSend;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_MacReceive -> %s_%s.MacReceive;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_MacSnoop -> %s_%s.MacSnoop;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_MacPacket -> %s_%s.MacPacket;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_MacAMPacket -> %s_%s.MacAMPacket;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_MacPacketAcknowledgements -> %s_%s.MacPacketAcknowledgements;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_MacLinkPacketMetadata -> %s_%s.MacLinkPacketMetadata;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
 		fprintf(fp, "FennecEngineP.%s_%s_RadioReceive <- %s_%s.RadioReceive;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name,
@@ -292,24 +279,6 @@ void generateFennecEngineC() {
 					conftab[i].conf->mac->lib->name);
 		fprintf(fp, "\n\n");
 		
-  		fprintf(fp, "/* Defined and linked radio module %s with %s state */\n\n", 
-					conftab[i].conf->radio->lib->name,
-					conftab[i].conf->id->name);
-		fprintf(fp, "components %sC as %s_%s;\n", 
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_Control -> %s_%s;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_Params <- %s_%s.%sParams;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->radio->lib->name);
 		fprintf(fp, "FennecEngineP.%s_%s_RadioReceive -> %s_%s.RadioReceive;\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name, 
