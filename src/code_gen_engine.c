@@ -118,7 +118,7 @@ void generateFennecEngineC() {
 
 		fprintf(fp, "\n");
 
-		fprintf(fp, "components %sC as %s_%s;\n", 
+		fprintf(fp, "components new %sC() as %s_%s;\n", 
 					conftab[i].conf->radio->lib->name, 
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
