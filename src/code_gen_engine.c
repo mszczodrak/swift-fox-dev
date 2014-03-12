@@ -217,128 +217,75 @@ void generateFennecEngineC() {
 
 		fprintf(fp, "\n");
 
-		fprintf(fp, "FennecEngineP.%s_%s_RadioReceive <- %s_%s.RadioReceive;\n",
+		fprintf(fp, "%s_%s.RadioReceive -> %s_%s.RadioReceive;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name,
 					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioBuffer -> %s_%s.RadioBuffer;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioSend -> %s_%s.RadioSend;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioPacket -> %s_%s.RadioPacket;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.PacketTransmitPower -> %s_%s.PacketTransmitPower;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.PacketRSSI -> %s_%s.PacketRSSI;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.PacketTimeSync -> %s_%s.PacketTimeSync;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.PacketLinkQuality -> %s_%s.PacketLinkQuality;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioCCA -> %s_%s.RadioCCA;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioState -> %s_%s.RadioState;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioLinkPacketMetadata -> %s_%s.RadioLinkPacketMetadata;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+
 		fprintf(fp, "FennecEngineP.%s_%s_RadioResource <- %s_%s.RadioResource;\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name, 
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_RadioBuffer <- %s_%s.RadioBuffer;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_RadioSend <- %s_%s.RadioSend;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_RadioPacket <- %s_%s.RadioPacket;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_PacketTransmitPower <- %s_%s.PacketTransmitPower;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_PacketRSSI <- %s_%s.PacketRSSI;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_PacketTimeSync <- %s_%s.PacketTimeSync;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_PacketLinkQuality <- %s_%s.PacketLinkQuality;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_RadioCCA <- %s_%s.RadioCCA;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_RadioState <- %s_%s.RadioState;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_RadioLinkPacketMetadata <- %s_%s.RadioLinkPacketMetadata;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\n\n");
-		
-		fprintf(fp, "FennecEngineP.%s_%s_RadioReceive -> %s_%s.RadioReceive;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
+
 		fprintf(fp, "FennecEngineP.%s_%s_RadioResource -> %s_%s.RadioResource;\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name, 
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_RadioBuffer -> %s_%s.RadioBuffer;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_RadioSend -> %s_%s.RadioSend;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_RadioPacket -> %s_%s.RadioPacket;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_PacketTransmitPower -> %s_%s.PacketTransmitPower;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_PacketRSSI -> %s_%s.PacketRSSI;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_PacketTimeSync -> %s_%s.PacketTimeSync;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_PacketLinkQuality -> %s_%s.PacketLinkQuality;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_RadioCCA -> %s_%s.RadioCCA;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_RadioState -> %s_%s.RadioState;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "FennecEngineP.%s_%s_RadioLinkPacketMetadata -> %s_%s.RadioLinkPacketMetadata;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
+
+
 		fprintf(fp, "\n");
 	}
 
@@ -405,47 +352,9 @@ void generateFennecEngineP() {
 					conftab[i].conf->mac->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name);
-
-		fprintf(fp, "uses interface LinkPacketMetadata as %s_%s_MacLinkPacketMetadata;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "provides interface RadioReceive as %s_%s_RadioReceive;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
 		fprintf(fp, "provides interface Resource as %s_%s_RadioResource;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "provides interface RadioBuffer as %s_%s_RadioBuffer;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "provides interface RadioSend as %s_%s_RadioSend;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "provides interface RadioPacket as %s_%s_RadioPacket;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "provides interface RadioCCA as %s_%s_RadioCCA;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "provides interface PacketField<uint8_t> as %s_%s_PacketTransmitPower;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "provides interface PacketField<uint8_t> as %s_%s_PacketRSSI;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "provides interface PacketField<uint32_t> as %s_%s_PacketTimeSync;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "provides interface PacketField<uint8_t> as %s_%s_PacketLinkQuality;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "provides interface RadioState as %s_%s_RadioState;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "provides interface LinkPacketMetadata as %s_%s_RadioLinkPacketMetadata;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\n\n");
 
 
     		fprintf(fp, "/* Radio Module %s with %s process */\n",
@@ -458,40 +367,7 @@ void generateFennecEngineP() {
 					conftab[i].conf->radio->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "uses interface RadioReceive as %s_%s_RadioReceive;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
 		fprintf(fp, "uses interface Resource as %s_%s_RadioResource;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "uses interface RadioBuffer as %s_%s_RadioBuffer;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "uses interface RadioSend as %s_%s_RadioSend;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "uses interface RadioPacket as %s_%s_RadioPacket;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "uses interface PacketField<uint8_t> as %s_%s_PacketTransmitPower;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "uses interface PacketField<uint8_t> as %s_%s_PacketRSSI;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "uses interface PacketField<uint32_t> as %s_%s_PacketTimeSync;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "uses interface PacketField<uint8_t> as %s_%s_PacketLinkQuality;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "uses interface RadioCCA as %s_%s_RadioCCA;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "uses interface RadioState as %s_%s_RadioState;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "uses interface LinkPacketMetadata as %s_%s_RadioLinkPacketMetadata;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
 		fprintf(fp, "\n\n");
@@ -599,24 +475,6 @@ void generateFennecEngineP() {
 
 	/* Radio Only Interfaces */
 
-        fprintf(fp,"bool LinkPacketMetadata_highChannelQuality(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-        fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP LinkPacketMetadata_highChannelQuality(%%d, %%d, 0x%%1x)\",\n");
-        fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-        fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-        for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-                fprintf(fp,"\t\treturn call %s_%s_RadioLinkPacketMetadata.highChannelQuality(msg);\n\n",
-                                        conftab[i].conf->id->name,
-                                        conftab[i].conf->radio->lib->name);
-        }
-        fprintf(fp,"\tdefault:\n");
-        fprintf(fp,"\t\treturn FALSE;\n");
-        fprintf(fp,"\t}\n");
-        fprintf(fp,"}\n\n");
-
-
-
-
 	fprintf(fp,"error_t RadioResource_request(uint16_t module_id, uint8_t to_layer) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioResource_request(%%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
@@ -681,500 +539,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 
-	fprintf(fp,"error_t RadioSend_send(uint16_t module_id, uint8_t to_layer, message_t* msg, bool useCca) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioSend_send(%%d, %%d, 0x%%1x, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, useCca);\n");
-	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioSend.send(msg, useCca);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn FAIL;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"uint8_t RadioPacket_maxPayloadLength(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioPacket_maxPayloadLength(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioPacket.maxPayloadLength();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"uint8_t RadioPacket_headerLength(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioPacket_headerLength(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioPacket.headerLength(msg);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"uint8_t RadioPacket_payloadLength(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioPacket_payloadLength(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioPacket.payloadLength(msg);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void RadioPacket_setPayloadLength(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t length) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioPacket_setPayloadLength(%%d, %%d, 0x%%1x, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, length);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\tcall %s_%s_RadioPacket.setPayloadLength(msg, length);\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp,"\t\treturn;\n\n");
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"uint8_t RadioPacket_metadataLength(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioPacket_metadataLength(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioPacket.metadataLength(msg);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void RadioPacket_clear(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioPacket_clear(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\tcall %s_%s_RadioPacket.clear(msg);\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp,"\t\treturn;\n\n");
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"error_t RadioBuffer_load(uint16_t module_id, uint8_t to_layer, message_t* msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioBuffer_load(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioBuffer.load(msg);\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn FAIL;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"bool PacketTransmitPower_isSet(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketTransmitPower_isSet(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_PacketTransmitPower.isSet(msg);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"uint8_t PacketTransmitPower_get(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketTransmitPower_get(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_PacketTransmitPower.get(msg);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void PacketTransmitPower_clear(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketTransmitPower_clear(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\tcall %s_%s_PacketTransmitPower.clear(msg);\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp,"\t\treturn;\n\n");
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void PacketTransmitPower_set(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t value) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketTransmitPower_set(%%d, %%d, 0x%%1x, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, value);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\tcall %s_%s_PacketTransmitPower.set(msg, value);\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp,"\t\treturn;\n\n");
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-
-	fprintf(fp,"bool PacketRSSI_isSet(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketRSSI_isSet(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_PacketRSSI.isSet(msg);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"uint8_t PacketRSSI_get(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketRSSI_get(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_PacketRSSI.get(msg);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void PacketRSSI_clear(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketRSSI_clear(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\tcall %s_%s_PacketRSSI.clear(msg);\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp,"\t\treturn;\n\n");
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void PacketRSSI_set(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t value) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketRSSI_set(%%d, %%d, 0x%%1x, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, value);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\tcall %s_%s_PacketRSSI.set(msg, value);\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp,"\t\treturn;\n\n");
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"bool PacketTimeSync_isSet(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketTimeSync_isSet(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_PacketTimeSync.isSet(msg);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"uint32_t PacketTimeSync_get(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketTimeSync_get(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_PacketTimeSync.get(msg);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void PacketTimeSync_clear(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketTimeSync_clear(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\tcall %s_%s_PacketTimeSync.clear(msg);\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp,"\t\treturn;\n\n");
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void PacketTimeSync_set(uint16_t module_id, uint8_t to_layer, message_t *msg, uint32_t value) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketTimeSync_set(%%d, %%d, 0x%%1x, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, value);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\tcall %s_%s_PacketTimeSync.set(msg, value);\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp,"\t\treturn;\n\n");
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"bool PacketLinkQuality_isSet(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketLinkQuality_isSet(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_PacketLinkQuality.isSet(msg);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"uint8_t PacketLinkQuality_get(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketLinkQuality_get(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_PacketLinkQuality.get(msg);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void PacketLinkQuality_clear(uint16_t module_id, uint8_t to_layer, message_t *msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketLinkQuality_clear(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\tcall %s_%s_PacketLinkQuality.clear(msg);\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp,"\t\treturn;\n\n");
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void PacketLinkQuality_set(uint16_t module_id, uint8_t to_layer, message_t *msg, uint8_t value) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP PacketLinkQuality_set(%%d, %%d, 0x%%1x, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, value);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\tcall %s_%s_PacketLinkQuality.set(msg, value);\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp,"\t\treturn;\n\n");
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"error_t RadioCCA_request(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioCCA_request(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioCCA.request();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn FAIL;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"error_t RadioState_turnOff(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioState_turnOff(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioState.turnOff();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn FALSE;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"error_t RadioState_standby(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioState_standby(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioState.standby();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn FALSE;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"error_t RadioState_turnOn(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioState_turnOn(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioState.turnOn();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn FALSE;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"error_t RadioState_setChannel(uint16_t module_id, uint8_t to_layer, uint8_t channel) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioState_setChannel(%%d, %%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, channel);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioState.setChannel(channel);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn FALSE;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"uint8_t RadioState_getChannel(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioState_getChannel(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioState.getChannel();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-
 	/* Events */
 
 	/* Radio Only events */
@@ -1191,120 +555,6 @@ void generateFennecEngineP() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name);
 	}
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void transmitLoadDone(uint16_t module_id, uint8_t to_layer, message_t *msg, error_t error) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP transmitLoadDone(%%d, %%d, 0x%%1x, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, error);\n");
-	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
-		fprintf(fp,"\t\treturn signal %s_%s_RadioBuffer.loadDone(msg, error);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-	}
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void RadioSend_sendDone(uint16_t module_id, uint8_t to_layer, message_t *msg, error_t error) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioSend_sendDone(%%d, %%d, 0x%%1x, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg, error);\n");
-	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
-		fprintf(fp,"\t\treturn signal %s_%s_RadioSend.sendDone(msg, error);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-	}
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void RadioSend_ready(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioSend_ready(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
-		fprintf(fp,"\t\treturn signal %s_%s_RadioSend.ready();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-	}
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void RadioState_done(uint16_t module_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioState_done(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
-		fprintf(fp,"\t\tsignal %s_%s_RadioState.done();\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp,"\t\treturn;\n\n");
-	}
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"void RadioCCA_done(uint16_t module_id, uint8_t to_layer, error_t error) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioCCA_done(%%d, %%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, error);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
-		fprintf(fp,"\t\tsignal %s_%s_RadioCCA.done(error);\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp,"\t\treturn;\n\n");
-	}
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"message_t* RadioReceive_receive(uint16_t module_id, uint8_t to_layer, message_t* msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioReceive_receive(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tif (call Fennec.checkPacket(msg) != SUCCESS) {\n");
-	fprintf(fp,"\t\t return msg;\n");
-	fprintf(fp,"\t}\n\n");
-	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
-		fprintf(fp,"\t\treturn signal %s_%s_RadioReceive.receive(msg);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn msg;\n\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"bool RadioReceive_header(uint16_t module_id, uint8_t to_layer, message_t* msg) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioReceive_header(%%d, %%d, 0x%%1x)\",\n");
-	fprintf(fp,"\t\t\tmodule_id, to_layer, msg);\n");
-	fprintf(fp,"\tif (call Fennec.checkPacket(msg) != SUCCESS) {\n");
-	fprintf(fp,"\t\t return 0;\n");
-	fprintf(fp,"\t}\n\n");
-	fprintf(fp,"\tmsg->conf = call Fennec.getConfId(module_id);\n");
-	fprintf(fp,"\tswitch( call Fennec.getNextModuleId(module_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
-		fprintf(fp,"\t\treturn signal %s_%s_RadioReceive.header(msg);\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n\n");
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"}\n\n");
 
@@ -1507,211 +757,6 @@ void generateFennecEngineP() {
 		fprintf(fp, "}\n\n");
 
 
-		fprintf(fp, "async command error_t %s_%s_RadioSend.send(message_t* msg, bool useCca) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioSend_send(%s, F_RADIO, msg, useCca);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-
-
-		fprintf(fp, "async command uint8_t %s_%s_RadioPacket.maxPayloadLength() {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioPacket_maxPayloadLength(%s, F_RADIO);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command uint8_t %s_%s_RadioPacket.headerLength(message_t* msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioPacket_headerLength(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command uint8_t %s_%s_RadioPacket.payloadLength(message_t* msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioPacket_payloadLength(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command void %s_%s_RadioPacket.setPayloadLength(message_t* msg, uint8_t length) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioPacket_setPayloadLength(%s, F_RADIO, msg, length);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command uint8_t %s_%s_RadioPacket.metadataLength(message_t* msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioPacket_metadataLength(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command void %s_%s_RadioPacket.clear(message_t* msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioPacket_clear(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-
-
-		fprintf(fp, "async command error_t %s_%s_RadioBuffer.load(message_t* msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioBuffer_load(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-
-
-		fprintf(fp, "async command bool %s_%s_PacketTransmitPower.isSet(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketTransmitPower_isSet(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command uint8_t %s_%s_PacketTransmitPower.get(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketTransmitPower_get(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command void %s_%s_PacketTransmitPower.clear(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketTransmitPower_clear(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command void %s_%s_PacketTransmitPower.set(message_t *msg, uint8_t value) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketTransmitPower_set(%s, F_RADIO, msg, value);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-
-
-		fprintf(fp, "async command bool %s_%s_PacketRSSI.isSet(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketRSSI_isSet(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command uint8_t %s_%s_PacketRSSI.get(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketRSSI_get(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command void %s_%s_PacketRSSI.clear(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketRSSI_clear(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command void %s_%s_PacketRSSI.set(message_t *msg, uint8_t value) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketRSSI_set(%s, F_RADIO, msg, value);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-
-
-		fprintf(fp, "async command bool %s_%s_PacketTimeSync.isSet(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketTimeSync_isSet(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command uint32_t %s_%s_PacketTimeSync.get(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketTimeSync_get(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command void %s_%s_PacketTimeSync.clear(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketTimeSync_clear(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command void %s_%s_PacketTimeSync.set(message_t *msg, uint32_t value) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketTimeSync_set(%s, F_RADIO, msg, value);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-
-
-		fprintf(fp, "async command bool %s_%s_PacketLinkQuality.isSet(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketLinkQuality_isSet(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command uint8_t %s_%s_PacketLinkQuality.get(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketLinkQuality_get(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command void %s_%s_PacketLinkQuality.clear(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketLinkQuality_clear(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command void %s_%s_PacketLinkQuality.set(message_t *msg, uint8_t value) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn PacketLinkQuality_set(%s, F_RADIO, msg, value);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-
-		fprintf(fp, "async command error_t %s_%s_RadioCCA.request() {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioCCA_request(%s, F_RADIO);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-
-
-		fprintf(fp, "command error_t %s_%s_RadioState.turnOff() {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioState_turnOff(%s, F_RADIO);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "command error_t %s_%s_RadioState.standby() {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioState_standby(%s, F_RADIO);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "command error_t %s_%s_RadioState.turnOn() {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioState_turnOn(%s, F_RADIO);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "command error_t %s_%s_RadioState.setChannel(uint8_t channel) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioState_setChannel(%s, F_RADIO, channel);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "command uint8_t %s_%s_RadioState.getChannel() {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioState_getChannel(%s, F_RADIO);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command bool %s_%s_RadioLinkPacketMetadata.highChannelQuality(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn LinkPacketMetadata_highChannelQuality(%s, F_RADIO, msg);\n",
-					conftab[i].conf->mac_id_name);
-		fprintf(fp, "}\n\n");
-	
-
-
-
 /* Interfaces with Radios */
 
 		fprintf(fp, "event void %s_%s_Control.startDone(error_t err) {\n",
@@ -1761,21 +806,6 @@ void generateFennecEngineP() {
 	                fprintf(fp, "}\n\n");
 	        }
 
-		fprintf(fp, "async event message_t* %s_%s_RadioReceive.receive(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "\treturn RadioReceive_receive(%s, F_MAC, msg);\n",
-					conftab[i].conf->radio_id_name);
-		fprintf(fp, "}\n\n");
-
-		fprintf(fp, "async event bool %s_%s_RadioReceive.header(message_t *msg) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "\treturn RadioReceive_header(%s, F_MAC, msg);\n",
-					conftab[i].conf->radio_id_name);
-		fprintf(fp, "}\n\n");
-
-
 		fprintf(fp, "event void %s_%s_RadioResource.granted() {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
@@ -1783,39 +813,6 @@ void generateFennecEngineP() {
 					conftab[i].conf->radio_id_name);
 		fprintf(fp, "}\n\n");
 
-		fprintf(fp, "async event void %s_%s_RadioBuffer.loadDone(message_t* msg, error_t error) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "\treturn transmitLoadDone(%s, F_MAC, msg, error);\n",
-					conftab[i].conf->radio_id_name);
-		fprintf(fp, "}\n\n");
-
-		fprintf(fp, "async event void %s_%s_RadioSend.sendDone(message_t *msg, error_t error) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "\treturn RadioSend_sendDone(%s, F_MAC, msg, error);\n",
-					conftab[i].conf->radio_id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async event void %s_%s_RadioSend.ready() {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "\treturn RadioSend_ready(%s, F_MAC);\n",
-					conftab[i].conf->radio_id_name);
-		fprintf(fp, "}\n\n");
-
-		fprintf(fp, "event void %s_%s_RadioState.done() {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "\treturn RadioState_done(%s, F_MAC);\n",
-					conftab[i].conf->radio_id_name);
-		fprintf(fp, "}\n\n");
-
-		fprintf(fp, "async event void %s_%s_RadioCCA.done(error_t error) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "\treturn RadioCCA_done(%s, F_MAC, error);\n",
-					conftab[i].conf->radio_id_name);
-		fprintf(fp, "}\n\n");
 	}
 
 	fprintf(fp, "\n}\n");
