@@ -1,4 +1,4 @@
-uint16_t dest_node = 7
+uint16_t dest_node = 3
 uint16_t src_node = 0xFFFF
 uint16_t event_src = 2
 
@@ -15,6 +15,13 @@ configuration count {
 
 configuration blinking {
 			blink(2, 1024)
+			nullNet()
+			nullMac()
+			nullRadio()
+}
+
+configuration blinking2 {
+			blink(1, 1024)
 			nullNet()
 			nullMac()
 			nullRadio()
