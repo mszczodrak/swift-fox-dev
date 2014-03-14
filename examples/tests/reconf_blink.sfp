@@ -1,4 +1,4 @@
-configuration control { ControlUnit()
+process system_control { ControlUnit()
 			cuNet()
 			cuMac()
                         cc2420(26, 31, 1, 1)
