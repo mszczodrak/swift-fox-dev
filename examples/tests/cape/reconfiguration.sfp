@@ -40,10 +40,9 @@ event tiMo2  { timerMilliE(5000, 0xFFFF)
 	nullRadio()
 }
 
-state led1 { red }
-state led2 { yellow }
-state counter { count }
-
+state led1 { red system_control }
+state led2 { yellow system_control }
+state counter { count system_control }
 
 from led1 goto led2 when tiMo
 from led2 goto led1 when tiMo2
