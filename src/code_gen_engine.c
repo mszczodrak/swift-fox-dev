@@ -315,9 +315,11 @@ void generateFennecEngineP() {
   	fprintf(fp, "uses interface Fennec;\n\n");
 
 	for( i = 0; i < conf_id_counter; i++ ) {
-    		fprintf(fp, "/* Computation Module %s with %s process */\n",
-					conftab[i].conf->app->lib->name,
-					conftab[i].conf->id->name);
+    		fprintf(fp, "/* Process %s with id: %d  */\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->counter);
+    		fprintf(fp, "/* Application Module %s */\n",
+					conftab[i].conf->app->lib->name);
       		fprintf(fp, "uses interface SplitControl as %s_%s_Control;\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
@@ -330,11 +332,8 @@ void generateFennecEngineP() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
 		}
-		fprintf(fp, "\n\n");
-
-    		fprintf(fp, "/* Network Module %s with %s process */\n",
-					conftab[i].conf->net->lib->name,
-					conftab[i].conf->id->name);
+    		fprintf(fp, "/* Network Module %s */\n",
+					conftab[i].conf->net->lib->name);
 		fprintf(fp, "uses interface SplitControl as %s_%s_Control;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
@@ -343,9 +342,8 @@ void generateFennecEngineP() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
 
-    		fprintf(fp, "/* MAC Module %s with %s process */\n",
-					conftab[i].conf->mac->lib->name,
-					conftab[i].conf->id->name);
+    		fprintf(fp, "/* MAC Module %s */\n",
+					conftab[i].conf->mac->lib->name);
 		fprintf(fp, "uses interface SplitControl as %s_%s_Control;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name);
@@ -358,9 +356,8 @@ void generateFennecEngineP() {
 					conftab[i].conf->mac->lib->name);
 
 
-    		fprintf(fp, "/* Radio Module %s with %s process */\n",
-					conftab[i].conf->radio->lib->name,
-					conftab[i].conf->id->name);
+    		fprintf(fp, "/* Radio Module %s */\n",
+					conftab[i].conf->radio->lib->name);
 		fprintf(fp, "uses interface SplitControl as %s_%s_Control;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
