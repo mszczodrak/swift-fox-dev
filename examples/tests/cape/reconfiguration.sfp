@@ -28,7 +28,7 @@ process yellow { blink(2, 1024)
 	nullRadio()
 }
 
-event tiMo { nullApp() #timerMilliE(8500, 0xFFFF)
+event tiMo { timerMilliE(8500, 0xFFFF)
 	nullNet()
 	nullMac()
 	nullRadio()

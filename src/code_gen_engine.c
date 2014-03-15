@@ -64,8 +64,9 @@ void generateFennecEngineC() {
 	for( i = 0; i < conf_id_counter; i++ ) {
   		fprintf(fp, "/* Process %s */\n\n", 
 					conftab[i].conf->id->name);
- 		fprintf(fp, "components new %sC() as %s_%s;\n",
+ 		fprintf(fp, "components new %sC(%d) as %s_%s;\n",
 					conftab[i].conf->app->lib->name,
+					conftab[i].conf->counter,
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
       		fprintf(fp, "FennecEngineP.%s_%s_Control -> %s_%s;\n",
@@ -82,8 +83,9 @@ void generateFennecEngineC() {
 
 		fprintf(fp, "\n");
 
-		fprintf(fp, "components new %sC() as %s_%s;\n",
+		fprintf(fp, "components new %sC(%d) as %s_%s;\n",
 					conftab[i].conf->net->lib->name,
+					conftab[i].conf->counter,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
       		fprintf(fp, "FennecEngineP.%s_%s_Control -> %s_%s;\n",
@@ -100,8 +102,9 @@ void generateFennecEngineC() {
 
 		fprintf(fp, "\n");
 
-		fprintf(fp, "components new %sC() as %s_%s;\n",
+		fprintf(fp, "components new %sC(%d) as %s_%s;\n",
 					conftab[i].conf->mac->lib->name,
+					conftab[i].conf->counter,
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name);
 		fprintf(fp, "FennecEngineP.%s_%s_Control -> %s_%s;\n",
