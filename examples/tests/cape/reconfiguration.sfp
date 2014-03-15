@@ -1,3 +1,6 @@
+uint16_t src_node = 0xFFFF
+uint16_t dest_node = 2
+
 process system_control { StateSync()
 			nullNet()
 			nullMac()
@@ -25,11 +28,7 @@ process yellow { blink(2, 1024)
 	nullRadio()
 }
 
-state led1 {red }
-state led2 {yellow }
-state counter {count}
-
-event tiMo { timerMilliE(8500, 0xFFFF)
+event tiMo { nullApp() #timerMilliE(8500, 0xFFFF)
 	nullNet()
 	nullMac()
 	nullRadio()
@@ -40,6 +39,11 @@ event tiMo2  { timerMilliE(5000, 0xFFFF)
 	nullMac()
 	nullRadio()
 }
+
+state led1 { red }
+state led2 { yellow }
+state counter { count }
+
 
 from led1 goto led2 when tiMo
 from led2 goto led1 when tiMo2

@@ -1111,7 +1111,7 @@ initialize(void) {
 	/* keywords set */
 	char *keywords[] = {"configuration", "start", "use", "application",
 			"network", "source", "event-condition", "from", "goto",
-			"conf", "event", "on", "off", 			
+			"conf", "event", "on", "off", "process", "state",
 			"mac", "radio", // new keywords
 			"when", "event"};
 	
