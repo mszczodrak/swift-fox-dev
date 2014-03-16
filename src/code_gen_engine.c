@@ -141,9 +141,7 @@ void generateFennecEngineC() {
 		fprintf(fp, "\n");
 
 		if (conftab[i].conf->app->lib->type == TYPE_EVENT) {
-			fprintf(fp, "FennecEngineP.%s_%s_Event -> %s_%s.Event;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name,
+			fprintf(fp, "%s_%s.Event -> CachesC.Event;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
 		}
@@ -330,11 +328,6 @@ void generateFennecEngineP() {
 					conftab[i].conf->app->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
-		if (conftab[i].conf->app->lib->type == TYPE_EVENT) {
-			fprintf(fp, "uses interface Event as %s_%s_Event;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		}
     		fprintf(fp, "/* Network Module %s */\n",
 					conftab[i].conf->net->lib->name);
 		fprintf(fp, "uses interface SplitControl as %s_%s_Control;\n",
@@ -540,10 +533,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 
-	/* Events */
-
 	/* Radio Only events */
-
 
 
 	fprintf(fp,"void granted(uint16_t module_id, uint8_t to_layer) {\n");
@@ -583,16 +573,6 @@ void generateFennecEngineP() {
 		fprintf(fp, "\tmodule_stopDone(%s, err);\n",
 					conftab[i].conf->app_id_name);
 		fprintf(fp, "}\n\n");
-
-		if (conftab[i].conf->app->lib->type == TYPE_EVENT) {
-			fprintf(fp, "\t/* Event Interface */\n\n");	
-			fprintf(fp, "event void %s_%s_Event.occured(uint16_t oc) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-			fprintf(fp, "\tcall Fennec.eventOccured(%s, oc);\n",
-					conftab[i].conf->app_id_name);
-			fprintf(fp, "}\n\n");
-		}
 
 		fprintf(fp, "\t/* Parameter Interface */\n\n");	
 
