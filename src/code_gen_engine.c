@@ -57,8 +57,8 @@ void generateFennecEngineC() {
 	fprintf(fp, "components LedsC;\n");
   	fprintf(fp, "FennecEngineP.Leds -> LedsC;\n\n");
 
-	fprintf(fp, "components CachesC;\n");
-  	fprintf(fp, "FennecEngineP.Fennec -> CachesC;\n\n");
+	fprintf(fp, "components FennecC;\n");
+  	fprintf(fp, "FennecEngineP.Fennec -> FennecC;\n\n");
 
 
 	for( i = 0; i < conf_id_counter; i++ ) {
@@ -141,7 +141,7 @@ void generateFennecEngineC() {
 		fprintf(fp, "\n");
 
 		if (conftab[i].conf->app->lib->type == TYPE_EVENT) {
-			fprintf(fp, "%s_%s.Event -> CachesC.Event;\n",
+			fprintf(fp, "%s_%s.Event -> FennecC.Event;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
 		}
