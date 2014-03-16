@@ -43,7 +43,6 @@
 
 
 void define_modules() {
-
 	char *full_path = get_sfc_path("", "ff_modules.h");
 	FILE *fp = fopen(full_path, "w");
 	int i;
@@ -54,7 +53,7 @@ void define_modules() {
 		exit(1);
 	}
 
-	fprintf(fp, "/* Swift Fox generated code for Fennec Fox network_processes.h */\n");
+	fprintf(fp, "/* Swift Fox generated code for Fennec Fox modules.h */\n");
 	fprintf(fp, "#ifndef __FF_MODULES_H__\n");
 	fprintf(fp, "#define __FF_MODULES_H__\n\n");
 
@@ -97,26 +96,15 @@ void define_modules() {
 
         }
         fprintf(fp, "\n");
-
 	fprintf(fp, "#endif\n\n");
 	fclose(fp);
-
 }
 
 
-void generateCaches(int event_counter, int policy_counter) {
-
-	FILE *tmp_confs = fopen(TEMP_CONF_FILE, "r");
-
-	char *full_path = get_sfc_path("", "ff_caches.h");
+void define_processes() {
+	char *full_path = get_sfc_path("", "ff_processes.h");
 	FILE *fp = fopen(full_path, "w");
-
-	struct modtab *mp;
-	struct conf_ids *conf_ptr;
 	int i;
-
-	//define_network_process();
-	define_modules();
 
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write \
@@ -124,48 +112,33 @@ void generateCaches(int event_counter, int policy_counter) {
 		exit(1);
 	}
 
-	if (tmp_confs == NULL) {
-		fprintf(stderr, "You do not have a permission to write \
-					into file: %s\n", TEMP_CONF_FILE);
-		exit(1);
+	fprintf(fp, "/* Swift Fox generated code for Fennec Fox ff_processes.h */\n");
+	fprintf(fp, "#ifndef __FF_PROCESSES_H__\n");
+	fprintf(fp, "#define __FF_PROCESSES_H__\n\n");
+
+	fprintf(fp, "#define NUMBER_OF_PROCESSES\t\t%d\n\n", conf_id_counter);
+
+	for( i = 0; i < conf_id_counter; i++ ) {
+		fprintf(fp, "/* Process %s */\n",
+			conftab[i].conf->id_name);
+		fprintf(fp, "#define %s\t%d\n\n",
+			conftab[i].conf->id_name,
+			conftab[i].conf->counter);
 	}
 
-	fprintf(fp, "/* Swift Fox generated code for Fennec Fox caches.h */\n");
-	fprintf(fp, "#ifndef __FF_CACHES_H__\n");
-	fprintf(fp, "#define __FF_CACHES_H__\n\n");
-
-
-	fprintf(fp, "#define NUMBER_OF_PROCESSES\t\t%d\n", conf_id_counter);
-	fprintf(fp, "#define NUMBER_OF_STATES\t\t%d\n", state_id_counter);
-	fprintf(fp, "#define NUMBER_OF_EVENTS\t\t%d\n", event_id_counter);
-	fprintf(fp, "#define NUMBER_OF_POLICIES\t\t%d\n", policy_counter);
-	fprintf(fp, "#include <Fennec.h>\n");
-	fprintf(fp, "#include \"ff_defaults.h\"\n\n");
-	fprintf(fp, "#include \"ff_modules.h\"\n\n");
-
-        for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-                if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
-                        fprintf(fp, "#include \"%sParams.h\"\n",
-                                                mp->lib->name);
-                }
-        }
         fprintf(fp, "\n");
 
+	/* Generate Proceses */
 
-
-
-
-	/* Generate Configurations */
-
-	fprintf(fp, "state_t active_state = %d;\n\n", active_state);
 	fprintf(fp, "struct network_process processes[NUMBER_OF_PROCESSES] = {\n");
 
-	/* generate code specifying each configuration's definition */
+	/* generate code specifying each process's definition */
 
 	for( i = 0; i < conf_id_counter; i++ ) {
 		fprintf(fp, "\t{\n");
    		fprintf(fp, "\t\t/* %s */\n", conftab[i].conf->id->name); 
-		fprintf(fp, "\t\t.process_id = %d,\n", conftab[i].conf->counter);
+		fprintf(fp, "\t\t.process_id = %s, \t/* %d */\n",
+				conftab[i].conf->id_name, conftab[i].conf->counter);
 		fprintf(fp, "\t\t.application = %s,\n", conftab[i].conf->app_id_name);
 		fprintf(fp, "\t\t.network = %s,\n", conftab[i].conf->net_id_name);
 		fprintf(fp, "\t\t.mac = %s,\n", conftab[i].conf->mac_id_name);
@@ -177,24 +150,56 @@ void generateCaches(int event_counter, int policy_counter) {
 	}
 
 	fprintf(fp, "};\n\n");
+	fprintf(fp, "#endif\n\n");
+	fclose(fp);
+}
 
+
+void define_states() {
+	char *full_path = get_sfc_path("", "ff_states.h");
+	FILE *fp = fopen(full_path, "w");
+	struct conf_ids *conf_ptr;
+	int i;
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+					into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "/* Swift Fox generated code for Fennec Fox ff_states.h */\n");
+	fprintf(fp, "#ifndef __FF_STATES_H__\n");
+	fprintf(fp, "#define __FF_STATES_H__\n\n");
+
+	fprintf(fp, "#include \"ff_processes.h\"\n\n");
+	fprintf(fp, "#define NUMBER_OF_STATES\t\t%d\n\n", state_id_counter);
+
+	fprintf(fp, "state_t active_state = %d;\n\n", active_state);
 
 	/* Generate States */
 
 	for( i = 0; i < state_id_counter; i++ ) {
-		fprintf(fp, "process_t state_%s_processes[%d] = {", statetab[i].state->id->name, statetab[i].state->confs_counter);
+		fprintf(fp, "/* State %s */\n",
+			conftab[i].conf->id->name);
+		fprintf(fp, "#define %s\t%d\n\n",
+			statetab[i].state->id_name,
+			statetab[i].state->counter);
+	}
+
+	for( i = 0; i < state_id_counter; i++ ) {
+		fprintf(fp, "process_t state_%s_processes[%d] = {\n", statetab[i].state->id->name, statetab[i].state->confs_counter);
 		conf_ptr = statetab[i].state->confs;
 		while (conf_ptr) { 
 			if (conf_ptr->conf) {
-				fprintf(fp, "%d", conf_ptr->conf->conf->counter);
+				fprintf(fp, "\t%s", conf_ptr->conf->conf->id_name);
 			}
 			conf_ptr = conf_ptr->confs;
 			if (conf_ptr != NULL) {
-				fprintf(fp, ", ");
+				fprintf(fp, ",\n");
 
 			}
 		}
-		fprintf(fp, "};\n\n");
+		fprintf(fp, "\n\t};\n\n");
 	}
 
 
@@ -202,7 +207,8 @@ void generateCaches(int event_counter, int policy_counter) {
 	for( i = 0; i < state_id_counter; i++ ) {
                 fprintf(fp, "\t{\n");
    		fprintf(fp, "\t\t/* %s */\n", statetab[i].state->id->name); 
-                fprintf(fp, "\t\t.state_id = %d,\n", statetab[i].state->counter);
+                fprintf(fp, "\t\t.state_id = %s, /* %d */\n",
+				statetab[i].state->id_name, statetab[i].state->counter);
                 fprintf(fp, "\t\t.num_processes = %d,\n", statetab[i].state->confs_counter);
 		fprintf(fp, "\t\t.process_list = state_%s_processes,\n", statetab[i].state->id->name);
 
@@ -220,6 +226,52 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	}
 	fprintf(fp, "};\n\n");
+
+	fprintf(fp, "#endif\n\n");
+	fclose(fp);
+}
+
+
+void generateCaches(int event_counter, int policy_counter) {
+
+	char *full_path = get_sfc_path("", "ff_caches.h");
+	FILE *fp = fopen(full_path, "w");
+
+	struct modtab *mp;
+	int i;
+
+	define_modules();
+	define_processes();
+	define_states();
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+					into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "/* Swift Fox generated code for Fennec Fox caches.h */\n");
+	fprintf(fp, "#ifndef __FF_CACHES_H__\n");
+	fprintf(fp, "#define __FF_CACHES_H__\n\n");
+
+
+	fprintf(fp, "#define NUMBER_OF_EVENTS\t\t%d\n", event_id_counter);
+	fprintf(fp, "#define NUMBER_OF_POLICIES\t\t%d\n", policy_counter);
+	fprintf(fp, "#include <Fennec.h>\n");
+	fprintf(fp, "#include \"ff_defaults.h\"\n");
+	fprintf(fp, "#include \"ff_modules.h\"\n");
+	fprintf(fp, "#include \"ff_processes.h\"\n");
+	fprintf(fp, "#include \"ff_states.h\"\n\n");
+
+        for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+                if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
+                        fprintf(fp, "#include \"%sParams.h\"\n",
+                                                mp->lib->name);
+                }
+        }
+        fprintf(fp, "\n");
+
+
 
 
 	/* module_t to event_id */
@@ -256,7 +308,6 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "#endif\n\n");
 
 	fclose(fp);
-	fclose(tmp_confs);
 }
 
 /** Marks the initial state.

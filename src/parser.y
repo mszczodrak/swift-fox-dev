@@ -333,6 +333,7 @@ configuration: process_type IDENTIFIER OPEN_BRACE newlines module newlines modul
 			}
 
 			$$->name = $2->name;
+			$$->id_name = conf_module_name($$->name, "process");
 
 			$$->counter	= conf_id_counter;
 			$$->app_id_value = conf_id_counter * F_LAYERS + F_APPLICATION; 	
@@ -494,6 +495,7 @@ state: STATE IDENTIFIER state_level OPEN_BRACE newlines conf_ids newlines CLOSE_
 	
 			$$->counter	= state_id_counter;
 			$2->value	= state_id_counter;
+			$$->id_name	= conf_module_name($$->id->name, "state");
 			++state_id_counter;
 
 			statetab[$$->counter].state = $$;

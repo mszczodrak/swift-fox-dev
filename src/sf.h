@@ -200,7 +200,7 @@ struct confnode {
 	char			*radio_id_name;
 	int			radio_id_value;
 	int			counter;
-	int 			level;
+	char			*id_name;
 };
 
 struct conftab {
@@ -234,6 +234,7 @@ struct statenode {
 	struct statenodes	*parent;
 	struct symtab		*id;
 	struct conf_ids		*confs;
+	char			*id_name;
 	int			counter;
 	int 			level;
 	int 			confs_counter;
