@@ -130,17 +130,16 @@ int yylex(void);
 %type <initp>	initial_configuration
 %type <prog>	program
 %type <ival>	module_type
-%type <ival> 	conf_level
+%type <ival> 	state_level
 %type <ival> 	array_part
 %type <dval> 	assign_value
-%type <ival> 	state_level
 %type <mtl>	module_types
 %type <mtl>	next_module_type
 %type <parv>	parameters
 %type <parv>	next_parameter
 %type <ival>	param_type
 %type <defv>	default_value
-%type <ival>	configuration_type
+%type <ival>	process_type
 
 %%
 
@@ -275,7 +274,7 @@ configurations: configurations configuration
 		}			
 	;
 
-configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines module newlines module newlines module newlines module newlines CLOSE_BRACE newlines
+configuration: process_type IDENTIFIER OPEN_BRACE newlines module newlines module newlines module newlines module newlines CLOSE_BRACE newlines
 		{
 			/* configuration node */
 			$$		= calloc(1, sizeof(struct confnode));
@@ -285,45 +284,45 @@ configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines modu
 			$$->id		= $2;
 	
 			/* level */
-			$$->level	= $3;
+			//$$->level	= $3;
 
 			/* link application module */
-			if (($6 == NULL) || (($6->type != TYPE_APPLICATION && $6->type != TYPE_EVENT))) {
+			if (($5 == NULL) || (($5->type != TYPE_APPLICATION && $5->type != TYPE_EVENT))) {
 				fprintf(stderr, "Undefined application module in %s\n", $2->name);
 				yyerror("expecting application module");
 			}
-			$$->app			= $6;
-			$$->app_params		= $6->params;
+			$$->app			= $5;
+			$$->app_params		= $5->params;
 			$$->app->lib->used 	= 1;
 
 
 			/* link network module */
-			if (($8 == NULL) || ($8->type != TYPE_NETWORK)) {
+			if (($7 == NULL) || ($7->type != TYPE_NETWORK)) {
 				fprintf(stderr, "Undefined network module in %s\n", $2->name);
 				yyerror("expecting network module");
 			}
-			$$->net			= $8;
-			$$->net_params		= $8->params;
+			$$->net			= $7;
+			$$->net_params		= $7->params;
 			$$->net->lib->used 	= 1;
 
 
 			/* link mac module */
-			if (($10 == NULL) || ($10->type != TYPE_MAC)) {
+			if (($9 == NULL) || ($9->type != TYPE_MAC)) {
 				fprintf(stderr, "Undefined mac module in %s\n", $2->name);
 				yyerror("expecting mac module");
 			}
-			$$->mac			= $10;
-			$$->mac_params		= $10->params;
+			$$->mac			= $9;
+			$$->mac_params		= $9->params;
 			$$->mac->lib->used 	= 1;
 
 
 			/* link radio module */
-			if (($12 == NULL) || ($12->type != TYPE_RADIO)) {
+			if (($11 == NULL) || ($11->type != TYPE_RADIO)) {
 				fprintf(stderr, "Undefined radio module in %s\n", $2->name);
 				yyerror("expecting radio module");
 			}
-			$$->radio		= $12;
-			$$->radio_params	= $12->params;
+			$$->radio		= $11;
+			$$->radio_params	= $11->params;
 			$$->radio->lib->used 	= 1;
 
 			$2->value	= conf_id_counter;
@@ -348,12 +347,11 @@ configuration: configuration_type IDENTIFIER conf_level OPEN_BRACE newlines modu
 			conftab[conf_id_counter].conf = $$;
 
 			++conf_id_counter;
-
 		}
 	;
 
 
-configuration_type: CONFIGURATION
+process_type: CONFIGURATION
 		{
 			$$ = TYPE_PROCESS_REGULAR;
 		}
@@ -366,18 +364,6 @@ configuration_type: CONFIGURATION
 			$$ = TYPE_UNKNOWN;
 		}
 	;
-
-
-conf_level: LEVEL CONSTANT
-		{
-			$$ = $2;
-		}
-        |       
-                {
-                        $$ = UNKNOWN;
-                }                       
-        ;
-
 
 
 module: IDENTIFIER OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS

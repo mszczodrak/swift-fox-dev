@@ -68,7 +68,7 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "#define __FF_CACHES_H__\n\n");
 
 
-	fprintf(fp, "#define NUMBER_OF_CONFIGURATIONS\t\t%d\n", conf_id_counter);
+	fprintf(fp, "#define NUMBER_OF_PROCESSES\t\t%d\n", conf_id_counter);
 	fprintf(fp, "#define NUMBER_OF_STATES\t\t%d\n", state_id_counter);
 	fprintf(fp, "#define NUMBER_OF_EVENTS\t\t%d\n", event_id_counter);
 	fprintf(fp, "#define NUMBER_OF_POLICIES\t\t%d\n", policy_counter);
@@ -128,24 +128,24 @@ void generateCaches(int event_counter, int policy_counter) {
 
 	/* Generate Configurations */
 
-	fprintf(fp, "uint16_t active_state = %d;\n\n", active_state);
-	fprintf(fp, "struct stack_configuration configurations[NUMBER_OF_CONFIGURATIONS] = {\n");
+	fprintf(fp, "state_t active_state = %d;\n\n", active_state);
+	fprintf(fp, "struct network_process processes[NUMBER_OF_PROCESSES] = {\n");
 
 	/* generate code specifying each configuration's definition */
 
 	for( i = 0; i < conf_id_counter; i++ ) {
 		fprintf(fp, "\t{\n");
    		fprintf(fp, "\t\t/* %s */\n", conftab[i].conf->id->name); 
-		fprintf(fp, "\t\t.conf_id = %d,\n", conftab[i].conf->counter);
+		fprintf(fp, "\t\t.process_id = %d,\n", conftab[i].conf->counter);
 		fprintf(fp, "\t\t.application = %s,\n", conftab[i].conf->app_id_name);
 		fprintf(fp, "\t\t.network = %s,\n", conftab[i].conf->net_id_name);
 		fprintf(fp, "\t\t.mac = %s,\n", conftab[i].conf->mac_id_name);
-		fprintf(fp, "\t\t.radio = %s,\n", conftab[i].conf->radio_id_name);
-		if (conftab[i].conf->level == UNKNOWN) {
-			fprintf(fp, "\t\t.level = F_MINIMUM_STATE_LEVEL\n");
-		} else {
-			fprintf(fp, "\t\t.level = %d\n", conftab[i].conf->level);
-		}
+		fprintf(fp, "\t\t.radio = %s\n", conftab[i].conf->radio_id_name);
+//		if (conftab[i].conf->level == UNKNOWN) {
+//			fprintf(fp, "\t\t.level = F_MINIMUM_STATE_LEVEL\n");
+//		} else {
+//			fprintf(fp, "\t\t.level = %d\n", conftab[i].conf->level);
+//		}
 		fprintf(fp, "\t}\n");
 		if (i+1 < conf_id_counter) {
 			fprintf(fp, "\t,\n");
@@ -158,7 +158,7 @@ void generateCaches(int event_counter, int policy_counter) {
 	/* Generate States */
 
 	for( i = 0; i < state_id_counter; i++ ) {
-		fprintf(fp, "conf_t %s_confs[%d] = {", statetab[i].state->id->name, statetab[i].state->confs_counter);
+		fprintf(fp, "process_t state_%s_processes[%d] = {", statetab[i].state->id->name, statetab[i].state->confs_counter);
 		conf_ptr = statetab[i].state->confs;
 		while (conf_ptr) { 
 			if (conf_ptr->conf) {
@@ -179,8 +179,15 @@ void generateCaches(int event_counter, int policy_counter) {
                 fprintf(fp, "\t{\n");
    		fprintf(fp, "\t\t/* %s */\n", statetab[i].state->id->name); 
                 fprintf(fp, "\t\t.state_id = %d,\n", statetab[i].state->counter);
-                fprintf(fp, "\t\t.num_confs = %d,\n", statetab[i].state->confs_counter);
-		fprintf(fp, "\t\t.conf_list = %s_confs\n", statetab[i].state->id->name);
+                fprintf(fp, "\t\t.num_processes = %d,\n", statetab[i].state->confs_counter);
+		fprintf(fp, "\t\t.process_list = state_%s_processes,\n", statetab[i].state->id->name);
+
+		if (statetab[i].state->level == UNKNOWN) {
+			fprintf(fp, "\t\t.level = F_MINIMUM_STATE_LEVEL\n");
+		} else {
+			fprintf(fp, "\t\t.level = %d\n", statetab[i].state->level);
+		}
+
 
 		fprintf(fp, "\t}\n");
 		if (i+1 < state_id_counter) {
