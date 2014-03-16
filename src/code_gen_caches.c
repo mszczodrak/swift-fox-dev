@@ -180,7 +180,7 @@ void define_states() {
 
 	for( i = 0; i < state_id_counter; i++ ) {
 		fprintf(fp, "/* State %s */\n",
-			conftab[i].conf->id->name);
+			statetab[i].state->id->name);
 		fprintf(fp, "#define %s\t%d\n\n",
 			statetab[i].state->id_name,
 			statetab[i].state->counter);
@@ -199,7 +199,7 @@ void define_states() {
 
 			}
 		}
-		fprintf(fp, "\n\t};\n\n");
+		fprintf(fp, "\n};\n\n");
 	}
 
 
