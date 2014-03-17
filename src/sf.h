@@ -219,7 +219,6 @@ struct confnode *conflook(struct symtab *conf_id);
 
 
 struct conf_id {
-	struct conf_ids		*parent;
 	struct symtab		*id;
 	struct confnode		*conf;
 };
