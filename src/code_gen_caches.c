@@ -187,19 +187,13 @@ void define_states() {
 	}
 
 	for( i = 0; i < state_id_counter; i++ ) {
-		fprintf(fp, "process_t state_%s_processes[%d] = {\n", statetab[i].state->id->name, statetab[i].state->confs_counter);
-		conf_ptr = statetab[i].state->confs;
-		while (conf_ptr) { 
-			if (conf_ptr->conf) {
-				fprintf(fp, "\t%s", conf_ptr->conf->conf->id_name);
-			}
-			conf_ptr = conf_ptr->confs;
-			if (conf_ptr != NULL) {
-				fprintf(fp, ",\n");
-
-			}
+		fprintf(fp, "struct network_process* state_%s_processes[] = {\n", 
+				statetab[i].state->id->name);
+		for( conf_ptr = statetab[i].state->confs; conf_ptr; conf_ptr = conf_ptr->confs ) {
+			fprintf(fp, "\t&processes[%s],\n", conf_ptr->conf->conf->id_name);
 		}
-		fprintf(fp, "\n};\n\n");
+		fprintf(fp, "\tNULL\n");
+		fprintf(fp, "};\n\n");
 	}
 
 
@@ -209,8 +203,7 @@ void define_states() {
    		fprintf(fp, "\t\t/* %s */\n", statetab[i].state->id->name); 
                 fprintf(fp, "\t\t.state_id = %s, /* %d */\n",
 				statetab[i].state->id_name, statetab[i].state->counter);
-                fprintf(fp, "\t\t.num_processes = %d,\n", statetab[i].state->confs_counter);
-		fprintf(fp, "\t\t.process_list = state_%s_processes,\n", statetab[i].state->id->name);
+		fprintf(fp, "\t\t.processes = state_%s_processes,\n", statetab[i].state->id->name);
 
 		if (statetab[i].state->level == UNKNOWN) {
 			fprintf(fp, "\t\t.level = F_MINIMUM_STATE_LEVEL\n");
