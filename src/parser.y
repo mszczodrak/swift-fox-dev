@@ -523,14 +523,6 @@ conf_ids: conf_ids newlines conf_id
 			$$		= calloc(1, sizeof(struct conf_ids));
 			
 			/* link the child nodes */
-			if ($1 != NULL) { 
-				$1->parent = $$;
-				$$->count = $1->count + 1;
-			} else {
-				$$->count = 1;
-			}
-			$3->parent	= $$;
-
 			$$->confs	= $1;
 			$$->conf	= $3;
 

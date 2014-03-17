@@ -225,10 +225,8 @@ struct conf_id {
 };
 
 struct conf_ids {
-	struct conf_ids		*parent;
 	struct conf_ids		*confs;
 	struct conf_id		*conf;
-	int 			count;
 };
 
 struct statenode {

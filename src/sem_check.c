@@ -561,7 +561,6 @@ addConfState(struct confnode *c) {
 	ci->id = c->id;
 
 	/* create conf_ids with one conf_id */
-	cis->count = 1;
 	cis->confs = NULL;
 	cis->conf = ci;
 
