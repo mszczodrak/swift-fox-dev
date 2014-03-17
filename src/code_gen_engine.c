@@ -371,22 +371,22 @@ void generateFennecEngineP() {
 	fprintf(fp,"implementation {\n\n");
 
 	fprintf(fp,"void module_startDone(module_t module_id, error_t error) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP module_startDone(%%d, %%d)\", module_id, error);\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine module_startDone(%%d, %%d)\", module_id, error);\n");
 	fprintf(fp,"\tsignal ModuleCtrl.startDone(module_id, error);\n");
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"void module_stopDone(module_t module_id, error_t error) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP module_stopDone(%%d, %%d)\", module_id, error);\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine module_stopDone(%%d, %%d)\", module_id, error);\n");
 	fprintf(fp,"\tsignal ModuleCtrl.stopDone(module_id, error);\n");
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"command error_t ModuleCtrl.start(module_t module_id) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP ModuleCtrl.start(%%d)\", module_id);\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine ModuleCtrl.start(%%d)\", module_id);\n");
 	fprintf(fp,"\tswitch(module_id) {\n\n");
 
 	for( i = 0; i < conf_id_counter; i++ ) {
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->app_id_name);
-		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%s_Control.start()\");\n",
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"[-] FennecEngine call %s_%s_Control.start()\");\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
 		fprintf(fp, "\t\treturn call %s_%s_Control.start();\n\n",
@@ -394,7 +394,7 @@ void generateFennecEngineP() {
 					conftab[i].conf->app->lib->name);
 
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->net_id_name);
-		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%s_Control.start()\");\n",
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"[-] FennecEngine call %s_%s_Control.start()\");\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
 		fprintf(fp, "\t\treturn call %s_%s_Control.start();\n\n",
@@ -402,7 +402,7 @@ void generateFennecEngineP() {
 					conftab[i].conf->net->lib->name);
 
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
-		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%s_Control.start()\");\n",
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"[-] FennecEngine call %s_%s_Control.start()\");\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name);
 		fprintf(fp, "\t\treturn call %s_%s_Control.start();\n\n",
@@ -410,7 +410,7 @@ void generateFennecEngineP() {
 					conftab[i].conf->mac->lib->name);
 
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%s_Control.start()\");\n",
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"[-] FennecEngine call %s_%s_Control.start()\");\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
 		fprintf(fp, "\t\treturn call %s_%s_Control.start();\n\n",
@@ -422,12 +422,12 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"command error_t ModuleCtrl.stop(module_t module_id) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP ModuleCtrl.stop(%%d)\", module_id);\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine ModuleCtrl.stop(%%d)\", module_id);\n");
 
 	fprintf(fp,"\tswitch(module_id) {\n\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->app_id_name);
-		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%s_Control.stop()\");\n",
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"[-] FennecEngine call %s_%s_Control.stop()\");\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
 		fprintf(fp, "\t\treturn call %s_%s_Control.stop();\n\n",
@@ -435,7 +435,7 @@ void generateFennecEngineP() {
 					conftab[i].conf->app->lib->name);
 
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->net_id_name);
-		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%s_Control.stop()\");\n",
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"[-] FennecEngine call %s_%s_Control.stop()\");\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
 		fprintf(fp, "\t\treturn call %s_%s_Control.stop();\n\n",
@@ -443,7 +443,7 @@ void generateFennecEngineP() {
 					conftab[i].conf->net->lib->name);
 
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
-		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%s_Control.stop()\");\n",
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"[-] FennecEngine call %s_%s_Control.stop()\");\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name);
 		fprintf(fp, "\t\treturn call %s_%s_Control.stop();\n\n",
@@ -451,7 +451,7 @@ void generateFennecEngineP() {
 					conftab[i].conf->mac->lib->name);
 
                 fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"FennecEngineP call %s_%s_Control.stop()\");\n",
+		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"[-] FennecEngine call %s_%s_Control.stop()\");\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
 		fprintf(fp, "\t\treturn call %s_%s_Control.stop();\n\n",
@@ -467,7 +467,7 @@ void generateFennecEngineP() {
 	/* Radio Only Interfaces */
 
 	fprintf(fp,"error_t RadioResource_request(process_t process_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioResource_request(%%d, %%d)\",\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine RadioResource_request(%%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tprocess_id, to_layer);\n");
 	fprintf(fp,"\tswitch( call Fennec.getModuleId(process_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
@@ -483,7 +483,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioResource_immediateRequest(process_t process_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioResource_immediateRequest(%%d, %%d)\",\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine RadioResource_immediateRequest(%%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tprocess_id, to_layer);\n");
 	fprintf(fp,"\tswitch( call Fennec.getModuleId(process_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
@@ -499,7 +499,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"error_t RadioResource_release(process_t process_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioResource_release(%%d, %%d)\",\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine RadioResource_release(%%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tprocess_id, to_layer);\n");
 	fprintf(fp,"\tswitch( call Fennec.getModuleId(process_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
@@ -515,7 +515,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"bool RadioResource_isOwner(process_t process_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP RadioResource_isOwner(%%d, %%d)\",\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine RadioResource_isOwner(%%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tprocess_id, to_layer);\n");
 	fprintf(fp,"\tswitch( call Fennec.getModuleId(process_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
@@ -534,7 +534,7 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp,"void granted(process_t process_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"FennecEngineP granted(%%d, %%d)\",\n");
+	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine granted(%%d, %%d)\",\n");
 	fprintf(fp,"\t\t\tprocess_id, to_layer);\n");
 	fprintf(fp,"\tswitch( call Fennec.getModuleId(process_id, to_layer) ) {\n");
 	for( i = 0; i < conf_id_counter; i++ ) {
