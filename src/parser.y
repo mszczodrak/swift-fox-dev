@@ -99,7 +99,7 @@ int yylex(void);
 %token APPLICATION NETWORK MAC RADIO 
 %token EQ SOURCE LF 
 %token OPEN_BRACE CLOSE_BRACE OPEN_PARENTHESIS CLOSE_PARENTHESIS
-%token OPEN_SQUARE_BRACE CLOSE_SQUARE_BRACE
+%token OPEN_SQUARE_BRACE CLOSE_SQUARE_BRACE STAR
 %token LEVEL AT 
 %token U_INT_EIGHT U_INT_SIXTEEN U_INT_THIRTY_TWO FLOAT DOUBLE
 
@@ -115,11 +115,11 @@ int yylex(void);
 %token <symp>	ANY
 %token <modp>	MODULES
 %type <modp>	module
-%type <confp>	configuration
-%type <confsp>	configurations
+%type <confp>	process
+%type <confsp>	processs
 %type <confid>	conf_id
 %type <confids> conf_ids
-%type <confsp>	defined_configurations
+%type <confsp>	defined_processs
 %type <statep>	state
 %type <statesp>	states
 %type <statesp>	defined_states
@@ -127,10 +127,11 @@ int yylex(void);
 %type <var>	global_variable
 %type <pol>	policy;
 %type <pols>	policies;
-%type <initp>	initial_configuration
+%type <initp>	initial_process
 %type <prog>	program
 %type <ival>	module_type
 %type <ival> 	state_level
+%type <ival> 	process_level
 %type <ival> 	array_part
 %type <dval> 	assign_value
 %type <mtl>	module_types
@@ -163,7 +164,7 @@ swiftfox: library program
 		}
 	;
 
-program: global_variables defined_configurations defined_states policies initial_configuration 
+program: global_variables defined_processs defined_states policies initial_process 
 		{
 			/* root node */
 			$$		= calloc(1, sizeof(struct program));
@@ -240,9 +241,9 @@ assign_value: RELOP CONSTANT
 	; 
 
 
-defined_configurations: configurations configuration
+defined_processs: processs process
 		{
-			/* configurations set */
+			/* processs set */
 			$$		= calloc(1, sizeof(struct confnodes));
 			
 			/* link the child nodes */
@@ -255,9 +256,9 @@ defined_configurations: configurations configuration
 		}	
 	;
 
-configurations: configurations configuration
+processs: processs process
 		{
-			/* configurations set */
+			/* processs set */
 			$$		= calloc(1, sizeof(struct confnodes));
 			
 			/* link the child nodes */
@@ -274,55 +275,53 @@ configurations: configurations configuration
 		}			
 	;
 
-configuration: process_type IDENTIFIER OPEN_BRACE newlines module newlines module newlines module newlines module newlines CLOSE_BRACE newlines
+process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlines module newlines module newlines module newlines CLOSE_BRACE newlines
 		{
-			/* configuration node */
+			/* process node */
 			$$		= calloc(1, sizeof(struct confnode));
 
 			/* init */
 			$2->type	= $1;
 			$$->id		= $2;
-	
-			/* level */
-			//$$->level	= $3;
+			$$->privileged	= $3;
 
 			/* link application module */
-			if (($5 == NULL) || (($5->type != TYPE_APPLICATION && $5->type != TYPE_EVENT))) {
+			if (($6 == NULL) || (($6->type != TYPE_APPLICATION && $6->type != TYPE_EVENT))) {
 				fprintf(stderr, "Undefined application module in %s\n", $2->name);
 				yyerror("expecting application module");
 			}
-			$$->app			= $5;
-			$$->app_params		= $5->params;
+			$$->app			= $6;
+			$$->app_params		= $6->params;
 			$$->app->lib->used 	= 1;
 
 
 			/* link network module */
-			if (($7 == NULL) || ($7->type != TYPE_NETWORK)) {
+			if (($8 == NULL) || ($8->type != TYPE_NETWORK)) {
 				fprintf(stderr, "Undefined network module in %s\n", $2->name);
 				yyerror("expecting network module");
 			}
-			$$->net			= $7;
-			$$->net_params		= $7->params;
+			$$->net			= $8;
+			$$->net_params		= $8->params;
 			$$->net->lib->used 	= 1;
 
 
 			/* link mac module */
-			if (($9 == NULL) || ($9->type != TYPE_MAC)) {
+			if (($10 == NULL) || ($10->type != TYPE_MAC)) {
 				fprintf(stderr, "Undefined mac module in %s\n", $2->name);
 				yyerror("expecting mac module");
 			}
-			$$->mac			= $9;
-			$$->mac_params		= $9->params;
+			$$->mac			= $10;
+			$$->mac_params		= $10->params;
 			$$->mac->lib->used 	= 1;
 
 
 			/* link radio module */
-			if (($11 == NULL) || ($11->type != TYPE_RADIO)) {
+			if (($12 == NULL) || ($12->type != TYPE_RADIO)) {
 				fprintf(stderr, "Undefined radio module in %s\n", $2->name);
 				yyerror("expecting radio module");
 			}
-			$$->radio		= $11;
-			$$->radio_params	= $11->params;
+			$$->radio		= $12;
+			$$->radio_params	= $12->params;
 			$$->radio->lib->used 	= 1;
 
 			$2->value	= conf_id_counter;
@@ -366,6 +365,15 @@ process_type: CONFIGURATION
 		}
 	;
 
+process_level: STAR
+		{
+			$$ = 1;
+		}
+        |       
+                {
+                        $$ = 0;
+                }                       
+        ;
 
 module: IDENTIFIER OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS
 		{
@@ -474,7 +482,7 @@ states: states state
 state: STATE IDENTIFIER state_level OPEN_BRACE newlines conf_ids newlines CLOSE_BRACE newlines
 		{
 
-			/* configuration node */
+			/* process node */
 			$$		= calloc(1, sizeof(struct statenode));
 
 			/* init */
@@ -593,7 +601,7 @@ policy: FROM IDENTIFIER GOTO IDENTIFIER WHEN conf_ids newlines
 		}
 
 
-initial_configuration: START IDENTIFIER newlines
+initial_process: START IDENTIFIER newlines
 		{
 			/* start node */
 			$$ = calloc(1, sizeof(struct initnode));
@@ -1023,7 +1031,7 @@ proc_policy(struct policy *p) {
 	return 0;	
 }
 
-/* finds configuration record based on its string ID */
+/* finds process record based on its string ID */
 struct confnode *
 conflook(struct symtab *conf_id) {
 	/* iterator */

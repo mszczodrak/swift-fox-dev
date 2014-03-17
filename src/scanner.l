@@ -220,7 +220,11 @@ or		{
 #ifndef __DEBUG__
 #endif
                         return CLOSE_SQUARE_BRACE;               }
+"*"	{
+#ifndef __DEBUG__
+#endif
 
+			return STAR;			}
 uint8_t		{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_UINT8_T;
@@ -269,8 +273,6 @@ int32_t	{
 			yylval.ival = TYPE_INT32_T;
 #endif
 			return VARIABLE_TYPE;		}
-
-
 
 {identifier}	{
 #ifndef __DEBUG__

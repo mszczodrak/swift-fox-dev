@@ -201,6 +201,7 @@ struct confnode {
 	int			radio_id_value;
 	int			counter;
 	char			*id_name;
+	int			privileged;
 };
 
 struct conftab {

@@ -1,7 +1,7 @@
 uint16_t src_node = 0xFFFF
 uint16_t dest_node = 2
 
-process system_control { StateSync()
+process system_control* { StateSync()
 			nullNet()
 			nullMac()
                         cape()
