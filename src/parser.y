@@ -495,12 +495,6 @@ state: STATE IDENTIFIER state_level OPEN_BRACE newlines conf_ids newlines CLOSE_
 
 			$$->confs	= $6;
 
-			if ($6 != NULL) {
-				$$->confs_counter = $6->count;
-			} else {
-				$$->confs_counter = 0;
-			}
-	
 			$$->counter	= state_id_counter;
 			$2->value	= state_id_counter;
 			$$->id_name	= conf_module_name($$->id->name, "state");

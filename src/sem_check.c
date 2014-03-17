@@ -472,8 +472,6 @@ updateStatesWithEvents(struct policy *p) {
 				}
 				cids->confs = p->event_confs;
 			}
-			statetab[i].state->confs_counter = statetab[i].state->confs_counter + 
-						p->event_confs->count;
 		}
 	}	
 }
@@ -572,9 +570,7 @@ addConfState(struct confnode *c) {
 	newstate->id = st;
 	newstate->level = UNKNOWN;
 	newstate->confs = cis;
-	newstate->confs_counter = 1;
 	newstate->counter = state_id_counter;
-	st->value = state_id_counter;
 	++state_id_counter;
 
 	statetab[newstate->counter].state = newstate;

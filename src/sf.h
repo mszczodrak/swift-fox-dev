@@ -238,7 +238,6 @@ struct statenode {
 	char			*id_name;
 	int			counter;
 	int 			level;
-	int 			confs_counter;
 };
 
 struct statetab {
