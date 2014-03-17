@@ -42,6 +42,7 @@
 */
 
 
+
 void define_modules() {
 	char *full_path = get_sfc_path("", "ff_modules.h");
 	FILE *fp = fopen(full_path, "w");
@@ -265,6 +266,15 @@ void generateCaches(int event_counter, int policy_counter) {
         fprintf(fp, "\n");
 
 
+	/* list all privileged processes */
+	fprintf(fp, "struct network_process* privileged_processes[] = {\n");
+	for ( i = 0; i < conf_id_counter; i++ ) {
+		if (conftab[i].conf->privileged) {
+			fprintf(fp, "\t&processes[%s],\n", conftab[i].conf->id_name);
+		}
+	}
+	fprintf(fp, "\tNULL\n");
+	fprintf(fp, "};\n\n");
 
 
 	/* module_t to event_id */
