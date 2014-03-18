@@ -2,9 +2,10 @@ uint16_t src_node = 0xFFFF
 uint16_t dest_node = 2
 
 process system_control* { StateSync()
-			nullNet()
-			nullMac()
-                        cape()
+	nullNet()
+	#nullMac()
+	csmaca(dest_node, 400, 10, 10, 1, 1, 1)
+	cape()
 }
 
 process count {
@@ -48,11 +49,11 @@ event tiMo3  { timerMilliE(300000, 0xFFFF)
 
 state led1 l 3 { red }
 state led2 { yellow }
-state counter { count }
+state collecting { count }
 
 from led1 goto led2 when tiMo
-from led2 goto counter when tiMo2
-from counter goto led1 when tiMo3
+from led2 goto collecting when tiMo2
+from collecting goto led1 when tiMo3
 
 start led1
 
