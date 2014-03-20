@@ -219,14 +219,17 @@ void generateFennecEngineC() {
 
 		fprintf(fp, "\n");
 
-		fprintf(fp, "%s_%s.RadioReceive -> %s_%s.RadioReceive;\n",
+
+		fprintf(fp, "%s_%s.Ieee154PacketLayer <- %s_%s.Ieee154PacketLayer;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "%s_%s.RadioBuffer -> %s_%s.RadioBuffer;\n", 
+
+
+		fprintf(fp, "%s_%s.RadioReceive -> %s_%s.RadioReceive;\n",
 					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->mac->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
 		fprintf(fp, "%s_%s.RadioSend -> %s_%s.RadioSend;\n", 
@@ -249,7 +252,7 @@ void generateFennecEngineC() {
 					conftab[i].conf->mac->lib->name, 
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "%s_%s.PacketTimeSync -> %s_%s.PacketTimeSync;\n", 
+		fprintf(fp, "%s_%s.RadioResource -> %s_%s.RadioResource;\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name, 
 					conftab[i].conf->id->name,
@@ -275,17 +278,73 @@ void generateFennecEngineC() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
 
-		fprintf(fp, "FennecEngineP.%s_%s_RadioResource <- %s_%s.RadioResource;\n", 
+
+		fprintf(fp, "%s_%s.RadioAlarm -> %s_%s.RadioAlarm;\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name, 
 					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
+					conftab[i].conf->radio->lib->name);
 
-		fprintf(fp, "FennecEngineP.%s_%s_RadioResource -> %s_%s.RadioResource;\n", 
+		fprintf(fp, "%s_%s.AckReceivedFlag -> %s_%s.AckReceivedFlag;\n", 
 					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name, 
+					conftab[i].conf->mac->lib->name, 
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
+
+
+		fprintf(fp, "%s_%s.ActiveMessageConfig -> %s_%s.ActiveMessageConfig;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.UniqueConfig -> %s_%s.UniqueConfig;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.LowPowerListeningConfig -> %s_%s.LowPowerListeningConfig;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+
+		fprintf(fp, "%s_%s.RandomCollisionConfig -> %s_%s.RandomCollisionConfig;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.SlottedCollisionConfig -> %s_%s.SlottedCollisionConfig;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.SoftwareAckConfig -> %s_%s.SoftwareAckConfig;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.TrafficMonitorConfig -> %s_%s.TrafficMonitorConfig;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.CsmaConfig -> %s_%s.CsmaConfig;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+
+
+
+
+
+
+
+
+
+
+
+		
 
 
 		fprintf(fp, "\n");
@@ -347,9 +406,6 @@ void generateFennecEngineP() {
 					conftab[i].conf->mac->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "provides interface Resource as %s_%s_RadioResource;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
 
 
     		fprintf(fp, "/* Radio Module %s */\n",
@@ -359,9 +415,6 @@ void generateFennecEngineP() {
 					conftab[i].conf->radio->lib->name);
     		fprintf(fp, "provides interface %sParams as %s_%s_Params;\n", 
 					conftab[i].conf->radio->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "uses interface Resource as %s_%s_RadioResource;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
 		fprintf(fp, "\n\n");
@@ -461,91 +514,6 @@ void generateFennecEngineP() {
 	fprintf(fp,"\t}\n");
 	fprintf(fp,"\treturn FAIL;\n");
 	fprintf(fp,"}\n\n");
-
-
-
-	/* Radio Only Interfaces */
-
-	fprintf(fp,"error_t RadioResource_request(process_t process_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine RadioResource_request(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tprocess_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getModuleId(process_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioResource.request();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn FAIL;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"error_t RadioResource_immediateRequest(process_t process_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine RadioResource_immediateRequest(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tprocess_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getModuleId(process_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioResource.immediateRequest();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"error_t RadioResource_release(process_t process_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine RadioResource_release(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tprocess_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getModuleId(process_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioResource.release();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	fprintf(fp,"bool RadioResource_isOwner(process_t process_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine RadioResource_isOwner(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tprocess_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getModuleId(process_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->radio_id_name);
-		fprintf(fp,"\t\treturn call %s_%s_RadioResource.isOwner();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-	}
-	fprintf(fp,"\tdefault:\n");
-	fprintf(fp,"\t\treturn 0;\n");
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
-
-	/* Radio Only events */
-
-
-	fprintf(fp,"void granted(process_t process_id, uint8_t to_layer) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine granted(%%d, %%d)\",\n");
-	fprintf(fp,"\t\t\tprocess_id, to_layer);\n");
-	fprintf(fp,"\tswitch( call Fennec.getModuleId(process_id, to_layer) ) {\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
-		fprintf(fp,"\t\treturn signal %s_%s_RadioResource.granted();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-	}
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"}\n\n");
-
 
 	struct paramtype *pt;
 
@@ -709,32 +677,6 @@ void generateFennecEngineP() {
 
 
 
-		fprintf(fp, "async command error_t %s_%s_RadioResource.request() {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioResource_request(%s, F_RADIO);\n",
-					conftab[i].conf->id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command error_t %s_%s_RadioResource.immediateRequest() {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioResource_immediateRequest(%s, F_RADIO);\n",
-					conftab[i].conf->id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command error_t %s_%s_RadioResource.release() {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioResource_release(%s, F_RADIO);\n",
-					conftab[i].conf->id_name);
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "async command error_t %s_%s_RadioResource.isOwner() {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\treturn RadioResource_isOwner(%s, F_RADIO);\n",
-					conftab[i].conf->id_name);
-		fprintf(fp, "}\n\n");
-
-
 /* Interfaces with Radios */
 
 		fprintf(fp, "event void %s_%s_Control.startDone(error_t err) {\n",
@@ -783,14 +725,6 @@ void generateFennecEngineP() {
 			fprintf(fp, "\treturn SUCCESS;\n");
 	                fprintf(fp, "}\n\n");
 	        }
-
-		fprintf(fp, "event void %s_%s_RadioResource.granted() {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "\treturn granted(%s, F_MAC);\n",
-					conftab[i].conf->id_name);
-		fprintf(fp, "}\n\n");
-
 	}
 
 	fprintf(fp, "\n}\n");

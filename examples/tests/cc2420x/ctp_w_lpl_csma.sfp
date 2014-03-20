@@ -1,0 +1,19 @@
+uint16_t dest_node = 2
+uint16_t src_node = 0xFFFF
+
+configuration count { counter(10, 1024, src_node, dest_node) 
+			#nullNet()
+			ctp(dest_node)
+                        csma()
+                        # always ON, delay_after_receive, backoff, min_backoff
+                        # ack, cca, crc
+#			nullRadio()
+ #                       cc2420x()
+			cc2420xNew()
+                        # channel, power, ack, crc
+			}
+
+state test { count }
+
+start test
+
