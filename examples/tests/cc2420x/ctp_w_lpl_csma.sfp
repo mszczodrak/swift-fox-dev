@@ -1,12 +1,13 @@
-uint16_t dest_node = 2
+uint16_t dest_node = 5
 uint16_t src_node = 0xFFFF
 
 configuration count { 
 			counter(5, 1024, src_node, dest_node) 
-			#printf()
-			#nullNet()
+#			printf()
+#			nullNet()
 			ctp(dest_node)
                         csma()
+#			nullMac()
                         # always ON, delay_after_receive, backoff, min_backoff
                         # ack, cca, crc
 #			nullRadio()
