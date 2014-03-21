@@ -216,80 +216,7 @@ void generateFennecEngineC() {
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name);
-
 		fprintf(fp, "\n");
-
-
-		fprintf(fp, "%s_%s.Ieee154PacketLayer <- %s_%s.Ieee154PacketLayer;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-
-
-		fprintf(fp, "%s_%s.RadioReceive -> %s_%s.RadioReceive;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "%s_%s.RadioSend -> %s_%s.RadioSend;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "%s_%s.RadioPacket -> %s_%s.RadioPacket;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "%s_%s.PacketTransmitPower -> %s_%s.PacketTransmitPower;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "%s_%s.PacketRSSI -> %s_%s.PacketRSSI;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "%s_%s.RadioResource -> %s_%s.RadioResource;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "%s_%s.PacketLinkQuality -> %s_%s.PacketLinkQuality;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "%s_%s.RadioCCA -> %s_%s.RadioCCA;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "%s_%s.RadioState -> %s_%s.RadioState;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "%s_%s.RadioLinkPacketMetadata -> %s_%s.RadioLinkPacketMetadata;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-
-
-		fprintf(fp, "%s_%s.RadioAlarm -> %s_%s.RadioAlarm;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
-
-		fprintf(fp, "%s_%s.AckReceivedFlag -> %s_%s.AckReceivedFlag;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
 
 
 		fprintf(fp, "%s_%s.ActiveMessageConfig -> %s_%s.ActiveMessageConfig;\n", 
@@ -307,7 +234,6 @@ void generateFennecEngineC() {
 					conftab[i].conf->mac->lib->name, 
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
-
 		fprintf(fp, "%s_%s.RandomCollisionConfig -> %s_%s.RandomCollisionConfig;\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name, 
@@ -333,20 +259,96 @@ void generateFennecEngineC() {
 					conftab[i].conf->mac->lib->name, 
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
-
-
-
-
-
-
-
-
-
-
-
-		
-
-
+		fprintf(fp, "%s_%s.DummyConfig -> %s_%s.DummyConfig;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioState -> %s_%s.RadioState;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioReceive -> %s_%s.RadioReceive;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioSend -> %s_%s.RadioSend;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioPacket -> %s_%s.RadioPacket;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioCCA -> %s_%s.RadioCCA;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioLinkPacketMetadata -> %s_%s.RadioLinkPacketMetadata;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioResource -> %s_%s.RadioResource;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioAlarm -> %s_%s.RadioAlarm;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.LocalTimeRadio -> %s_%s.LocalTimeRadio;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioPacketTimeStampRadio -> %s_%s.PacketTimeStampRadio;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioPacketTimeStampMilli -> %s_%s.PacketTimeStampMilli;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.RadioPacketTimeStamp32khz -> %s_%s.PacketTimeStamp32khz;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.PacketTransmitPower -> %s_%s.PacketTransmitPower;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.PacketRSSI -> %s_%s.PacketRSSI;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.PacketLinkQuality -> %s_%s.PacketLinkQuality;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.AckReceivedFlag -> %s_%s.AckReceivedFlag;\n", 
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
+		fprintf(fp, "%s_%s.Ieee154PacketLayer <- %s_%s.Ieee154PacketLayer;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->mac->lib->name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->radio->lib->name);
 		fprintf(fp, "\n");
 	}
 
@@ -573,9 +575,6 @@ void generateFennecEngineP() {
 	                fprintf(fp, "}\n\n");
 	        }
 
-
-
-
 		fprintf(fp, "event void %s_%s_Control.startDone(error_t err) {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
@@ -626,8 +625,6 @@ void generateFennecEngineP() {
 
 /* Interfaces with Macs */
 
-
-
 		fprintf(fp, "event void %s_%s_Control.startDone(error_t err) {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->mac->lib->name);
@@ -674,8 +671,6 @@ void generateFennecEngineP() {
 			fprintf(fp, "\treturn SUCCESS;\n");
 	                fprintf(fp, "}\n\n");
 	        }
-
-
 
 /* Interfaces with Radios */
 
