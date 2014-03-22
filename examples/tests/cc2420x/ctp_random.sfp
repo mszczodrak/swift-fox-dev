@@ -1,14 +1,12 @@
-uint16_t dest_node = 2
+uint16_t dest_node = 75
 uint16_t src_node = 0xFFFF
 
 configuration count { 
 			counter(60, 1024, src_node, dest_node) 
 			ctp(dest_node)
-                        csma()
+                        random()
                         # always ON, delay_after_receive, backoff, min_backoff
                         # ack, cca, crc
-#			nullRadio()
-#                       cc2420x()
 			cc2420xNew()
                         # channel, power, ack, crc
 			}
