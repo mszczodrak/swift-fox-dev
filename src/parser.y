@@ -609,7 +609,7 @@ definitions: definitions definition
         |
         ;
 
-definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_types CLOSE_PARENTHESIS
+definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_types newlines CLOSE_PARENTHESIS
 		{
 			/* iterator */
 			char *p = NULL;
