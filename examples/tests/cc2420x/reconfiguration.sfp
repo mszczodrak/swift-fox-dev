@@ -3,16 +3,13 @@ uint16_t dest_node = 2
 
 process system_control* { StateSync()
 	nullNet()
-	random()
 	cc2420x()
 }
 
 process count {
 	counter(5, 1024, src_node, dest_node)
 	ctp(dest_node)
-	random()
 	cc2420x()
-
 }
 
 state collecting { count }

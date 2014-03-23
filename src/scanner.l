@@ -166,10 +166,6 @@ mac         {
 #ifndef __DEBUG__
 #endif
                         return MAC;                 }
-radio         {
-#ifndef __DEBUG__
-#endif
-                        return RADIO;                 }
 source		{
 #ifndef __DEBUG__
 #endif

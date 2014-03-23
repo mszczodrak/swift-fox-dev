@@ -86,15 +86,6 @@ void define_modules() {
 			conftab[i].conf->mac_id_name,
 			conftab[i].conf->mac_id_value);
 
-		fprintf(fp, "/* %s for process %s\n"
-				"Radio module located at %s */\n",
-			conftab[i].conf->radio->lib->name,
-			conftab[i].conf->id->name,
-			conftab[i].conf->radio->lib->path);
-		fprintf(fp, "#define %s\t%d\n\n",
-			conftab[i].conf->radio_id_name,
-			conftab[i].conf->radio_id_value);
-
         }
         fprintf(fp, "\n");
 	fprintf(fp, "#endif\n\n");
@@ -142,8 +133,7 @@ void define_processes() {
 				conftab[i].conf->id_name, conftab[i].conf->counter);
 		fprintf(fp, "\t\t.application = %s,\n", conftab[i].conf->app_id_name);
 		fprintf(fp, "\t\t.network = %s,\n", conftab[i].conf->net_id_name);
-		fprintf(fp, "\t\t.mac = %s,\n", conftab[i].conf->mac_id_name);
-		fprintf(fp, "\t\t.radio = %s\n", conftab[i].conf->radio_id_name);
+		fprintf(fp, "\t\t.mac = %s\n", conftab[i].conf->mac_id_name);
 		fprintf(fp, "\t}\n");
 		if (i+1 < conf_id_counter) {
 			fprintf(fp, "\t,\n");

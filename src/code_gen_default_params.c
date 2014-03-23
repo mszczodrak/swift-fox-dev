@@ -124,24 +124,6 @@ void generateDefaultParams() {
                                 fprintf(fp, ",\n");
                 }               
                 fprintf(fp, "};\n\n");
-
-		/** 
-		radio default parameter values 
-		*/
-                fprintf(fp, "struct %s_params %s_params = {\n",
-                        conftab[i].conf->radio->lib->name,
-			conftab[i].conf->radio_id_name);
-
-                for (pv = conftab[i].conf->radio_params; pv != NULL; ) {
-                        fprintf(fp, "\t%f", pv->num_value);
-                                                
-                        pv = pv->child;         
-                        if (pv == NULL)
-                                fprintf(fp, "\n");
-                        else    
-                                fprintf(fp, ",\n");
-                }
-                fprintf(fp, "};\n\n");
 	}
 
 
@@ -219,34 +201,6 @@ void generateDefaultParams() {
 				/* this is fixed number so point to module's struct params */
                         	fprintf(fp, "\t&%s_params.%s",
 					conftab[i].conf->mac_id_name,
-					pt->name);
-			} else {
-				/* this is global variable */
-				fprintf(fp, "\t%s", pv->value->name);
-
-			}
-
-                        pt = pt->child;
-                        if (pt == NULL)
-                                fprintf(fp, "\n");
-                        else
-                                fprintf(fp, ",\n");
-                }
-                fprintf(fp, "};\n\n");
-
-		/** 
-		radio default parameter values 
-		*/
-                fprintf(fp, "struct %s_params_ptr %s_ptr = {\n",
-                        conftab[i].conf->radio->lib->name,
-			conftab[i].conf->radio_id_name);
-
-                for (pv = conftab[i].conf->radio_params, pt = conftab[i].conf->radio->lib->params;
-			pv != NULL && pt != NULL; pv = pv->child) {
-			if (pv->value == NULL) {
-				/* this is fixed number so point to module's struct params */
-                        	fprintf(fp, "\t&%s_params.%s",
-					conftab[i].conf->radio_id_name,
 					pt->name);
 			} else {
 				/* this is global variable */

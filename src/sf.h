@@ -53,7 +53,6 @@
 #define TYPE_NETWORK		2
 #define TYPE_EVENT		3
 #define TYPE_MAC		5
-#define TYPE_RADIO		6
 
 #define TYPE_TYPE		8
 
@@ -92,7 +91,6 @@
 #define F_APPLICATION		1
 #define F_NETWORK		2
 #define F_MAC			3
-#define F_RADIO			4
 #define F_LAYERS		4
 
 
@@ -186,19 +184,15 @@ struct confnode {
 	struct modtab		*app;
 	struct modtab		*net;
 	struct modtab		*mac;
-	struct modtab		*radio;
 	struct paramvalue	*app_params;
 	struct paramvalue	*net_params;
 	struct paramvalue	*mac_params;
-	struct paramvalue	*radio_params;
 	char			*app_id_name;
 	int			app_id_value;
 	char			*net_id_name;
 	int			net_id_value;
 	char			*mac_id_name;
 	int			mac_id_value;
-	char			*radio_id_name;
-	int			radio_id_value;
 	int			counter;
 	char			*id_name;
 	int			privileged;

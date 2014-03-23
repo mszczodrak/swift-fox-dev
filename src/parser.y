@@ -96,7 +96,7 @@ int yylex(void);
 
 %token STATE CONFIGURATION COMMA EVENT 
 %token FROM GOTO START USE WHEN 
-%token APPLICATION NETWORK MAC RADIO 
+%token APPLICATION NETWORK MAC  
 %token EQ SOURCE LF 
 %token OPEN_BRACE CLOSE_BRACE OPEN_PARENTHESIS CLOSE_PARENTHESIS
 %token OPEN_SQUARE_BRACE CLOSE_SQUARE_BRACE STAR
@@ -275,7 +275,7 @@ processs: processs process
 		}			
 	;
 
-process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlines module newlines module newlines module newlines CLOSE_BRACE newlines
+process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlines module newlines module newlines CLOSE_BRACE newlines
 		{
 			/* process node */
 			$$		= calloc(1, sizeof(struct confnode));
@@ -315,15 +315,6 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 			$$->mac->lib->used 	= 1;
 
 
-			/* link radio module */
-			if (($12 == NULL) || ($12->type != TYPE_RADIO)) {
-				fprintf(stderr, "Undefined radio module in %s\n", $2->name);
-				yyerror("expecting radio module");
-			}
-			$$->radio		= $12;
-			$$->radio_params	= $12->params;
-			$$->radio->lib->used 	= 1;
-
 			$2->value	= conf_id_counter;
 
 			if ($1 == TYPE_PROCESS_EVENT) {
@@ -338,11 +329,9 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 			$$->app_id_value = conf_id_counter * F_LAYERS + F_APPLICATION; 	
 			$$->net_id_value = conf_id_counter * F_LAYERS + F_NETWORK; 	
 			$$->mac_id_value = conf_id_counter * F_LAYERS + F_MAC; 	
-			$$->radio_id_value = conf_id_counter * F_LAYERS + F_RADIO; 	
 			$$->app_id_name = conf_module_name($$->name, $$->app->lib->name);
 			$$->net_id_name = conf_module_name($$->name, $$->net->lib->name);
 			$$->mac_id_name = conf_module_name($$->name, $$->mac->lib->name);
-			$$->radio_id_name = conf_module_name($$->name, $$->radio->lib->name);
 
 			conftab[conf_id_counter].conf = $$;
 
@@ -669,13 +658,6 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_typ
                                 $4->id = 0;
 				break;
                         
-			case TYPE_RADIO:
-                                /* radio */
-                                $4->type = TYPE_RADIO;
-				$4->used = 0;
-                                $4->id = 0;
-				break;
-                       
 			default:
 				printf("UNKNOWN TYPE\n"); 
 			}
@@ -687,7 +669,6 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_typ
 module_type: APPLICATION 	{ $$ = TYPE_APPLICATION; }
         | NETWORK 		{ $$ = TYPE_NETWORK; }
         | MAC 			{ $$ = TYPE_MAC; }
-        | RADIO 		{ $$ = TYPE_RADIO; }
 	| SOURCE 		{ $$ = TYPE_EVENT; }
 	|			{ $$ = TYPE_UNKNOWN; }
         ;
@@ -1094,7 +1075,7 @@ initialize(void) {
 	char *keywords[] = {"configuration", "start", "use", "application",
 			"network", "source", "event-condition", "from", "goto",
 			"conf", "event", "on", "off", "process", "state",
-			"mac", "radio", // new keywords
+			"mac", "am", // new keywords
 			"when", "event"};
 	
 	/* size of the keywords set */

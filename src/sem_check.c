@@ -224,34 +224,6 @@ checkConfiguration(struct confnode* c) {
                         goto mac_err;
         }
 
-	/** 
-	check for undeclared network 
-	*/
-	if (c->radio == NULL || c->radio->type == TYPE_UNKNOWN || c->radio->lib == NULL)
-		goto radio_err;
-
-        /* check for undeclared radio */
-        if (c->radio->type == TYPE_KEYWORD) {
-		if (c->radio->lib == NULL)
-			goto radio_err;
-
-                /* loop */
-                found = 0;
-                for (sp = symtab; sp < &symtab[NSYMS]; sp++)
-                        if (sp->name &&
-                                !strcmp(sp->name, c->radio->lib->def))
-                                if (sp->type && (sp->type == TYPE_RADIO)) {
-                                        /* found */
-                                        found = 1;
-                                        break;
-                                }
-
-                /* undeclared radio */
-                if (!found)
-                        goto radio_err;
-        }
-
-
 	/* check if states are defined */
 
 	if (state_defined == 0) {
@@ -283,13 +255,6 @@ net_err:
 
 mac_err:
 	(void)fprintf(stderr, "error: undeclared mac in configuration %s\n",
-			c->id->name);
-
-        /* terminate */
-        exit(1);
-
-radio_err:
-	(void)fprintf(stderr, "error: undeclared radio in configuration %s\n",
 			c->id->name);
 
         /* terminate */
@@ -376,11 +341,6 @@ checkConfigurationModules(struct confnode *c) {
 	check mac module params 
 	*/
 	checkSingleModule(c, c->mac, &(c->mac_params), c->mac->lib->params);
-
-	/** 
-	check radio module params 
-	*/
-	checkSingleModule(c, c->radio, &(c->radio_params), c->radio->lib->params);
 }
 
 /** 
