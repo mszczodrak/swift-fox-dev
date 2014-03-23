@@ -344,11 +344,6 @@ void generateFennecEngineC() {
 					conftab[i].conf->mac->lib->name, 
 					conftab[i].conf->id->name,
 					conftab[i].conf->radio->lib->name);
-		fprintf(fp, "%s_%s.Ieee154PacketLayer <- %s_%s.Ieee154PacketLayer;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->mac->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->radio->lib->name);
 		fprintf(fp, "\n");
 	}
 
