@@ -1,0 +1,59 @@
+uint16_t src_node = 0xFFFF
+uint16_t dest_node = 2
+uint16_t event_src = 1
+
+process system_control { StateSync()
+	nullNet()
+	nullMac()
+	cc2420x(26, 31)
+	# channel, power, ack, crc
+}
+
+process count {
+	counter(5, 1024, src_node, dest_node)
+	ctp(dest_node)
+	csma()
+	cc2420x(26, 31, 0)
+	# channel, power, lpl
+}
+
+process red { blink(1, 1024)
+	nullNet() 
+	nullMac()
+	nullRadio()
+}
+
+process yellow { blink(2, 1024)
+	nullNet() 
+	nullMac()
+	nullRadio()
+}
+
+event tiMo { timerMilliE(8500, event_src)
+	nullNet()
+	nullMac()
+	nullRadio()
+}
+
+event tiMo2  { timerMilliE(5000, event_src)
+	nullNet()
+	nullMac()
+	nullRadio()
+}
+
+event tiMo3  { timerMilliE(300000, event_src)
+	nullNet()
+	nullMac()
+	nullRadio()
+}
+
+state led1 l 3 { red }
+state led2 { yellow }
+state counter { count }
+
+from led1 goto led2 when tiMo
+from led2 goto counter when tiMo2
+from counter goto led1 when tiMo3
+
+start led1
+
