@@ -61,7 +61,6 @@ void generateFennecEngineC() {
 	fprintf(fp, "components FennecC;\n");
   	fprintf(fp, "FennecEngineP.Fennec -> FennecC;\n\n");
 
-
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_MAC) {
 			fprintf(fp, "components %sC;\n",
@@ -278,7 +277,8 @@ void generateFennecEngineP() {
 							type_name(pt->type), 
 							mp->lib->name, 
 							pt->name);
-						fprintf(fp, "\tprocess_t process_id = 0;\n");
+						fprintf(fp, "\tprocess_t process_id = call Fennec.getProcessIdFromAM(%s);\n",
+							mp->id_name);
 					} else {
 						fprintf(fp, "command %s %sParams.get_%s[process_t process_id]() {\n",
 							type_name(pt->type), 
@@ -297,8 +297,8 @@ void generateFennecEngineP() {
 							pt->name, 
 							type_name(pt->type), 
 							pt->name);
-						fprintf(fp, "\tprocess_t process_id = 0;\n");
-
+						fprintf(fp, "\tprocess_t process_id = call Fennec.getProcessIdFromAM(%s);\n",
+							mp->id_name);
 					} else {
 						fprintf(fp, "command error_t %sParams.set_%s[process_t process_id](%s new_%s) {\n",
 							mp->lib->name, 
@@ -306,7 +306,6 @@ void generateFennecEngineP() {
 							type_name(pt->type), 
 							pt->name);
 					}
-
 
 					fprintf(fp, "\treturn SUCCESS;\n");
 					fprintf(fp, "}\n\n");
