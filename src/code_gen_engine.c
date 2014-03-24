@@ -368,6 +368,13 @@ void generateFennecEngineP() {
 						type_name(pt->type), 
 						mp->lib->name, 
 						pt->name);
+//					fprintf(fp, "\treturn ((%s*)(getParams(%s))).%s;\n",
+//						type_name(pt->type), 
+//						mp->lib->name, 
+//						pt->name);
+							
+
+
 					fprintf(fp, "}\n\n");
 					fprintf(fp, "command error_t %s_Params.set_%s(%s new_%s) {\n",
 						mp->lib->name, 

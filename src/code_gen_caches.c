@@ -132,8 +132,11 @@ void define_processes() {
 		fprintf(fp, "\t\t.process_id = %s, \t/* %d */\n",
 				conftab[i].conf->id_name, conftab[i].conf->counter);
 		fprintf(fp, "\t\t.application = %s,\n", conftab[i].conf->app_id_name);
+		fprintf(fp, "\t\t.application_params = &%s_ptr,\n", conftab[i].conf->app_id_name);
 		fprintf(fp, "\t\t.network = %s,\n", conftab[i].conf->net_id_name);
-		fprintf(fp, "\t\t.mac = %s\n", conftab[i].conf->mac_id_name);
+		fprintf(fp, "\t\t.network_params = &%s_ptr,\n", conftab[i].conf->net_id_name);
+		fprintf(fp, "\t\t.mac = %s,\n", conftab[i].conf->mac_id_name);
+		fprintf(fp, "\t\t.mac_params = &%s_ptr\n", conftab[i].conf->mac_id_name);
 		fprintf(fp, "\t}\n");
 		if (i+1 < conf_id_counter) {
 			fprintf(fp, "\t,\n");
