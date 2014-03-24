@@ -69,7 +69,7 @@ void generateFennecEngineC() {
 			fprintf(fp, "FennecEngineP.%s_Control -> %sC;\n",
 					mp->lib->name,
 					mp->lib->name);
-			fprintf(fp, "FennecEngineP.%s_Params <- %sC.%sParams;\n", 
+			fprintf(fp, "FennecEngineP.%sParams <- %sC.%sParams;\n", 
 					mp->lib->name,
 					mp->lib->name,
 					mp->lib->name);
@@ -91,9 +91,9 @@ void generateFennecEngineC() {
 					conftab[i].conf->app->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_Params <- %s_%s.%sParams;\n",
-					conftab[i].conf->id->name,
+      		fprintf(fp, "FennecEngineP.%sParams[%d] <- %s_%s.%sParams;\n",
 					conftab[i].conf->app->lib->name,
+					conftab[i].conf->counter,
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name, 
 					conftab[i].conf->app->lib->name);
@@ -110,9 +110,9 @@ void generateFennecEngineC() {
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name); 
-      		fprintf(fp, "FennecEngineP.%s_%s_Params <- %s_%s.%sParams;\n", 
-					conftab[i].conf->id->name,
+      		fprintf(fp, "FennecEngineP.%sParams[%d] <- %s_%s.%sParams;\n", 
 					conftab[i].conf->net->lib->name, 
+					conftab[i].conf->counter,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name, 
 					conftab[i].conf->net->lib->name);
@@ -227,10 +227,23 @@ void generateFennecEngineP() {
 					mp->lib->name);
 			fprintf(fp, "uses interface SplitControl as %s_Control;\n",
 					mp->lib->name);
-      			fprintf(fp, "provides interface %sParams as %s_Params;\n", 
-					mp->lib->name,
+      			fprintf(fp, "provides interface %sParams;\n", 
 					mp->lib->name);
                 }
+
+		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_NETWORK) {
+      			fprintf(fp, "provides interface %sParams[process_t process_id];\n", 
+					mp->lib->name);
+		}
+
+		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_APPLICATION) {
+      			fprintf(fp, "provides interface %sParams[process_t process_id];\n", 
+					mp->lib->name);
+		}
+
+
+
+
         }
 
 
@@ -244,17 +257,9 @@ void generateFennecEngineP() {
       		fprintf(fp, "uses interface SplitControl as %s_%s_Control;\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
-      		fprintf(fp, "provides interface %sParams as %s_%s_Params;\n", 
-					conftab[i].conf->app->lib->name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
     		fprintf(fp, "/* Network Module %s */\n",
 					conftab[i].conf->net->lib->name);
 		fprintf(fp, "uses interface SplitControl as %s_%s_Control;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "provides interface %sParams as %s_%s_Params;\n", 
-					conftab[i].conf->net->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
 
@@ -356,15 +361,16 @@ void generateFennecEngineP() {
 			fprintf(fp, "\tmodule_stopDone(err);\n");
 			fprintf(fp, "}\n\n");
 
+
 			/* check if the interface is empty, if it is add dummy call */
 			if (mp->lib->params == NULL) {
-				fprintf(fp, "command void %s_Params.dummy() {}\n",
+				fprintf(fp, "command void %sParams.dummy() {}\n",
 						mp->lib->name);
 			} else {
 	
 				for (pt = mp->lib->params; pt != NULL; pt = pt->child ) {
 	
-					fprintf(fp, "command %s %s_Params.get_%s() {\n",
+					fprintf(fp, "command %s %sParams.get_%s() {\n",
 						type_name(pt->type), 
 						mp->lib->name, 
 						pt->name);
@@ -376,7 +382,7 @@ void generateFennecEngineP() {
 
 
 					fprintf(fp, "}\n\n");
-					fprintf(fp, "command error_t %s_Params.set_%s(%s new_%s) {\n",
+					fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
 						mp->lib->name, 
 						pt->name, 
 						type_name(pt->type), 
@@ -386,6 +392,40 @@ void generateFennecEngineP() {
 				}
 			}
 	        }
+
+		if (mp->lib != NULL && mp->lib->path && mp->lib->used && (mp->type == TYPE_NETWORK || mp->type == TYPE_APPLICATION)) {
+
+			/* check if the interface is empty, if it is add dummy call */
+			if (mp->lib->params == NULL) {
+				fprintf(fp, "command void %sParams.dummy[process_t process_id]() {}\n",
+						mp->lib->name);
+			} else {
+	
+				for (pt = mp->lib->params; pt != NULL; pt = pt->child ) {
+	
+					fprintf(fp, "command %s %sParams.get_%s[process_t process_id]() {\n",
+						type_name(pt->type), 
+						mp->lib->name, 
+						pt->name);
+//					fprintf(fp, "\treturn ((%s*)(getParams(%s))).%s;\n",
+//						type_name(pt->type), 
+//						mp->lib->name, 
+//						pt->name);
+							
+
+
+					fprintf(fp, "}\n\n");
+					fprintf(fp, "command error_t %sParams.set_%s[process_t process_id](%s new_%s) {\n",
+						mp->lib->name, 
+						pt->name, 
+						type_name(pt->type), 
+						pt->name);
+					fprintf(fp, "\treturn SUCCESS;\n");
+		        	        fprintf(fp, "}\n\n");
+				}
+			}
+		}
+
 
         }
 
@@ -410,38 +450,6 @@ void generateFennecEngineP() {
 
 		fprintf(fp, "\t/* Parameter Interface */\n\n");	
 
-		/* check if the interface is empty, if it is add dummy call */
-		if (conftab[i].conf->app->lib->params == NULL) {
-			fprintf(fp, "command void %s_%s_Params.dummy() {}\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		}
-
-		for(pt = conftab[i].conf->app->lib->params; pt != NULL; pt = pt->child ) {
-			fprintf(fp, "command %s %s_%s_Params.get_%s() {\n",
-					type_name(pt->type), 
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name, 
-					pt->name);
-			fprintf(fp, "\treturn *(%s_ptr.%s);\n",
-					conftab[i].conf->app_id_name,
-					pt->name);
-			fprintf(fp, "}\n\n");
-
-			fprintf(fp, "command error_t %s_%s_Params.set_%s(%s new_%s) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name, 
-					pt->name, 
-					type_name(pt->type), 
-					pt->name);
-			fprintf(fp, "\t*(%s_ptr.%s) = new_%s;\n", 
-					conftab[i].conf->app_id_name,
-					pt->name,
-					pt->name);
-			fprintf(fp, "\treturn SUCCESS;\n");
-	                fprintf(fp, "}\n\n");
-	        }
-
 		fprintf(fp, "event void %s_%s_Control.startDone(error_t err) {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
@@ -455,40 +463,6 @@ void generateFennecEngineP() {
 
 
 		fprintf(fp, "\t/* Parameter Interfaces */\n\n");	
-
-		/* check if the interface is empty, if it is add dummy call */
-		if (conftab[i].conf->net->lib->params == NULL) {
-			fprintf(fp, "command void %s_%s_Params.dummy() {}\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-		}
-
-		for(pt = conftab[i].conf->net->lib->params; pt != NULL; pt = pt->child ) {
-			fprintf(fp, "command %s %s_%s_Params.get_%s() {\n",
-					type_name(pt->type), 
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name, 
-					pt->name);
-			fprintf(fp, "\treturn *(%s_ptr.%s);\n",
-					conftab[i].conf->net_id_name,
-					pt->name);
-			fprintf(fp, "}\n\n");
-			fprintf(fp, "command error_t %s_%s_Params.set_%s(%s new_%s) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name, 
-					pt->name, 
-					type_name(pt->type), 
-					pt->name);
-			fprintf(fp, "\t*(%s_ptr.%s) = new_%s;\n", 
-					conftab[i].conf->net_id_name,
-					pt->name,
-					pt->name);
-			fprintf(fp, "\treturn SUCCESS;\n");
-	                fprintf(fp, "}\n\n");
-	        }
-
-
-
 
 
 /* Interfaces with Macs */
