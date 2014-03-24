@@ -973,6 +973,8 @@ proc_module(char *s) {
 			mp->lib = sp->lib;
 			mp->params = NULL;
 			mp->name = strdup(sp->lib->name);
+			mp->id = ++module_id_counter;
+			mp->id_name = conf_module_name(mp->name, "module");
 			for(c = mp->name; *c != '\0'; c++ ) {
 				*c = toupper(*c);
 			}

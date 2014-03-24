@@ -171,6 +171,8 @@ struct evtab *evlook(char *);
 struct modtab {
 	char			*name;
         int            		type;
+	int			id;
+	char			*id_name;
         struct libtab   	*lib;
 	struct paramvalue	*params;
 } modtab[NMODS];

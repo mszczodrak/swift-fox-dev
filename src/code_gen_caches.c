@@ -47,6 +47,7 @@ void define_modules() {
 	char *full_path = get_sfc_path("", "ff_modules.h");
 	FILE *fp = fopen(full_path, "w");
 	int i;
+	struct modtab *mp;
 
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write \
@@ -58,30 +59,26 @@ void define_modules() {
 	fprintf(fp, "#ifndef __FF_MODULES_H__\n");
 	fprintf(fp, "#define __FF_MODULES_H__\n\n");
 
+
+        for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
+                if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
+			fprintf(fp, "/* %s module located at %s */\n",
+				mp->lib->name,
+				mp->lib->path);
+                        fprintf(fp, "#define %s\t%d\n\n", mp->id_name, mp->id);
+                }
+        }
+        fprintf(fp, "\n");
+
 	for( i = 0; i < conf_id_counter; i++ ) {
-		fprintf(fp, "/* %s for process %s\n"
-				"Computation module located at %s */\n",
-			conftab[i].conf->app->lib->name,
-			conftab[i].conf->id->name,
-			conftab[i].conf->app->lib->path);
-		fprintf(fp, "#define %s\t%d\n\n",
+			fprintf(fp, "#define %s\t%d\n\n",
 			conftab[i].conf->app_id_name,
 			conftab[i].conf->app_id_value);
 
-		fprintf(fp, "/* %s for process %s\n"
-				"Network module located at %s */\n",
-			conftab[i].conf->net->lib->name,
-			conftab[i].conf->id->name,
-			conftab[i].conf->net->lib->path);
 		fprintf(fp, "#define %s\t%d\n\n",
 			conftab[i].conf->net_id_name,
 			conftab[i].conf->net_id_value);
 
-		fprintf(fp, "/* %s for process %s\n"
-				"MAC module located at %s */\n",
-			conftab[i].conf->mac->lib->name,
-			conftab[i].conf->id->name,
-			conftab[i].conf->mac->lib->path);
 		fprintf(fp, "#define %s\t%d\n\n",
 			conftab[i].conf->mac_id_name,
 			conftab[i].conf->mac_id_value);
@@ -133,10 +130,15 @@ void define_processes() {
 				conftab[i].conf->id_name, conftab[i].conf->counter);
 		fprintf(fp, "\t\t.application = %s,\n", conftab[i].conf->app_id_name);
 		fprintf(fp, "\t\t.application_params = &%s_ptr,\n", conftab[i].conf->app_id_name);
+		fprintf(fp, "\t\t.application_module = %s,\n", conftab[i].conf->app->id_name);
+
 		fprintf(fp, "\t\t.network = %s,\n", conftab[i].conf->net_id_name);
 		fprintf(fp, "\t\t.network_params = &%s_ptr,\n", conftab[i].conf->net_id_name);
+		fprintf(fp, "\t\t.network_module = %s,\n", conftab[i].conf->net->id_name);
+
 		fprintf(fp, "\t\t.mac = %s,\n", conftab[i].conf->mac_id_name);
-		fprintf(fp, "\t\t.mac_params = &%s_ptr\n", conftab[i].conf->mac_id_name);
+		fprintf(fp, "\t\t.mac_params = &%s_ptr,\n", conftab[i].conf->mac_id_name);
+		fprintf(fp, "\t\t.mac_module = %s\n", conftab[i].conf->mac->id_name);
 		fprintf(fp, "\t}\n");
 		if (i+1 < conf_id_counter) {
 			fprintf(fp, "\t,\n");
