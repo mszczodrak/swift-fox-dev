@@ -66,8 +66,8 @@ void generateFennecEngineC() {
 		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_MAC) {
 			fprintf(fp, "components %sC;\n",
 					mp->lib->name);
-			fprintf(fp, "FennecEngineP.%s_Control -> %sC;\n",
-					mp->lib->name,
+			fprintf(fp, "FennecEngineP.SplitControl[%s] -> %sC;\n",
+					mp->id_name,
 					mp->lib->name);
 			fprintf(fp, "FennecEngineP.%sParams <- %sC.%sParams;\n", 
 					mp->lib->name,
@@ -86,9 +86,8 @@ void generateFennecEngineC() {
 					conftab[i].conf->counter,
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_Control -> %s_%s;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name,
+      		fprintf(fp, "FennecEngineP.SplitControl[%d] -> %s_%s;\n",
+					conftab[i].conf->counter,
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
       		fprintf(fp, "FennecEngineP.%sParams[%d] <- %s_%s.%sParams;\n",
@@ -105,9 +104,8 @@ void generateFennecEngineC() {
 					conftab[i].conf->counter,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "FennecEngineP.%s_%s_Control -> %s_%s;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name,
+      		fprintf(fp, "FennecEngineP.SplitControl[%d] -> %s_%s;\n",
+					conftab[i].conf->counter,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name); 
       		fprintf(fp, "FennecEngineP.%sParams[%d] <- %s_%s.%sParams;\n", 
@@ -221,11 +219,11 @@ void generateFennecEngineP() {
   	fprintf(fp, "uses interface Fennec;\n\n");
 
 
+	fprintf(fp, "uses interface SplitControl[module_t module_id];\n");
+
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_MAC) {
     			fprintf(fp, "/* MAC Module %s */\n",
-					mp->lib->name);
-			fprintf(fp, "uses interface SplitControl as %s_Control;\n",
 					mp->lib->name);
       			fprintf(fp, "provides interface %sParams;\n", 
 					mp->lib->name);
@@ -247,29 +245,6 @@ void generateFennecEngineP() {
         }
 
 
-
-	for( i = 0; i < conf_id_counter; i++ ) {
-    		fprintf(fp, "/* Process %s with id: %d  */\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->counter);
-    		fprintf(fp, "/* Application Module %s */\n",
-					conftab[i].conf->app->lib->name);
-      		fprintf(fp, "uses interface SplitControl as %s_%s_Control;\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-    		fprintf(fp, "/* Network Module %s */\n",
-					conftab[i].conf->net->lib->name);
-		fprintf(fp, "uses interface SplitControl as %s_%s_Control;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-
-		fprintf(fp, "\n\n");
-	}
-
-
-
-
-
 	fprintf(fp,"}\n\n");
 	fprintf(fp,"implementation {\n\n");
 
@@ -285,82 +260,31 @@ void generateFennecEngineP() {
 
 	fprintf(fp,"command error_t ModuleCtrl.start(module_t module_id) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine ModuleCtrl.start(%%d)\", module_id);\n");
-	fprintf(fp,"\tswitch(module_id) {\n\n");
-
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->app_id_name);
-		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"[-] FennecEngine call %s_%s_Control.start()\");\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp, "\t\treturn call %s_%s_Control.start();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->net_id_name);
-		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"[-] FennecEngine call %s_%s_Control.start()\");\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-		fprintf(fp, "\t\treturn call %s_%s_Control.start();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
-		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"[-] FennecEngine call %s_Control.start()\");\n",
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\t\treturn call %s_Control.start();\n\n",
-					conftab[i].conf->mac->lib->name);
-	}
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"\treturn FAIL;\n");
+	fprintf(fp,"\treturn call SplitControl.start[module_id]();\n\n");
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"command error_t ModuleCtrl.stop(module_t module_id) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine ModuleCtrl.stop(%%d)\", module_id);\n");
-
-	fprintf(fp,"\tswitch(module_id) {\n\n");
-	for( i = 0; i < conf_id_counter; i++ ) {
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->app_id_name);
-		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"[-] FennecEngine call %s_%s_Control.stop()\");\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp, "\t\treturn call %s_%s_Control.stop();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->net_id_name);
-		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"[-] FennecEngine call %s_%s_Control.stop()\");\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-		fprintf(fp, "\t\treturn call %s_%s_Control.stop();\n\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-
-                fprintf(fp, "\tcase %s:\n", conftab[i].conf->mac_id_name);
-		fprintf(fp, "\t\tdbg(\"FennecEngine\", \"[-] FennecEngine call %s_Control.stop()\");\n",
-					conftab[i].conf->mac->lib->name);
-		fprintf(fp, "\t\treturn call %s_Control.stop();\n\n",
-					conftab[i].conf->mac->lib->name);
-	}
-	fprintf(fp,"\t}\n");
-	fprintf(fp,"\treturn FAIL;\n");
+	fprintf(fp,"\treturn call SplitControl.stop[module_id]();\n\n");
 	fprintf(fp,"}\n\n");
 
 	struct paramtype *pt;
 
 	/* Interfaces with Computations */
 
+	fprintf(fp, "event void SplitControl.startDone[module_t module_id](error_t err) {\n");
+	fprintf(fp, "\tmodule_startDone(err);\n");
+	fprintf(fp, "}\n\n");
+	fprintf(fp, "event void SplitControl.stopDone[module_t module_id](error_t err) {\n");
+	fprintf(fp, "\tmodule_stopDone(err);\n");
+	fprintf(fp, "}\n\n");
+
+
+
+
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_MAC) {
-			fprintf(fp, "event void %s_Control.startDone(error_t err) {\n",
-					mp->lib->name);
-			fprintf(fp, "\tmodule_startDone(err);\n");
-			fprintf(fp, "}\n\n");
-			fprintf(fp, "event void %s_Control.stopDone(error_t err) {\n",
-					mp->lib->name);
-			fprintf(fp, "\tmodule_stopDone(err);\n");
-			fprintf(fp, "}\n\n");
-
 
 			/* check if the interface is empty, if it is add dummy call */
 			if (mp->lib->params == NULL) {
@@ -427,47 +351,10 @@ void generateFennecEngineP() {
 		}
 
 
-        }
-
-
-	for( i = 0; i < conf_id_counter; i++ ) {
-
-		fprintf(fp, "\n/* Linking Computation %s */\n",
-					conftab[i].conf->app->lib->name);
-
-		fprintf(fp, "\t/* Module Control Interface */\n\n");	
-
-		fprintf(fp, "event void %s_%s_Control.startDone(error_t err){\n", 
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp, "\tmodule_startDone(err);\n");
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "event void %s_%s_Control.stopDone(error_t err) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name);
-		fprintf(fp, "\tmodule_stopDone(err);\n");
-		fprintf(fp, "}\n\n");
-
-		fprintf(fp, "\t/* Parameter Interface */\n\n");	
-
-		fprintf(fp, "event void %s_%s_Control.startDone(error_t err) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-		fprintf(fp, "\tmodule_startDone(err);\n");
-		fprintf(fp, "}\n\n");
-		fprintf(fp, "event void %s_%s_Control.stopDone(error_t err) {\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
-		fprintf(fp, "\tmodule_stopDone(err);\n");
-		fprintf(fp, "}\n\n");
-
-
-		fprintf(fp, "\t/* Parameter Interfaces */\n\n");	
-
-
-/* Interfaces with Macs */
-
 	}
+
+	fprintf(fp, "default command error_t SplitControl.start[module_t module_id]() { return FAIL; }\n");
+	fprintf(fp, "default command error_t SplitControl.stop[module_t module_id]() { return FAIL; }\n");
 
 	fprintf(fp, "\n}\n");
 	fclose(fp);
