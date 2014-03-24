@@ -201,27 +201,27 @@ checkConfiguration(struct confnode* c) {
 	}
 	
 	/** 
-	check for undeclared mac 
+	check for undeclared am 
 	*/
-	if (c->mac == NULL || c->mac->type == TYPE_UNKNOWN || c->mac->lib == NULL)
-		goto mac_err;
+	if (c->am == NULL || c->am->type == TYPE_UNKNOWN || c->am->lib == NULL)
+		goto am_err;
 
-        /* check for undeclared mac */
-        if (c->mac->type == TYPE_KEYWORD) {
+        /* check for undeclared am */
+        if (c->am->type == TYPE_KEYWORD) {
                 /* loop */
                 found = 0;
                 for (sp = symtab; sp < &symtab[NSYMS]; sp++)
                         if (sp->name &&
-                                !strcmp(sp->name, c->mac->lib->def))
-                                if (sp->type && (sp->type == TYPE_MAC)) {
+                                !strcmp(sp->name, c->am->lib->def))
+                                if (sp->type && (sp->type == TYPE_AM)) {
                                         /* found */
                                         found = 1;
                                         break;
                                 }
 
-                /* undeclared mac */
+                /* undeclared am */
                 if (!found)
-                        goto mac_err;
+                        goto am_err;
         }
 
 	/* check if states are defined */
@@ -253,8 +253,8 @@ net_err:
 	/* terminate */
 	exit(1);
 
-mac_err:
-	(void)fprintf(stderr, "error: undeclared mac in configuration %s\n",
+am_err:
+	(void)fprintf(stderr, "error: undeclared am in configuration %s\n",
 			c->id->name);
 
         /* terminate */
@@ -338,9 +338,9 @@ checkConfigurationModules(struct confnode *c) {
 	checkSingleModule(c, c->net, &(c->net_params), c->net->lib->params);
 
 	/** 
-	check mac module params 
+	check am module params 
 	*/
-	checkSingleModule(c, c->mac, &(c->mac_params), c->mac->lib->params);
+	checkSingleModule(c, c->am, &(c->am_params), c->am->lib->params);
 }
 
 /** 

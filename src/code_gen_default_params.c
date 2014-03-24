@@ -108,13 +108,13 @@ void generateDefaultParams() {
                 fprintf(fp, "};\n\n");
 
 		/** 
-		mac default parameter values 
+		am default parameter values 
 		*/
                 fprintf(fp, "struct %s_params %s_params = {\n",
-                        conftab[i].conf->mac->lib->name,
-			conftab[i].conf->mac_id_name);
+                        conftab[i].conf->am->lib->name,
+			conftab[i].conf->am_id_name);
 
-                for (pv = conftab[i].conf->mac_params; pv != NULL; ) {
+                for (pv = conftab[i].conf->am_params; pv != NULL; ) {
                         fprintf(fp, "\t%f", pv->num_value);
                         
                         pv = pv->child;         
@@ -189,18 +189,18 @@ void generateDefaultParams() {
                 fprintf(fp, "};\n\n");
 
 		/** 
-		mac default parameter values 
+		am default parameter values 
 		*/
                 fprintf(fp, "struct %s_params_ptr %s_ptr = {\n",
-                        conftab[i].conf->mac->lib->name,
-			conftab[i].conf->mac_id_name);
+                        conftab[i].conf->am->lib->name,
+			conftab[i].conf->am_id_name);
 
-                for (pv = conftab[i].conf->mac_params, pt = conftab[i].conf->mac->lib->params;
+                for (pv = conftab[i].conf->am_params, pt = conftab[i].conf->am->lib->params;
 			pv != NULL && pt != NULL; pv = pv->child) {
 			if (pv->value == NULL) {
 				/* this is fixed number so point to module's struct params */
                         	fprintf(fp, "\t&%s_params.%s",
-					conftab[i].conf->mac_id_name,
+					conftab[i].conf->am_id_name,
 					pt->name);
 			} else {
 				/* this is global variable */

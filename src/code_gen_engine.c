@@ -62,7 +62,7 @@ void generateFennecEngineC() {
   	fprintf(fp, "FennecEngineP.Fennec -> FennecC;\n\n");
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_MAC) {
+		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_AM) {
 			fprintf(fp, "components %sC;\n",
 					mp->lib->name);
 			fprintf(fp, "FennecEngineP.SplitControl[%s] -> %sC;\n",
@@ -161,34 +161,34 @@ void generateFennecEngineC() {
       		fprintf(fp, "%s_%s.MacAMSend -> %sC.MacAMSend[%s];\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
-					conftab[i].conf->mac->lib->name,
+					conftab[i].conf->am->lib->name,
 					conftab[i].conf->id_name);
       		fprintf(fp, "%s_%s.MacReceive -> %sC.MacReceive[%s];\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name, 
-					conftab[i].conf->mac->lib->name,
+					conftab[i].conf->am->lib->name,
 					conftab[i].conf->id_name);
       		fprintf(fp, "%s_%s.MacSnoop -> %sC.MacSnoop[%s];\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
-					conftab[i].conf->mac->lib->name,
+					conftab[i].conf->am->lib->name,
 					conftab[i].conf->id_name);
       		fprintf(fp, "%s_%s.MacAMPacket -> %sC.MacAMPacket;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
-					conftab[i].conf->mac->lib->name);
+					conftab[i].conf->am->lib->name);
       		fprintf(fp, "%s_%s.MacPacket -> %sC.MacPacket;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
-					conftab[i].conf->mac->lib->name);
+					conftab[i].conf->am->lib->name);
       		fprintf(fp, "%s_%s.MacPacketAcknowledgements -> %sC.MacPacketAcknowledgements;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
-					conftab[i].conf->mac->lib->name);
+					conftab[i].conf->am->lib->name);
       		fprintf(fp, "%s_%s.MacLinkPacketMetadata -> %sC.MacLinkPacketMetadata;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
-					conftab[i].conf->mac->lib->name);
+					conftab[i].conf->am->lib->name);
 		fprintf(fp, "\n");
 	}
 
@@ -221,7 +221,7 @@ void generateFennecEngineP() {
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
-			if (mp->type == TYPE_MAC) {
+			if (mp->type == TYPE_AM) {
 	      			fprintf(fp, "provides interface %sParams;\n", 
 						mp->lib->name);
 	                } else {
@@ -262,7 +262,7 @@ void generateFennecEngineP() {
 		if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
 			/* check if the interface is empty, if it is add dummy call */
 			if (mp->lib->params == NULL) {
-				if (mp->type == TYPE_MAC) {
+				if (mp->type == TYPE_AM) {
 					fprintf(fp, "command void %sParams.dummy() {}\n\n",
 						mp->lib->name);
 				} else {
@@ -271,7 +271,7 @@ void generateFennecEngineP() {
 				}
 			} else {
 				for (pt = mp->lib->params; pt != NULL; pt = pt->child ) {
-					if (mp->type == TYPE_MAC) {
+					if (mp->type == TYPE_AM) {
 						fprintf(fp, "command %s %sParams.get_%s() {\n",
 							type_name(pt->type), 
 							mp->lib->name, 
@@ -295,15 +295,15 @@ void generateFennecEngineP() {
 							mp->lib->name,
 							pt->name);
 					}
-					if (mp->type == TYPE_MAC) {
-						fprintf(fp, "\treturn *((struct %s_params_ptr*)(processes[process_id].mac_params))->%s;\n",
+					if (mp->type == TYPE_AM) {
+						fprintf(fp, "\treturn *((struct %s_params_ptr*)(processes[process_id].am_params))->%s;\n",
 							mp->lib->name,
 							pt->name);
 					}
 
 					fprintf(fp, "}\n\n");
 
-					if (mp->type == TYPE_MAC) {
+					if (mp->type == TYPE_AM) {
 						fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
 							mp->lib->name, 
 							pt->name, 

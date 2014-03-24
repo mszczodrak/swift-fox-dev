@@ -117,8 +117,8 @@ void generateParams() {
 		module_params_h(conftab[i].conf->app);
 		module_params_interface_app(conftab[i].conf->net);
 		module_params_h(conftab[i].conf->net);
-		module_params_interface_app(conftab[i].conf->mac);
-		module_params_h(conftab[i].conf->mac);
+		module_params_interface_app(conftab[i].conf->am);
+		module_params_h(conftab[i].conf->am);
 	}
 }
 

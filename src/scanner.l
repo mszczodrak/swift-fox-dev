@@ -161,10 +161,10 @@ network		{
 #ifndef __DEBUG__
 #endif
 			return NETWORK;			}
-mac         {
+am         {
 #ifndef __DEBUG__
 #endif
-                        return MAC;                 }
+                        return AM;			}
 source		{
 #ifndef __DEBUG__
 #endif

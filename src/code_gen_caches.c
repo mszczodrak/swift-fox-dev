@@ -71,7 +71,7 @@ void define_modules() {
 	for( i = 0; i < conf_id_counter; i++ ) {
 		fprintf(fp, "#define %s\t%d\n\n", conftab[i].conf->app_id_name, ++id_counter);
 		fprintf(fp, "#define %s\t%d\n\n", conftab[i].conf->net_id_name, ++id_counter);
-	//	fprintf(fp, "#define %s\t%d\n\n", conftab[i].conf->mac_id_name, ++id_counter);
+	//	fprintf(fp, "#define %s\t%d\n\n", conftab[i].conf->am_id_name, ++id_counter);
         }
         fprintf(fp, "\n");
 	fprintf(fp, "#endif\n\n");
@@ -125,10 +125,10 @@ void define_processes() {
 		fprintf(fp, "\t\t.network_params = &%s_ptr,\n", conftab[i].conf->net_id_name);
 		fprintf(fp, "\t\t.network_module = %s,\n", conftab[i].conf->net->id_name);
 
-		fprintf(fp, "\t\t.mac = %s,\n", conftab[i].conf->mac->id_name);
-		fprintf(fp, "\t\t.mac_params = &%s_ptr,\n", conftab[i].conf->mac_id_name);
-		fprintf(fp, "\t\t.mac_module = %s,\n", conftab[i].conf->mac->id_name);
-		fprintf(fp, "\t\t.mac_level = %d\n", conftab[i].conf->mac_inferior);
+		fprintf(fp, "\t\t.am = %s,\n", conftab[i].conf->am->id_name);
+		fprintf(fp, "\t\t.am_params = &%s_ptr,\n", conftab[i].conf->am_id_name);
+		fprintf(fp, "\t\t.am_module = %s,\n", conftab[i].conf->am->id_name);
+		fprintf(fp, "\t\t.am_level = %d\n", conftab[i].conf->am_inferior);
 		fprintf(fp, "\t}\n");
 		if (i+1 < conf_id_counter) {
 			fprintf(fp, "\t,\n");

@@ -97,7 +97,7 @@ int yylex(void);
 
 %token STATE CONFIGURATION COMMA EVENT 
 %token FROM GOTO START USE WHEN 
-%token APPLICATION NETWORK MAC  
+%token APPLICATION NETWORK AM  
 %token EQ SOURCE LF 
 %token OPEN_BRACE CLOSE_BRACE OPEN_PARENTHESIS CLOSE_PARENTHESIS
 %token OPEN_SQUARE_BRACE CLOSE_SQUARE_BRACE STAR EXCLAMATION
@@ -307,15 +307,15 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 			$$->net->lib->used 	= 1;
 
 
-			/* link mac module */
-			if (($11 == NULL) || ($11->type != TYPE_MAC)) {
-				fprintf(stderr, "Undefined mac module in %s\n", $2->name);
-				yyerror("expecting mac module");
+			/* link am module */
+			if (($11 == NULL) || ($11->type != TYPE_AM)) {
+				fprintf(stderr, "Undefined am module in %s\n", $2->name);
+				yyerror("expecting am module");
 			}
-			$$->mac			= $11;
-			$$->mac_params		= $11->params;
-			$$->mac_inferior	= $10;
-			$$->mac->lib->used 	= 1;
+			$$->am			= $11;
+			$$->am_params		= $11->params;
+			$$->am_inferior	= $10;
+			$$->am->lib->used 	= 1;
 
 
 			$2->value	= conf_id_counter;
@@ -331,7 +331,7 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 			$$->counter	= conf_id_counter;
 			$$->app_id_name = conf_module_name($$->name, $$->app->lib->name);
 			$$->net_id_name = conf_module_name($$->name, $$->net->lib->name);
-			$$->mac_id_name = conf_module_name($$->name, $$->mac->lib->name);
+			$$->am_id_name = conf_module_name($$->name, $$->am->lib->name);
 
 			conftab[conf_id_counter].conf = $$;
 
@@ -661,9 +661,9 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_typ
 				$4->id = 0;
 				break;
 
-			case TYPE_MAC:
-                                /* mac */
-                                $4->type = TYPE_MAC;
+			case TYPE_AM:
+                                /* am */
+                                $4->type = TYPE_AM;
 				$4->used = 0;
                                 $4->id = 0;
 				break;
@@ -678,7 +678,7 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_typ
 
 module_type: APPLICATION 	{ $$ = TYPE_APPLICATION; }
         | NETWORK 		{ $$ = TYPE_NETWORK; }
-        | MAC 			{ $$ = TYPE_MAC; }
+        | AM 			{ $$ = TYPE_AM; }
 	| SOURCE 		{ $$ = TYPE_EVENT; }
 	|			{ $$ = TYPE_UNKNOWN; }
         ;
@@ -1084,10 +1084,10 @@ void
 initialize(void) {
 
 	/* keywords set */
-	char *keywords[] = {"configuration", "start", "use", "application",
-			"network", "source", "event-condition", "from", "goto",
-			"conf", "event", "on", "off", "process", "state",
-			"mac", "am", // new keywords
+	char *keywords[] = {"start", "use", "application",
+			"network", "source", "from", "goto",
+			"on", "off", "process", "state",
+			"am", // new keywords
 			"when", "event"};
 	
 	/* size of the keywords set */

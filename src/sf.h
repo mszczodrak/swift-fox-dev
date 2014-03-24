@@ -52,7 +52,7 @@
 #define TYPE_APPLICATION	1
 #define TYPE_NETWORK		2
 #define TYPE_EVENT		3
-#define TYPE_MAC		5
+#define TYPE_AM			4
 
 #define TYPE_TYPE		8
 
@@ -87,12 +87,6 @@
 #define TEMP_DIR                "/tmp/swift_fox"
 
 #define STD_FENNEC_FOX_LIB	"support/sfc/fennec.sfl"
-
-#define F_APPLICATION		1
-#define F_NETWORK		2
-#define F_MAC			3
-#define F_LAYERS		4
-
 
 #define UNKNOWN			-1
 
@@ -185,14 +179,14 @@ struct confnode {
 	char			*name;
 	struct modtab		*app;
 	struct modtab		*net;
-	struct modtab		*mac;
+	struct modtab		*am;
 	struct paramvalue	*app_params;
 	struct paramvalue	*net_params;
-	struct paramvalue	*mac_params;
+	struct paramvalue	*am_params;
 	char			*app_id_name;
 	char			*net_id_name;
-	char			*mac_id_name;
-	int			mac_inferior;			
+	char			*am_id_name;
+	int			am_inferior;			
 	int			counter;
 	char			*id_name;
 	int			daemon;
