@@ -281,13 +281,9 @@ void generateFennecEngineP() {
 							type_name(pt->type), 
 							mp->lib->name, 
 							pt->name);
-//					fprintf(fp, "\treturn ((%s*)(getParams(%s))).%s;\n",
-//						type_name(pt->type), 
-//						mp->lib->name, 
-//						pt->name);
-							
-
-	
+						fprintf(fp, "\treturn ((struct %s*)processes[0].mac_params)->%s;\n",
+							mp->name,
+							pt->name);
 						fprintf(fp, "}\n\n");
 						fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
 							mp->lib->name, 
@@ -298,11 +294,11 @@ void generateFennecEngineP() {
 			        	        fprintf(fp, "}\n\n");
 					} else {
 
-					fprintf(fp, "command %s %sParams.get_%s[process_t process_id]() {\n",
-						type_name(pt->type), 
-						mp->lib->name, 
-						pt->name);
-//					fprintf(fp, "\treturn ((%s*)(getParams(%s))).%s;\n",
+//						fprintf(fp, "command %s %sParams.get_%s[process_t process_id]() {\n",
+//							type_name(pt->type), 
+//							mp->lib->name, 
+//							pt->name);
+//						fprintf(fp, "\treturn ((struct %s*)processes[process_id] (getParams(%s))).%s;\n",
 //						type_name(pt->type), 
 //						mp->lib->name, 
 //						pt->name);
