@@ -266,10 +266,10 @@ void generateFennecEngineP() {
 			/* check if the interface is empty, if it is add dummy call */
 			if (mp->lib->params == NULL) {
 				if (mp->type == TYPE_MAC) {
-					fprintf(fp, "command void %sParams.dummy() {}\n",
+					fprintf(fp, "command void %sParams.dummy() {}\n\n",
 						mp->lib->name);
 				} else {
-					fprintf(fp, "command void %sParams.dummy[process_t process_id]() {}\n",
+					fprintf(fp, "command void %sParams.dummy[process_t process_id]() {}\n\n",
 						mp->lib->name);
 				}
 
@@ -281,7 +281,7 @@ void generateFennecEngineP() {
 							type_name(pt->type), 
 							mp->lib->name, 
 							pt->name);
-						fprintf(fp, "process_t process_id = 0\n");
+						fprintf(fp, "\tprocess_t process_id = 0;\n");
 					} else {
 						fprintf(fp, "command %s %sParams.get_%s[process_t process_id]() {\n",
 							type_name(pt->type), 
@@ -300,7 +300,7 @@ void generateFennecEngineP() {
 							pt->name, 
 							type_name(pt->type), 
 							pt->name);
-						fprintf(fp, "process_t process_id = 0\n");
+						fprintf(fp, "\tprocess_t process_id = 0;\n");
 
 					} else {
 						fprintf(fp, "command error_t %sParams.set_%s[process_t process_id](%s new_%s) {\n",
@@ -313,7 +313,7 @@ void generateFennecEngineP() {
 
 					fprintf(fp, "\treturn SUCCESS;\n");
 					fprintf(fp, "}\n\n");
-					}
+					
 				}
 
 			}
