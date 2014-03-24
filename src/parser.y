@@ -116,10 +116,10 @@ int yylex(void);
 %token <modp>	MODULES
 %type <modp>	module
 %type <confp>	process
-%type <confsp>	processs
+%type <confsp>	processes
 %type <confid>	conf_id
 %type <confids> conf_ids
-%type <confsp>	defined_processs
+%type <confsp>	defined_processes
 %type <statep>	state
 %type <statesp>	states
 %type <statesp>	defined_states
@@ -164,7 +164,7 @@ swiftfox: library program
 		}
 	;
 
-program: global_variables defined_processs defined_states policies initial_process 
+program: global_variables defined_processes defined_states policies initial_process 
 		{
 			/* root node */
 			$$		= calloc(1, sizeof(struct program));
@@ -241,9 +241,9 @@ assign_value: RELOP CONSTANT
 	; 
 
 
-defined_processs: processs process
+defined_processes: processes process
 		{
-			/* processs set */
+			/* processes set */
 			$$		= calloc(1, sizeof(struct confnodes));
 			
 			/* link the child nodes */
@@ -256,9 +256,9 @@ defined_processs: processs process
 		}	
 	;
 
-processs: processs process
+processes: processes process
 		{
-			/* processs set */
+			/* processes set */
 			$$		= calloc(1, sizeof(struct confnodes));
 			
 			/* link the child nodes */

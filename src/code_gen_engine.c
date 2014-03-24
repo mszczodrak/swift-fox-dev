@@ -268,14 +268,14 @@ void generateFennecEngineP() {
 	fprintf(fp,"}\n\n");
 	fprintf(fp,"implementation {\n\n");
 
-	fprintf(fp,"void module_startDone(module_t module_id, error_t error) {\n");
+	fprintf(fp,"void module_startDone(error_t error) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine module_startDone(%%d, %%d)\", module_id, error);\n");
-	fprintf(fp,"\tsignal ModuleCtrl.startDone(module_id, error);\n");
+	fprintf(fp,"\tsignal ModuleCtrl.startDone(error);\n");
 	fprintf(fp,"}\n\n");
 
-	fprintf(fp,"void module_stopDone(module_t module_id, error_t error) {\n");
+	fprintf(fp,"void module_stopDone(error_t error) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine module_stopDone(%%d, %%d)\", module_id, error);\n");
-	fprintf(fp,"\tsignal ModuleCtrl.stopDone(module_id, error);\n");
+	fprintf(fp,"\tsignal ModuleCtrl.stopDone(error);\n");
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"command error_t ModuleCtrl.start(module_t module_id) {\n");
@@ -349,9 +349,11 @@ void generateFennecEngineP() {
 		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_MAC) {
 			fprintf(fp, "event void %s_Control.startDone(error_t err) {\n",
 					mp->lib->name);
+			fprintf(fp, "\tmodule_startDone(err);\n");
 			fprintf(fp, "}\n\n");
 			fprintf(fp, "event void %s_Control.stopDone(error_t err) {\n",
 					mp->lib->name);
+			fprintf(fp, "\tmodule_stopDone(err);\n");
 			fprintf(fp, "}\n\n");
 
 			/* check if the interface is empty, if it is add dummy call */
@@ -391,14 +393,12 @@ void generateFennecEngineP() {
 		fprintf(fp, "event void %s_%s_Control.startDone(error_t err){\n", 
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
-		fprintf(fp, "\tmodule_startDone(%s, err);\n",
-					conftab[i].conf->app_id_name);
+		fprintf(fp, "\tmodule_startDone(err);\n");
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "event void %s_%s_Control.stopDone(error_t err) {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
-		fprintf(fp, "\tmodule_stopDone(%s, err);\n",
-					conftab[i].conf->app_id_name);
+		fprintf(fp, "\tmodule_stopDone(err);\n");
 		fprintf(fp, "}\n\n");
 
 		fprintf(fp, "\t/* Parameter Interface */\n\n");	
@@ -438,14 +438,12 @@ void generateFennecEngineP() {
 		fprintf(fp, "event void %s_%s_Control.startDone(error_t err) {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
-		fprintf(fp, "\tmodule_startDone(%s, err);\n",
-					conftab[i].conf->net_id_name);
+		fprintf(fp, "\tmodule_startDone(err);\n");
 		fprintf(fp, "}\n\n");
 		fprintf(fp, "event void %s_%s_Control.stopDone(error_t err) {\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
-		fprintf(fp, "\tmodule_stopDone(%s, err);\n",
-					conftab[i].conf->net_id_name);
+		fprintf(fp, "\tmodule_stopDone(err);\n");
 		fprintf(fp, "}\n\n");
 
 
