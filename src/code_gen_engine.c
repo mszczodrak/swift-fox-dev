@@ -281,45 +281,39 @@ void generateFennecEngineP() {
 							type_name(pt->type), 
 							mp->lib->name, 
 							pt->name);
-						fprintf(fp, "\treturn ((struct %s_params*)processes[0].mac_params)->%s;\n",
+						fprintf(fp, "process_t process_id = 0\n");
+					} else {
+						fprintf(fp, "command %s %sParams.get_%s[process_t process_id]() {\n",
+							type_name(pt->type), 
+							mp->lib->name, 
+							pt->name);
+					}
+
+					fprintf(fp, "\treturn ((struct %s_params*)processes[process_id].mac_params)->%s;\n",
 							mp->lib->name,
 							pt->name);
-						fprintf(fp, "}\n\n");
+					fprintf(fp, "}\n\n");
+
+					if (mp->type == TYPE_MAC) {
 						fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
 							mp->lib->name, 
 							pt->name, 
 							type_name(pt->type), 
 							pt->name);
-						fprintf(fp, "\treturn SUCCESS;\n");
-			        	        fprintf(fp, "}\n\n");
+						fprintf(fp, "process_t process_id = 0\n");
+
 					} else {
-
-						fprintf(fp, "command %s %sParams.get_%s[process_t process_id]() {\n",
-							type_name(pt->type), 
+						fprintf(fp, "command error_t %sParams.set_%s[process_t process_id](%s new_%s) {\n",
 							mp->lib->name, 
+							pt->name, 
+							type_name(pt->type), 
 							pt->name);
-//						fprintf(fp, "\treturn ((struct %s*)processes[process_id] (getParams(%s))).%s;\n",
-//						type_name(pt->type), 
-//						mp->lib->name, 
-//						pt->name);
-							
-
-
-					fprintf(fp, "}\n\n");
-					fprintf(fp, "command error_t %sParams.set_%s[process_t process_id](%s new_%s) {\n",
-						mp->lib->name, 
-						pt->name, 
-						type_name(pt->type), 
-						pt->name);
-					fprintf(fp, "\treturn SUCCESS;\n");
-		        	        fprintf(fp, "}\n\n");
-
-
-
-
-
 					}
 
+
+					fprintf(fp, "\treturn SUCCESS;\n");
+					fprintf(fp, "}\n\n");
+					}
 				}
 
 			}
