@@ -285,7 +285,7 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 			/* init */
 			$2->type	= $1;
 			$$->id		= $2;
-			$$->privileged	= $3;
+			$$->daemon	= $3;
 
 			/* link application module */
 			if (($6 == NULL) || (($6->type != TYPE_APPLICATION && $6->type != TYPE_EVENT))) {

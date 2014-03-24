@@ -195,7 +195,7 @@ struct confnode {
 	int			mac_inferior;			
 	int			counter;
 	char			*id_name;
-	int			privileged;
+	int			daemon;
 };
 
 struct conftab {

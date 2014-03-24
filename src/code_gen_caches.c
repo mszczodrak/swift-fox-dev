@@ -250,17 +250,15 @@ void generateCaches(int event_counter, int policy_counter) {
         }
         fprintf(fp, "\n");
 
-
-	/* list all privileged processes */
-	fprintf(fp, "struct network_process* privileged_processes[] = {\n");
+	/* list all daemon processes */
+	fprintf(fp, "struct network_process* daemon_processes[] = {\n");
 	for ( i = 0; i < conf_id_counter; i++ ) {
-		if (conftab[i].conf->privileged) {
+		if (conftab[i].conf->daemon) {
 			fprintf(fp, "\t&processes[%s],\n", conftab[i].conf->id_name);
 		}
 	}
 	fprintf(fp, "\tNULL\n");
 	fprintf(fp, "};\n\n");
-
 
 	/* module_t to event_id */
 	fprintf(fp, "struct event_process events[NUMBER_OF_EVENTS] = {\n");
@@ -275,7 +273,6 @@ void generateCaches(int event_counter, int policy_counter) {
 	}
 
 	fprintf(fp, "};\n\n");
-
 
         fprintf(fp, "struct fennec_policy policies[NUMBER_OF_POLICIES] = {\n");
 	for(i = 0; i < policy_counter; ) {
