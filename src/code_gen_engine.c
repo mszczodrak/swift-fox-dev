@@ -201,7 +201,6 @@ void generateFennecEngineP() {
 
         char *full_path = get_sfc_path("", "FennecEngineP.nc");
         FILE *fp = fopen(full_path, "w");
-	int i;
 	struct modtab *mp;
 
         if (fp == NULL) {
@@ -286,9 +285,22 @@ void generateFennecEngineP() {
 							pt->name);
 					}
 
-					fprintf(fp, "\treturn ((struct %s_params*)processes[process_id].mac_params)->%s;\n",
+					if (mp->type == TYPE_APPLICATION) {
+						fprintf(fp, "\treturn *((struct %s_params_ptr*)(processes[process_id].application_params))->%s;\n",
 							mp->lib->name,
 							pt->name);
+					}
+					if (mp->type == TYPE_NETWORK) {
+						fprintf(fp, "\treturn *((struct %s_params_ptr*)(processes[process_id].network_params))->%s;\n",
+							mp->lib->name,
+							pt->name);
+					}
+					if (mp->type == TYPE_MAC) {
+						fprintf(fp, "\treturn *((struct %s_params_ptr*)(processes[process_id].mac_params))->%s;\n",
+							mp->lib->name,
+							pt->name);
+					}
+
 					fprintf(fp, "}\n\n");
 
 					if (mp->type == TYPE_MAC) {
