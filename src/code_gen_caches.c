@@ -47,6 +47,7 @@ void define_modules() {
 	char *full_path = get_sfc_path("", "ff_modules.h");
 	FILE *fp = fopen(full_path, "w");
 	int i;
+	int id_counter = 0;
 	struct modtab *mp;
 
 	if (fp == NULL) {
@@ -62,27 +63,16 @@ void define_modules() {
 
         for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
                 if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
-			fprintf(fp, "/* %s module located at %s */\n",
-				mp->lib->name,
-				mp->lib->path);
-                        fprintf(fp, "#define %s\t%d\n\n", mp->id_name, mp->id);
+			fprintf(fp, "/* %s module located at %s */\n", mp->lib->name, mp->lib->path);
+                        fprintf(fp, "#define %s\t%d\n\n", mp->id_name, ++id_counter);
                 }
         }
         fprintf(fp, "\n");
 
 	for( i = 0; i < conf_id_counter; i++ ) {
-			fprintf(fp, "#define %s\t%d\n\n",
-			conftab[i].conf->app_id_name,
-			conftab[i].conf->app_id_value);
-
-		fprintf(fp, "#define %s\t%d\n\n",
-			conftab[i].conf->net_id_name,
-			conftab[i].conf->net_id_value);
-
-		fprintf(fp, "#define %s\t%d\n\n",
-			conftab[i].conf->mac_id_name,
-			conftab[i].conf->mac_id_value);
-
+		fprintf(fp, "#define %s\t%d\n\n", conftab[i].conf->app_id_name, ++id_counter);
+		fprintf(fp, "#define %s\t%d\n\n", conftab[i].conf->net_id_name, ++id_counter);
+		fprintf(fp, "#define %s\t%d\n\n", conftab[i].conf->mac_id_name, ++id_counter);
         }
         fprintf(fp, "\n");
 	fprintf(fp, "#endif\n\n");
