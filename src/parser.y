@@ -100,7 +100,7 @@ int yylex(void);
 %token APPLICATION NETWORK MAC  
 %token EQ SOURCE LF 
 %token OPEN_BRACE CLOSE_BRACE OPEN_PARENTHESIS CLOSE_PARENTHESIS
-%token OPEN_SQUARE_BRACE CLOSE_SQUARE_BRACE STAR
+%token OPEN_SQUARE_BRACE CLOSE_SQUARE_BRACE STAR EXCLAMATION
 %token LEVEL AT 
 %token U_INT_EIGHT U_INT_SIXTEEN U_INT_THIRTY_TWO FLOAT DOUBLE
 
@@ -133,6 +133,7 @@ int yylex(void);
 %type <ival>	module_type
 %type <ival> 	state_level
 %type <ival> 	process_level
+%type <ival> 	module_level
 %type <ival> 	array_part
 %type <dval> 	assign_value
 %type <mtl>	module_types
@@ -276,7 +277,7 @@ processes: processes process
 		}			
 	;
 
-process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlines module newlines module newlines CLOSE_BRACE newlines
+process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlines module newlines module_level module newlines CLOSE_BRACE newlines
 		{
 			/* process node */
 			$$		= calloc(1, sizeof(struct confnode));
@@ -307,12 +308,13 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 
 
 			/* link mac module */
-			if (($10 == NULL) || ($10->type != TYPE_MAC)) {
+			if (($11 == NULL) || ($11->type != TYPE_MAC)) {
 				fprintf(stderr, "Undefined mac module in %s\n", $2->name);
 				yyerror("expecting mac module");
 			}
-			$$->mac			= $10;
-			$$->mac_params		= $10->params;
+			$$->mac			= $11;
+			$$->mac_params		= $11->params;
+			$$->mac_inferior	= $10;
 			$$->mac->lib->used 	= 1;
 
 
@@ -327,9 +329,6 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 			$$->id_name = conf_module_name($$->name, "process");
 
 			$$->counter	= conf_id_counter;
-			$$->app_id_value = conf_id_counter * F_LAYERS + F_APPLICATION; 	
-			$$->net_id_value = conf_id_counter * F_LAYERS + F_NETWORK; 	
-			$$->mac_id_value = conf_id_counter * F_LAYERS + F_MAC; 	
 			$$->app_id_name = conf_module_name($$->name, $$->app->lib->name);
 			$$->net_id_name = conf_module_name($$->name, $$->net->lib->name);
 			$$->mac_id_name = conf_module_name($$->name, $$->mac->lib->name);
@@ -355,7 +354,7 @@ process_type: CONFIGURATION
 		}
 	;
 
-process_level: STAR
+process_level: EXCLAMATION 
 		{
 			$$ = 1;
 		}
@@ -364,6 +363,16 @@ process_level: STAR
                         $$ = 0;
                 }                       
         ;
+
+module_level: STAR
+		{
+			$$ = 1;
+		}
+	|
+		{
+			$$ = 0;
+		}
+	;
 
 module: IDENTIFIER OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS
 		{

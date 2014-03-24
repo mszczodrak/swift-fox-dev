@@ -60,7 +60,6 @@ void define_modules() {
 	fprintf(fp, "#ifndef __FF_MODULES_H__\n");
 	fprintf(fp, "#define __FF_MODULES_H__\n\n");
 
-
         for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
                 if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
 			fprintf(fp, "/* %s module located at %s */\n", mp->lib->name, mp->lib->path);
@@ -128,7 +127,8 @@ void define_processes() {
 
 		fprintf(fp, "\t\t.mac = %s,\n", conftab[i].conf->mac_id_name);
 		fprintf(fp, "\t\t.mac_params = &%s_ptr,\n", conftab[i].conf->mac_id_name);
-		fprintf(fp, "\t\t.mac_module = %s\n", conftab[i].conf->mac->id_name);
+		fprintf(fp, "\t\t.mac_module = %s,\n", conftab[i].conf->mac->id_name);
+		fprintf(fp, "\t\t.mac_level = %d\n", conftab[i].conf->mac_inferior);
 		fprintf(fp, "\t}\n");
 		if (i+1 < conf_id_counter) {
 			fprintf(fp, "\t,\n");

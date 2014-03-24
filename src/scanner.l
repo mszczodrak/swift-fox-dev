@@ -134,7 +134,6 @@ goto		{
 #endif
 			return GOTO;			}
 
-
 start		{
 #ifndef __DEBUG__
 #endif
@@ -219,8 +218,11 @@ or		{
 "*"	{
 #ifndef __DEBUG__
 #endif
-
 			return STAR;			}
+"!"	{
+#ifndef __DEBUG__
+#endif
+			return EXCLAMATION;		}
 uint8_t		{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_UINT8_T;

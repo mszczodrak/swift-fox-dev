@@ -190,11 +190,9 @@ struct confnode {
 	struct paramvalue	*net_params;
 	struct paramvalue	*mac_params;
 	char			*app_id_name;
-	int			app_id_value;
 	char			*net_id_name;
-	int			net_id_value;
 	char			*mac_id_name;
-	int			mac_id_value;
+	int			mac_inferior;			
 	int			counter;
 	char			*id_name;
 	int			privileged;
