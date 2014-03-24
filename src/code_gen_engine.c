@@ -222,41 +222,21 @@ void generateFennecEngineP() {
 	fprintf(fp, "uses interface SplitControl[module_t module_id];\n");
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_MAC) {
-    			fprintf(fp, "/* MAC Module %s */\n",
+		if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
+			if (mp->type == TYPE_MAC) {
+	      			fprintf(fp, "provides interface %sParams;\n", 
+						mp->lib->name);
+	                } else {
+      				fprintf(fp, "provides interface %sParams[process_t process_id];\n", 
 					mp->lib->name);
-      			fprintf(fp, "provides interface %sParams;\n", 
-					mp->lib->name);
-                }
-
-		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_NETWORK) {
-      			fprintf(fp, "provides interface %sParams[process_t process_id];\n", 
-					mp->lib->name);
+			}
 		}
-
-		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_APPLICATION) {
-      			fprintf(fp, "provides interface %sParams[process_t process_id];\n", 
-					mp->lib->name);
-		}
-
-
-
-
         }
 
 
 	fprintf(fp,"}\n\n");
 	fprintf(fp,"implementation {\n\n");
 
-	fprintf(fp,"void module_startDone(error_t error) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine module_startDone(%%d, %%d)\", module_id, error);\n");
-	fprintf(fp,"\tsignal ModuleCtrl.startDone(error);\n");
-	fprintf(fp,"}\n\n");
-
-	fprintf(fp,"void module_stopDone(error_t error) {\n");
-	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine module_stopDone(%%d, %%d)\", module_id, error);\n");
-	fprintf(fp,"\tsignal ModuleCtrl.stopDone(error);\n");
-	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"command error_t ModuleCtrl.start(module_t module_id) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine ModuleCtrl.start(%%d)\", module_id);\n");
@@ -272,61 +252,52 @@ void generateFennecEngineP() {
 
 	/* Interfaces with Computations */
 
-	fprintf(fp, "event void SplitControl.startDone[module_t module_id](error_t err) {\n");
-	fprintf(fp, "\tmodule_startDone(err);\n");
+	fprintf(fp, "event void SplitControl.startDone[module_t module_id](error_t error) {\n");
+	fprintf(fp, "\tdbg(\"FennecEngine\", \"[-] FennecEngine SplitControl.startDone[%%d](%%d)\", module_id, error);\n");
+	fprintf(fp, "\tsignal ModuleCtrl.startDone(error);\n");
 	fprintf(fp, "}\n\n");
-	fprintf(fp, "event void SplitControl.stopDone[module_t module_id](error_t err) {\n");
-	fprintf(fp, "\tmodule_stopDone(err);\n");
+	fprintf(fp, "event void SplitControl.stopDone[module_t module_id](error_t error) {\n");
+	fprintf(fp, "\tdbg(\"FennecEngine\", \"[-] FennecEngine SplitControl.stopDone[%%d](%%d)\", module_id, error);\n");
+	fprintf(fp, "\tsignal ModuleCtrl.stopDone(error);\n");
 	fprintf(fp, "}\n\n");
-
-
-
-
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_MAC) {
-
+		if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
 			/* check if the interface is empty, if it is add dummy call */
 			if (mp->lib->params == NULL) {
-				fprintf(fp, "command void %sParams.dummy() {}\n",
+				if (mp->type == TYPE_MAC) {
+					fprintf(fp, "command void %sParams.dummy() {}\n",
 						mp->lib->name);
+				} else {
+					fprintf(fp, "command void %sParams.dummy[process_t process_id]() {}\n",
+						mp->lib->name);
+				}
+
 			} else {
 	
 				for (pt = mp->lib->params; pt != NULL; pt = pt->child ) {
-	
-					fprintf(fp, "command %s %sParams.get_%s() {\n",
-						type_name(pt->type), 
-						mp->lib->name, 
-						pt->name);
+					if (mp->type == TYPE_MAC) {
+						fprintf(fp, "command %s %sParams.get_%s() {\n",
+							type_name(pt->type), 
+							mp->lib->name, 
+							pt->name);
 //					fprintf(fp, "\treturn ((%s*)(getParams(%s))).%s;\n",
 //						type_name(pt->type), 
 //						mp->lib->name, 
 //						pt->name);
 							
 
-
-					fprintf(fp, "}\n\n");
-					fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
-						mp->lib->name, 
-						pt->name, 
-						type_name(pt->type), 
-						pt->name);
-					fprintf(fp, "\treturn SUCCESS;\n");
-		        	        fprintf(fp, "}\n\n");
-				}
-			}
-	        }
-
-		if (mp->lib != NULL && mp->lib->path && mp->lib->used && (mp->type == TYPE_NETWORK || mp->type == TYPE_APPLICATION)) {
-
-			/* check if the interface is empty, if it is add dummy call */
-			if (mp->lib->params == NULL) {
-				fprintf(fp, "command void %sParams.dummy[process_t process_id]() {}\n",
-						mp->lib->name);
-			} else {
 	
-				for (pt = mp->lib->params; pt != NULL; pt = pt->child ) {
-	
+						fprintf(fp, "}\n\n");
+						fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
+							mp->lib->name, 
+							pt->name, 
+							type_name(pt->type), 
+							pt->name);
+						fprintf(fp, "\treturn SUCCESS;\n");
+			        	        fprintf(fp, "}\n\n");
+					} else {
+
 					fprintf(fp, "command %s %sParams.get_%s[process_t process_id]() {\n",
 						type_name(pt->type), 
 						mp->lib->name, 
@@ -346,11 +317,18 @@ void generateFennecEngineP() {
 						pt->name);
 					fprintf(fp, "\treturn SUCCESS;\n");
 		        	        fprintf(fp, "}\n\n");
+
+
+
+
+
+					}
+
 				}
+
 			}
-		}
 
-
+	        }
 	}
 
 	fprintf(fp, "default command error_t SplitControl.start[module_t module_id]() { return FAIL; }\n");
