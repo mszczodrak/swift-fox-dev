@@ -240,12 +240,12 @@ void generateFennecEngineP() {
 
 	fprintf(fp,"command error_t ModuleCtrl.start(module_t module_id) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine ModuleCtrl.start(%%d)\", module_id);\n");
-	fprintf(fp,"\treturn call SplitControl.start[module_id]();\n\n");
+	fprintf(fp,"\treturn call SplitControl.start[module_id]();\n");
 	fprintf(fp,"}\n\n");
 
 	fprintf(fp,"command error_t ModuleCtrl.stop(module_t module_id) {\n");
 	fprintf(fp,"\tdbg(\"FennecEngine\", \"[-] FennecEngine ModuleCtrl.stop(%%d)\", module_id);\n");
-	fprintf(fp,"\treturn call SplitControl.stop[module_id]();\n\n");
+	fprintf(fp,"\treturn call SplitControl.stop[module_id]();\n");
 	fprintf(fp,"}\n\n");
 
 	struct paramtype *pt;
