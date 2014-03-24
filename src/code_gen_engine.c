@@ -233,7 +233,6 @@ void generateFennecEngineP() {
 		}
         }
 
-
 	fprintf(fp,"}\n\n");
 	fprintf(fp,"implementation {\n\n");
 
@@ -272,9 +271,7 @@ void generateFennecEngineP() {
 					fprintf(fp, "command void %sParams.dummy[process_t process_id]() {}\n\n",
 						mp->lib->name);
 				}
-
 			} else {
-	
 				for (pt = mp->lib->params; pt != NULL; pt = pt->child ) {
 					if (mp->type == TYPE_MAC) {
 						fprintf(fp, "command %s %sParams.get_%s() {\n",
@@ -313,11 +310,8 @@ void generateFennecEngineP() {
 
 					fprintf(fp, "\treturn SUCCESS;\n");
 					fprintf(fp, "}\n\n");
-					
 				}
-
 			}
-
 	        }
 	}
 
