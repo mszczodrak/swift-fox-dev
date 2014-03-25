@@ -80,42 +80,48 @@ checkState(struct statenode *s) {
 	*/
 	
 	for (i = 0; i < state_id_counter; i++) {
-		//printf("0x%1x 0x%1x\n", statetab[i].state, s);
 		if ((statetab[i].state != s) && (statetab[i].state->id == s->id)) {
-			goto state_err;
+			/* redeclaration */
+			(void)fprintf(stderr, "error: redeclaration of state %s\n",
+				s->id->name);
+			/* terminate */
+			exit(1);
 		}
 	}
 
 
 	/* check if every configuration is defined */
-	for (i = 0; i < state_id_counter; i++) {
-		for (conf_ptr = statetab[i].state->confs; conf_ptr != NULL; conf_ptr = conf_ptr->confs) {
-			if (conf_ptr->conf->id->type == TYPE_UNKNOWN) {
-				goto undef_conf;
+	for (conf_ptr = s->confs; conf_ptr != NULL; conf_ptr = conf_ptr->confs) {
+		if (conf_ptr->conf->id->type == TYPE_UNKNOWN) {
+			/* undefined configuration */
+			(void)fprintf(stderr, "error: undefined configuration %s in state %s\n",
+				conf_ptr->conf->id->name, s->id->name);
+			/* terminate */
+			exit(1);
+		}
+	}
+
+	/* check number of dominant AM modules in the state */
+	for (conf_ptr = s->confs; conf_ptr != NULL; conf_ptr = conf_ptr->confs) {
+		int not_inferior = 0;
+		struct conf_ids *cp;
+		for(cp = conf_ptr; cp != NULL; cp = cp->confs) {
+			if (conf_ptr->conf->conf->am->lib == cp->conf->conf->am->lib) {
+				not_inferior += !(cp->conf->conf->am_inferior);
+			}
+
+			if (not_inferior > 1) {
+				/* ambigious match of AM in the state */
+				(void)fprintf(stderr, "error: too many dominant AM modules %s in the state %s\n",
+					conf_ptr->conf->conf->am->lib->name, s->id->name);
+				/* terminate */
+				exit(1);
 			}
 		}
 	}
 
-
 	/* OK, no problems found */
 	return;
-
-
-state_err:
-	/* redeclaration */
-	(void)fprintf(stderr, "error: redeclaration of state %s\n",
-			s->id->name);
-	/* terminate */
-	exit(1);
-
-
-
-undef_conf:
-	/* undefined configuration */
-	(void)fprintf(stderr, "error: undefined configuration %s in state %s\n",
-			conf_ptr->conf->id->name, statetab[i].state->id->name);
-	/* terminate */
-	exit(1);
 }
 
 
