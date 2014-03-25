@@ -216,6 +216,7 @@ global_variable: param_type IDENTIFIER array_part assign_value newlines
 			$$->name	= $2;
 			$$->length	= $3;
 			$$->value	= $4;
+			$2->type	= TYPE_VARIABLE_GLOBAL;
 		}
 
 array_part: OPEN_SQUARE_BRACE CONSTANT CLOSE_SQUARE_BRACE
@@ -387,6 +388,9 @@ parameters: IDENTIFIER next_parameter
                         if (sp == NULL)
                                 yyerror("symtab pointer not found");
 
+			if (sp->type != TYPE_VARIABLE_GLOBAL)
+				yyerror("undefined variable");
+
                         /* paramvalue node */
                         $$              = calloc(1, sizeof(struct paramvalue));
 			$$->child	= $2;
@@ -412,6 +416,9 @@ next_parameter: COMMA IDENTIFIER next_parameter
                         struct symtab *sp = symlook($2->name);
                         if (sp == NULL)
                                 yyerror("symtab pointer not found");
+
+			if (sp->type != TYPE_VARIABLE_GLOBAL)
+				yyerror("undefined variable");
 
                         /* paramvalue node */
                         $$              = calloc(1, sizeof(struct paramvalue));
