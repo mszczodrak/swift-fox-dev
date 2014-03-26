@@ -1103,15 +1103,12 @@ initialize(void) {
 	sp->type = TYPE_KEYWORD;
 }
 
-
 struct paramtype*
 process_module_parameter(int param_type, struct symtab* identifier, struct defvalue* default_value) {
 	struct paramtype* param;
 	struct symtab *sp = symlook(identifier->name);
 	if (sp == NULL)
 		yyerror("symtab pointer not found");
-
-	printf("type %s: %d\n", identifier->name, param_type);
 
 	if (param_type == 0) {
 		fprintf(stderr, "missing parameter type in declaration of module %s\n",
@@ -1125,13 +1122,6 @@ process_module_parameter(int param_type, struct symtab* identifier, struct defva
 	param->def_val = default_value;
 	return param;
 }
-
-
-
-
-
-
-
 
 void printTable() {
 	struct symtab *sp;
