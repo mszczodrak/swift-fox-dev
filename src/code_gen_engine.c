@@ -263,7 +263,7 @@ void generateFennecEngineP() {
 			/* check if the interface is empty, if it is add dummy call */
 			if (mp->lib->params == NULL) {
 				if (mp->type == TYPE_AM) {
-					fprintf(fp, "command void %sParams.dummy() {}\n\n",
+					fprintf(fp, "async command void %sParams.dummy() {}\n\n",
 						mp->lib->name);
 				} else {
 					fprintf(fp, "command void %sParams.dummy[process_t process_id]() {}\n\n",
@@ -272,7 +272,7 @@ void generateFennecEngineP() {
 			} else {
 				for (pt = mp->lib->params; pt != NULL; pt = pt->child ) {
 					if (mp->type == TYPE_AM) {
-						fprintf(fp, "command %s %sParams.get_%s() {\n",
+						fprintf(fp, "async command %s %sParams.get_%s() {\n",
 							type_name(pt->type), 
 							mp->lib->name, 
 							pt->name);
@@ -304,7 +304,7 @@ void generateFennecEngineP() {
 					fprintf(fp, "}\n\n");
 
 					if (mp->type == TYPE_AM) {
-						fprintf(fp, "command error_t %sParams.set_%s(%s new_%s) {\n",
+						fprintf(fp, "async command error_t %sParams.set_%s(%s new_%s) {\n",
 							mp->lib->name, 
 							pt->name, 
 							type_name(pt->type), 
