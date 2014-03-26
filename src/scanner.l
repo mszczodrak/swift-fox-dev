@@ -223,6 +223,12 @@ or		{
 #ifndef __DEBUG__
 #endif
 			return EXCLAMATION;		}
+
+bool		{
+#ifndef __DEBUG__
+			yylval.ival = TYPE_BOOL;
+#endif
+			return VARIABLE_TYPE;		}
 uint8_t		{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_UINT8_T;

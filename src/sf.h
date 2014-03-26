@@ -64,6 +64,7 @@
 #define TYPE_KEYWORD		14
 #define TYPE_VARIABLE_GLOBAL	15
 
+#define TYPE_BOOL		19
 #define TYPE_UINT8_T		20
 #define TYPE_UINT16_T		21
 #define TYPE_UINT32_T		22

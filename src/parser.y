@@ -65,6 +65,10 @@ char *conf_state_suffix = "_cts";
 void yyerror(const char *errmsg, ...);
 int yylex(void);
 
+struct paramtype*
+process_module_parameter(int param_type, struct symtab* identifier, struct defvalue* default_value);
+
+
 %}
 
 %locations
@@ -136,8 +140,8 @@ int yylex(void);
 %type <ival> 	module_level
 %type <ival> 	array_part
 %type <dval> 	assign_value
-%type <mtl>	module_types
-%type <mtl>	next_module_type
+%type <mtl>	module_parameters
+%type <mtl>	next_module_parameter
 %type <parv>	parameters
 %type <parv>	next_parameter
 %type <ival>	param_type
@@ -615,7 +619,7 @@ definitions: definitions definition
         |
         ;
 
-definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_types newlines CLOSE_PARENTHESIS
+definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_parameters newlines CLOSE_PARENTHESIS
 		{
 			/* iterator */
 			char *p = NULL;
@@ -691,17 +695,9 @@ module_type: APPLICATION 	{ $$ = TYPE_APPLICATION; }
         ;
 
 
-module_types: param_type IDENTIFIER default_value next_module_type
+module_parameters: param_type IDENTIFIER default_value next_module_parameter
 		{
-			struct symtab *sp = symlook($2->name);
-			if (sp == NULL)
-                                yyerror("symtab pointer not found");
-
-
-                        $$              = calloc(1, sizeof(struct paramtype));
-			$$->type	= $1;
-                        $$->name   	= $2->name;
-			$$->def_val	= $3;
+			$$ = process_module_parameter($1, $2, $3);
                         $$->child       = $4;
 		}
 	|
@@ -726,17 +722,10 @@ default_value: RELOP CONSTANT
 	;
 
 
-next_module_type: newlines COMMA newlines param_type IDENTIFIER default_value next_module_type
+next_module_parameter: newlines COMMA newlines param_type IDENTIFIER default_value next_module_parameter
 		{
-			struct symtab *sp = symlook($5->name);
-			if (sp == NULL)
-                                yyerror("symtab pointer not found");
-
-                        $$              = calloc(1, sizeof(struct paramtype));
-                        $$->type   	= $4;
-                        $$->name   	= $5->name;
-			$$->def_val	= $6;
-			$$->child	= $7;
+			$$ = process_module_parameter($4, $5, $6);
+			$$->child = $7;
 		}
 	|
 		{
@@ -748,7 +737,6 @@ next_module_type: newlines COMMA newlines param_type IDENTIFIER default_value ne
 param_type: VARIABLE_TYPE
 		{
 			$$ = $1;
-
 		}
 	|
 		{
@@ -1115,6 +1103,36 @@ initialize(void) {
 	sp->type = TYPE_KEYWORD;
 }
 
+
+struct paramtype*
+process_module_parameter(int param_type, struct symtab* identifier, struct defvalue* default_value) {
+	struct paramtype* param;
+	struct symtab *sp = symlook(identifier->name);
+	if (sp == NULL)
+		yyerror("symtab pointer not found");
+
+	printf("type %s: %d\n", identifier->name, param_type);
+
+	if (param_type == 0) {
+		fprintf(stderr, "missing parameter type in declaration of module %s\n",
+			identifier->name);
+		yyerror("parameter type not specified");
+	}
+
+	param = calloc(1, sizeof(struct paramtype));
+	param->type = param_type;
+	param->name = identifier->name;
+	param->def_val = default_value;
+	return param;
+}
+
+
+
+
+
+
+
+
 void printTable() {
 	struct symtab *sp;
 	printf("\n");
@@ -1138,5 +1156,8 @@ void printTable() {
 		}
         }
 } 
+
+
+
 
 
