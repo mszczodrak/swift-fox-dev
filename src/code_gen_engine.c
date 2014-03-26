@@ -285,7 +285,7 @@ void generateFennecEngineP() {
 							pt->name);
 					}
 
-					if (mp->type == TYPE_APPLICATION) {
+					if ((mp->type == TYPE_APPLICATION) || (mp->type == TYPE_EVENT)) {
 						fprintf(fp, "\treturn *((struct %s_params_ptr*)(processes[process_id].application_params))->%s;\n",
 							mp->lib->name,
 							pt->name);
@@ -304,7 +304,7 @@ void generateFennecEngineP() {
 					fprintf(fp, "}\n\n");
 
 					if (mp->type == TYPE_AM) {
-						fprintf(fp, "async command error_t %sParams.set_%s(%s new_%s) {\n",
+						fprintf(fp, "async command void %sParams.set_%s(%s new_%s) {\n",
 							mp->lib->name, 
 							pt->name, 
 							type_name(pt->type), 
@@ -312,14 +312,31 @@ void generateFennecEngineP() {
 						fprintf(fp, "\tprocess_t process_id = call Fennec.getProcessIdFromAM(%s);\n",
 							mp->id_name);
 					} else {
-						fprintf(fp, "command error_t %sParams.set_%s[process_t process_id](%s new_%s) {\n",
+						fprintf(fp, "command void %sParams.set_%s[process_t process_id](%s new_%s) {\n",
 							mp->lib->name, 
 							pt->name, 
 							type_name(pt->type), 
 							pt->name);
 					}
 
-					fprintf(fp, "\treturn SUCCESS;\n");
+					if ((mp->type == TYPE_APPLICATION) || (mp->type == TYPE_EVENT)) {
+						fprintf(fp, "\t*((struct %s_params_ptr*)(processes[process_id].application_params))->%s = new_%s;\n",
+							mp->lib->name,
+							pt->name,
+							pt->name);
+					}
+					if (mp->type == TYPE_NETWORK) {
+						fprintf(fp, "\t*((struct %s_params_ptr*)(processes[process_id].network_params))->%s = new_%s;\n",
+							mp->lib->name,
+							pt->name,
+							pt->name);
+					}
+					if (mp->type == TYPE_AM) {
+						fprintf(fp, "\t*((struct %s_params_ptr*)(processes[process_id].am_params))->%s = new_%s;\n",
+							mp->lib->name,
+							pt->name,
+							pt->name);
+					}
 					fprintf(fp, "}\n\n");
 				}
 			}

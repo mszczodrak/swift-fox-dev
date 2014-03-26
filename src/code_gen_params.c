@@ -68,12 +68,12 @@ void module_params_interface_app(struct modtab *mp) {
 		if (mp->type == TYPE_AM) {
                 	fprintf(fp, "\tasync command %s get_%s();\n", 
 				type_name(pt->type), pt->name);
-	                fprintf(fp, "\tasync command error_t set_%s(%s new_%s);\n", 
+	                fprintf(fp, "\tasync command void set_%s(%s new_%s);\n", 
 				pt->name, type_name(pt->type), pt->name);
 		} else {
                 	fprintf(fp, "\tcommand %s get_%s();\n", 
 				type_name(pt->type), pt->name);
-	                fprintf(fp, "\tcommand error_t set_%s(%s new_%s);\n", 
+	                fprintf(fp, "\tcommand void set_%s(%s new_%s);\n", 
 				pt->name, type_name(pt->type), pt->name);
 		}
         }
