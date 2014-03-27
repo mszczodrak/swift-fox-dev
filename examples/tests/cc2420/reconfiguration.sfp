@@ -3,6 +3,7 @@ uint8_t radio_tx_power = 31	# in 	[31, 27, 23, 19, 15, 11, 7, 3]
 uint8_t radio_channel = 26	# in	[11-26]
 uint16_t dest_node = 2
 uint16_t src_node = 0xFFFF
+uint16_t event_src = 4
 
 process system_control ! {
 	StateSync()
@@ -28,17 +29,17 @@ process yellow { blink(2, 1024)
 	*cc2420()
 }
 
-event tiMo { timerMilliE(8500, 0xFFFF)
+event tiMo { timerMilliE(8500, event_src)
 	nullNet()
 	*cc2420()
 }
 
-event tiMo2  { timerMilliE(5000, 0xFFFF)
+event tiMo2  { timerMilliE(5000, event_src)
 	nullNet()
 	*cc2420()
 }
 
-event tiMo3  { timerMilliE(300000, 0xFFFF)
+event tiMo3  { timerMilliE(30000, event_src)
 	nullNet()
 	*cc2420()
 }
