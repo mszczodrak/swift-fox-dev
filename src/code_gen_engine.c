@@ -189,6 +189,17 @@ void generateFennecEngineC() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
+      		fprintf(fp, "%s_%s.LowPowerListening -> %sC.LowPowerListening;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->name,
+					conftab[i].conf->am->lib->name);
+      		fprintf(fp, "%s_%s.RadioChannel -> %sC.RadioChannel;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->name,
+					conftab[i].conf->am->lib->name);
+
+
+
 		fprintf(fp, "\n");
 	}
 
