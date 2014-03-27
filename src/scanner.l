@@ -34,6 +34,7 @@
   */
 
 #include <stdio.h>
+#include <math.h>
 #ifdef __DEBUG__	/* link with the testing suite */
 #include <unistd.h>
 #include "common.h"
@@ -67,7 +68,7 @@ floating	{number}\.{digit}+
 newline		\n
 identifier	({letter}|_)({letter}|{digit}|_)*
 hex		0x([A-Fa-f]|{digit})+
-constant	{digit}|{number}|{hex}|{floating}
+constant	{floating}|{digit}|{number}|{hex}|{floating}
 env_const	\$\(({letter}|{digit}|_)*\)
 path		(http:\/\/|\.|\/|{env_const})({letter}|{digit}|\.|\/|_|-|~)*
 comment		#.*

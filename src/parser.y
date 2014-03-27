@@ -140,7 +140,7 @@ process_module_parameter(int param_type, struct symtab* identifier, struct defva
 %type <ival> 	process_level
 %type <ival> 	module_level
 %type <ival> 	array_part
-%type <dval> 	assign_value
+%type <ldval> 	assign_value
 %type <mtl>	module_parameters
 %type <mtl>	next_module_parameter
 %type <parv>	parameters
