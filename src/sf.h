@@ -124,7 +124,7 @@ struct symtab *symlook(char *);
 struct symtab *find_module_symtab(char *);
 
 struct defvalue {
-	double			def_value;
+	long double		def_value;
 	int 			def_valid;
 };
 
@@ -138,7 +138,7 @@ struct paramtype {
 struct paramvalue {
 	struct paramvalue	*child;	
 	struct symtab		*value;
-	double			num_value;
+	long double		num_value;
 };
 
 struct libtab {
@@ -248,7 +248,7 @@ struct variable {
 	/** lenght of the variable - use for arrays */
 	int			length;
 	/* default variable value */
-	double			value;
+	long double		value;
 };
 
 

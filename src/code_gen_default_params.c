@@ -79,7 +79,7 @@ void generateDefaultParams() {
 
 
                 for (pv = conftab[i].conf->app_params; pv != NULL; ) {
-                       	fprintf(fp, "\t%f", pv->num_value);
+                       	fprintf(fp, "\t%Lf", pv->num_value);
 
                         pv = pv->child;
                         if (pv == NULL)
@@ -97,7 +97,7 @@ void generateDefaultParams() {
 			conftab[i].conf->net_id_name);
 
                 for (pv = conftab[i].conf->net_params; pv != NULL; ) {
-                        fprintf(fp, "\t%f", pv->num_value);
+                        fprintf(fp, "\t%Lf", pv->num_value);
 
                         pv = pv->child;
                         if (pv == NULL)
@@ -115,7 +115,7 @@ void generateDefaultParams() {
 			conftab[i].conf->am_id_name);
 
                 for (pv = conftab[i].conf->am_params; pv != NULL; ) {
-                        fprintf(fp, "\t%f", pv->num_value);
+                        fprintf(fp, "\t%Lf", pv->num_value);
                         
                         pv = pv->child;         
                         if (pv == NULL)

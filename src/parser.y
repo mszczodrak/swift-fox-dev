@@ -80,6 +80,7 @@ process_module_parameter(int param_type, struct symtab* identifier, struct defva
 	int 			ival;
 	char 			*str;
 	double			dval;
+	long double		ldval;
 	struct confnode		*confp;
 	struct confnodes	*confsp;
 	struct conf_id		*confid;
@@ -109,7 +110,7 @@ process_module_parameter(int param_type, struct symtab* identifier, struct defva
 %token U_INT_EIGHT U_INT_SIXTEEN U_INT_THIRTY_TWO FLOAT DOUBLE
 
 
-%token <dval>	CONSTANT
+%token <ldval>	CONSTANT
 %token <symp>	IDENTIFIER
 %token <str>	VARIABLE_LINE
 %token <libp>	PATH

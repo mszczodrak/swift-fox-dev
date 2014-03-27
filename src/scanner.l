@@ -63,10 +63,11 @@ whitespace	{delim}+
 letter		[A-Za-z]
 digit		[0-9]
 number		(-)*[1-9]{digit}*
+floating	{number}\.{digit}+		
 newline		\n
 identifier	({letter}|_)({letter}|{digit}|_)*
 hex		0x([A-Fa-f]|{digit})+
-constant	{digit}|{number}|{hex}
+constant	{digit}|{number}|{hex}|{floating}
 env_const	\$\(({letter}|{digit}|_)*\)
 path		(http:\/\/|\.|\/|{env_const})({letter}|{digit}|\.|\/|_|-|~)*
 comment		#.*
@@ -291,7 +292,7 @@ int32_t	{
 			return PATH;			}
 {constant}	{
 #ifndef __DEBUG__
-			yylval.dval = atof(yytext);
+			yylval.ldval = atof(yytext);
 #endif
 			return CONSTANT;		}
 
