@@ -7,7 +7,7 @@ uint16_t event_src = 4
 
 process system_control ! {
 	StateSync()
-	rebroadcast(2, 1.1)
+	rebroadcast(2, 1.2)
 #	nullNet()
 	*cc2420()
 	# channel, power, lpl
@@ -16,7 +16,7 @@ process system_control ! {
 process count {
 	counter(5, 1024, src_node, dest_node)
 	ctp(dest_node)
-	cc2420(radio_channel, radio_tx_power, 0, 1)
+	cc2420(radio_channel, radio_tx_power, 200, 1)
 	# channel, power, lpl, autoAck
 }
 
@@ -35,12 +35,12 @@ event tiMo { timerMilliE(8500, event_src)
 	*cc2420()
 }
 
-event tiMo2  { timerMilliE(5000, event_src)
+event tiMo2 { timerMilliE(5000, event_src)
 	nullNet()
 	*cc2420()
 }
 
-event tiMo3  { timerMilliE(30000, event_src)
+event tiMo3 { timerMilliE(9000, event_src)
 	nullNet()
 	*cc2420()
 }
