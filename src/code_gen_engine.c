@@ -65,6 +65,9 @@ void generateFennecEngineC() {
 		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_AM) {
 			fprintf(fp, "components %sC;\n",
 					mp->lib->name);
+			fprintf(fp, "#define UQ_%s_QUEUE \"unique_%s_queue\"\n",
+					mp->id_name,
+					mp->lib->name);
 			fprintf(fp, "FennecEngineP.SplitControl[%s] -> %sC;\n",
 					mp->id_name,
 					mp->lib->name);
@@ -72,6 +75,18 @@ void generateFennecEngineC() {
 					mp->lib->name,
 					mp->lib->name,
 					mp->lib->name);
+			fprintf(fp, "components new AMQueueImplP(uniqueCount(UQ_%s_QUEUE)) as %sSendQueueP;\n",
+					mp->id_name,
+					mp->lib->name);
+			fprintf(fp, "%sSendQueueP.AMSend -> %sC.MacAMSend;\n",
+                                        mp->lib->name,
+                                        mp->lib->name);
+			fprintf(fp, "%sSendQueueP.AMPacket -> %sC.MacAMPacket;\n",
+                                        mp->lib->name,
+                                        mp->lib->name);
+			fprintf(fp, "%sSendQueueP.Packet -> %sC.MacPacket;\n",
+                                        mp->lib->name,
+                                        mp->lib->name);
 			fprintf(fp, "\n");
                 }
         }
@@ -118,12 +133,10 @@ void generateFennecEngineC() {
 
       	
 		if (conftab[i].conf->app->lib->type == TYPE_EVENT) {
-			fprintf(fp, "%s_%s.Event -> FennecC.Event;\n",
+			fprintf(fp, "%s_%s.Event -> FennecC.Event;\n\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
 		}
-
-		fprintf(fp, "\n");
 
      		fprintf(fp, "%s_%s.NetworkAMSend -> %s_%s.NetworkAMSend;\n",
 					conftab[i].conf->id->name,
@@ -158,11 +171,20 @@ void generateFennecEngineC() {
 
 		fprintf(fp, "\n");
 
-      		fprintf(fp, "%s_%s.MacAMSend -> %sC.MacAMSend[%s];\n",
+		fprintf(fp, "components new AMQueueEntryP(%s) as %sAMQueueEntryP;\n",
+					conftab[i].conf->id_name,
+					conftab[i].conf->id->name);
+      		fprintf(fp, "%s_%s.MacAMSend -> %sAMQueueEntryP.AMSend;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
+					conftab[i].conf->id->name);
+      		fprintf(fp, "%sAMQueueEntryP.AMPacket -> %sC.MacAMPacket;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->am->lib->name);
+      		fprintf(fp, "%sAMQueueEntryP.Send -> %sSendQueueP.Send[unique(UQ_%s_QUEUE)];\n",
+					conftab[i].conf->id->name,
 					conftab[i].conf->am->lib->name,
-					conftab[i].conf->id_name);
+					conftab[i].conf->am->id_name);
       		fprintf(fp, "%s_%s.MacReceive -> %sC.MacReceive[%s];\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name, 
@@ -198,12 +220,10 @@ void generateFennecEngineC() {
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
 
-
-
 		fprintf(fp, "\n");
 	}
 
-	fprintf(fp, "\n}\n");
+	fprintf(fp, "}\n");
 	fclose(fp);
 	free(full_path);
 }
