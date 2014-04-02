@@ -63,20 +63,23 @@ void generateFennecEngineC() {
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_AM) {
-			fprintf(fp, "components %sC;\n",
-					mp->lib->name);
 			fprintf(fp, "#define UQ_%s_QUEUE \"unique_%s_queue\"\n",
 					mp->id_name,
 					mp->lib->name);
-			fprintf(fp, "FennecEngineP.SplitControl[%s] -> %sC;\n",
+			fprintf(fp, "components %sC;\n",
+					mp->lib->name);
+			fprintf(fp, "components new AMQueueImplP(uniqueCount(UQ_%s_QUEUE)) as %sSendQueueP;\n",
 					mp->id_name,
+					mp->lib->name);
+			fprintf(fp, "FennecEngineP.SplitControl[%s] -> %sSendQueueP.SplitControl;\n",
+					mp->id_name,
+					mp->lib->name);
+			fprintf(fp, "%sSendQueueP.AMControl -> %sC.SplitControl;\n",
+					mp->lib->name,
 					mp->lib->name);
 			fprintf(fp, "FennecEngineP.%sParams <- %sC.%sParams;\n", 
 					mp->lib->name,
 					mp->lib->name,
-					mp->lib->name);
-			fprintf(fp, "components new AMQueueImplP(uniqueCount(UQ_%s_QUEUE)) as %sSendQueueP;\n",
-					mp->id_name,
 					mp->lib->name);
 			fprintf(fp, "%sSendQueueP.AMSend -> %sC.MacAMSend;\n",
                                         mp->lib->name,
