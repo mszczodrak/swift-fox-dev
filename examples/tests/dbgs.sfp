@@ -1,4 +1,4 @@
-process test { dbgs() nullNet() nullMac() cape() }
+process test { dbgs() nullNet() nullAM() }
 
 state single { test }
 
