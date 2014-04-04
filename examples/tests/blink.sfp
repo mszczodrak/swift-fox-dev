@@ -1,7 +1,6 @@
 process hello { blink(1, 500)	# Application layer module
 			nullNet()	# Network layer module
-			nullMac() 	# MAC layer module
-			nullRadio() 	# Radio layer module
+			nullAM() 	# AM layer
 			}
 state single { hello }
 
