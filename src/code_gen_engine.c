@@ -71,14 +71,14 @@ void generateFennecEngineC() {
 			fprintf(fp, "components new AMQueueImplP(uniqueCount(UQ_%s_QUEUE)) as %sSendQueueP;\n",
 					mp->id_name,
 					mp->lib->name);
-			fprintf(fp, "FennecEngineP.SplitControl[%s] -> %sSendQueueP.SplitControl;\n",
+			fprintf(fp, "FennecEngineP.SplitControl[%s] -> %sC.SplitControl;\n",
 					mp->id_name,
 					mp->lib->name);
-			fprintf(fp, "%sSendQueueP.AMControl -> %sC.SplitControl;\n",
+			fprintf(fp, "%sC.%sParams -> FennecEngineP.%sParams;\n", 
+					mp->lib->name,
 					mp->lib->name,
 					mp->lib->name);
-			fprintf(fp, "FennecEngineP.%sParams <- %sC.%sParams;\n", 
-					mp->lib->name,
+			fprintf(fp, "%sC.AMQueueControl -> %sSendQueueP;\n", 
 					mp->lib->name,
 					mp->lib->name);
 			fprintf(fp, "%sSendQueueP.AMSend -> %sC.MacAMSend;\n",
