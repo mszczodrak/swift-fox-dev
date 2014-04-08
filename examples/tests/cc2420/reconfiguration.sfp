@@ -52,6 +52,6 @@ from led1 goto led2 when tiMo
 from led2 goto collecting when tiMo2
 from collecting goto led1 when tiMo3
 
-#start led1
-start collecting
+start led1
+#start collecting
 
