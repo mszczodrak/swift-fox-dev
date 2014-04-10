@@ -1,3 +1,6 @@
-process empty { nullApp() nullNet() nullMac() nullRadio()  }
-start empty
+process empty { nullApp() nullNet() nullAM()  }
+
+state test { empty }
+
+start test
 
