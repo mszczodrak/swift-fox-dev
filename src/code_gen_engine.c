@@ -78,9 +78,6 @@ void generateFennecEngineC() {
 					mp->lib->name,
 					mp->lib->name,
 					mp->lib->name);
-			fprintf(fp, "%sC.AMQueueControl -> %sSendQueueP;\n", 
-					mp->lib->name,
-					mp->lib->name);
 			fprintf(fp, "%sSendQueueP.AMSend -> %sC.MacAMSend;\n",
                                         mp->lib->name,
                                         mp->lib->name);
