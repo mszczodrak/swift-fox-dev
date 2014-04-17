@@ -141,32 +141,47 @@ void generateFennecEngineC() {
 					conftab[i].conf->app->lib->name);
 		}
 
-     		fprintf(fp, "%s_%s.NetworkAMSend -> %s_%s.NetworkAMSend;\n",
+     		fprintf(fp, "%s_%s.SubAMSend -> %s_%s.AMSend;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "%s_%s.NetworkReceive -> %s_%s.NetworkReceive;\n",
+      		fprintf(fp, "%s_%s.SubReceive -> %s_%s.Receive;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "%s_%s.NetworkSnoop -> %s_%s.NetworkSnoop;\n",
+      		fprintf(fp, "%s_%s.SubSnoop -> %s_%s.Snoop;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "%s_%s.NetworkPacket -> %s_%s.NetworkPacket;\n",
+      		fprintf(fp, "%s_%s.SubPacket -> %s_%s.Packet;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "%s_%s.NetworkAMPacket -> %s_%s.NetworkAMPacket;\n",
+      		fprintf(fp, "%s_%s.SubAMPacket -> %s_%s.AMPacket;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "%s_%s.NetworkPacketAcknowledgements -> %s_%s.NetworkPacketAcknowledgements;\n",
+      		fprintf(fp, "%s_%s.SubPacketAcknowledgements -> %s_%s.PacketAcknowledgements;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->name);
+      		fprintf(fp, "%s_%s.SubPacketLinkQuality -> %s_%s.PacketLinkQuality;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->name);
+      		fprintf(fp, "%s_%s.SubPacketTransmitPower -> %s_%s.PacketTransmitPower;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->name, 
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->name);
+      		fprintf(fp, "%s_%s.SubPacketRSSI -> %s_%s.PacketRSSI;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name, 
 					conftab[i].conf->id->name,
@@ -177,7 +192,7 @@ void generateFennecEngineC() {
 		fprintf(fp, "components new AMQueueEntryP(%s) as %sAMQueueEntryP;\n",
 					conftab[i].conf->id_name,
 					conftab[i].conf->id->name);
-      		fprintf(fp, "%s_%s.MacAMSend -> %sAMQueueEntryP.AMSend;\n",
+      		fprintf(fp, "%s_%s.SubAMSend -> %sAMQueueEntryP.AMSend;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->id->name);
@@ -188,29 +203,29 @@ void generateFennecEngineC() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->am->lib->name,
 					conftab[i].conf->am->id_name);
-      		fprintf(fp, "%s_%s.MacReceive -> %sC.MacReceive[%s];\n",
+      		fprintf(fp, "%s_%s.SubReceive -> %sC.MacReceive[%s];\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name, 
 					conftab[i].conf->am->lib->name,
 					conftab[i].conf->id_name);
-      		fprintf(fp, "%s_%s.MacSnoop -> %sC.MacSnoop[%s];\n",
+      		fprintf(fp, "%s_%s.SubSnoop -> %sC.MacSnoop[%s];\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name,
 					conftab[i].conf->id_name);
-      		fprintf(fp, "%s_%s.MacAMPacket -> %sC.MacAMPacket;\n",
+      		fprintf(fp, "%s_%s.SubAMPacket -> %sC.MacAMPacket;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
-      		fprintf(fp, "%s_%s.MacPacket -> %sC.MacPacket;\n",
+      		fprintf(fp, "%s_%s.SubPacket -> %sC.MacPacket;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
-      		fprintf(fp, "%s_%s.MacPacketAcknowledgements -> %sC.MacPacketAcknowledgements;\n",
+      		fprintf(fp, "%s_%s.SubPacketAcknowledgements -> %sC.MacPacketAcknowledgements;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
-      		fprintf(fp, "%s_%s.MacLinkPacketMetadata -> %sC.MacLinkPacketMetadata;\n",
+      		fprintf(fp, "%s_%s.SubLinkPacketMetadata -> %sC.MacLinkPacketMetadata;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
@@ -219,6 +234,18 @@ void generateFennecEngineC() {
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
       		fprintf(fp, "%s_%s.RadioChannel -> %sC.RadioChannel;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->name,
+					conftab[i].conf->am->lib->name);
+      		fprintf(fp, "%s_%s.SubPacketLinkQuality -> %sC.PacketLinkQuality;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->name,
+					conftab[i].conf->am->lib->name);
+      		fprintf(fp, "%s_%s.SubPacketTransmitPower -> %sC.PacketTransmitPower;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->name,
+					conftab[i].conf->am->lib->name);
+      		fprintf(fp, "%s_%s.SubPacketRSSI -> %sC.PacketRSSI;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
