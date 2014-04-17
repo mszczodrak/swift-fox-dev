@@ -29,12 +29,12 @@ process yellow { blink(2, 1024)
 	*cc2420()
 }
 
-event tiMo { timerMilliE(85000, event_src)
+event tiMo { timerMilliE(850000, event_src)
 	nullNet()
 	*cc2420()
 }
 
-event tiMo2 { timerMilliE(50000, event_src)
+event tiMo2 { timerMilliE(500000, event_src)
 	nullNet()
 	*cc2420()
 }
