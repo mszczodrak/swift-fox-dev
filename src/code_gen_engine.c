@@ -81,13 +81,13 @@ void generateFennecEngineC() {
 			fprintf(fp, "%sC.AMQueueControl -> %sSendQueueP;\n", 
 					mp->lib->name,
 					mp->lib->name);
-			fprintf(fp, "%sSendQueueP.AMSend -> %sC.MacAMSend;\n",
+			fprintf(fp, "%sSendQueueP.AMSend -> %sC.AMSend;\n",
                                         mp->lib->name,
                                         mp->lib->name);
-			fprintf(fp, "%sSendQueueP.AMPacket -> %sC.MacAMPacket;\n",
+			fprintf(fp, "%sSendQueueP.AMPacket -> %sC.AMPacket;\n",
                                         mp->lib->name,
                                         mp->lib->name);
-			fprintf(fp, "%sSendQueueP.Packet -> %sC.MacPacket;\n",
+			fprintf(fp, "%sSendQueueP.Packet -> %sC.Packet;\n",
                                         mp->lib->name,
                                         mp->lib->name);
 			fprintf(fp, "\n");
@@ -196,36 +196,36 @@ void generateFennecEngineC() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->id->name);
-      		fprintf(fp, "%sAMQueueEntryP.AMPacket -> %sC.MacAMPacket;\n",
+      		fprintf(fp, "%sAMQueueEntryP.AMPacket -> %sC.AMPacket;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->am->lib->name);
       		fprintf(fp, "%sAMQueueEntryP.Send -> %sSendQueueP.Send[unique(UQ_%s_QUEUE)];\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->am->lib->name,
 					conftab[i].conf->am->id_name);
-      		fprintf(fp, "%s_%s.SubReceive -> %sC.MacReceive[%s];\n",
+      		fprintf(fp, "%s_%s.SubReceive -> %sC.Receive[%s];\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name, 
 					conftab[i].conf->am->lib->name,
 					conftab[i].conf->id_name);
-      		fprintf(fp, "%s_%s.SubSnoop -> %sC.MacSnoop[%s];\n",
+      		fprintf(fp, "%s_%s.SubSnoop -> %sC.Snoop[%s];\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name,
 					conftab[i].conf->id_name);
-      		fprintf(fp, "%s_%s.SubAMPacket -> %sC.MacAMPacket;\n",
+      		fprintf(fp, "%s_%s.SubAMPacket -> %sC.AMPacket;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
-      		fprintf(fp, "%s_%s.SubPacket -> %sC.MacPacket;\n",
+      		fprintf(fp, "%s_%s.SubPacket -> %sC.Packet;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
-      		fprintf(fp, "%s_%s.SubPacketAcknowledgements -> %sC.MacPacketAcknowledgements;\n",
+      		fprintf(fp, "%s_%s.SubPacketAcknowledgements -> %sC.PacketAcknowledgements;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
-      		fprintf(fp, "%s_%s.SubLinkPacketMetadata -> %sC.MacLinkPacketMetadata;\n",
+      		fprintf(fp, "%s_%s.SubLinkPacketMetadata -> %sC.LinkPacketMetadata;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
