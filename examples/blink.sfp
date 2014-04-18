@@ -1,4 +1,4 @@
-configuration hello { 
+process hello { 
 	blink(1, 500)
 	nullNet()
 	nullAM() }

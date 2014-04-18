@@ -1,7 +1,0 @@
-process hello { blink(1, 500)	# Application layer module
-			nullNet()	# Network layer module
-			nullAM() 	# AM layer
-			}
-state single { hello }
-
-start single

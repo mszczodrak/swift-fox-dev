@@ -1,6 +1,0 @@
-process empty { nullApp() nullNet() nullAM()  }
-
-state test { empty }
-
-start test
-

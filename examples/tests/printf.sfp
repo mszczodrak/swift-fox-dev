@@ -1,6 +1,0 @@
-process test { printf() nullNet() nullAM() }
-
-state single { test }
-
-start single
-

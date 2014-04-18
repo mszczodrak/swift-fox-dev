@@ -1,6 +1,0 @@
-process test { dbgs() nullNet() nullAM() }
-
-state single { test }
-
-start single
-
