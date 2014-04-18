@@ -109,7 +109,7 @@ any		{
 			yylval.symp = symlook(yytext);
 #endif
 			return ANY;			}
-(configuration|conf|proc|process)	{
+(proc|process)	{
 #ifndef __DEBUG__
 #endif
 			return CONFIGURATION;		}
