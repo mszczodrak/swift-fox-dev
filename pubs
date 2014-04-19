@@ -1,5 +1,4 @@
 doc
-examples
 man      
 src
 .gitignore
@@ -12,3 +11,5 @@ README
 README.md
 configure.ac
 release.sh  
+examples/*.sfp
+examples/cc2420
