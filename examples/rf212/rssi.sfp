@@ -8,8 +8,8 @@ int8_t threshold2 = -50         # turn on 3rd LED (blue)
 
 process rssi_test { rssi(test_delay, rssi_offset, threshold1, threshold2) 
 	nullNet()
-	rf212(radio_channel, radio_tx_power, 0, 20, 1)
-	# channel, power, sleepInterval, sleepDelay, autoAck
+	rf212(radio_channel, radio_tx_power, 0)
+	# channel, power, sleepInterval, sleepDelay
 }
 
 state test { rssi_test }
