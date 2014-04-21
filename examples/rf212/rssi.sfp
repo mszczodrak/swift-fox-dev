@@ -1,7 +1,6 @@
-uint16_t test_delay = 1024      # in ms - how often a test packet is sent
 uint8_t radio_tx_power = 0xE8   # 
-                                # 
 uint8_t radio_channel = 0       # 
+uint16_t test_delay = 1024      # in ms - how often a test packet is sent
 float rssi_scale = 3.1		
 int8_t rssi_offset = -98        
 int8_t threshold1 = -80         # turn on 2nd LED (yellow)
