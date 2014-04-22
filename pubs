@@ -13,3 +13,7 @@ configure.ac
 release.sh  
 examples/*.sfp
 examples/cc2420
+examples/cc2420x
+examples/rf212
+examples/rf230
+examples/atm128rfa1
