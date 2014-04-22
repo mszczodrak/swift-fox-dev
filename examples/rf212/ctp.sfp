@@ -6,7 +6,7 @@ uint16_t src_node = 0xFFFF
 process count {
         counter(60, 1024, src_node, dest_node)
         ctp(dest_node)
-        cc2420x(radio_channel, radio_tx_power, 200)
+        rf212(radio_channel, radio_tx_power, 200)
         # channel, power, sleepInterval, sleepDelay
 }
 

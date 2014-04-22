@@ -7,40 +7,40 @@ uint16_t src_node = 0xFFFF
 process system_control ! {
 	StateSync()
 	nullNet()
-	*cc2420x()
+	*atm128rfa1()
 	# channel, power, lpl
 }
 
 process count {
 	counter(60, 1024, src_node, dest_node)
 	ctp(dest_node)
-	cc2420x(radio_channel, radio_tx_power, 0, 0)
+	atm128rfa1(radio_channel, radio_tx_power, 0, 0)
 	# channel, power, lpl, slotted
 }
 
 process red { blink(1, 1024)
 	nullNet() 
-	*cc2420x()
+	*atm128rfa1()
 }
 
 process yellow { blink(2, 1024)
 	nullNet() 
-	*cc2420x()
+	*atm128rfa1()
 }
 
 event tiMo { timerMilliE(8500, 0xFFFF)
 	nullNet()
-	*cc2420x()
+	*atm128rfa1()
 }
 
 event tiMo2  { timerMilliE(5000, 0xFFFF)
 	nullNet()
-	*cc2420x()
+	*atm128rfa1()
 }
 
 event tiMo3  { timerMilliE(300000, 0xFFFF)
 	nullNet()
-	*cc2420x()
+	*atm128rfa1()
 }
 
 state led1 l 3 { red }
