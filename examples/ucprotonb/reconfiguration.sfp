@@ -1,7 +1,7 @@
 uint8_t rf212_radio_tx_power = 0xE8   #
 uint8_t rf212_radio_channel = 0       #
-uint8_t rf230_radio_tx_power = 0      #
-uint8_t rf230_radio_channel = 26      #
+uint8_t atm128rfa1_radio_tx_power = 0      #
+uint8_t atm128rfa1_radio_channel = 26      #
 uint16_t dest_node = 2
 uint16_t event_src = 3		# set to 0xFFFF if every node detects an event
 uint16_t src_node = 0xFFFF
@@ -16,7 +16,7 @@ process system_control ! {
 process count {
 	counter(60, 1024, src_node, dest_node)
 	ctp(dest_node)
-	rf230(rf230_radio_channel, rf230_radio_tx_power, 0)
+	atm128rfa1(atm128rfa1_radio_channel, atm128rfa1_radio_tx_power, 0)
 	# channel, power, lpl
 }
 
