@@ -55,6 +55,8 @@ int conf_id_counter	= 0;
 int state_defined	= 0;
 int module_id_counter	= 0;
 
+int variable_memory_offset = 0;
+
 int active_state;
 
 int file_status;
@@ -216,12 +218,15 @@ global_variables: global_variables global_variable
 
 global_variable: param_type IDENTIFIER array_part assign_value newlines 
 		{
-			$$		= calloc(1, sizeof(struct variable));
+			$$ 		= find_variable($2);
 			$$->type 	= $1;
 			$$->name	= $2;
 			$$->length	= $3;
+			$$->offset	= variable_memory_offset;
 			$$->value	= $4;
 			$2->type	= TYPE_VARIABLE_GLOBAL;
+
+			variable_memory_offset += (type_size($$->type) * $$->length);
 		}
 
 array_part: OPEN_SQUARE_BRACE CONSTANT CLOSE_SQUARE_BRACE
@@ -953,6 +958,29 @@ find_module_symtab(char *s) {
         }
 	return NULL;
 }
+
+struct variable *
+find_variable(struct symtab *s) {
+        /* iterator */
+        struct variable *vp = NULL;
+
+	/* loop */
+	for(vp = vartab; vp < &vartab[NSYMS]; vp++) {
+        	/* is it already here? */
+	        if (vp->name && vp->name == s)
+	      		return vp;
+
+		/* is it free */
+		if(!vp->name) {
+			vp->name = s;
+			return vp;
+		}
+		/* otherwise continue to next */
+	}
+	yyerror("vartab is full");
+	return NULL;
+}
+
 
 /* process_module */
 struct modtab *

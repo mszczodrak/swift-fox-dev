@@ -46,6 +46,7 @@
 #define NCONFS			256
 #define NSTATES			256
 #define NPOLS			256
+#define NVARS			256
 
 #define TYPE_UNKNOWN		0
 
@@ -262,7 +263,7 @@ struct variable {
 	int			length;
 	/* default variable value */
 	long double		value;
-};
+} vartab[NVARS];
 
 
 struct variables {
@@ -274,7 +275,7 @@ struct variables {
 	struct variable		*var;
 };
 
-
+struct variable *find_variable(struct symtab *s);
 
 struct policy {
 	/** pointer to parent policy */

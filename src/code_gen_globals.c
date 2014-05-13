@@ -153,16 +153,11 @@ void addGlobalVariable(struct variable *sh) {
 		exit(1);
 	}
 
-	sh->name->type = TYPE_VARIABLE_GLOBAL;
-	sh->offset = variable_memory_offset;
-	variable_memory_offset += (type_size(sh->type) * sh->length);
-
 	fprintf(fp, "%s %s[%d] = {%Lf};\n\n", type_name(sh->type), 
 						sh->name->name,
 						sh->length,
 						sh->value);
 
-	printf("%d\n", variable_memory_offset);
 	free(full_path);
 	fclose(fp);
 

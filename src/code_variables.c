@@ -34,12 +34,8 @@
 #include "code_gen.h"
 #include "utils.h"
 
-int variable_memory_offset = 0;
 
 void findVariableOffset(struct variable *sh) {
-	sh->name->type = TYPE_VARIABLE_GLOBAL;
-	sh->offset = variable_memory_offset;
-	variable_memory_offset += (type_size(sh->type) * sh->length);
 }
 
 
