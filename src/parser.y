@@ -84,7 +84,7 @@ process_module_parameter(int param_type, struct symtab* identifier, struct defva
 	double			dval;
 	long double		ldval;
 	struct confnode		*confp;
-	struct confnodes	*confsp;
+	struct processnodes	*confsp;
 	struct conf_id		*confid;
 	struct conf_ids		*confids;
 	struct event_id		*eventid;
@@ -145,8 +145,8 @@ process_module_parameter(int param_type, struct symtab* identifier, struct defva
 %type <ldval> 	assign_value
 %type <mtl>	module_parameters
 %type <mtl>	next_module_parameter
-%type <parv>	parameters
-%type <parv>	next_parameter
+%type <vars>	parameters
+%type <var>	parameter
 %type <ival>	param_type
 %type <defv>	default_value
 %type <ival>	process_type
@@ -257,7 +257,7 @@ assign_value: RELOP CONSTANT
 defined_processes: processes process
 		{
 			/* processes set */
-			$$		= calloc(1, sizeof(struct confnodes));
+			$$		= calloc(1, sizeof(struct processnodes));
 			
 			/* link the child nodes */
 			if ($1 != NULL)
@@ -272,7 +272,7 @@ defined_processes: processes process
 processes: processes process
 		{
 			/* processes set */
-			$$		= calloc(1, sizeof(struct confnodes));
+			$$		= calloc(1, sizeof(struct processnodes));
 			
 			/* link the child nodes */
 			if ($1 != NULL) 
@@ -304,7 +304,7 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 				yyerror("expecting application module");
 			}
 			$$->app			= $6;
-			$$->app_params		= $6->params;
+			$$->app_vars		= $6->variables;
 			$$->app->lib->used 	= 1;
 
 
@@ -314,7 +314,7 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 				yyerror("expecting network module");
 			}
 			$$->net			= $8;
-			$$->net_params		= $8->params;
+			$$->net_vars		= $8->variables;
 			$$->net->lib->used 	= 1;
 
 
@@ -324,7 +324,7 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 				yyerror("expecting am module");
 			}
 			$$->am			= $11;
-			$$->am_params		= $11->params;
+			$$->am_vars		= $11->variables;
 			$$->am_inferior	= $10;
 			$$->am->lib->used 	= 1;
 
@@ -388,32 +388,23 @@ module_level: STAR
 module: IDENTIFIER OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS
 		{
 			$$ = proc_module($1->name);
-			$$->params = $3;
+			$$->variables = $3;
 		}		
 	;
 
-parameters: IDENTIFIER next_parameter
+parameters: parameters parameter
                 {
-                        struct symtab *sp = symlook($1->name);
-                        if (sp == NULL)
-                                yyerror("symtab pointer not found");
 
-			if (sp->type != TYPE_VARIABLE_GLOBAL)
-				yyerror("undefined variable");
+			$$              = calloc(1, sizeof(struct variables));
 
-                        /* paramvalue node */
-                        $$              = calloc(1, sizeof(struct paramvalue));
-			$$->child	= $2;
-                        $$->value       = $1;
-			$$->num_value	= 0;
-                }
-        | CONSTANT next_parameter
-                {
-                        /* pramvalue node */
-                        $$              = calloc(1, sizeof(struct paramvalue));
-                        $$->child       = $2;
-                        $$->value       = NULL;
-                        $$->num_value	= $1;
+			/* link the child nodes */
+			if ($1 != NULL)
+                                $1->parent = $$;
+
+                        $2->parent      = $$;
+
+                        $$->vars        = $1;
+                        $$->var         = $2;
                 }
 	|	
 		{
@@ -421,36 +412,22 @@ parameters: IDENTIFIER next_parameter
 		}
         ;
 
-next_parameter: COMMA IDENTIFIER next_parameter 
+parameter: IDENTIFIER
                 {
-                        struct symtab *sp = symlook($2->name);
-                        if (sp == NULL)
-                                yyerror("symtab pointer not found");
-
-			if (sp->type != TYPE_VARIABLE_GLOBAL)
+			$$		= find_variable($1);
+			if ($$->type != TYPE_VARIABLE_GLOBAL) {
+				fprintf(stderr, "Variable %s is not global\n", $1->name);
 				yyerror("undefined variable");
-
-                        /* paramvalue node */
-                        $$              = calloc(1, sizeof(struct paramvalue));
-                        $$->child       = $3;
-                        $$->value       = $2;
-			$$->num_value	= 0;
+			}
                 }
-        | COMMA CONSTANT next_parameter
+
+        | CONSTANT
 		{
-                        /* pramvalue node */
-                        $$              = calloc(1, sizeof(struct paramvalue));
-                        $$->child       = $3;
-                        $$->value       = NULL;
-			$$->num_value	= $2;
+			$$		= find_variable(NULL);
+			$$->type	= TYPE_VARIABLE_LOCAL;
+			$$->value	= $1;
 		}
-	|
-                {
-                        $$ = NULL;
-                }
         ;
-
-
 
 
 defined_states: states state
@@ -1004,7 +981,7 @@ proc_module(char *s) {
                 if(!mp->lib) {
 			mp->type = sp->type;
 			mp->lib = sp->lib;
-			mp->params = NULL;
+			mp->variables = NULL;
 			mp->name = strdup(sp->lib->name);
 			mp->id = ++module_id_counter;
 			mp->id_name = conf_module_name(mp->name, "module");

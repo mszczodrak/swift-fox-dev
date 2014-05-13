@@ -56,7 +56,7 @@ traverse_program(struct program* p, int f, int policy_counter){
 			plain traversal 
 			*/
 			case TREE_TRAVERSE:
-				traverse_confnodes(p->defcon, f);
+				traverse_processnodes(p->defcon, f);
 				traverse_statenodes(p->defstate, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
@@ -75,7 +75,7 @@ traverse_program(struct program* p, int f, int policy_counter){
 				init_sem_evt();
 				
 				traverse_variables(p->vars, f);
-				traverse_confnodes(p->defcon, f);
+				traverse_processnodes(p->defcon, f);
 				traverse_statenodes(p->defstate, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
@@ -90,7 +90,7 @@ traverse_program(struct program* p, int f, int policy_counter){
 				startGlobalVariables();
 				traverse_variables(p->vars, f);
 				endGlobalVariables();
-				traverse_confnodes(p->defcon, f);
+				traverse_processnodes(p->defcon, f);
 				traverse_statenodes(p->defstate, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
@@ -173,21 +173,21 @@ configuration traversal
 */
 
 void
-traverse_confnodes(struct confnodes* c, int f) {	
+traverse_processnodes(struct processnodes* c, int f) {	
 	if (c != NULL){
 		switch (f) {
 		case TREE_TRAVERSE:
-			traverse_confnodes(c->confs, f);
+			traverse_processnodes(c->confs, f);
 			traverse_confnode(c->conf, f);
 			break;
 
 		case TREE_CHECK_SEMANTIC:
-			traverse_confnodes(c->confs, f);
+			traverse_processnodes(c->confs, f);
 			traverse_confnode(c->conf, f);
 			break;
 
 		case TREE_GENERATE_CODE:
-			traverse_confnodes(c->confs, f);
+			traverse_processnodes(c->confs, f);
 			traverse_confnode(c->conf, f);
 			break;
 			

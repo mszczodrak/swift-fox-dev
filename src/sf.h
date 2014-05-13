@@ -64,6 +64,7 @@
 #define TYPE_STATE		13
 #define TYPE_KEYWORD		14
 #define TYPE_VARIABLE_GLOBAL	15
+#define TYPE_VARIABLE_LOCAL	16
 
 #define TYPE_BOOL		19
 #define TYPE_UINT8_T		20
@@ -169,27 +170,54 @@ struct evtab {
 
 struct evtab *evlook(char *);
 
+struct variable {
+	/** pointer to the structure with parent variables */
+	struct variables	*parent;
+	/** type of a variable encoded as intiger */
+	int			type;
+	/** memory offset in bytes */
+	int			offset;
+	/** pointer to a symtab containing the variable's name */
+	struct symtab		*name;
+	/** lenght of the variable - use for arrays */
+	int			length;
+	/* default variable value */
+	long double		value;
+} vartab[NVARS];
+
+
+struct variables {
+	/** pointer to previous variable */
+	struct variables	*parent;	
+	/** pointer to further variable */
+	struct variables	*vars;
+	/** pointer to the variable structure */
+	struct variable		*var;
+};
+
+struct variable *find_variable(struct symtab *s);
+
 struct modtab {
 	char			*name;
         int            		type;
 	int			id;
 	char			*id_name;
         struct libtab   	*lib;
-	struct paramvalue	*params;
+	struct variables	*variables;
 } modtab[NMODS];
 
 struct modtab *proc_module(char *);
 
 struct confnode {
-	struct confnodes	*parent;
+	struct processnodes	*parent;
 	struct symtab		*id;
 	char			*name;
 	struct modtab		*app;
 	struct modtab		*net;
 	struct modtab		*am;
-	struct paramvalue	*app_params;
-	struct paramvalue	*net_params;
-	struct paramvalue	*am_params;
+	struct variables	*app_vars;
+	struct variables	*net_vars;
+	struct variables	*am_vars;
 	int			app_param_name[MAX_NUM_OF_PARAMS];
 	int			app_param_offset[MAX_NUM_OF_PARAMS];
 	int			net_param_name[MAX_NUM_OF_PARAMS];
@@ -210,9 +238,9 @@ struct conftab {
 } conftab[NCONFS];
 
 
-struct confnodes {
-	struct confnodes	*parent;
-	struct confnodes	*confs;
+struct processnodes {
+	struct processnodes	*parent;
+	struct processnodes	*confs;
 	struct confnode		*conf;
 };
 
@@ -250,33 +278,6 @@ struct statenodes {
 };
 
 
-struct variable {
-	/** pointer to the structure with parent variables */
-	struct variables	*parent;
-	/** type of a variable encoded as intiger */
-	int			type;
-	/** memory offset in bytes */
-	int			offset;
-	/** pointer to a symtab containing the variable's name */
-	struct symtab		*name;
-	/** lenght of the variable - use for arrays */
-	int			length;
-	/* default variable value */
-	long double		value;
-} vartab[NVARS];
-
-
-struct variables {
-	/** pointer to previous variable */
-	struct variables	*parent;	
-	/** pointer to further variable */
-	struct variables	*vars;
-	/** pointer to the variable structure */
-	struct variable		*var;
-};
-
-struct variable *find_variable(struct symtab *s);
-
 struct policy {
 	/** pointer to parent policy */
 	struct policies		*parent;
@@ -306,7 +307,7 @@ struct initnode {
 
 struct program {
 	struct variables	*vars;
-	struct confnodes	*defcon;
+	struct processnodes	*defcon;
 	struct statenodes	*defstate;
 	struct policies		*defpol;
 	struct initnode		*init;
