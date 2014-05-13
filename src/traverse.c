@@ -207,6 +207,33 @@ traverse_processnodes(struct processnodes* c, int f) {
 	}
 }
 
+
+void updateProcessVariables(struct confnode* c) {
+	struct paramtype *pt;
+	struct modtab *mp;
+	struct variable *vp;
+
+/*
+
+	for (pt = c->app->lib->params, vp = c->app_vars; pt != NULL; pt = pt->child, vp = vp->vars ) {
+
+		if (vp->var->type == TYPE_VARIABLE_LOCAL) {
+			type = pt->type;
+			pt->name;
+		}
+
+	}
+
+
+	mp = c->net;
+
+
+	mp = c->am;
+*/
+
+}
+
+
 /** 
 visit a single configuration
 
@@ -219,6 +246,7 @@ void
 traverse_confnode(struct confnode* c, int f) {	
 	switch (f) {
 		case TREE_TRAVERSE:
+			updateProcessVariables(c);
 			break;
 
 		case TREE_CHECK_SEMANTIC:
@@ -261,7 +289,6 @@ traverse_statenodes(struct statenodes* s, int f) {
 	} else {
 		switch(f) {
 		case TREE_CHECK_SEMANTIC:
-//			checkControlState();	
 			break;
 
 		default:
@@ -280,8 +307,6 @@ traverse_statenode(struct statenode* s, int f) {
 
 		case TREE_CHECK_SEMANTIC:
 			checkState(s);
-//			checkConfiguration(c);
-//			checkConfigurationModules(c);
 			break;
         
 		case TREE_GENERATE_CODE:

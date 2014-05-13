@@ -65,6 +65,7 @@
 #define TYPE_KEYWORD		14
 #define TYPE_VARIABLE_GLOBAL	15
 #define TYPE_VARIABLE_LOCAL	16
+#define TYPE_VARIABLE_DEFAULT	17
 
 #define TYPE_BOOL		19
 #define TYPE_UINT8_T		20
@@ -135,24 +136,11 @@ struct defvalue {
 	int 			def_valid;
 };
 
-struct paramtype {
-        struct paramtype        *child;
-	int			type;
-	struct defvalue		*def_val;
-        char                    *name;
-};
-
-struct paramvalue {
-	struct paramvalue	*child;	
-	struct symtab		*value;
-	long double		num_value;
-};
-
 struct libtab {
         char			*path;
 	char			*def;
 	char			*name;
-	struct paramtype	*params;
+	struct variables	*variables;
 	int			used;
 	int			type;
 	int			id;

@@ -341,9 +341,10 @@ void generateFennecEngineP() {
 	fprintf(fp, "}\n\n");
 
 
+/*
+
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
-			/* check if the interface is empty, if it is add dummy call */
 			if (mp->lib->params == NULL) {
 				if (mp->type == TYPE_AM) {
 					fprintf(fp, "async command void %sParams.dummy() {}\n\n",
@@ -425,6 +426,8 @@ void generateFennecEngineP() {
 			}
 	        }
 	}
+
+*/
 
 	fprintf(fp, "default command error_t SplitControl.start[module_t module_id]() { return FAIL; }\n");
 	fprintf(fp, "default command error_t SplitControl.stop[module_t module_id]() { return FAIL; }\n");

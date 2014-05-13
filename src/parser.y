@@ -67,9 +67,7 @@ char *conf_state_suffix = "_cts";
 void yyerror(const char *errmsg, ...);
 int yylex(void);
 
-struct paramtype*
-process_module_parameter(int param_type, struct symtab* identifier, struct defvalue* default_value);
-
+char *current_module = NULL;
 
 %}
 
@@ -131,8 +129,8 @@ process_module_parameter(int param_type, struct symtab* identifier, struct defva
 %type <statep>	state
 %type <statesp>	states
 %type <statesp>	defined_states
-%type <vars>	global_variables
-%type <var>	global_variable
+%type <vars>	variables
+%type <var>	variable
 %type <pol>	policy;
 %type <pols>	policies;
 %type <initp>	initial_process
@@ -143,12 +141,11 @@ process_module_parameter(int param_type, struct symtab* identifier, struct defva
 %type <ival> 	module_level
 %type <ival> 	array_part
 %type <ldval> 	assign_value
-%type <mtl>	module_parameters
-%type <mtl>	next_module_parameter
+%type <vars>	module_variables
+%type <var>	module_variable
 %type <vars>	parameters
 %type <var>	parameter
 %type <ival>	param_type
-%type <defv>	default_value
 %type <ival>	process_type
 
 %%
@@ -173,7 +170,7 @@ swiftfox: library program
 		}
 	;
 
-program: global_variables defined_processes defined_states policies initial_process 
+program: variables defined_processes defined_states policies initial_process 
 		{
 			/* root node */
 			$$		= calloc(1, sizeof(struct program));
@@ -195,9 +192,9 @@ program: global_variables defined_processes defined_states policies initial_proc
 	;
 
 
-global_variables: global_variables global_variable
+variables: variables variable
                 {
-			/* global_variable set */
+			/* variable set */
 			$$ 		= calloc(1, sizeof(struct variables));
 
 			/* link the child nodes */
@@ -216,7 +213,7 @@ global_variables: global_variables global_variable
         ;
 
 
-global_variable: param_type IDENTIFIER array_part assign_value newlines 
+variable: param_type IDENTIFIER array_part assign_value newlines 
 		{
 			$$ 		= find_variable($2);
 			$$->type 	= $1;
@@ -602,7 +599,7 @@ definitions: definitions definition
         |
         ;
 
-definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_parameters newlines CLOSE_PARENTHESIS
+definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_variables newlines CLOSE_PARENTHESIS
 		{
 			/* iterator */
 			char *p = NULL;
@@ -615,12 +612,14 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_par
 				/* failed */
 				yyerror("redeclaration of library");
 
+			current_module = $3->name;
+
 			/* fix the child properties */
 			$3->type = $2;
 			$3->lib = $4;
 
 			/* set params for the library */
-			$4->params = $7;
+			$4->variables = $7;
 
                         /* extract the name from the path */
                         if ((p = rindex($4->path, '/')) == NULL)
@@ -678,41 +677,39 @@ module_type: APPLICATION 	{ $$ = TYPE_APPLICATION; }
         ;
 
 
-module_parameters: param_type IDENTIFIER default_value next_module_parameter
+module_variables: module_variables module_variable 
 		{
-			$$ = process_module_parameter($1, $2, $3);
-                        $$->child       = $4;
+			$$              = calloc(1, sizeof(struct variables));
+
+			/* link the child nodes */
+			if ($1 != NULL)
+				$1->parent = $$;
+
+			$2->parent      = $$;
+
+			$$->vars        = $1;
+			$$->var         = $2;
 		}
-	|
+	|       
 		{
 			$$ = NULL;
-		}
+		}                       
 	;
 
 
-default_value: RELOP CONSTANT
+module_variable: param_type IDENTIFIER assign_value newlines 
 		{
-			$$		= calloc(1, sizeof(struct defvalue));
-			$$->def_value	= $2;
-			$$->def_valid	= 1;
-		}
-	|
-		{
-			$$		= calloc(1, sizeof(struct defvalue));
-			$$->def_value	= 0;
-			$$->def_valid	= 0;
-		}
-	;
+			struct symtab *s;
+			char *tmp = malloc(strlen(current_module) + strlen($2->name) + 2);
+			sprintf(tmp, "%s_%s", current_module, $2->name);
+			s = symlook(tmp);
 
+			$$		= find_variable(s);
+			$$->name	= tmp;
+			$$->type	= $1;
+			$$->value	= $3;
+			$2->type	= TYPE_VARIABLE_DEFAULT;
 
-next_module_parameter: newlines COMMA newlines param_type IDENTIFIER default_value next_module_parameter
-		{
-			$$ = process_module_parameter($4, $5, $6);
-			$$->child = $7;
-		}
-	|
-		{
-			$$ = NULL;
 		}
 	;
 
@@ -1107,26 +1104,6 @@ initialize(void) {
 	sp->name = "any";
 	sp->value = 253;
 	sp->type = TYPE_KEYWORD;
-}
-
-struct paramtype*
-process_module_parameter(int param_type, struct symtab* identifier, struct defvalue* default_value) {
-	struct paramtype* param;
-	struct symtab *sp = symlook(identifier->name);
-	if (sp == NULL)
-		yyerror("symtab pointer not found");
-
-	if (param_type == 0) {
-		fprintf(stderr, "missing parameter type in declaration of module %s\n",
-			identifier->name);
-		yyerror("parameter type not specified");
-	}
-
-	param = calloc(1, sizeof(struct paramtype));
-	param->type = param_type;
-	param->name = identifier->name;
-	param->def_val = default_value;
-	return param;
 }
 
 void printTable() {
