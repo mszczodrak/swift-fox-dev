@@ -78,6 +78,9 @@ void generateFennecEngineC() {
 					mp->lib->name,
 					mp->lib->name,
 					mp->lib->name);
+			fprintf(fp, "%sC.Param -> FennecEngineP.Param[%s, F_AM];\n", 
+					mp->lib->name,
+					mp->id_name);
 			fprintf(fp, "%sC.AMQueueControl -> %sSendQueueP;\n", 
 					mp->lib->name,
 					mp->lib->name);
@@ -113,7 +116,10 @@ void generateFennecEngineC() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name, 
 					conftab[i].conf->app->lib->name);
-
+		fprintf(fp, "FennecEngineP.Param[%s, F_APPLICATION] <- %s_%s.Param;\n", 
+					conftab[i].conf->id_name,
+					conftab[i].conf->id->name,
+					conftab[i].conf->app->lib->name);
 		fprintf(fp, "\n");
 
 		fprintf(fp, "components new %sC(%s) as %s_%s;\n",
@@ -130,6 +136,11 @@ void generateFennecEngineC() {
 					conftab[i].conf->id_name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name, 
+					conftab[i].conf->net->lib->name);
+
+		fprintf(fp, "FennecEngineP.Param[%s, F_NETWORK] <- %s_%s.Param;\n", 
+					conftab[i].conf->id_name,
+					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
 
 		fprintf(fp, "\n");
@@ -291,6 +302,7 @@ void generateFennecEngineP() {
 			}
 		}
         }
+	fprintf(fp, "provides interface Param[process_t process, uint8_t layer];\n");
 
 	fprintf(fp,"}\n\n");
 	fprintf(fp,"implementation {\n\n");
@@ -318,6 +330,16 @@ void generateFennecEngineP() {
 	fprintf(fp, "\tdbg(\"FennecEngine\", \"[-] FennecEngine SplitControl.stopDone[%%d](%%d)\\n\", module_id, error);\n");
 	fprintf(fp, "\tsignal ModuleCtrl.stopDone(error);\n");
 	fprintf(fp, "}\n\n");
+
+
+	fprintf(fp, "command error_t Param.get[process_t process_id, uint8_t layer](uint8_t name, void *value, uint8_t size) {\n");
+	fprintf(fp, "\treturn SUCCESS;\n");
+	fprintf(fp, "}\n\n");
+
+	fprintf(fp, "command error_t Param.set[process_t process_id, uint8_t layer](uint8_t name, void *value, uint8_t size) {\n");
+	fprintf(fp, "\treturn SUCCESS;\n");
+	fprintf(fp, "}\n\n");
+
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
 		if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
