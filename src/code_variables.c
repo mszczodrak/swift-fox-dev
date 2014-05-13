@@ -31,51 +31,20 @@
   * @author: Marcin K Szczodrak
   */
 
+#include "code_gen.h"
+#include "utils.h"
 
-#ifndef __CODE_GEN_H__
-#define __CODE_GEN_H__
-#define TEMP_CONF_FILE	"/tmp/tmp_conf_file_sfc"
+int variable_memory_offset = 0;
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <string.h>
-#include <ctype.h>
-#include "sf.h"
-#include "traverse.h"
+void findVariableOffset(struct variable *sh) {
+	sh->name->type = TYPE_VARIABLE_GLOBAL;
+	sh->offset = variable_memory_offset;
+	variable_memory_offset += (type_size(sh->type) * sh->length);
+}
 
-extern int conf_id_counter;
-extern int module_id_counter;
-extern int state_id_counter;
 
-extern FILE* tmp_confs;
+void findParametersOffset(struct confnode* c) {
 
-void setFiles();
-void initCodeGeneration();
 
-void setFennecExtra();
+}
 
-void startGlobalVariables();
-void addGlobalVariable(struct variable *sh);
-void findVariableOffset(struct variable *sh);
-void findParametersOffset(struct confnode* c);
-void endGlobalVariables();
-
-void finishCodeGeneration(int policy_counter);
-
-void generateCaches(int event_counter, int policy_counter);
-
-void generateModules();
-
-void generateDefaultParams();
-
-void generateInitial(struct initnode *i);
-
-void generateFennecEngineC();
-
-void generateFennecEngineP();
-
-void generateParams();
-void generateGlobals();
-
-#endif

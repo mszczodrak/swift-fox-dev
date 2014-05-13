@@ -74,6 +74,7 @@ traverse_program(struct program* p, int f, int policy_counter){
 				*/
 				init_sem_evt();
 				
+				traverse_variables(p->vars, f);
 				traverse_confnodes(p->defcon, f);
 				traverse_statenodes(p->defstate, f);
 				traverse_policies(p->defpol, f);
@@ -150,6 +151,7 @@ traverse_variable(struct variable* sh, int f) {
 		break;
 
 	case TREE_CHECK_SEMANTIC:
+		findVariableOffset(sh);
 		break;
 
 	case TREE_GENERATE_CODE:
@@ -222,6 +224,7 @@ traverse_confnode(struct confnode* c, int f) {
 		case TREE_CHECK_SEMANTIC:
 			checkConfiguration(c);
 			checkConfigurationModules(c);
+			findParametersOffset(c);
 			break;
         
 		case TREE_GENERATE_CODE:

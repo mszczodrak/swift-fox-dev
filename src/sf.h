@@ -81,6 +81,9 @@
 #define MIN_CONV		60 * SEC_CONV
 #define HR_CONV			60 * MIN_CONV
 
+#define MAX_NUM_OF_PARAMS	10
+
+
 #define NUMBER_OF_FF_MODULES	7
 
 #define BUF_SZ			1024
@@ -186,6 +189,12 @@ struct confnode {
 	struct paramvalue	*app_params;
 	struct paramvalue	*net_params;
 	struct paramvalue	*am_params;
+	int			app_param_name[MAX_NUM_OF_PARAMS];
+	int			app_param_offset[MAX_NUM_OF_PARAMS];
+	int			net_param_name[MAX_NUM_OF_PARAMS];
+	int			net_param_offset[MAX_NUM_OF_PARAMS];
+	int			am_param_name[MAX_NUM_OF_PARAMS];
+	int			am_param_offset[MAX_NUM_OF_PARAMS];
 	char			*app_id_name;
 	char			*net_id_name;
 	char			*am_id_name;

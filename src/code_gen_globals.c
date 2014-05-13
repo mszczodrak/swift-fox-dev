@@ -34,8 +34,6 @@
 #include "code_gen.h"
 #include "utils.h"
 
-int variable_memory_offset = 0;
-
 void startGlobalVariables() {
 	char *full_path = get_sfc_path("", "ff_globals.h");
 	FILE *fp = fopen(full_path, "w");
@@ -66,8 +64,6 @@ void startGlobalVariables() {
 	fprintf(fp, "#define _GLOBAL_VARIABLES_H_\n\n");
 
 	fprintf(fp, "nx_struct global_variables {\n");
-
-	variable_memory_offset = 0;
 
 	free(full_path);
 	fclose(fp);
