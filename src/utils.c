@@ -37,6 +37,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <ctype.h>
+#include <stdint.h>
 #include "utils.h"
 #include "sf.h"
 #include "parser.h"
@@ -82,6 +83,42 @@ char * type_name(int type_value) {
 		return "";
 	}
 }
+
+
+int type_size(int type_value) {
+	switch(type_value) {
+	case TYPE_BOOL:
+		return sizeof(uint8_t);
+
+	case TYPE_UINT8_T:
+		return sizeof(uint8_t);
+
+	case TYPE_UINT16_T:
+		return sizeof(uint16_t);
+
+	case TYPE_UINT32_T:
+		return sizeof(uint32_t);
+
+	case TYPE_INT8_T:
+		return sizeof(int8_t);
+
+	case TYPE_INT16_T:
+		return sizeof(int16_t);
+
+	case TYPE_INT32_T:
+		return sizeof(int32_t);
+
+	case TYPE_FLOAT:
+		return sizeof(float);
+
+	case TYPE_DOUBLE:
+		return sizeof(double);
+
+	default:
+		return 0;
+	}
+}
+
 
 /**
 converts local path within Fennec Fox library to a complete path 

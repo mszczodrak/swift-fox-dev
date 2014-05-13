@@ -100,6 +100,8 @@ extern int event_id_counter;
 extern int conf_id_counter;
 extern int state_defined;
 
+extern int variable_memory_offset;
+
 extern char *conf_state_suffix;
 
 int start_parser(int argc, char *argv[]);
@@ -243,6 +245,8 @@ struct variable {
 	struct variables	*parent;
 	/** type of a variable encoded as intiger */
 	int			type;
+	/** memory offset in bytes */
+	int			offset;
 	/** pointer to a symtab containing the variable's name */
 	struct symtab		*name;
 	/** lenght of the variable - use for arrays */
