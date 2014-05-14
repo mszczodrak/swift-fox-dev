@@ -210,13 +210,13 @@ traverse_processnodes(struct processnodes* c, int f) {
 }
 
 
-void updateModuleVariables(struct modtab *mp) {
+void updateModuleVariables(struct modtab *mp, char *confname) {
 	struct variables *lvar = mp->lib->variables;
 	struct variables *mvar = mp->variables;
 
 	if (SF_DEBUG) {
 		printf("\tModule %s\n", mp->name);
-		printf("\t\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\n");
+		printf("\t\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tFULL_NAME\n");
 	}
 
 	while (lvar != NULL) {
@@ -245,6 +245,9 @@ void updateModuleVariables(struct modtab *mp) {
 
 			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
 
+                        mvar->var->full_name = malloc(strlen(confname) + strlen(mp->name) + strlen(lvar->var->name) + 3);
+                        sprintf(mvar->var->full_name, "%s_%s_%s", confname, mp->name, lvar->var->name);
+			mvar->var->full_name = str_toupper(mvar->var->full_name);
 		}
 
 
@@ -263,9 +266,9 @@ void updateModuleVariables(struct modtab *mp) {
 		}
 
 		if (SF_DEBUG) {
-			printf("\t\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%d\n", mvar->var->type,
+			printf("\t\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", mvar->var->type,
 			mvar->var->name, mvar->var->value, mvar->var->init, mvar->var->offset,
-			mvar->var->class_type);
+			mvar->var->class_type, mvar->var->full_name);
 		}
 
 		if (mvar != NULL) {
@@ -287,9 +290,9 @@ void updateProcessVariables(struct confnode* c) {
 		printf("\nProcess %s\n", c->name);
 	}
 
-	updateModuleVariables(c->app);
-	updateModuleVariables(c->net);
-	updateModuleVariables(c->am);
+	updateModuleVariables(c->app, c->name);
+	updateModuleVariables(c->net, c->name);
+	updateModuleVariables(c->am, c->name);
 }
 
 

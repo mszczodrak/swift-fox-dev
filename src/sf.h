@@ -169,6 +169,8 @@ struct variable {
 	int			offset;
 	/** pointer to a symtab containing the variable's name */
 	char			*name;
+	/** full varibale name, per process, per module */
+	char			*full_name;
 	/** lenght of the variable - use for arrays */
 	int			length;
 	/* default variable value */

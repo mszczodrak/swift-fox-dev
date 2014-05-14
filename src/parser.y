@@ -228,11 +228,15 @@ global_variable: param_type IDENTIFIER array_part assign_value newlines
 			$$->class_type	= TYPE_VARIABLE_GLOBAL;
 			$$->init	= 1;
 
+			$$->full_name = malloc(strlen("global") + strlen($2->name) + 2);
+			sprintf($$->full_name, "%s_%s", "global", $2->name);
+			$$->full_name = str_toupper($$->full_name);
+
 			if (SF_DEBUG) {
 				printf("Global variable\n");
-				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\n");
-				printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%d\n", $$->type,
-				$$->name, $$->value, $$->init, $$->offset, $$->class_type);	
+				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tFULL_NAME\n");
+				printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", $$->type,
+				$$->name, $$->value, $$->init, $$->offset, $$->class_type, $$->full_name);	
 			}
 			variable_memory_offset += (type_size($$->type) * $$->length);
 		}
@@ -994,6 +998,7 @@ find_variable(char *varname) {
 				vp->name = strdup(varname);
 			}
 			vp->id = variable_id_counter;
+			vp->full_name = NULL;
 			variable_id_counter++;
 			return vp;
 		}
