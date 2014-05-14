@@ -50,6 +50,7 @@ main entry point
 */
 void
 traverse_program(struct program* p, int f, int policy_counter){
+	printf("traverse %d\n", f);
 	if (p != NULL) {
 		switch (f) {
 			/** 
@@ -208,10 +209,77 @@ traverse_processnodes(struct processnodes* c, int f) {
 }
 
 
+void updateModuleVariables(struct modtab *mp) {
+	struct variables *lvar = mp->lib->variables;
+	struct variables *mvar = mp->variables;
+
+	printf("here module %s\n", mp->name);
+
+	while (lvar != NULL || mvar != NULL) {
+
+		if (lvar == NULL && mvar != NULL) {
+			fprintf(stderr, "more variables defined that declared\n");
+			break;
+		}	
+
+		if (mvar != NULL) {
+			if (mvar->var->class_type == TYPE_VARIABLE_LOCAL) {
+				printf("local\n");
+			}
+
+			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
+				printf("global\n");
+			}
+
+
+		}
+
+
+		/* case when mvar is missing, so copy the lvar */
+		if (lvar != NULL && mvar == NULL) {
+			mvar = malloc(sizeof(struct variables));
+			mvar->vars = NULL;
+			mvar->var = malloc(sizeof(struct variable));
+			mvar->var->type = lvar->var->type;
+			mvar->var->name = lvar->var->name;
+			mvar->var->length = lvar->var->length;
+			mvar->var->value = lvar->var->value;
+			mvar->var->offset = variable_memory_offset;
+
+//			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
+		}
+
+
+
+		/* check if variable is a constant */
+		
+
+		if (lvar->vars != NULL) {
+			printf("lvar: %s\n", lvar->var->name);
+			lvar = lvar->vars;
+		}
+			
+		if (mvar->vars != NULL) {
+//			printf("mvar: %s\n", mvar->var->name->name);
+			mvar = mvar->vars;
+		}
+	}
+
+
+}
+
+
 void updateProcessVariables(struct confnode* c) {
+/*
 	struct paramtype *pt;
 	struct modtab *mp;
 	struct variable *vp;
+*/
+	
+
+	updateModuleVariables(c->app);
+	updateModuleVariables(c->net);
+	updateModuleVariables(c->am);
 
 /*
 

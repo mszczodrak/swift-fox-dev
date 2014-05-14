@@ -195,7 +195,7 @@ void addGlobalVariable(struct variable *sh) {
 	}
 
 	fprintf(fp, "%s %s[%d] = {%Lf};\n\n", type_name(sh->type), 
-						sh->name->name,
+						sh->name,
 						sh->length,
 						sh->value);
 
@@ -215,12 +215,12 @@ void addGlobalVariable(struct variable *sh) {
 
 	if (sh->length > 1) {
 		fprintf(fp, "\tnx_%s %s[%d];\n", type_name(sh->type), 
-						sh->name->name,
+						sh->name,
 						sh->length);
 
 	} else {
 		fprintf(fp, "\tnx_%s %s;\n", type_name(sh->type), 
-						sh->name->name);
+						sh->name);
 	}
 
 
@@ -240,11 +240,11 @@ void addGlobalVariable(struct variable *sh) {
 	}
 
 	if (sh->length > 1) {
-		fprintf(fp, "\t.%s = {%Lf},\n", sh->name->name,
+		fprintf(fp, "\t.%s = {%Lf},\n", sh->name,
 						sh->value);
 
 	} else {
-		fprintf(fp, "\t.%s = %Lf,\n", sh->name->name,
+		fprintf(fp, "\t.%s = %Lf,\n", sh->name,
 						sh->value);
 	}
 

@@ -129,8 +129,8 @@ char *current_module = NULL;
 %type <statep>	state
 %type <statesp>	states
 %type <statesp>	defined_states
-%type <vars>	variables
-%type <var>	variable
+%type <vars>	global_variables
+%type <var>	global_variable
 %type <pol>	policy;
 %type <pols>	policies;
 %type <initp>	initial_process
@@ -160,6 +160,12 @@ swiftfox: library program
 
 			/* traverse the AST for semantic checking */	
 			traverse_program($2,
+					TREE_TRAVERSE,
+					policy_counter);
+
+
+			/* traverse the AST for semantic checking */	
+			traverse_program($2,
 					TREE_CHECK_SEMANTIC,
 					policy_counter);
 
@@ -170,7 +176,7 @@ swiftfox: library program
 		}
 	;
 
-program: variables defined_processes defined_states policies initial_process 
+program: global_variables defined_processes defined_states policies initial_process 
 		{
 			/* root node */
 			$$		= calloc(1, sizeof(struct program));
@@ -192,7 +198,7 @@ program: variables defined_processes defined_states policies initial_process
 	;
 
 
-variables: variables variable
+global_variables: global_variables global_variable
                 {
 			/* variable set */
 			$$ 		= calloc(1, sizeof(struct variables));
@@ -213,16 +219,15 @@ variables: variables variable
         ;
 
 
-variable: param_type IDENTIFIER array_part assign_value newlines 
+global_variable: param_type IDENTIFIER array_part assign_value newlines 
 		{
-			printf("got: %s\n", $2->name);
-			$$ 		= find_variable($2);
+			$$ 		= find_variable($2->name);
 			$$->type 	= $1;
-			$$->name	= $2;
 			$$->length	= $3;
 			$$->offset	= variable_memory_offset;
 			$$->value	= $4;
-			$2->type	= TYPE_VARIABLE_GLOBAL;
+			$$->class_type	= TYPE_VARIABLE_GLOBAL;
+			$$->init	= 1;
 
 			variable_memory_offset += (type_size($$->type) * $$->length);
 		}
@@ -244,10 +249,6 @@ assign_value: RELOP CONSTANT
 			} else {
 				$$ = 0;
 			}
-		}
-	|
-		{
-			$$ = 0;
 		}
 	; 
 
@@ -413,28 +414,28 @@ parameters: parameters parameter
 parameter: CONSTANT
 		{
 			$$		= find_variable(NULL);
-			$$->type	= TYPE_VARIABLE_LOCAL;
+			$$->class_type	= TYPE_VARIABLE_LOCAL;
 			$$->value	= $1;
 		}
 	| newlines COMMA newlines CONSTANT
 		{
 			$$		= find_variable(NULL);
-			$$->type	= TYPE_VARIABLE_LOCAL;
+			$$->class_type	= TYPE_VARIABLE_LOCAL;
 			$$->value	= $4;
 		}
 
 	| IDENTIFIER
                 {
-			$$		= find_variable($1);
-			if ($$->name->type != TYPE_VARIABLE_GLOBAL) {
+			$$		= find_variable($1->name);
+			if ($$->class_type != TYPE_VARIABLE_GLOBAL) {
 				fprintf(stderr, "Variable %s is not global\n", $1->name);
 				yyerror("undefined variable");
 			}
                 }
 	| newlines COMMA newlines IDENTIFIER
                 {
-			$$		= find_variable($4);
-			if ($$->name->type != TYPE_VARIABLE_GLOBAL) {
+			$$		= find_variable($4->name);
+			if ($$->class_type != TYPE_VARIABLE_GLOBAL) {
 				fprintf(stderr, "Variable %s is not global\n", $4->name);
 				yyerror("undefined variable");
 			}
@@ -627,6 +628,8 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_var
 				/* failed */
 				yyerror("redeclaration of library");
 
+			printf("define module: %s\n", $3->name);
+
 			current_module = $3->name;
 
 			/* fix the child properties */
@@ -714,30 +717,27 @@ module_variables: module_variables module_variable
 
 module_variable: param_type IDENTIFIER assign_value newlines 
 		{
-			struct symtab *s;
 			char *tmp = malloc(strlen(current_module) + strlen($2->name) + 2);
 			sprintf(tmp, "%s_%s", current_module, $2->name);
-			s = symlook(tmp);
 
-			$$		= find_variable(s);
-			$$->name	= s;
+			$$		= find_variable(tmp);
 			$$->type	= $1;
 			$$->value	= $3;
-			$2->type	= TYPE_VARIABLE_DEFAULT;
+			$$->init	= 1;
+			$$->class_type	= TYPE_VARIABLE_DEFAULT;
 
 		}
 	| newlines COMMA newlines param_type IDENTIFIER assign_value newlines
 		{
-			struct symtab *s;
 			char *tmp = malloc(strlen(current_module) + strlen($5->name) + 2);
 			sprintf(tmp, "%s_%s", current_module, $5->name);
-			s = symlook(tmp);
 
-			$$		= find_variable(s);
-			$$->name	= s;
+			$$		= find_variable(tmp);
 			$$->type	= $4;
 			$$->value	= $6;
-			$5->type	= TYPE_VARIABLE_DEFAULT;
+			$$->init	= 1;
+			$$->class_type	= TYPE_VARIABLE_DEFAULT;
+			
 
 		}
 	;
@@ -963,19 +963,21 @@ find_module_symtab(char *s) {
 }
 
 struct variable *
-find_variable(struct symtab *s) {
+find_variable(char *varname) {
         /* iterator */
         struct variable *vp = NULL;
 
 	/* loop */
-	for(vp = vartab; vp < &vartab[NSYMS]; vp++) {
+	for(vp = vartab; vp < &vartab[NVARS]; vp++) {
         	/* is it already here? */
-	        if (vp->name && vp->name == s)
+	        if (vp->name && (varname!=NULL) && !strcmp(vp->name, varname))
 	      		return vp;
 
 		/* is it free */
 		if(!vp->name) {
-			vp->name = s;
+			if (varname != NULL) {
+				vp->name = strdup(varname);
+			}
 			return vp;
 		}
 		/* otherwise continue to next */

@@ -78,4 +78,5 @@ void generateFennecEngineP();
 void generateParams();
 void generateGlobals();
 
+void checkModuleParameters(struct modtab* mp);
 #endif

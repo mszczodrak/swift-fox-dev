@@ -44,3 +44,8 @@ void findParametersOffset(struct confnode* c) {
 
 }
 
+void checkModuleParameters(struct modtab* mp) {
+
+}
+
+

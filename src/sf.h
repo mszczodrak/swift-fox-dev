@@ -166,11 +166,15 @@ struct variable {
 	/** memory offset in bytes */
 	int			offset;
 	/** pointer to a symtab containing the variable's name */
-	struct symtab		*name;
+	char			*name;
 	/** lenght of the variable - use for arrays */
 	int			length;
 	/* default variable value */
 	long double		value;
+	/* variable initialized */
+	int			init;
+	/* variable type */
+	int			class_type;
 } vartab[NVARS];
 
 
@@ -183,7 +187,7 @@ struct variables {
 	struct variable		*var;
 };
 
-struct variable *find_variable(struct symtab *s);
+struct variable *find_variable(char *varname);
 
 struct modtab {
 	char			*name;
