@@ -233,42 +233,34 @@ void updateModuleVariables(struct modtab *mp, char *confname) {
 					type_name(mvar->var->type),
 					type_name(lvar->var->type));
 			}
+			/* still copy the application perspective name */
+			mvar->var->cap_name = lvar->var->cap_name;
 		}
 
 		/* case when we use a constant as a variable */
 		if (mvar != NULL && mvar->var->class_type == TYPE_VARIABLE_LOCAL) {
 			mvar->var->type = lvar->var->type;	
-			free(mvar->var->name);
 			mvar->var->name = lvar->var->name;
 			mvar->var->length = lvar->var->length;
+			mvar->var->cap_name = lvar->var->cap_name;
 			mvar->var->offset = variable_memory_offset;
-
 			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
-
-                        mvar->var->full_name = malloc(strlen(confname) + strlen(mp->name) + strlen(lvar->var->name) + 3);
-                        sprintf(mvar->var->full_name, "%s_%s_%s", confname, mp->name, lvar->var->name);
-			mvar->var->full_name = str_toupper(mvar->var->full_name);
 		}
-
 
 		/* case when mvar is missing, so copy the lvar */
 		if (mvar == NULL) {
 			mvar = malloc(sizeof(struct variables));
 			mvar->vars = NULL;
 			mvar->var = malloc(sizeof(struct variable));
-			mvar->var->type = lvar->var->type;
-			mvar->var->name = lvar->var->name;
-			mvar->var->length = lvar->var->length;
-			mvar->var->value = lvar->var->value;
+			memcpy(mvar->var, lvar->var, sizeof(struct variable));
 			mvar->var->offset = variable_memory_offset;
-
 			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
 		}
 
 		if (SF_DEBUG) {
 			printf("\t\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", mvar->var->type,
 			mvar->var->name, mvar->var->value, mvar->var->init, mvar->var->offset,
-			mvar->var->class_type, mvar->var->full_name);
+			mvar->var->class_type, mvar->var->cap_name);
 		}
 
 		if (mvar != NULL) {

@@ -84,8 +84,6 @@
 #define MIN_CONV		60 * SEC_CONV
 #define HR_CONV			60 * MIN_CONV
 
-#define MAX_NUM_OF_PARAMS	10
-
 #define SF_DEBUG		1
 
 #define NUMBER_OF_FF_MODULES	7
@@ -170,7 +168,7 @@ struct variable {
 	/** pointer to a symtab containing the variable's name */
 	char			*name;
 	/** full varibale name, per process, per module */
-	char			*full_name;
+	char			*cap_name;
 	/** lenght of the variable - use for arrays */
 	int			length;
 	/* default variable value */
@@ -213,15 +211,12 @@ struct confnode {
 	struct modtab		*app;
 	struct modtab		*net;
 	struct modtab		*am;
-	struct variables	*app_vars;
-	struct variables	*net_vars;
-	struct variables	*am_vars;
-	int			app_param_name[MAX_NUM_OF_PARAMS];
-	int			app_param_offset[MAX_NUM_OF_PARAMS];
-	int			net_param_name[MAX_NUM_OF_PARAMS];
-	int			net_param_offset[MAX_NUM_OF_PARAMS];
-	int			am_param_name[MAX_NUM_OF_PARAMS];
-	int			am_param_offset[MAX_NUM_OF_PARAMS];
+	int			*app_param_name;
+	int			*app_param_offset;
+	int			*net_param_name;
+	int			*net_param_offset;
+	int			*am_param_name;
+	int			*am_param_offset;
 	char			*app_id_name;
 	char			*net_id_name;
 	char			*am_id_name;

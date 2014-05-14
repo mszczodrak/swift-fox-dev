@@ -227,16 +227,14 @@ global_variable: param_type IDENTIFIER array_part assign_value newlines
 			$$->value	= $4;
 			$$->class_type	= TYPE_VARIABLE_GLOBAL;
 			$$->init	= 1;
-
-			$$->full_name = malloc(strlen("global") + strlen($2->name) + 2);
-			sprintf($$->full_name, "%s_%s", "global", $2->name);
-			$$->full_name = str_toupper($$->full_name);
+			$$->cap_name 	= strdup($2->name);
+			$$->cap_name	= str_toupper($$->cap_name);
 
 			if (SF_DEBUG) {
 				printf("Global variable\n");
-				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tFULL_NAME\n");
+				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tCAP_NAME\n");
 				printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", $$->type,
-				$$->name, $$->value, $$->init, $$->offset, $$->class_type, $$->full_name);	
+				$$->name, $$->value, $$->init, $$->offset, $$->class_type, $$->cap_name);	
 			}
 			variable_memory_offset += (type_size($$->type) * $$->length);
 		}
@@ -312,7 +310,6 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 				yyerror("expecting application module");
 			}
 			$$->app			= $6;
-			$$->app_vars		= $6->variables;
 			$$->app->lib->used 	= 1;
 
 
@@ -322,7 +319,6 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 				yyerror("expecting network module");
 			}
 			$$->net			= $8;
-			$$->net_vars		= $8->variables;
 			$$->net->lib->used 	= 1;
 
 
@@ -332,7 +328,6 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 				yyerror("expecting am module");
 			}
 			$$->am			= $11;
-			$$->am_vars		= $11->variables;
 			$$->am_inferior	= $10;
 			$$->am->lib->used 	= 1;
 
@@ -435,19 +430,24 @@ parameter: CONSTANT
 
 	| IDENTIFIER
                 {
-			$$		= find_variable($1->name);
-			if ($$->class_type != TYPE_VARIABLE_GLOBAL) {
+			struct variable *vp	= find_variable($1->name);
+			if (vp->class_type != TYPE_VARIABLE_GLOBAL) {
 				fprintf(stderr, "Variable %s is not global\n", $1->name);
 				yyerror("undefined variable");
 			}
+			$$			= malloc(sizeof(struct variable));
+			memcpy($$, vp, sizeof(struct variable));
+
                 }
 	| newlines COMMA newlines IDENTIFIER
                 {
-			$$		= find_variable($4->name);
-			if ($$->class_type != TYPE_VARIABLE_GLOBAL) {
+			struct variable *vp	= find_variable($4->name);
+			if (vp->class_type != TYPE_VARIABLE_GLOBAL) {
 				fprintf(stderr, "Variable %s is not global\n", $4->name);
 				yyerror("undefined variable");
 			}
+			$$			= malloc(sizeof(struct variable));
+			memcpy($$, vp, sizeof(struct variable));
                 }
         ;
 
@@ -996,9 +996,12 @@ find_variable(char *varname) {
 		if(!vp->name) {
 			if (varname != NULL) {
 				vp->name = strdup(varname);
+				vp->cap_name = strdup(vp->name);
+				vp->cap_name = str_toupper(vp->cap_name);
+			} else {
+				vp->cap_name = NULL;
 			}
 			vp->id = variable_id_counter;
-			vp->full_name = NULL;
 			variable_id_counter++;
 			return vp;
 		}
