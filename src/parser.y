@@ -409,7 +409,20 @@ parameters: parameters parameter
 		}
         ;
 
-parameter: IDENTIFIER
+parameter: CONSTANT
+		{
+			$$		= find_variable(NULL);
+			$$->type	= TYPE_VARIABLE_LOCAL;
+			$$->value	= $1;
+		}
+	| newlines COMMA newlines CONSTANT
+		{
+			$$		= find_variable(NULL);
+			$$->type	= TYPE_VARIABLE_LOCAL;
+			$$->value	= $4;
+		}
+
+	| IDENTIFIER
                 {
 			$$		= find_variable($1);
 			if ($$->type != TYPE_VARIABLE_GLOBAL) {
@@ -417,13 +430,14 @@ parameter: IDENTIFIER
 				yyerror("undefined variable");
 			}
                 }
-
-        | CONSTANT
-		{
-			$$		= find_variable(NULL);
-			$$->type	= TYPE_VARIABLE_LOCAL;
-			$$->value	= $1;
-		}
+	| newlines COMMA newlines IDENTIFIER
+                {
+			$$		= find_variable($4);
+			if ($$->type != TYPE_VARIABLE_GLOBAL) {
+				fprintf(stderr, "Variable %s is not global\n", $4->name);
+				yyerror("undefined variable");
+			}
+                }
         ;
 
 
@@ -709,6 +723,20 @@ module_variable: param_type IDENTIFIER assign_value newlines
 			$$->type	= $1;
 			$$->value	= $3;
 			$2->type	= TYPE_VARIABLE_DEFAULT;
+
+		}
+	| newlines COMMA newlines param_type IDENTIFIER assign_value newlines
+		{
+			struct symtab *s;
+			char *tmp = malloc(strlen(current_module) + strlen($5->name) + 2);
+			sprintf(tmp, "%s_%s", current_module, $5->name);
+			s = symlook(tmp);
+
+			$$		= find_variable(s);
+			$$->name	= s;
+			$$->type	= $4;
+			$$->value	= $6;
+			$5->type	= TYPE_VARIABLE_DEFAULT;
 
 		}
 	;
