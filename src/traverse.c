@@ -235,6 +235,9 @@ int updateModuleVariables(struct modtab *mp) {
 				exit(1);
 			}
 			/* still copy the application perspective name */
+			struct variable *global_var = mvar->var;
+			mvar->var = malloc(sizeof(struct variable));
+			memcpy(mvar->var, global_var, sizeof(struct variable));
 			mvar->var->cap_name = lvar->var->cap_name;
 		}
 
