@@ -35,17 +35,41 @@
 #include "utils.h"
 
 
-void findVariableOffset(struct variable *sh) {
-}
+void generateVariableConstants() {
+	char *full_path = get_sfc_path("", "variable_constants.h");
+	FILE *fp = fopen(full_path, "w");
+	int i;
+	int j;
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+        fprintf(fp, "#ifndef _FF_VARIABLE_CONSTANTS_H_\n");
+        fprintf(fp, "#define _FF_VARIABLE_CONSTANTS_H_\n\n");
 
 
-void findParametersOffset(struct confnode* c) {
+	for( i = 0; i < NVARS; i++ ) {
+		int skip = 0;
+		if (vartab[i].length == 0) {
+			break;
+		}
+		for ( j = 0; j < i; j++ ) {
+			if (!strcmp(vartab[i].cap_name, vartab[j].cap_name)) {
+				skip = 1;
+				continue;	
+			}
+		}
+		if (!skip) {
+			fprintf(fp, "#define %-15s \t%d\n", vartab[i].cap_name, i);
+		}
+	}
 
-
-}
-
-void checkModuleParameters(struct modtab* mp) {
-
+        fprintf(fp, "\n#endif\n\n");
+        fclose(fp);
+        free(full_path);
 }
 
 

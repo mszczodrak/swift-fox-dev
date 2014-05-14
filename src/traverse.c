@@ -153,7 +153,6 @@ traverse_variable(struct variable* sh, int f) {
 		break;
 
 	case TREE_CHECK_SEMANTIC:
-		findVariableOffset(sh);
 		break;
 
 	case TREE_GENERATE_CODE:
@@ -210,9 +209,10 @@ traverse_processnodes(struct processnodes* c, int f) {
 }
 
 
-void updateModuleVariables(struct modtab *mp, char *confname) {
+int updateModuleVariables(struct modtab *mp) {
 	struct variables *lvar = mp->lib->variables;
 	struct variables *mvar = mp->variables;
+	int number_of_variables;
 
 	if (SF_DEBUG) {
 		printf("\tModule %s\n", mp->name);
@@ -232,6 +232,7 @@ void updateModuleVariables(struct modtab *mp, char *confname) {
 				fprintf(stderr, "type %s does not match %s\n",
 					type_name(mvar->var->type),
 					type_name(lvar->var->type));
+				exit(1);
 			}
 			/* still copy the application perspective name */
 			mvar->var->cap_name = lvar->var->cap_name;
@@ -267,13 +268,23 @@ void updateModuleVariables(struct modtab *mp, char *confname) {
 			mvar = mvar->vars;
 		}
 		lvar = lvar->vars;
+		number_of_variables++;
 	}
 
 	if (mvar != NULL) {
 		fprintf(stderr, "more variables defined that declared\n");
+		exit(1);
 	}
+	return number_of_variables;
+}
 
+void generateVariableOffset(struct modtab *mp, int number_of_variables, int* variable_name, int* variable_offset) {
+	int i;
+	struct variables *mvar = mp->variables;
+	for (i = 0; i < number_of_variables; i++) {
+		
 
+	}
 }
 
 
@@ -282,9 +293,13 @@ void updateProcessVariables(struct confnode* c) {
 		printf("\nProcess %s\n", c->name);
 	}
 
-	updateModuleVariables(c->app, c->name);
-	updateModuleVariables(c->net, c->name);
-	updateModuleVariables(c->am, c->name);
+	c->app_var_num = updateModuleVariables(c->app);
+	c->net_var_num = updateModuleVariables(c->net);
+	c->am_var_num = updateModuleVariables(c->am);
+
+	generateVariableOffset(c->app, c->app_var_num, c->app_var_name, c->app_var_offset);
+	generateVariableOffset(c->net, c->net_var_num, c->net_var_name, c->net_var_offset);
+	generateVariableOffset(c->am, c->am_var_num, c->am_var_name, c->am_var_offset);
 }
 
 
@@ -306,7 +321,6 @@ traverse_confnode(struct confnode* c, int f) {
 		case TREE_CHECK_SEMANTIC:
 			checkConfiguration(c);
 			checkConfigurationModules(c);
-			findParametersOffset(c);
 			break;
         
 		case TREE_GENERATE_CODE:
