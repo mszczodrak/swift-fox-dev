@@ -228,6 +228,12 @@ global_variable: param_type IDENTIFIER array_part assign_value newlines
 			$$->class_type	= TYPE_VARIABLE_GLOBAL;
 			$$->init	= 1;
 
+			if (SF_DEBUG) {
+				printf("Global variable\n");
+				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tCLASS_TYPE\n");
+				printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d\n", $$->type,
+				$$->name, $$->value, $$->init, $$->class_type);	
+			}
 			variable_memory_offset += (type_size($$->type) * $$->length);
 		}
 
@@ -608,6 +614,11 @@ initial_process: START IDENTIFIER newlines
 
 
 library: newlines definitions
+		{
+			if (SF_DEBUG) {
+				printf("\n");
+			}
+		}
 	;
 
 definitions: definitions definition 

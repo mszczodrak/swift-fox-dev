@@ -37,6 +37,7 @@
 #include "traverse.h"
 #include "sem_check.h"
 #include "code_gen.h"
+#include "utils.h"
 
 /** 
 AST (Abstract Syntax Tree) traversal; 
@@ -213,16 +214,31 @@ void updateModuleVariables(struct modtab *mp) {
 	struct variables *lvar = mp->lib->variables;
 	struct variables *mvar = mp->variables;
 
-	printf("here module %s\n", mp->name);
+	if (SF_DEBUG) {
+		printf("\tModule %s\n", mp->name);
+		printf("\t\tTYPE\tNAME\t\tVALUE\t\tINIT\tCLASS_TYPE\n");
+	}
 
-	while (lvar != NULL || mvar != NULL) {
+	while (lvar != NULL) {
 
-		if (lvar == NULL && mvar != NULL) {
-			fprintf(stderr, "more variables defined that declared\n");
-			break;
-		}	
+		if (mvar != NULL && mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
+			/* this already points to global variable, so should
+			 * be fine; just check if the type matches */
+			if (mvar->var->type != lvar->var->type) {
+				if (SF_DEBUG) {
+					printf("type mismatch %d vs %d\n", mvar->var->type, lvar->var->type);
+				}
+				fprintf(stderr, "type %s does not match %s\n",
+					type_name(mvar->var->type),
+					type_name(lvar->var->type));
+			}
+		}
 
-		if (mvar != NULL) {
+		if (mvar != NULL && mvar->var->class_type == TYPE_VARIABLE_LOCAL) {
+		
+
+
+/*
 			if (mvar->var->class_type == TYPE_VARIABLE_LOCAL) {
 				printf("local\n");
 			}
@@ -231,12 +247,13 @@ void updateModuleVariables(struct modtab *mp) {
 				printf("global\n");
 			}
 
+*/
 
 		}
 
 
 		/* case when mvar is missing, so copy the lvar */
-		if (lvar != NULL && mvar == NULL) {
+		if (mvar == NULL) {
 			mvar = malloc(sizeof(struct variables));
 			mvar->vars = NULL;
 			mvar->var = malloc(sizeof(struct variable));
@@ -246,16 +263,19 @@ void updateModuleVariables(struct modtab *mp) {
 			mvar->var->value = lvar->var->value;
 			mvar->var->offset = variable_memory_offset;
 
-//			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
+			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
 		}
 
-
+		if (SF_DEBUG) {
+			printf("\t\t%d \t%-10s \t%-10.1Lf \t%d \t%d\n", mvar->var->type,
+			mvar->var->name, mvar->var->value, mvar->var->init, mvar->var->class_type);
+		}
 
 		/* check if variable is a constant */
 		
 
 		if (lvar != NULL) {
-			printf("lvar: %s\n", lvar->var->name);
+//			printf("lvar: %s\n", lvar->var->name);
 			lvar = lvar->vars;
 		}
 			
@@ -263,6 +283,10 @@ void updateModuleVariables(struct modtab *mp) {
 //			printf("mvar: %s\n", mvar->var->name->name);
 			mvar = mvar->vars;
 		}
+	}
+
+	if (mvar != NULL) {
+		fprintf(stderr, "more variables defined that declared\n");
 	}
 
 
@@ -276,6 +300,10 @@ void updateProcessVariables(struct confnode* c) {
 	struct variable *vp;
 */
 	
+
+	if (SF_DEBUG) {
+		printf("Process %s\n", c->name);
+	}
 
 	updateModuleVariables(c->app);
 	updateModuleVariables(c->net);
