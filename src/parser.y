@@ -705,7 +705,7 @@ module_variable: param_type IDENTIFIER assign_value newlines
 			s = symlook(tmp);
 
 			$$		= find_variable(s);
-			$$->name	= tmp;
+			$$->name	= s;
 			$$->type	= $1;
 			$$->value	= $3;
 			$2->type	= TYPE_VARIABLE_DEFAULT;

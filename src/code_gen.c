@@ -102,13 +102,13 @@ code can be generated.
 */
 void finishCodeGeneration(int policy_counter) {
 	generateCaches(0, policy_counter);
-	generateDefaultParams();
+	//generateDefaultParams();
 
 	generateFennecEngineC();
 
 	generateFennecEngineP();
 
-	generateParams();
+	//generateParams();
 
 	setFennecExtra();
 }

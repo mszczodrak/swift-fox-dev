@@ -88,6 +88,28 @@ void startGlobalVariables() {
 	free(full_path);
 	fclose(fp);
 	/* end of initializing global variables */
+
+	/* global variables init */
+	full_path = get_sfc_path("", "global_variables_index.h");
+	fp = fopen(full_path, "w");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "#ifndef _GLOBAL_VARIABLES_INDEX_H_\n");
+	fprintf(fp, "#define _GLOBAL_VARIABLES_INDEX_H_\n\n");
+
+	fprintf(fp, "int global_index[] = {\n");
+
+	free(full_path);
+	fclose(fp);
+	/* end of initializing global variables */
+
+
+
 }
 
 
@@ -126,6 +148,25 @@ void endGlobalVariables() {
 
 	/* global variables init */
 	full_path = get_sfc_path("", "global_variables_init.h");
+	fp = fopen(full_path, "a");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "};\n\n");
+	fprintf(fp, "#endif\n");
+
+	free(full_path);
+	fclose(fp);
+	/* end of initializing global variables */
+
+
+
+	/* global variables init */
+	full_path = get_sfc_path("", "global_variables_index.h");
 	fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
@@ -198,6 +239,23 @@ void addGlobalVariable(struct variable *sh) {
 		exit(1);
 	}
 
+	fprintf(fp, "%d, ", sh->offset);
+
+	free(full_path);
+	fclose(fp);
+	/* end of initializing global variables */
+
+
+	/* global variables init */
+	full_path = get_sfc_path("", "global_variables_index.h");
+	fp = fopen(full_path, "a");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
 	if (sh->length > 1) {
 		fprintf(fp, "\t.%s = {%Lf},\n", sh->name->name,
 						sh->value);
@@ -211,6 +269,11 @@ void addGlobalVariable(struct variable *sh) {
 	free(full_path);
 	fclose(fp);
 	/* end of initializing global variables */
+
+
+
+
+
 
 
 }
