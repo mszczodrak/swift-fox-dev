@@ -83,6 +83,8 @@ void define_processes() {
 	char *full_path = get_sfc_path("", "ff_processes.h");
 	FILE *fp = fopen(full_path, "w");
 	int i;
+	int vc;
+	struct variables *mvar;
 
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write \
@@ -106,6 +108,75 @@ void define_processes() {
 
         fprintf(fp, "\n");
 
+	/* proc variables */
+
+	for( i = 0; i < conf_id_counter; i++ ) {
+		if (conftab[i].conf->app_var_num > 0) {
+			fprintf(fp, "uint8_t %s_variable_name[%d] = {", conftab[i].conf->app_id_name, conftab[i].conf->app_var_num);
+			for (vc = 0, mvar = conftab[i].conf->app->variables; vc < conftab[i].conf->app_var_num && mvar != NULL; vc++) {
+				fprintf(fp, "%s", mvar->var->cap_name);
+				mvar = mvar->vars;
+				if ( mvar != NULL ) {
+					fprintf(fp, ", ");
+				}
+			}
+			fprintf(fp, "};\n");
+			fprintf(fp, "uint8_t %s_variable_offset[%d] = {", conftab[i].conf->app_id_name, conftab[i].conf->app_var_num);
+			for (vc = 0, mvar = conftab[i].conf->app->variables; vc < conftab[i].conf->app_var_num && mvar != NULL; vc++) {
+				fprintf(fp, "%d", mvar->var->offset);
+				mvar = mvar->vars;
+				if ( mvar != NULL ) {
+					fprintf(fp, ", ");
+				}
+			}
+			fprintf(fp, "};\n");
+		}
+
+		if (conftab[i].conf->net_var_num > 0) {
+			fprintf(fp, "uint8_t %s_variable_name[%d] = {", conftab[i].conf->net_id_name, conftab[i].conf->net_var_num);
+			for (vc = 0, mvar = conftab[i].conf->net->variables; vc < conftab[i].conf->net_var_num && mvar != NULL; vc++) {
+				fprintf(fp, "%s", mvar->var->cap_name);
+				mvar = mvar->vars;
+				if ( mvar != NULL ) {
+					fprintf(fp, ", ");
+				}
+			}
+			fprintf(fp, "};\n");
+			fprintf(fp, "uint8_t %s_variable_offset[%d] = {", conftab[i].conf->net_id_name, conftab[i].conf->net_var_num);
+			for (vc = 0, mvar = conftab[i].conf->net->variables; vc < conftab[i].conf->net_var_num && mvar != NULL; vc++) {
+				fprintf(fp, "%d", mvar->var->offset);
+				mvar = mvar->vars;
+				if ( mvar != NULL ) {
+					fprintf(fp, ", ");
+				}
+			}
+			fprintf(fp, "};\n");
+		}
+
+		if (conftab[i].conf->am_var_num > 0) {
+			fprintf(fp, "uint8_t %s_variable_name[%d] = {", conftab[i].conf->am_id_name, conftab[i].conf->am_var_num);
+			for (vc = 0, mvar = conftab[i].conf->am->variables; vc < conftab[i].conf->am_var_num && mvar != NULL; vc++) {
+				fprintf(fp, "%s", mvar->var->cap_name);
+				mvar = mvar->vars;
+				if ( mvar != NULL ) {
+					fprintf(fp, ", ");
+				}
+			}
+			fprintf(fp, "};\n");
+			fprintf(fp, "uint8_t %s_variable_offset[%d] = {", conftab[i].conf->am_id_name, conftab[i].conf->am_var_num);
+			for (vc = 0, mvar = conftab[i].conf->am->variables; vc < conftab[i].conf->am_var_num && mvar != NULL; vc++) {
+				fprintf(fp, "%d", mvar->var->offset);
+				mvar = mvar->vars;
+				if ( mvar != NULL ) {
+					fprintf(fp, ", ");
+				}
+			}
+			fprintf(fp, "};\n");
+		}
+	}
+	fprintf(fp, "\n\n");
+
+
 	/* Generate Proceses */
 
 	fprintf(fp, "struct network_process processes[NUMBER_OF_PROCESSES] = {\n");
@@ -118,16 +189,36 @@ void define_processes() {
 		fprintf(fp, "\t\t.process_id = %s, \t/* %d */\n",
 				conftab[i].conf->id_name, conftab[i].conf->counter);
 		fprintf(fp, "\t\t.application = %s,\n", conftab[i].conf->app_id_name);
-		fprintf(fp, "\t\t.application_params = &%s_ptr,\n", conftab[i].conf->app_id_name);
 		fprintf(fp, "\t\t.application_module = %s,\n", conftab[i].conf->app->id_name);
+		if (conftab[i].conf->app_var_num > 0) {
+			fprintf(fp, "\t\t.application_variable_name = %s_variable_name,\n", conftab[i].conf->app_id_name);
+			fprintf(fp, "\t\t.application_variable_offset = %s_variable_offset,\n", conftab[i].conf->app_id_name);
+		} else {
+			fprintf(fp, "\t\t.application_variable_name = NULL,\n");
+			fprintf(fp, "\t\t.application_variable_offset = NULL,\n");
+		}
 
 		fprintf(fp, "\t\t.network = %s,\n", conftab[i].conf->net_id_name);
-		fprintf(fp, "\t\t.network_params = &%s_ptr,\n", conftab[i].conf->net_id_name);
 		fprintf(fp, "\t\t.network_module = %s,\n", conftab[i].conf->net->id_name);
+		if (conftab[i].conf->net_var_num > 0) {
+			fprintf(fp, "\t\t.network_variable_name = %s_variable_name,\n", conftab[i].conf->net_id_name);
+			fprintf(fp, "\t\t.network_variable_offset = %s_variable_offset,\n", conftab[i].conf->net_id_name);
+
+		} else {
+			fprintf(fp, "\t\t.network_variable_name = NULL,\n");
+			fprintf(fp, "\t\t.network_variable_offset = NULL,\n");
+		}
 
 		fprintf(fp, "\t\t.am = %s,\n", conftab[i].conf->am->id_name);
-		fprintf(fp, "\t\t.am_params = &%s_ptr,\n", conftab[i].conf->am_id_name);
 		fprintf(fp, "\t\t.am_module = %s,\n", conftab[i].conf->am->id_name);
+		if (conftab[i].conf->am_var_num > 0) {
+			fprintf(fp, "\t\t.am_variable_name = %s_variable_name,\n", conftab[i].conf->am_id_name);
+			fprintf(fp, "\t\t.am_variable_offset = %s_variable_offset,\n", conftab[i].conf->am_id_name);
+		} else {
+			fprintf(fp, "\t\t.am_variable_name = NULL,\n");
+			fprintf(fp, "\t\t.am_variable_offset = NULL,\n");
+		}
+
 		fprintf(fp, "\t\t.am_level = %d\n", conftab[i].conf->am_inferior);
 		fprintf(fp, "\t}\n");
 		if (i+1 < conf_id_counter) {

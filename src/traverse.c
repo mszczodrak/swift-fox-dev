@@ -212,7 +212,7 @@ traverse_processnodes(struct processnodes* c, int f) {
 int updateModuleVariables(struct modtab *mp) {
 	struct variables *lvar = mp->lib->variables;
 	struct variables *mvar = mp->variables;
-	int number_of_variables;
+	int number_of_variables = 0;
 
 	if (SF_DEBUG) {
 		printf("\tModule %s\n", mp->name);
@@ -278,16 +278,6 @@ int updateModuleVariables(struct modtab *mp) {
 	return number_of_variables;
 }
 
-void generateVariableOffset(struct modtab *mp, int number_of_variables, int* variable_name, int* variable_offset) {
-	int i;
-	struct variables *mvar = mp->variables;
-	for (i = 0; i < number_of_variables; i++) {
-		
-
-	}
-}
-
-
 void updateProcessVariables(struct confnode* c) {
 	if (SF_DEBUG) {
 		printf("\nProcess %s\n", c->name);
@@ -296,10 +286,6 @@ void updateProcessVariables(struct confnode* c) {
 	c->app_var_num = updateModuleVariables(c->app);
 	c->net_var_num = updateModuleVariables(c->net);
 	c->am_var_num = updateModuleVariables(c->am);
-
-	generateVariableOffset(c->app, c->app_var_num, c->app_var_name, c->app_var_offset);
-	generateVariableOffset(c->net, c->net_var_num, c->net_var_name, c->net_var_offset);
-	generateVariableOffset(c->am, c->am_var_num, c->am_var_name, c->am_var_offset);
 }
 
 
