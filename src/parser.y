@@ -230,9 +230,9 @@ global_variable: param_type IDENTIFIER array_part assign_value newlines
 
 			if (SF_DEBUG) {
 				printf("Global variable\n");
-				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tCLASS_TYPE\n");
-				printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d\n", $$->type,
-				$$->name, $$->value, $$->init, $$->class_type);	
+				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\n");
+				printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%d\n", $$->type,
+				$$->name, $$->value, $$->init, $$->offset, $$->class_type);	
 			}
 			variable_memory_offset += (type_size($$->type) * $$->length);
 		}
@@ -651,10 +651,11 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_var
 
 			if (SF_DEBUG) {
 				struct variables *v = $7;
-				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tCLASS_TYPE\n");
+				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\n");
 				for (v = $7; v != NULL; v=v->vars) {
-					printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d\n", v->var->type,
-					v->var->name, v->var->value, v->var->init, v->var->class_type);	
+					printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%d\n", v->var->type,
+					v->var->name, v->var->value, v->var->init, v->var->offset,
+					v->var->class_type);	
 				}
 			}
 
@@ -740,6 +741,7 @@ module_variable: param_type IDENTIFIER assign_value newlines
 			$$->type	= $1;
 			$$->value	= $3;
 			$$->init	= 1;
+			$$->length	= 1;
 			$$->class_type	= TYPE_VARIABLE_DEFAULT;
 
 		}
@@ -749,6 +751,7 @@ module_variable: param_type IDENTIFIER assign_value newlines
 			$$->type	= $4;
 			$$->value	= $6;
 			$$->init	= 1;
+			$$->length	= 1;
 			$$->class_type	= TYPE_VARIABLE_DEFAULT;
 		}
 	;

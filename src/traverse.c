@@ -216,11 +216,12 @@ void updateModuleVariables(struct modtab *mp) {
 
 	if (SF_DEBUG) {
 		printf("\tModule %s\n", mp->name);
-		printf("\t\tTYPE\tNAME\t\tVALUE\t\tINIT\tCLASS_TYPE\n");
+		printf("\t\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\n");
 	}
 
 	while (lvar != NULL) {
 
+		/* case when we use global variable */
 		if (mvar != NULL && mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 			/* this already points to global variable, so should
 			 * be fine; just check if the type matches */
@@ -234,20 +235,15 @@ void updateModuleVariables(struct modtab *mp) {
 			}
 		}
 
+		/* case when we use a constant as a variable */
 		if (mvar != NULL && mvar->var->class_type == TYPE_VARIABLE_LOCAL) {
-		
+			mvar->var->type = lvar->var->type;	
+			free(mvar->var->name);
+			mvar->var->name = lvar->var->name;
+			mvar->var->length = lvar->var->length;
+			mvar->var->offset = variable_memory_offset;
 
-
-/*
-			if (mvar->var->class_type == TYPE_VARIABLE_LOCAL) {
-				printf("local\n");
-			}
-
-			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
-				printf("global\n");
-			}
-
-*/
+			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
 
 		}
 
@@ -267,22 +263,15 @@ void updateModuleVariables(struct modtab *mp) {
 		}
 
 		if (SF_DEBUG) {
-			printf("\t\t%d \t%-10s \t%-10.1Lf \t%d \t%d\n", mvar->var->type,
-			mvar->var->name, mvar->var->value, mvar->var->init, mvar->var->class_type);
+			printf("\t\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%d\n", mvar->var->type,
+			mvar->var->name, mvar->var->value, mvar->var->init, mvar->var->offset,
+			mvar->var->class_type);
 		}
 
-		/* check if variable is a constant */
-		
-
-		if (lvar != NULL) {
-//			printf("lvar: %s\n", lvar->var->name);
-			lvar = lvar->vars;
-		}
-			
 		if (mvar != NULL) {
-//			printf("mvar: %s\n", mvar->var->name->name);
 			mvar = mvar->vars;
 		}
+		lvar = lvar->vars;
 	}
 
 	if (mvar != NULL) {
@@ -294,39 +283,13 @@ void updateModuleVariables(struct modtab *mp) {
 
 
 void updateProcessVariables(struct confnode* c) {
-/*
-	struct paramtype *pt;
-	struct modtab *mp;
-	struct variable *vp;
-*/
-	
-
 	if (SF_DEBUG) {
-		printf("Process %s\n", c->name);
+		printf("\nProcess %s\n", c->name);
 	}
 
 	updateModuleVariables(c->app);
 	updateModuleVariables(c->net);
 	updateModuleVariables(c->am);
-
-/*
-
-	for (pt = c->app->lib->params, vp = c->app_vars; pt != NULL; pt = pt->child, vp = vp->vars ) {
-
-		if (vp->var->type == TYPE_VARIABLE_LOCAL) {
-			type = pt->type;
-			pt->name;
-		}
-
-	}
-
-
-	mp = c->net;
-
-
-	mp = c->am;
-*/
-
 }
 
 
