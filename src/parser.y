@@ -215,6 +215,7 @@ variables: variables variable
 
 variable: param_type IDENTIFIER array_part assign_value newlines 
 		{
+			printf("got: %s\n", $2->name);
 			$$ 		= find_variable($2);
 			$$->type 	= $1;
 			$$->name	= $2;
@@ -425,7 +426,7 @@ parameter: CONSTANT
 	| IDENTIFIER
                 {
 			$$		= find_variable($1);
-			if ($$->type != TYPE_VARIABLE_GLOBAL) {
+			if ($$->name->type != TYPE_VARIABLE_GLOBAL) {
 				fprintf(stderr, "Variable %s is not global\n", $1->name);
 				yyerror("undefined variable");
 			}
@@ -433,7 +434,7 @@ parameter: CONSTANT
 	| newlines COMMA newlines IDENTIFIER
                 {
 			$$		= find_variable($4);
-			if ($$->type != TYPE_VARIABLE_GLOBAL) {
+			if ($$->name->type != TYPE_VARIABLE_GLOBAL) {
 				fprintf(stderr, "Variable %s is not global\n", $4->name);
 				yyerror("undefined variable");
 			}

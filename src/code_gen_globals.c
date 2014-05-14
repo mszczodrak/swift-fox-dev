@@ -239,7 +239,14 @@ void addGlobalVariable(struct variable *sh) {
 		exit(1);
 	}
 
-	fprintf(fp, "%d, ", sh->offset);
+	if (sh->length > 1) {
+		fprintf(fp, "\t.%s = {%Lf},\n", sh->name->name,
+						sh->value);
+
+	} else {
+		fprintf(fp, "\t.%s = %Lf,\n", sh->name->name,
+						sh->value);
+	}
 
 	free(full_path);
 	fclose(fp);
@@ -256,24 +263,9 @@ void addGlobalVariable(struct variable *sh) {
 		exit(1);
 	}
 
-	if (sh->length > 1) {
-		fprintf(fp, "\t.%s = {%Lf},\n", sh->name->name,
-						sh->value);
-
-	} else {
-		fprintf(fp, "\t.%s = %Lf,\n", sh->name->name,
-						sh->value);
-	}
-
+	fprintf(fp, "%d, ", sh->offset);
 
 	free(full_path);
 	fclose(fp);
 	/* end of initializing global variables */
-
-
-
-
-
-
-
 }
