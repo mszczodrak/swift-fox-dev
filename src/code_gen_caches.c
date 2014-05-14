@@ -237,18 +237,10 @@ void generateCaches(int event_counter, int policy_counter) {
 	fprintf(fp, "#define NUMBER_OF_EVENTS\t\t%d\n", event_id_counter);
 	fprintf(fp, "#define NUMBER_OF_POLICIES\t\t%d\n", policy_counter);
 	fprintf(fp, "#include <Fennec.h>\n");
-	fprintf(fp, "#include \"ff_defaults.h\"\n");
+	fprintf(fp, "#include \"variable_constants.h\"\n");
 	fprintf(fp, "#include \"ff_modules.h\"\n");
 	fprintf(fp, "#include \"ff_processes.h\"\n");
 	fprintf(fp, "#include \"ff_states.h\"\n\n");
-
-        for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-                if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
-                        fprintf(fp, "#include \"%sParams.h\"\n",
-                                                mp->lib->name);
-                }
-        }
-        fprintf(fp, "\n");
 
 	/* list all daemon processes */
 	fprintf(fp, "struct network_process* daemon_processes[] = {\n");

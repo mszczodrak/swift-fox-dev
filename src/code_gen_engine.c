@@ -74,10 +74,6 @@ void generateFennecEngineC() {
 			fprintf(fp, "FennecEngineP.SplitControl[%s] -> %sC.SplitControl;\n",
 					mp->id_name,
 					mp->lib->name);
-			fprintf(fp, "%sC.%sParams -> FennecEngineP.%sParams;\n", 
-					mp->lib->name,
-					mp->lib->name,
-					mp->lib->name);
 			fprintf(fp, "%sC.Param -> FennecEngineP.Param[%s, F_AM];\n", 
 					mp->lib->name,
 					mp->id_name);
@@ -110,12 +106,6 @@ void generateFennecEngineC() {
 					conftab[i].conf->app_id_name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->app->lib->name);
-      		fprintf(fp, "FennecEngineP.%sParams[%s] <- %s_%s.%sParams;\n",
-					conftab[i].conf->app->lib->name,
-					conftab[i].conf->id_name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name, 
-					conftab[i].conf->app->lib->name);
 		fprintf(fp, "FennecEngineP.Param[%s, F_APPLICATION] <- %s_%s.Param;\n", 
 					conftab[i].conf->id_name,
 					conftab[i].conf->id->name,
@@ -131,13 +121,6 @@ void generateFennecEngineC() {
 					conftab[i].conf->net_id_name,
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name); 
-      		fprintf(fp, "FennecEngineP.%sParams[%s] <- %s_%s.%sParams;\n", 
-					conftab[i].conf->net->lib->name, 
-					conftab[i].conf->id_name,
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name, 
-					conftab[i].conf->net->lib->name);
-
 		fprintf(fp, "FennecEngineP.Param[%s, F_NETWORK] <- %s_%s.Param;\n", 
 					conftab[i].conf->id_name,
 					conftab[i].conf->id->name,
@@ -290,18 +273,6 @@ void generateFennecEngineP() {
 
 
 	fprintf(fp, "uses interface SplitControl[module_t module_id];\n");
-
-	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
-			if (mp->type == TYPE_AM) {
-	      			fprintf(fp, "provides interface %sParams;\n", 
-						mp->lib->name);
-	                } else {
-      				fprintf(fp, "provides interface %sParams[process_t process_id];\n", 
-					mp->lib->name);
-			}
-		}
-        }
 	fprintf(fp, "provides interface Param[process_t process, uint8_t layer];\n");
 
 	fprintf(fp,"}\n\n");

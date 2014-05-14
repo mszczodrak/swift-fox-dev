@@ -61,6 +61,8 @@ void findVariableOffset(struct variable *sh);
 void findParametersOffset(struct confnode* c);
 void endGlobalVariables();
 
+void generateVariableConstants();
+
 void finishCodeGeneration(int policy_counter);
 
 void generateCaches(int event_counter, int policy_counter);
