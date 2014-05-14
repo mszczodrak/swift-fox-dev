@@ -254,12 +254,12 @@ void updateModuleVariables(struct modtab *mp) {
 		/* check if variable is a constant */
 		
 
-		if (lvar->vars != NULL) {
+		if (lvar != NULL) {
 			printf("lvar: %s\n", lvar->var->name);
 			lvar = lvar->vars;
 		}
 			
-		if (mvar->vars != NULL) {
+		if (mvar != NULL) {
 //			printf("mvar: %s\n", mvar->var->name->name);
 			mvar = mvar->vars;
 		}

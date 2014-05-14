@@ -86,6 +86,7 @@
 
 #define MAX_NUM_OF_PARAMS	10
 
+#define SF_DEBUG		1
 
 #define NUMBER_OF_FF_MODULES	7
 
@@ -105,6 +106,7 @@ extern int module_id_counter;
 extern int event_id_counter;
 extern int conf_id_counter;
 extern int state_defined;
+extern int variable_id_counter;
 
 extern int variable_memory_offset;
 
@@ -175,6 +177,8 @@ struct variable {
 	int			init;
 	/* variable type */
 	int			class_type;
+	/* variable id */
+	int			id;
 } vartab[NVARS];
 
 

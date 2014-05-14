@@ -54,6 +54,7 @@ int event_id_counter	= 0;
 int conf_id_counter	= 0;
 int state_defined	= 0;
 int module_id_counter	= 0;
+int variable_id_counter	= 0;
 
 int variable_memory_offset = 0;
 
@@ -66,8 +67,6 @@ char *conf_state_suffix = "_cts";
 
 void yyerror(const char *errmsg, ...);
 int yylex(void);
-
-char *current_module = NULL;
 
 %}
 
@@ -413,13 +412,13 @@ parameters: parameters parameter
 
 parameter: CONSTANT
 		{
-			$$		= find_variable(NULL);
+			$$		= find_variable("const");
 			$$->class_type	= TYPE_VARIABLE_LOCAL;
 			$$->value	= $1;
 		}
 	| newlines COMMA newlines CONSTANT
 		{
-			$$		= find_variable(NULL);
+			$$		= find_variable("const");
 			$$->class_type	= TYPE_VARIABLE_LOCAL;
 			$$->value	= $4;
 		}
@@ -628,16 +627,25 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_var
 				/* failed */
 				yyerror("redeclaration of library");
 
-			printf("define module: %s\n", $3->name);
-
-			current_module = $3->name;
+			if (SF_DEBUG) {
+				printf("define module: %s\n", $3->name);
+			}
 
 			/* fix the child properties */
 			$3->type = $2;
 			$3->lib = $4;
 
-			/* set params for the library */
+			/* set variables for the library */
 			$4->variables = $7;
+
+			if (SF_DEBUG) {
+				struct variables *v = $7;
+				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tCLASS_TYPE\n");
+				for (v = $7; v != NULL; v=v->vars) {
+					printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d\n", v->var->type,
+					v->var->name, v->var->value, v->var->init, v->var->class_type);	
+				}
+			}
 
                         /* extract the name from the path */
                         if ((p = rindex($4->path, '/')) == NULL)
@@ -717,10 +725,7 @@ module_variables: module_variables module_variable
 
 module_variable: param_type IDENTIFIER assign_value newlines 
 		{
-			char *tmp = malloc(strlen(current_module) + strlen($2->name) + 2);
-			sprintf(tmp, "%s_%s", current_module, $2->name);
-
-			$$		= find_variable(tmp);
+			$$		= find_variable($2->name);
 			$$->type	= $1;
 			$$->value	= $3;
 			$$->init	= 1;
@@ -729,16 +734,11 @@ module_variable: param_type IDENTIFIER assign_value newlines
 		}
 	| newlines COMMA newlines param_type IDENTIFIER assign_value newlines
 		{
-			char *tmp = malloc(strlen(current_module) + strlen($5->name) + 2);
-			sprintf(tmp, "%s_%s", current_module, $5->name);
-
-			$$		= find_variable(tmp);
+			$$		= find_variable($5->name);
 			$$->type	= $4;
 			$$->value	= $6;
 			$$->init	= 1;
 			$$->class_type	= TYPE_VARIABLE_DEFAULT;
-			
-
 		}
 	;
 
@@ -970,14 +970,17 @@ find_variable(char *varname) {
 	/* loop */
 	for(vp = vartab; vp < &vartab[NVARS]; vp++) {
         	/* is it already here? */
-	        if (vp->name && (varname!=NULL) && !strcmp(vp->name, varname))
+	        if (vp->name && (varname!=NULL) && !strcmp(vp->name, varname) && (vp->class_type == TYPE_VARIABLE_GLOBAL)) {
 	      		return vp;
+		}
 
 		/* is it free */
 		if(!vp->name) {
 			if (varname != NULL) {
 				vp->name = strdup(varname);
 			}
+			vp->id = variable_id_counter;
+			variable_id_counter++;
 			return vp;
 		}
 		/* otherwise continue to next */
