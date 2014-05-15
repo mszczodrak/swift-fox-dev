@@ -92,16 +92,18 @@ traverse_program(struct program* p, int f, int policy_counter){
 				initCodeGeneration();
 				initDataStorageH();
 				initDataStorageValues();
+
 				initGlobalDataH();
-
 				traverse_variables(p->vars, f);
+				finishGlobalDataH();
 
-				endGlobalDataH();
 				switchGlobalToLocalDataStorage();
+
 				traverse_processnodes(p->defcon, f);
 				traverse_statenodes(p->defstate, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
+				finishDataStorageValues();
 				finishCodeGeneration(policy_counter);
 				break;
 			/** 

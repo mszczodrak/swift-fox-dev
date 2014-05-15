@@ -104,7 +104,7 @@ void initGlobalDataH() {
 }
 
 
-void endGlobalDataH() {
+void finishGlobalDataH() {
 	/* global struct */
 	char *full_path = get_sfc_path("", "global_data.h");
 	FILE *fp = fopen(full_path, "a");
@@ -122,6 +122,27 @@ void endGlobalDataH() {
 	fclose(fp);
 	/* end of definig global variables */
 }
+
+void finishDataStorageValues() {
+	/* global variables init */
+	char *full_path = get_sfc_path("", "data_storage_values.h");
+	FILE *fp = fopen(full_path, "a");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "\t}\n");
+	fprintf(fp, "};\n\n");
+	fprintf(fp, "#endif\n");
+
+	free(full_path);
+	fclose(fp);
+	/* end of initializing global variables */
+}
+
 
 void switchGlobalToLocalDataStorage() {
 	/* global variables init */
