@@ -55,11 +55,12 @@ void initCodeGeneration();
 
 void setFennecExtra();
 
-void startGlobalVariables();
+void initDataStorageH();
+void initDataStorageValues();
+void initGlobalDataH();
 void addGlobalVariable(struct variable *sh);
-void findVariableOffset(struct variable *sh);
-void findParametersOffset(struct confnode* c);
-void endGlobalVariables();
+void endGlobalDataH();
+void switchGlobalToLocalDataStorage();
 
 void generateVariableConstants();
 
@@ -68,8 +69,6 @@ void finishCodeGeneration(int policy_counter);
 void generateCaches(int event_counter, int policy_counter);
 
 void generateModules();
-
-void generateDefaultParams();
 
 void generateInitial(struct initnode *i);
 

@@ -34,8 +34,8 @@
 #include "code_gen.h"
 #include "utils.h"
 
-void startGlobalVariables() {
-	char *full_path = get_sfc_path("", "ff_globals.h");
+void initDataStorageH() {
+	char *full_path = get_sfc_path("", "data_storage.h");
 	FILE *fp = fopen(full_path, "w");
 
 	if (fp == NULL) {
@@ -44,15 +44,25 @@ void startGlobalVariables() {
 		exit(1);
 	}
 
-	fprintf(fp, "#ifndef _FF_GLOBALS_H_\n");
-	fprintf(fp, "#define _FF_GLOBALS_H_\n\n");
+	fprintf(fp, "#ifndef _FF_DATA_STORAGE_H_\n");
+	fprintf(fp, "#define _FF_DATA_STORAGE_H_\n\n");
+	fprintf(fp, "#include \"global_data.h\"\n");
+	fprintf(fp, "#include \"local_data.h\"\n\n");
+
+	fprintf(fp, "nx_struct data_storage {\n");
+	fprintf(fp, "\tnx_struct global_data global;\n");
+	fprintf(fp, "\tnx_struct local_data local;\n");
+	fprintf(fp, "};\n\n");
+	
+	fprintf(fp, "#endif\n");
 
 	free(full_path);
 	fclose(fp);
+}
 
-	/* global struct */
-	full_path = get_sfc_path("", "global_variables.h");
-	fp = fopen(full_path, "w");
+void initDataStorageValues() {
+	char *full_path = get_sfc_path("", "data_storage_values.h");
+	FILE *fp = fopen(full_path, "w");
 
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write \
@@ -60,61 +70,43 @@ void startGlobalVariables() {
 		exit(1);
 	}
 
-	fprintf(fp, "#ifndef _GLOBAL_VARIABLES_H_\n");
-	fprintf(fp, "#define _GLOBAL_VARIABLES_H_\n\n");
+	fprintf(fp, "#ifndef _FF_DATA_STORAGE_VALUES_H_\n");
+	fprintf(fp, "#define _FF_DATA_STORAGE_VALUES_H_\n\n");
+	fprintf(fp, "#include \"data_storage.h\"\n\n");
 
-	fprintf(fp, "nx_struct global_variables {\n");
+	fprintf(fp, "nx_struct data_storage data {\n");
+	fprintf(fp, "\t.global = {\n");
+	
+	free(full_path);
+	fclose(fp);
+}
+
+
+void initGlobalDataH() {
+	/* global struct */
+	char *full_path = get_sfc_path("", "global_data.h");
+	FILE *fp = fopen(full_path, "w");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "#ifndef _GLOBAL_DATA_H_\n");
+	fprintf(fp, "#define _GLOBAL_DATA_H_\n\n");
+
+	fprintf(fp, "nx_struct global_data {\n");
 
 	free(full_path);
 	fclose(fp);
 	/* end of definig global variables */
-
-
-	/* global variables init */
-	full_path = get_sfc_path("", "global_variables_init.h");
-	fp = fopen(full_path, "w");
-
-	if (fp == NULL) {
-		fprintf(stderr, "You do not have a permission to write \
-						into file: %s\n", full_path);
-		exit(1);
-	}
-
-	fprintf(fp, "#ifndef _GLOBAL_VARIABLES_INIT_H_\n");
-	fprintf(fp, "#define _GLOBAL_VARIABLES_INIT_H_\n\n");
-
-	fprintf(fp, "nx_struct global_variables globals = {\n");
-
-	free(full_path);
-	fclose(fp);
-	/* end of initializing global variables */
-
-	/* global variables init */
-	full_path = get_sfc_path("", "global_variables_index.h");
-	fp = fopen(full_path, "w");
-
-	if (fp == NULL) {
-		fprintf(stderr, "You do not have a permission to write \
-						into file: %s\n", full_path);
-		exit(1);
-	}
-
-	fprintf(fp, "#ifndef _GLOBAL_VARIABLES_INDEX_H_\n");
-	fprintf(fp, "#define _GLOBAL_VARIABLES_INDEX_H_\n\n");
-
-	fprintf(fp, "int global_index[] = {\n");
-
-	free(full_path);
-	fclose(fp);
-	/* end of initializing global variables */
-
-
-
 }
 
 
-void endGlobalVariables() {
-	char *full_path = get_sfc_path("", "ff_globals.h");
+void endGlobalDataH() {
+	/* global struct */
+	char *full_path = get_sfc_path("", "global_data.h");
 	FILE *fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
@@ -123,32 +115,18 @@ void endGlobalVariables() {
 		exit(1);
 	}
 
-	fprintf(fp, "#endif\n");
-
-	free(full_path);
-	fclose(fp);
-
-	/* global struct */
-	full_path = get_sfc_path("", "global_variables.h");
-	fp = fopen(full_path, "a");
-
-	if (fp == NULL) {
-		fprintf(stderr, "You do not have a permission to write \
-						into file: %s\n", full_path);
-		exit(1);
-	}
-
 	fprintf(fp, "};\n\n");
 	fprintf(fp, "#endif\n");
 
 	free(full_path);
 	fclose(fp);
 	/* end of definig global variables */
+}
 
-
+void switchGlobalToLocalDataStorage() {
 	/* global variables init */
-	full_path = get_sfc_path("", "global_variables_init.h");
-	fp = fopen(full_path, "a");
+	char *full_path = get_sfc_path("", "data_storage_values.h");
+	FILE *fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write \
@@ -156,27 +134,8 @@ void endGlobalVariables() {
 		exit(1);
 	}
 
-	fprintf(fp, "};\n\n");
-	fprintf(fp, "#endif\n");
-
-	free(full_path);
-	fclose(fp);
-	/* end of initializing global variables */
-
-
-
-	/* global variables init */
-	full_path = get_sfc_path("", "global_variables_index.h");
-	fp = fopen(full_path, "a");
-
-	if (fp == NULL) {
-		fprintf(stderr, "You do not have a permission to write \
-						into file: %s\n", full_path);
-		exit(1);
-	}
-
-	fprintf(fp, "};\n\n");
-	fprintf(fp, "#endif\n");
+	fprintf(fp, "\t},\n");
+	fprintf(fp, "\t.local = {\n");
 
 	free(full_path);
 	fclose(fp);
@@ -185,27 +144,9 @@ void endGlobalVariables() {
 
 
 void addGlobalVariable(struct variable *sh) {
-	char *full_path = get_sfc_path("", "ff_globals.h");
-	FILE *fp = fopen(full_path, "a");
-
-	if (fp == NULL) {
-		fprintf(stderr, "You do not have a permission to write \
-						into file: %s\n", full_path);
-		exit(1);
-	}
-
-	fprintf(fp, "%s %s[%d] = {%Lf};\n\n", type_name(sh->type), 
-						sh->name,
-						sh->length,
-						sh->value);
-
-	free(full_path);
-	fclose(fp);
-
-
 	/* global struct */
-	full_path = get_sfc_path("", "global_variables.h");
-	fp = fopen(full_path, "a");
+	char *full_path = get_sfc_path("", "global_data.h");
+	FILE *fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write \
@@ -230,7 +171,7 @@ void addGlobalVariable(struct variable *sh) {
 
 
 	/* global variables init */
-	full_path = get_sfc_path("", "global_variables_init.h");
+	full_path = get_sfc_path("", "data_storage_values.h");
 	fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
@@ -240,30 +181,13 @@ void addGlobalVariable(struct variable *sh) {
 	}
 
 	if (sh->length > 1) {
-		fprintf(fp, "\t.%s = {%Lf},\n", sh->name,
+		fprintf(fp, "\t\t.%s = {%Lf},\n", sh->name,
 						sh->value);
 
 	} else {
-		fprintf(fp, "\t.%s = %Lf,\n", sh->name,
+		fprintf(fp, "\t\t.%s = %Lf,\n", sh->name,
 						sh->value);
 	}
-
-	free(full_path);
-	fclose(fp);
-	/* end of initializing global variables */
-
-
-	/* global variables init */
-	full_path = get_sfc_path("", "global_variables_index.h");
-	fp = fopen(full_path, "a");
-
-	if (fp == NULL) {
-		fprintf(stderr, "You do not have a permission to write \
-						into file: %s\n", full_path);
-		exit(1);
-	}
-
-	fprintf(fp, "%d, ", sh->offset);
 
 	free(full_path);
 	fclose(fp);
