@@ -78,13 +78,10 @@
 #define TYPE_INT32_T		27
 
 #define PATH_SZ			256
-#define ARGC_MAX		2
 
 #define SEC_CONV		1024
 #define MIN_CONV		60 * SEC_CONV
 #define HR_CONV			60 * MIN_CONV
-
-#define SF_DEBUG		1
 
 #define NUMBER_OF_FF_MODULES	7
 
@@ -109,6 +106,8 @@ extern int variable_id_counter;
 extern int variable_memory_offset;
 
 extern char *conf_state_suffix;
+
+extern int sfc_debug;
 
 int start_parser(int argc, char *argv[]);
 

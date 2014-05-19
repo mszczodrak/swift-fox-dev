@@ -222,7 +222,7 @@ int updateModuleVariables(struct modtab *mp) {
 	struct variables *mvar = mp->variables;
 	int number_of_variables = 0;
 
-	if (SF_DEBUG) {
+	if (sfc_debug) {
 		printf("\tModule %s\n", mp->name);
 		printf("\t\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tFULL_NAME\n");
 	}
@@ -234,7 +234,7 @@ int updateModuleVariables(struct modtab *mp) {
 			/* this already points to global variable, so should
 			 * be fine; just check if the type matches */
 			if (mvar->var->type != lvar->var->type) {
-				if (SF_DEBUG) {
+				if (sfc_debug) {
 					printf("type mismatch %d vs %d\n", mvar->var->type, lvar->var->type);
 				}
 				fprintf(stderr, "type %s does not match %s\n",
@@ -269,7 +269,7 @@ int updateModuleVariables(struct modtab *mp) {
 			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
 		}
 
-		if (SF_DEBUG) {
+		if (sfc_debug) {
 			printf("\t\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", mvar->var->type,
 			mvar->var->name, mvar->var->value, mvar->var->init, mvar->var->offset,
 			mvar->var->class_type, mvar->var->cap_name);
@@ -290,7 +290,7 @@ int updateModuleVariables(struct modtab *mp) {
 }
 
 void updateProcessVariables(struct confnode* c) {
-	if (SF_DEBUG) {
+	if (sfc_debug) {
 		printf("\nProcess %s\n", c->name);
 	}
 

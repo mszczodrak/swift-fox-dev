@@ -45,7 +45,7 @@ main(int argc, char *argv[] ) {
 	/** 
 	argument checking 
 	*/
-  	if (argc != ARGC_MAX) {
+  	if (argc < 1 && argc > 3) {
 
 		(void)fprintf(stderr, "%s: no input files\n\n", argv[0]);
 		(void)fprintf(stderr, "If your source program is located in");

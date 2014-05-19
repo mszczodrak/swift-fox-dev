@@ -67,6 +67,7 @@ char *conf_state_suffix = "_cts";
 
 void yyerror(const char *errmsg, ...);
 int yylex(void);
+int sfc_debug = 0;
 
 %}
 
@@ -230,7 +231,7 @@ global_variable: param_type IDENTIFIER array_part assign_value newlines
 			$$->cap_name 	= strdup($2->name);
 			$$->cap_name	= str_toupper($$->cap_name);
 
-			if (SF_DEBUG) {
+			if (sfc_debug) {
 				printf("Global variable\n");
 				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tCAP_NAME\n");
 				printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", $$->type,
@@ -619,7 +620,7 @@ initial_process: START IDENTIFIER newlines
 
 library: newlines definitions
 		{
-			if (SF_DEBUG) {
+			if (sfc_debug) {
 				printf("\n");
 			}
 		}
@@ -642,7 +643,7 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_var
 				/* failed */
 				yyerror("redeclaration of library");
 
-			if (SF_DEBUG) {
+			if (sfc_debug) {
 				printf("define module: %s\n", $3->name);
 			}
 
@@ -653,7 +654,7 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_var
 			/* set variables for the library */
 			$4->variables = $7;
 
-			if (SF_DEBUG) {
+			if (sfc_debug) {
 				struct variables *v = $7;
 				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\n");
 				for (v = $7; v != NULL; v=v->vars) {
@@ -794,9 +795,24 @@ extern int yyleng;
 int
 start_parser(int argc, char *argv[]) {
 
+	char *source_file;
+	if (argc == 3) {
+		if (!strcmp(argv[1], "-d")) {
+			printf("use debug\n");
+			sfc_debug = 1;
+		} else {
+			fprintf(stderr, "unknown flag %s\n", argv[1]);
+			exit(1);
+		}
+		source_file = argv[2];
+	} else {
+		sfc_debug = 0;
+		source_file = argv[1];
+	}
+
 	/* check the file extention */
-	if (rindex(argv[1], '.') != NULL && !strcmp(rindex(argv[1], '.'), ".sfp")) {
-		argv[1][strlen(argv[1])-4] = '\0';
+	if (rindex(source_file, '.') != NULL && !strcmp(rindex(source_file, '.'), ".sfp")) {
+		source_file[strlen(source_file)-4] = '\0';
 	}
 		
 	/* init */
@@ -804,8 +820,8 @@ start_parser(int argc, char *argv[]) {
 	(void)memset(library_file, 0, PATH_SZ);
 	(void)memset(fennec_library_file, 0, PATH_SZ);
 
-	(void)snprintf(program_file, PATH_SZ, "%s.sfp", argv[1]);
-	(void)snprintf(library_file, PATH_SZ, "%s.sfl", argv[1]);
+	(void)snprintf(program_file, PATH_SZ, "%s.sfp", source_file);
+	(void)snprintf(library_file, PATH_SZ, "%s.sfl", source_file);
 	(void)snprintf(fennec_library_file, PATH_SZ, "%s/%s", 
 			getenv("FENNEC_FOX_LIB"), STD_FENNEC_FOX_LIB);
 
@@ -831,7 +847,7 @@ start_parser(int argc, char *argv[]) {
 		/* failed */
 		(void)fprintf(stderr, 
 			"%s.sfl: no such file or directory and no standard library\n",
-			argv[1]);
+			source_file);
 		exit(1);
 	}
 
