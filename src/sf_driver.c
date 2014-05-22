@@ -100,12 +100,19 @@ main(int argc, char *argv[] ) {
 			break;
 		}
 		fprintf(stderr, "unrecognized additional parameters\n");
-		exit(2);
+		fprintf(stderr, "compilation terminated\n");
+		exit(1);
+	}
+
+	if (pfile == NULL) {
+		fprintf(stderr, "no input files\n");
+		fprintf(stderr, "compilation terminated.\n");
+		exit(1);
 	}
 
 	if (errflag) {
 		fprintf(stderr, "try %s -h  for help\n", argv[0]);
-		exit(2);
+		exit(1);
 	}
 
 	/** 
