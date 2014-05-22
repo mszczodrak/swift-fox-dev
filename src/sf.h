@@ -109,7 +109,7 @@ extern char *conf_state_suffix;
 
 extern int sfc_debug;
 
-int start_parser(int argc, char *argv[]);
+int start_parser(char *pfile, char *lfile);
 
 extern int yylineno;
 extern int yycolumn;

@@ -793,26 +793,11 @@ extern int yyleng;
 
 /* main entry point */
 int
-start_parser(int argc, char *argv[]) {
-
-	char *source_file;
-	if (argc == 3) {
-		if (!strcmp(argv[1], "-d")) {
-			printf("use debug\n");
-			sfc_debug = 1;
-		} else {
-			fprintf(stderr, "unknown flag %s\n", argv[1]);
-			exit(1);
-		}
-		source_file = argv[2];
-	} else {
-		sfc_debug = 0;
-		source_file = argv[1];
-	}
+start_parser(char *pfile, char *lfile) {
 
 	/* check the file extention */
-	if (rindex(source_file, '.') != NULL && !strcmp(rindex(source_file, '.'), ".sfp")) {
-		source_file[strlen(source_file)-4] = '\0';
+	if (rindex(pfile, '.') != NULL && !strcmp(rindex(pfile, '.'), ".sfp")) {
+		pfile[strlen(pfile)-4] = '\0';
 	}
 		
 	/* init */
@@ -820,8 +805,8 @@ start_parser(int argc, char *argv[]) {
 	(void)memset(library_file, 0, PATH_SZ);
 	(void)memset(fennec_library_file, 0, PATH_SZ);
 
-	(void)snprintf(program_file, PATH_SZ, "%s.sfp", source_file);
-	(void)snprintf(library_file, PATH_SZ, "%s.sfl", source_file);
+	(void)snprintf(program_file, PATH_SZ, "%s.sfp", pfile);
+	(void)snprintf(library_file, PATH_SZ, "%s.sfl", lfile);
 	(void)snprintf(fennec_library_file, PATH_SZ, "%s/%s", 
 			getenv("FENNEC_FOX_LIB"), STD_FENNEC_FOX_LIB);
 
@@ -847,7 +832,7 @@ start_parser(int argc, char *argv[]) {
 		/* failed */
 		(void)fprintf(stderr, 
 			"%s.sfl: no such file or directory and no standard library\n",
-			source_file);
+			lfile);
 		exit(1);
 	}
 
