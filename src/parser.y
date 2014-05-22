@@ -806,7 +806,9 @@ start_parser(char *pfile, char *lfile) {
 	(void)memset(fennec_library_file, 0, PATH_SZ);
 
 	(void)snprintf(program_file, PATH_SZ, "%s.sfp", pfile);
-	(void)snprintf(library_file, PATH_SZ, "%s.sfl", lfile);
+	if (lfile != NULL) {
+		(void)snprintf(library_file, PATH_SZ, "%s.sfl", lfile);
+	}
 	(void)snprintf(fennec_library_file, PATH_SZ, "%s/%s", 
 			getenv("FENNEC_FOX_LIB"), STD_FENNEC_FOX_LIB);
 
@@ -880,7 +882,7 @@ yywrap(void) {
 	switch(file_status) {
 		case 1:
 			/* re-init */
-			yylineno		= 1;
+			yylineno	= 1;
 			file_status 	= 2;
 			file_name 	= library_file;
 
