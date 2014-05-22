@@ -33,6 +33,7 @@
 
 
 #include <stdio.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "sf.h"
@@ -55,7 +56,8 @@ main(int argc, char *argv[] ) {
 	argument checking 
 	*/
 
-	while ((c = getopt(argc, argv, ":vhdp:l:")) != 1) {
+	while ((c = getopt(argc, argv, "vhdp:l:")) != -1) {
+		//fprintf(stdout, "gets %c\n", c);
 		switch(c) {
 		case 'v':
 			print_version();
@@ -80,7 +82,25 @@ main(int argc, char *argv[] ) {
 			fprintf(stderr, "Unrecognized option: '-%c'\n", optopt);
 			errflag++;
 			break;
+		default:
+			fprintf(stderr, "Incorrect argument\n");
+			exit(1);
 		}
+	}
+
+	while (optind < argc) {
+		if (pfile == NULL) {
+			pfile = argv[optind];
+			optind++;
+			break;
+		}
+		if (lfile == NULL) {
+			lfile = argv[optind];
+			optind++;
+			break;
+		}
+		fprintf(stderr, "unrecognized additional parameters\n");
+		exit(2);
 	}
 
 	if (errflag) {
