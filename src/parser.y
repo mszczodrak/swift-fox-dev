@@ -436,8 +436,9 @@ parameter: CONSTANT
 				fprintf(stderr, "Variable %s is not global\n", $1->name);
 				yyerror("undefined variable");
 			}
-			$$			= malloc(sizeof(struct variable));
-			memcpy($$, vp, sizeof(struct variable));
+			//$$			= malloc(sizeof(struct variable));
+			//memcpy($$, vp, sizeof(struct variable));
+			$$ = vp;
 
                 }
 	| newlines COMMA newlines IDENTIFIER
@@ -447,8 +448,9 @@ parameter: CONSTANT
 				fprintf(stderr, "Variable %s is not global\n", $4->name);
 				yyerror("undefined variable");
 			}
-			$$			= malloc(sizeof(struct variable));
-			memcpy($$, vp, sizeof(struct variable));
+			//$$			= malloc(sizeof(struct variable));
+			//memcpy($$, vp, sizeof(struct variable));
+			$$ = vp;
                 }
         ;
 
@@ -720,7 +722,7 @@ module_type: APPLICATION 	{ $$ = TYPE_APPLICATION; }
         ;
 
 
-module_variables: module_variables module_variable 
+module_variables: module_variables module_variable
 		{
 			$$              = calloc(1, sizeof(struct variables));
 

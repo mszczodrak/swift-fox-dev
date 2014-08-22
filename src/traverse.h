@@ -41,7 +41,7 @@ void traverse_program(struct program* p, int f, int policy_counter);
 void traverse_variables(struct variables* sh, int f);
 void traverse_variable(struct variable* sh, int f);
 void traverse_processnodes(struct processnodes* c, int f);
-void traverse_confnode(struct confnode* c, int f);
+void traverse_process(struct confnode* c, int f);
 void traverse_statenodes(struct statenodes* s, int f);
 void traverse_statenode(struct statenode* s, int f);
 void traverse_policies(struct policies* p, int f);

@@ -60,6 +60,7 @@ void initDataStorageValues();
 void initGlobalDataH();
 void addGlobalVariable(struct variable *sh);
 void finishGlobalDataH();
+void finishDataStorageValues();
 void switchGlobalToLocalDataStorage();
 
 void generateVariableConstants();

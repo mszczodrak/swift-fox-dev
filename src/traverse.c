@@ -51,13 +51,15 @@ main entry point
 */
 void
 traverse_program(struct program* p, int f, int policy_counter){
-	printf("traverse %d\n", f);
 	if (p != NULL) {
 		switch (f) {
 			/** 
 			plain traversal 
 			*/
 			case TREE_TRAVERSE:
+				if (sfc_debug) {
+					printf("traverse: first pass (%d)\n", f);
+				}
 				traverse_processnodes(p->defcon, f);
 				traverse_statenodes(p->defstate, f);
 				traverse_policies(p->defpol, f);
@@ -67,6 +69,9 @@ traverse_program(struct program* p, int f, int policy_counter){
 			traversal for semantic checking 
 			*/
 			case TREE_CHECK_SEMANTIC:
+				if (sfc_debug) {
+					printf("traverse: check seminatic (%d)\n", f);
+				}
 				/** 
 				zero the mapping structure 
 				*/
@@ -87,6 +92,9 @@ traverse_program(struct program* p, int f, int policy_counter){
 			traversal for code generation 
 			*/
 			case TREE_GENERATE_CODE:
+				if (sfc_debug) {
+					printf("traverse: generate code (%d)\n", f);
+				}
 				setFiles();
 
 				initCodeGeneration();
@@ -110,6 +118,7 @@ traverse_program(struct program* p, int f, int policy_counter){
 			make the compiler happy 
 			*/
 			default:
+				printf("traverse: UNNOWN STATE (%d)\n", f);
 				break;
 		}
 	}
@@ -186,18 +195,20 @@ traverse_processnodes(struct processnodes* c, int f) {
 	if (c != NULL){
 		switch (f) {
 		case TREE_TRAVERSE:
+			printf("1");
+			traverse_process(c->conf, f);
+			printf("2");
 			traverse_processnodes(c->confs, f);
-			traverse_confnode(c->conf, f);
 			break;
 
 		case TREE_CHECK_SEMANTIC:
+			traverse_process(c->conf, f);
 			traverse_processnodes(c->confs, f);
-			traverse_confnode(c->conf, f);
 			break;
 
 		case TREE_GENERATE_CODE:
+			traverse_process(c->conf, f);
 			traverse_processnodes(c->confs, f);
-			traverse_confnode(c->conf, f);
 			break;
 			
 		default:
@@ -228,6 +239,7 @@ int updateModuleVariables(struct modtab *mp) {
 	}
 
 	while (lvar != NULL) {
+		printf("Checking %s %s\n", mvar->var->name, lvar->var->name);
 
 		/* case when we use global variable */
 		if (mvar != NULL && mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
@@ -237,9 +249,12 @@ int updateModuleVariables(struct modtab *mp) {
 				if (sfc_debug) {
 					printf("type mismatch %d vs %d\n", mvar->var->type, lvar->var->type);
 				}
-				fprintf(stderr, "type %s does not match %s\n",
+				fprintf(stderr, "module %s got variable %s of type %s, while the library expects type %s for variable %s\n",
+					mp->name,
+					mvar->var->name,
 					type_name(mvar->var->type),
-					type_name(lvar->var->type));
+					type_name(lvar->var->type),
+					lvar->var->name);
 				exit(1);
 			}
 			/* still copy the application perspective name */
@@ -309,7 +324,7 @@ visit a single configuration
 */
 
 void
-traverse_confnode(struct confnode* c, int f) {	
+traverse_process(struct confnode* c, int f) {	
 	switch (f) {
 		case TREE_TRAVERSE:
 			updateProcessVariables(c);
