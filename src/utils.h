@@ -36,6 +36,12 @@
 #define _SF_UTILS_H_
 
 #include "sf.h"
+#include <stdio.h>
+#include <string.h>
+#include "traverse.h"
+#include "sem_check.h"
+#include "code_gen.h"
+#include "utils.h"
 
 char *type_name(int type_value);
 int type_size(int type_value);
@@ -47,5 +53,8 @@ int check_path(char *path);
 
 char *str_toupper(char *s);
 char *conf_module_name(char *conf, char *module);
+
+int updateModuleVariables(struct modtab *mp);
+void updateProcessVariables(struct confnode* c);
 
 #endif
