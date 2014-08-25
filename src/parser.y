@@ -130,6 +130,7 @@ int sfc_debug = 0;
 %type <statep>	state
 %type <statesp>	states
 %type <statesp>	defined_states
+%type <vars>	defined_global_variables
 %type <vars>	global_variables
 %type <var>	global_variable
 %type <pol>	policy;
@@ -177,7 +178,7 @@ swiftfox: library program
 		}
 	;
 
-program: global_variables defined_processes defined_states policies initial_process 
+program: defined_global_variables defined_processes defined_states policies initial_process 
 		{
 			/* root node */
 			$$		= calloc(1, sizeof(struct program));
@@ -198,6 +199,16 @@ program: global_variables defined_processes defined_states policies initial_proc
 		}
 	;
 
+
+defined_global_variables: global_variables
+		{
+			$$ = $1;
+
+			if (sfc_debug) {
+				printf("\n");
+			}
+			print_variables(TYPE_VARIABLE_GLOBAL);
+		}
 
 global_variables: global_variables global_variable
                 {
@@ -626,9 +637,7 @@ library: newlines definitions
 			if (sfc_debug) {
 				printf("\n");
 			}
-
 			print_variables(TYPE_VARIABLE_DEFAULT);
-
 		}
 	;
 
