@@ -245,8 +245,7 @@ void
 traverse_process(struct confnode* c, int f) {	
 	switch (f) {
 		case TREE_TRAVERSE:
-			updateProcessVariables(c);
-			print_process(c);
+			//print_process(c);
 			break;
 
 		case TREE_CHECK_SEMANTIC:

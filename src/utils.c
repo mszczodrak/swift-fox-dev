@@ -327,10 +327,6 @@ int updateModuleVariables(struct modtab *mp) {
 }
 
 void updateProcessVariables(struct confnode* c) {
-	if (sfc_debug) {
-		printf("\nProcess %s\n", c->name);
-	}
-
 	c->app_var_num = updateModuleVariables(c->app);
 	c->net_var_num = updateModuleVariables(c->net);
 	c->am_var_num = updateModuleVariables(c->am);

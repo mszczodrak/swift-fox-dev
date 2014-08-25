@@ -367,6 +367,9 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 			conftab[conf_id_counter].conf = $$;
 
 			++conf_id_counter;
+
+			updateProcessVariables($$);
+			print_process($$);
 		}
 	;
 
