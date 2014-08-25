@@ -86,9 +86,9 @@ void print_process_module(struct modtab *mp) {
 	printf("\tModule %s\n", mp->name);
 	printf("\t\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tFULL_NAME\n");
 
-	while(mvar != NULL && mvar->vars != NULL) {
-		mvar = mvar->vars;
-	}
+//	while(mvar != NULL && mvar->vars != NULL) {
+//		mvar = mvar->vars;
+//	}
 
 	for(; mvar != NULL; mvar = mvar->parent) {
 		printf("\t\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", mvar->var->type,

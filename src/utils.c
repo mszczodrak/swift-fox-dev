@@ -240,17 +240,14 @@ char *conf_module_name(char *conf, char *module) {
 int updateModuleVariables(struct modtab *mp) {
 	struct variables *lvar = mp->lib->variables;
 	struct variables *mvar = mp->variables;
+	struct variables *revar = NULL;
 	int number_of_variables = 0;
-
-//	if (sfc_debug) {
-//		printf("\tModule %s\n", mp->name);
-//		printf("\t\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tFULL_NAME\n");
-//	}
-
 
 	while(mvar != NULL && mvar->vars != NULL) {
 		mvar = mvar->vars;
 	}
+
+	revar = mvar;
 
 	while(lvar != NULL && lvar->vars != NULL) {
 		lvar = lvar->vars;
@@ -295,6 +292,7 @@ int updateModuleVariables(struct modtab *mp) {
 			mvar = malloc(sizeof(struct variables));
 			//mvar->vars = NULL;
 			mvar->var = malloc(sizeof(struct variable));
+			mvar->parent = NULL;
 
 			mvar->vars = mp->variables;
 			mp->variables = mvar;
@@ -305,12 +303,6 @@ int updateModuleVariables(struct modtab *mp) {
 			mvar->var->class_type = TYPE_VARIABLE_LOCAL;
 			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
 		}
-
-//		if (sfc_debug) {
-//			printf("\t\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", mvar->var->type,
-//			mvar->var->name, mvar->var->value, mvar->var->init, mvar->var->offset,
-//			mvar->var->class_type, mvar->var->cap_name);
-//		}
 
 		if (mvar != NULL) {
 			mvar = mvar->parent;
@@ -323,6 +315,10 @@ int updateModuleVariables(struct modtab *mp) {
 		fprintf(stderr, "more variables defined that declared\n");
 		exit(1);
 	}
+
+	/* Reverse order of variables.. this way they can be traversed in order */
+	mp->variables = revar;
+
 	return number_of_variables;
 }
 
