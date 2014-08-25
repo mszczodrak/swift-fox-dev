@@ -60,9 +60,13 @@ traverse_program(struct program* p, int f, int policy_counter){
 				if (sfc_debug) {
 					printf("traverse: first pass (%d)\n", f);
 				}
+				printf(".2\n");
 				traverse_processnodes(p->defcon, f);
+				printf(".4\n");
 				traverse_statenodes(p->defstate, f);
+				printf(".6\n");
 				traverse_policies(p->defpol, f);
+				printf(".8\n");
 				traverse_initnode(p->init, f);
 				break;
 			/** 
@@ -133,21 +137,22 @@ shared variables traversal
 */
 void
 traverse_variables(struct variables* sh, int f) {
+	printf("TVs\n");
         if (sh != NULL){
                 switch (f) {
                         case TREE_TRAVERSE:
-                                traverse_variables(sh->vars, f);
                                 traverse_variable(sh->var, f);
+                                traverse_variables(sh->vars, f);
                                 break;
 
                         case TREE_CHECK_SEMANTIC:
-                                traverse_variables(sh->vars, f);
                                 traverse_variable(sh->var, f);
+                                traverse_variables(sh->vars, f);
                                 break;
 
                         case TREE_GENERATE_CODE:
-                                traverse_variables(sh->vars, f);
                                 traverse_variable(sh->var, f);
+                                traverse_variables(sh->vars, f);
                                 break;
 
                         default:
@@ -165,6 +170,7 @@ inspects a single variable
 */
 void
 traverse_variable(struct variable* sh, int f) {
+	printf("T\n");
 	switch (f) {
 	case TREE_TRAVERSE:
 		break;
@@ -230,7 +236,9 @@ traverse_processnodes(struct processnodes* c, int f) {
 
 int updateModuleVariables(struct modtab *mp) {
 	struct variables *lvar = mp->lib->variables;
+	struct variables *lvart = mp->lib->variables;
 	struct variables *mvar = mp->variables;
+	struct variables *mvart = mp->variables;
 	int number_of_variables = 0;
 
 	if (sfc_debug) {
@@ -238,8 +246,17 @@ int updateModuleVariables(struct modtab *mp) {
 		printf("\t\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tFULL_NAME\n");
 	}
 
+
+	while(mvar != NULL && mvar->vars != NULL) {
+		mvar = mvar->vars;
+	}
+
+	while(lvar != NULL && lvar->vars != NULL) {
+		lvar = lvar->vars;
+	}
+
 	while (lvar != NULL) {
-		printf("Checking %s %s\n", mvar->var->name, lvar->var->name);
+//		printf("Checking %s %s\n", mvar->var->name, lvar->var->name);
 
 		/* case when we use global variable */
 		if (mvar != NULL && mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
@@ -279,6 +296,7 @@ int updateModuleVariables(struct modtab *mp) {
 			mvar = malloc(sizeof(struct variables));
 			mvar->vars = NULL;
 			mvar->var = malloc(sizeof(struct variable));
+			mp->variables = mvar;
 			memcpy(mvar->var, lvar->var, sizeof(struct variable));
 			mvar->var->offset = variable_memory_offset;
 			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
@@ -291,9 +309,9 @@ int updateModuleVariables(struct modtab *mp) {
 		}
 
 		if (mvar != NULL) {
-			mvar = mvar->vars;
+			mvar = mvar->parent;
 		}
-		lvar = lvar->vars;
+		lvar = lvar->parent;
 		number_of_variables++;
 	}
 

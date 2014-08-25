@@ -405,6 +405,16 @@ module: IDENTIFIER OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS
 		{
 			$$ = proc_module($1->name);
 			$$->variables = $3;
+			if ($3 != NULL) {
+				$3->parent = NULL;
+			}
+
+			printf("MODULE  %s\n", $1->name);
+			struct variables* v = $3;
+			for (v = $3; v!=NULL; v = v->vars) {
+				printf("\t%s", v->var->name);
+			}
+			printf("\n");
 		}		
 	;
 
@@ -412,6 +422,7 @@ parameters: parameters parameter
                 {
 
 			$$              = calloc(1, sizeof(struct variables));
+			printf("Ps %d  -> %s\n", $$, $2->name);
 
 			/* link the child nodes */
 			if ($1 != NULL)
