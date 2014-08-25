@@ -61,13 +61,9 @@ traverse_program(struct program* p, int f, int policy_counter){
 				if (sfc_debug) {
 					printf("traverse: first pass (%d)\n", f);
 				}
-				printf(".2\n");
 				traverse_processnodes(p->defcon, f);
-				printf(".4\n");
 				traverse_statenodes(p->defstate, f);
-				printf(".6\n");
 				traverse_policies(p->defpol, f);
-				printf(".8\n");
 				traverse_initnode(p->init, f);
 				break;
 			/** 
@@ -200,20 +196,18 @@ traverse_processnodes(struct processnodes* c, int f) {
 	if (c != NULL){
 		switch (f) {
 		case TREE_TRAVERSE:
-			printf("1");
-			traverse_process(c->conf, f);
-			printf("2");
 			traverse_processnodes(c->confs, f);
+			traverse_process(c->conf, f);
 			break;
 
 		case TREE_CHECK_SEMANTIC:
-			traverse_process(c->conf, f);
 			traverse_processnodes(c->confs, f);
+			traverse_process(c->conf, f);
 			break;
 
 		case TREE_GENERATE_CODE:
-			traverse_process(c->conf, f);
 			traverse_processnodes(c->confs, f);
+			traverse_process(c->conf, f);
 			break;
 			
 		default:
