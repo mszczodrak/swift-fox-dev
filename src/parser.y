@@ -416,12 +416,12 @@ module: IDENTIFIER OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS
 				$3->parent = NULL;
 			}
 
-			printf("MODULE  %s\n", $1->name);
-			struct variables* v = $3;
-			for (v = $3; v!=NULL; v = v->vars) {
-				printf("\t%s", v->var->name);
-			}
-			printf("\n");
+			//printf("MODULE  %s\n", $1->name);
+			//struct variables* v = $3;
+			//for (v = $3; v!=NULL; v = v->vars) {
+			//	printf("\t%s", v->var->name);
+			//}
+			//printf("\n");
 		}		
 	;
 
