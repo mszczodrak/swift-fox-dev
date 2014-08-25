@@ -104,6 +104,7 @@ extern int state_defined;
 extern int variable_id_counter;
 
 extern int variable_memory_offset;
+extern int global_memory_size;
 
 extern char *conf_state_suffix;
 

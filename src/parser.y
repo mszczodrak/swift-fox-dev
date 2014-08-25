@@ -58,6 +58,7 @@ int module_id_counter	= 0;
 int variable_id_counter	= 0;
 
 int variable_memory_offset = 0;
+int global_memory_size = 0;
 
 int active_state;
 
@@ -236,7 +237,7 @@ global_variable: param_type IDENTIFIER array_part assign_value newlines
 			$$ 		= find_variable($2->name);
 			$$->type 	= $1;
 			$$->length	= $3;
-			$$->offset	= variable_memory_offset;
+			$$->offset	= global_memory_size;
 			$$->value	= $4;
 			$$->class_type	= TYPE_VARIABLE_GLOBAL;
 			$$->init	= 1;
@@ -249,7 +250,7 @@ global_variable: param_type IDENTIFIER array_part assign_value newlines
 				printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", $$->type,
 				$$->name, $$->value, $$->init, $$->offset, $$->class_type, $$->cap_name);	
 			}
-			variable_memory_offset += (type_size($$->type) * $$->length);
+			global_memory_size += (type_size($$->type) * $$->length);
 		}
 
 array_part: OPEN_SQUARE_BRACE CONSTANT CLOSE_SQUARE_BRACE
@@ -422,7 +423,6 @@ parameters: parameters parameter
                 {
 
 			$$              = calloc(1, sizeof(struct variables));
-			printf("Ps %d  -> %s\n", $$, $2->name);
 
 			/* link the child nodes */
 			if ($1 != NULL)

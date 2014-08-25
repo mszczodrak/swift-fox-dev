@@ -236,9 +236,7 @@ traverse_processnodes(struct processnodes* c, int f) {
 
 int updateModuleVariables(struct modtab *mp) {
 	struct variables *lvar = mp->lib->variables;
-	struct variables *lvart = mp->lib->variables;
 	struct variables *mvar = mp->variables;
-	struct variables *mvart = mp->variables;
 	int number_of_variables = 0;
 
 	if (sfc_debug) {
@@ -256,8 +254,6 @@ int updateModuleVariables(struct modtab *mp) {
 	}
 
 	while (lvar != NULL) {
-//		printf("Checking %s %s\n", mvar->var->name, lvar->var->name);
-
 		/* case when we use global variable */
 		if (mvar != NULL && mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 			/* this already points to global variable, so should
