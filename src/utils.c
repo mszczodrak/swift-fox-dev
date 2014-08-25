@@ -284,6 +284,7 @@ int updateModuleVariables(struct modtab *mp) {
 			mvar->var->length = lvar->var->length;
 			mvar->var->cap_name = lvar->var->cap_name;
 			mvar->var->offset = variable_memory_offset;
+			mvar->var->init = 1;
 			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
 		}
 
