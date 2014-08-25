@@ -38,6 +38,7 @@
 #include "sem_check.h"
 #include "code_gen.h"
 #include "utils.h"
+#include "dbg_utils.h"
 
 /** 
 AST (Abstract Syntax Tree) traversal; 
@@ -245,6 +246,7 @@ traverse_process(struct confnode* c, int f) {
 	switch (f) {
 		case TREE_TRAVERSE:
 			updateProcessVariables(c);
+			print_process(c);
 			break;
 
 		case TREE_CHECK_SEMANTIC:

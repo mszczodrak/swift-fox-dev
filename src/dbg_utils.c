@@ -75,3 +75,37 @@ void print_variables(int class_type) {
 	printf("\n");
 }
 
+
+void print_process_module(struct modtab *mp) {
+	struct variables *mvar = mp->variables;
+
+	if (!sfc_debug) {
+		return;
+	}
+
+	printf("\tModule %s\n", mp->name);
+	printf("\t\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tFULL_NAME\n");
+
+	while(mvar != NULL && mvar->vars != NULL) {
+		mvar = mvar->vars;
+	}
+
+	for(; mvar != NULL; mvar = mvar->parent) {
+		printf("\t\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", mvar->var->type,
+		mvar->var->name, mvar->var->value, mvar->var->init, mvar->var->offset,
+		mvar->var->class_type, mvar->var->cap_name);
+	}
+	printf("\n");
+}
+
+void print_process(struct confnode* c) {
+	if (!sfc_debug) {
+		return;
+	}
+
+	printf("Process %s\n", c->name);
+	print_process_module(c->app);
+	print_process_module(c->net);
+	print_process_module(c->am);
+
+}

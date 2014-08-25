@@ -38,5 +38,7 @@
 #include "sf.h"
 
 void print_variables(int class_type);
+void print_process_module(struct modtab *mp);
+void print_process(struct confnode* c);
 
 #endif

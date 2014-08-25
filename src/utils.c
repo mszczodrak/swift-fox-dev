@@ -242,10 +242,10 @@ int updateModuleVariables(struct modtab *mp) {
 	struct variables *mvar = mp->variables;
 	int number_of_variables = 0;
 
-	if (sfc_debug) {
-		printf("\tModule %s\n", mp->name);
-		printf("\t\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tFULL_NAME\n");
-	}
+//	if (sfc_debug) {
+//		printf("\tModule %s\n", mp->name);
+//		printf("\t\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tFULL_NAME\n");
+//	}
 
 
 	while(mvar != NULL && mvar->vars != NULL) {
@@ -293,19 +293,24 @@ int updateModuleVariables(struct modtab *mp) {
 		/* case when mvar is missing, so copy the lvar */
 		if (mvar == NULL) {
 			mvar = malloc(sizeof(struct variables));
-			mvar->vars = NULL;
+			//mvar->vars = NULL;
 			mvar->var = malloc(sizeof(struct variable));
+
+			mvar->vars = mp->variables;
 			mp->variables = mvar;
+			mvar->vars->parent = mvar;
+
 			memcpy(mvar->var, lvar->var, sizeof(struct variable));
 			mvar->var->offset = variable_memory_offset;
+			mvar->var->class_type = TYPE_VARIABLE_LOCAL;
 			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
 		}
 
-		if (sfc_debug) {
-			printf("\t\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", mvar->var->type,
-			mvar->var->name, mvar->var->value, mvar->var->init, mvar->var->offset,
-			mvar->var->class_type, mvar->var->cap_name);
-		}
+//		if (sfc_debug) {
+//			printf("\t\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", mvar->var->type,
+//			mvar->var->name, mvar->var->value, mvar->var->init, mvar->var->offset,
+//			mvar->var->class_type, mvar->var->cap_name);
+//		}
 
 		if (mvar != NULL) {
 			mvar = mvar->parent;
