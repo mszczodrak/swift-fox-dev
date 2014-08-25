@@ -42,6 +42,7 @@
 #include <stdarg.h>
 #include "sf.h"
 #include "utils.h"
+#include "dbg_utils.h"
 #include "traverse.h"
 
 void initialize(void);
@@ -625,6 +626,9 @@ library: newlines definitions
 			if (sfc_debug) {
 				printf("\n");
 			}
+
+			print_variables();
+
 		}
 	;
 
@@ -763,7 +767,6 @@ module_variable: param_type IDENTIFIER assign_value newlines
 		}
 	;
 
-
 param_type: VARIABLE_TYPE
 		{
 			$$ = $1;
@@ -773,8 +776,6 @@ param_type: VARIABLE_TYPE
 			$$ = 0;
 		}
 	;
-
-
 
 newlines: newlines newline
 	|
@@ -1015,7 +1016,6 @@ find_variable(char *varname) {
 	yyerror("vartab is full");
 	return NULL;
 }
-
 
 /* process_module */
 struct modtab *
