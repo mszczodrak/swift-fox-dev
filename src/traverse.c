@@ -137,7 +137,6 @@ shared variables traversal
 */
 void
 traverse_variables(struct variables* sh, int f) {
-	printf("TVs\n");
         if (sh != NULL){
                 switch (f) {
                         case TREE_TRAVERSE:
@@ -170,7 +169,6 @@ inspects a single variable
 */
 void
 traverse_variable(struct variable* sh, int f) {
-	printf("T\n");
 	switch (f) {
 	case TREE_TRAVERSE:
 		break;
