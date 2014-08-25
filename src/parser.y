@@ -325,6 +325,7 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 			}
 			$$->app			= $6;
 			$$->app->lib->used 	= 1;
+			//$$->app_var_num		= updateModuleVariables($6);
 
 
 			/* link network module */
@@ -334,6 +335,7 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 			}
 			$$->net			= $8;
 			$$->net->lib->used 	= 1;
+			//$$->net_var_num		= updateModuleVariables($8);
 
 
 			/* link am module */
@@ -342,8 +344,9 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 				yyerror("expecting am module");
 			}
 			$$->am			= $11;
-			$$->am_inferior	= $10;
+			$$->am_inferior		= $10;
 			$$->am->lib->used 	= 1;
+			//$$->am_var_num		= updateModuleVariables($11);
 
 
 			$2->value	= conf_id_counter;
@@ -785,7 +788,27 @@ module_variable: param_type IDENTIFIER assign_value newlines
 			$$->length	= 1;
 			$$->class_type	= TYPE_VARIABLE_DEFAULT;
 		}
+	| param_type IDENTIFIER
+		{
+			$$		= find_variable($2->name);
+			$$->type	= $1;
+			$$->value	= 0;
+			$$->init	= 0;
+			$$->length	= 1;
+			$$->class_type	= TYPE_VARIABLE_DEFAULT;
+
+		}
+	| newlines COMMA newlines param_type IDENTIFIER
+		{
+			$$		= find_variable($5->name);
+			$$->type	= $4;
+			$$->value	= 0;
+			$$->init	= 0;
+			$$->length	= 1;
+			$$->class_type	= TYPE_VARIABLE_DEFAULT;
+		}
 	;
+
 
 param_type: VARIABLE_TYPE
 		{
