@@ -45,7 +45,7 @@
 
 
 /* prints all variables */
-void print_variables(void) {
+void print_variables(int class_type) {
 
         /* iterator */
         struct variable *vp = NULL;
@@ -61,6 +61,10 @@ void print_variables(void) {
 		/* is it free */
 		if(!vp->name) {
 			break;
+		}
+
+		if (class_type != 0 && vp->class_type != class_type) {
+			continue;
 		}
 
 		printf("%d \t%-10s \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n",

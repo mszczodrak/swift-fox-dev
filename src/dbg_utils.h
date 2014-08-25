@@ -37,6 +37,6 @@
 
 #include "sf.h"
 
-void print_variables(void);
+void print_variables(int class_type);
 
 #endif

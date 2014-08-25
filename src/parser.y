@@ -627,7 +627,7 @@ library: newlines definitions
 				printf("\n");
 			}
 
-			print_variables();
+			print_variables(TYPE_VARIABLE_DEFAULT);
 
 		}
 	;
