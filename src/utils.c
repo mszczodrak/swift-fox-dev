@@ -237,6 +237,7 @@ char *conf_module_name(char *conf, char *module) {
 }
 
 
+
 int updateModuleVariables(struct modtab *mp) {
 	struct variables *lvar = mp->lib->variables;
 	struct variables *mvar = mp->variables;

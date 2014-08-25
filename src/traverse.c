@@ -137,18 +137,18 @@ traverse_variables(struct variables* sh, int f) {
         if (sh != NULL){
                 switch (f) {
                         case TREE_TRAVERSE:
-                                traverse_variable(sh->var, f);
                                 traverse_variables(sh->vars, f);
+                                traverse_variable(sh->var, f);
                                 break;
 
                         case TREE_CHECK_SEMANTIC:
-                                traverse_variable(sh->var, f);
                                 traverse_variables(sh->vars, f);
+                                traverse_variable(sh->var, f);
                                 break;
 
                         case TREE_GENERATE_CODE:
-                                traverse_variable(sh->var, f);
                                 traverse_variables(sh->vars, f);
+                                traverse_variable(sh->var, f);
                                 break;
 
                         default:

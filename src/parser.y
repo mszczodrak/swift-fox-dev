@@ -203,6 +203,11 @@ program: defined_global_variables defined_processes defined_states policies init
 
 defined_global_variables: global_variables
 		{
+
+//			while($1 != NULL && $1->vars != NULL) {
+//				$1 = $1->vars;
+//			}
+
 			$$ = $1;
 
 			if (sfc_debug) {
