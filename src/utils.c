@@ -390,6 +390,9 @@ void setUniqueVariableIDs() {
 			uniqueId++;
 		}
 	}
-}
 
+	if (uniqueId > 255) {
+		printf("Too many unique variables: %d\n", uniqueId);
+	}
+}
 
