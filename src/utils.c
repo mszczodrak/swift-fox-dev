@@ -43,6 +43,7 @@
 #include "parser.h"
 
 int adjust_global_offset = 0;
+int unique_variable_id = 0;
 
 /**
 converts type value (int) into string
@@ -275,8 +276,10 @@ int updateModuleVariables(struct modtab *mp) {
 			/* still copy the application perspective name */
 			struct variable *global_var = mvar->var;
 			global_var->used = 1;
-			mvar->var = malloc(sizeof(struct variable));
+			//mvar->var = malloc(sizeof(struct variable));
+			mvar->var = find_variable(lvar->var->name);
 			memcpy(mvar->var, global_var, sizeof(struct variable));
+			mvar->var->name = lvar->var->name;
 			mvar->var->cap_name = lvar->var->cap_name;
 		}
 
@@ -295,7 +298,8 @@ int updateModuleVariables(struct modtab *mp) {
 		if (mvar == NULL) {
 			mvar = malloc(sizeof(struct variables));
 			//mvar->vars = NULL;
-			mvar->var = malloc(sizeof(struct variable));
+			//mvar->var = malloc(sizeof(struct variable));
+			mvar->var = find_variable(lvar->var->name);
 			mvar->parent = NULL;
 
 			mvar->vars = mp->variables;
@@ -309,6 +313,8 @@ int updateModuleVariables(struct modtab *mp) {
 		}
 
 		mvar->var->used = 1;
+		mvar->var->id = 0;
+		lvar->var->used = 1;
 
 		if (mvar != NULL) {
 			mvar = mvar->parent;
@@ -356,3 +362,37 @@ void pruneUnusedGlobalVariable(struct variable *sh) {
 	adjust_global_offset += offset;
 	global_memory_size -= offset;
 }
+
+
+void setUniqueVariableIDs() {
+	int i;
+	int j;
+	int uniqueId = 0;
+
+	for( i = 0; i < NVARS; i++ ) {
+		int skip = 0;
+		if (vartab[i].length == 0) {
+			break;
+		}
+
+		if (vartab[i].id == -1) {
+			continue;
+		}
+
+		printf("id %s\n", vartab[i].name);
+
+		for ( j = 0; j < i; j++ ) {
+			if (!strcmp(vartab[i].cap_name, vartab[j].cap_name) && (vartab[j].id != -1)) {
+				printf("skip\n");
+				skip = 1;
+				break;	
+			}
+		}
+		if (!skip) {
+			vartab[i].id = uniqueId;
+			uniqueId++;
+		}
+	}
+}
+
+

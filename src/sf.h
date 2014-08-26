@@ -101,7 +101,7 @@ extern int module_id_counter;
 extern int event_id_counter;
 extern int conf_id_counter;
 extern int state_defined;
-extern int variable_id_counter;
+extern int unique_variable_id;
 
 extern int variable_memory_offset;
 extern int global_memory_size;

@@ -56,14 +56,15 @@ void generateVariableConstants() {
 		if (vartab[i].length == 0) {
 			break;
 		}
-		for ( j = 0; j < i; j++ ) {
-			if (!strcmp(vartab[i].cap_name, vartab[j].cap_name)) {
-				skip = 1;
-				continue;	
-			}
+
+		if (vartab[i].id == -1) {
+			continue;
 		}
+
 		if (!skip) {
-			fprintf(fp, "#define %-15s \t%d\n", vartab[i].cap_name, i);
+			fprintf(fp, "#define %-15s \t%d\n",
+					vartab[i].cap_name,
+					vartab[i].id);
 		}
 	}
 

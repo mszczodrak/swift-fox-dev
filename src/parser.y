@@ -55,7 +55,6 @@ int event_id_counter	= 0;
 int conf_id_counter	= 0;
 int state_defined	= 0;
 int module_id_counter	= 0;
-int variable_id_counter	= 0;
 
 int variable_memory_offset = 0;
 int global_memory_size = 0;
@@ -1045,8 +1044,7 @@ find_variable(char *varname) {
 			}
 			vp->used = 0;
 			vp->offset = -1;
-			vp->id = variable_id_counter;
-			variable_id_counter++;
+			vp->id = -1;
 			return vp;
 		}
 		/* otherwise continue to next */

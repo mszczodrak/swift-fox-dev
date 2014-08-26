@@ -92,6 +92,7 @@ traverse_program(struct program* p, int f, int policy_counter){
 				traverse_statenodes(p->defstate, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
+				setUniqueVariableIDs();
 				break;
 
 			/**
@@ -116,7 +117,6 @@ traverse_program(struct program* p, int f, int policy_counter){
 				initLocalDataH();
 				traverse_processnodes(p->defcon, f);
 				finishLocalDataH();
-
 
 				traverse_statenodes(p->defstate, f);
 				traverse_policies(p->defpol, f);
@@ -257,12 +257,12 @@ traverse_process(struct confnode* c, int f) {
 
 		case TREE_CHECK_SEMANTIC:
 			updateProcessVariables(c);
-			print_process(c);
 			checkConfiguration(c);
 			checkConfigurationModules(c);
 			break;
         
 		case TREE_GENERATE_CODE:
+			print_process(c);
 			traverse_variables(c->app->variables, f);
 			traverse_variables(c->net->variables, f);
 			traverse_variables(c->am->variables, f);
