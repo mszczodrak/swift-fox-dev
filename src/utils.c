@@ -42,7 +42,6 @@
 #include "sf.h"
 #include "parser.h"
 
-
 /**
 converts type value (int) into string
 
@@ -346,5 +345,4 @@ void pruneUnusedGlobalVariable(struct variable *sh) {
 	if (sfc_debug) {
 		printf("Found unused variable: %s\n", sh->name);
 	}
-
 }
