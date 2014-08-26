@@ -83,15 +83,15 @@ traverse_program(struct program* p, int f, int policy_counter){
 				init_sem_evt();
 				
 				traverse_variables(p->vars, f);
-				traverse_processnodes(p->defcon, f);
-				traverse_statenodes(p->defstate, f);
-				traverse_policies(p->defpol, f);
-				traverse_initnode(p->init, f);
 
 				if (adjust_global_offset > 0) {
 					print_variables(TYPE_VARIABLE_GLOBAL);
 				}
 
+				traverse_processnodes(p->defcon, f);
+				traverse_statenodes(p->defstate, f);
+				traverse_policies(p->defpol, f);
+				traverse_initnode(p->init, f);
 				break;
 
 			/**
@@ -256,6 +256,8 @@ traverse_process(struct confnode* c, int f) {
 			break;
 
 		case TREE_CHECK_SEMANTIC:
+			updateProcessVariables(c);
+			print_process(c);
 			checkConfiguration(c);
 			checkConfigurationModules(c);
 			break;
