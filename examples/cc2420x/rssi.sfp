@@ -7,6 +7,8 @@ int8_t rssi_offset = -45        # -20 rssi is ~= -65 dBm
 int8_t threshold1 = -80         # turn on 2nd LED (yellow)
 int8_t threshold2 = -50         # turn on 3rd LED (blue)
 
+uint16_t DUPA = 80
+
 process rssi_test { rssi(test_delay, rssi_scale, rssi_offset, threshold1, threshold2) 
 	nullNet()
 	cc2420x(radio_channel, radio_tx_power, 0)

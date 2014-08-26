@@ -259,6 +259,7 @@ int updateModuleVariables(struct modtab *mp) {
 		if (mvar != NULL && mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 			/* this already points to global variable, so should
 			 * be fine; just check if the type matches */
+			printf("Global var %s   used %d\n", mvar->var->name, mvar->var->used);
 			if (mvar->var->type != lvar->var->type) {
 				if (sfc_debug) {
 					printf("type mismatch %d vs %d\n", mvar->var->type, lvar->var->type);
@@ -332,3 +333,17 @@ void updateProcessVariables(struct confnode* c) {
 	c->am_var_num = updateModuleVariables(c->am);
 }
 
+void pruneUnusedGlobalVariable(struct variable *sh) {
+	if (sh->class_type != TYPE_VARIABLE_GLOBAL) {
+		return;
+	}
+
+	if (sh->used == 1) {
+		return;
+	}
+
+	if (sfc_debug) {
+		printf("Found unused variable: %s\n", sh->name);
+	}
+
+}

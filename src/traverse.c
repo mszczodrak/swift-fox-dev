@@ -82,11 +82,12 @@ traverse_program(struct program* p, int f, int policy_counter){
 				*/
 				init_sem_evt();
 				
-				traverse_variables(p->vars, f);
 				traverse_processnodes(p->defcon, f);
 				traverse_statenodes(p->defstate, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
+
+				traverse_variables(p->vars, f);
 				break;
 
 			/**
@@ -175,6 +176,7 @@ traverse_variable(struct variable* sh, int f) {
 		break;
 
 	case TREE_CHECK_SEMANTIC:
+		pruneUnusedGlobalVariable(sh);
 		break;
 
 	case TREE_GENERATE_CODE:

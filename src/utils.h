@@ -57,4 +57,5 @@ char *conf_module_name(char *conf, char *module);
 int updateModuleVariables(struct modtab *mp);
 void updateProcessVariables(struct confnode* c);
 
+void pruneUnusedGlobalVariable(struct variable *sh);
 #endif
