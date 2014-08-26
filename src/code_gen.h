@@ -88,4 +88,9 @@ void generateParams();
 void generateGlobals();
 
 void checkModuleParameters(struct modtab* mp);
+
+
+void initVariableLookupH();
+void finishVariableLookupH();
+
 #endif

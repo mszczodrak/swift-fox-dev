@@ -148,6 +148,28 @@ void initLocalDataH() {
 	/* end of definig local variables */
 }
 
+void initVariableLookupH() {
+	/* variable_lookup struct */
+	char *full_path = get_sfc_path("", "variable_lookup.h");
+	FILE *fp = fopen(full_path, "w");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "#ifndef _VARIABLE_LOOKUP_DATA_H_\n");
+	fprintf(fp, "#define _VARIABLE_LOOKUP_DATA_H_\n\n");
+
+	fprintf(fp, "nx_struct variable_lookup[%d] {\n", variable_cache);
+
+	free(full_path);
+	fclose(fp);
+	/* end of definig variable lookup data */
+}
+
+
 
 void finishLocalDataH() {
 	/* local struct */
@@ -187,6 +209,26 @@ void finishDataStorageValues() {
 	free(full_path);
 	fclose(fp);
 	/* end of initializing global variables */
+}
+
+
+void finishVariableLookupH() {
+	/* variable_lookup struct */
+	char *full_path = get_sfc_path("", "variable_lookup.h");
+	FILE *fp = fopen(full_path, "a");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "};\n\n");
+	fprintf(fp, "#endif\n\n");
+
+	free(full_path);
+	fclose(fp);
+	/* end of definig variable lookup data */
 }
 
 

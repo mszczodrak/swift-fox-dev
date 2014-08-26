@@ -49,7 +49,6 @@ void generateVariableConstants() {
         fprintf(fp, "#ifndef _FF_VARIABLE_CONSTANTS_H_\n");
         fprintf(fp, "#define _FF_VARIABLE_CONSTANTS_H_\n\n");
 
-
 	for( i = 0; i < NVARS; i++ ) {
 		int skip = 0;
 		if (vartab[i].length == 0) {

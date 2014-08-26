@@ -115,8 +115,10 @@ traverse_program(struct program* p, int f, int policy_counter){
 				switchGlobalToLocalDataStorage();
 
 				initLocalDataH();
+				initVariableLookupH();
 				traverse_processnodes(p->defcon, f);
 				finishLocalDataH();
+				finishVariableLookupH();
 
 				traverse_statenodes(p->defstate, f);
 				traverse_policies(p->defpol, f);

@@ -109,6 +109,7 @@ extern int global_memory_size;
 extern char *conf_state_suffix;
 
 extern int sfc_debug;
+extern int variable_cache;
 
 int start_parser(char *pfile, char *lfile);
 
@@ -220,13 +221,13 @@ struct confnode {
 	struct modtab		*am;
 	int			app_var_num;
 	int			*app_var_name;
-	int			*app_var_offset;
+	int			app_var_offset;
 	int			net_var_num;
 	int			*net_var_name;
-	int			*net_var_offset;
+	int			net_var_offset;
 	int			am_var_num;
 	int			*am_var_name;
-	int			*am_var_offset;
+	int			am_var_offset;
 	char			*app_id_name;
 	char			*net_id_name;
 	char			*am_id_name;
