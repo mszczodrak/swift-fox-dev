@@ -319,7 +319,7 @@ int updateModuleVariables(struct modtab *mp) {
 	}
 
 	/* Reverse order of variables.. this way they can be traversed in order */
-	mp->variables = revar;
+	mp->variables_end = revar;
 
 	return number_of_variables;
 }

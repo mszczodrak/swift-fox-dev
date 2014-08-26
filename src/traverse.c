@@ -248,6 +248,9 @@ traverse_process(struct confnode* c, int f) {
 			break;
         
 		case TREE_GENERATE_CODE:
+			traverse_variables(c->app->variables, f);
+			traverse_variables(c->net->variables, f);
+			traverse_variables(c->am->variables, f);
 			break;
 
 		default:

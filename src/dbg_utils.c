@@ -77,7 +77,7 @@ void print_variables(int class_type) {
 
 
 void print_process_module(struct modtab *mp) {
-	struct variables *mvar = mp->variables;
+	struct variables *mvar = mp->variables_end;
 
 	if (!sfc_debug) {
 		return;

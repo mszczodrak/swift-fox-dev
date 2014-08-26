@@ -200,6 +200,7 @@ struct modtab {
 	char			*id_name;
         struct libtab   	*lib;
 	struct variables	*variables;
+	struct variables	*variables_end;
 } modtab[NMODS];
 
 struct modtab *proc_module(char *);
