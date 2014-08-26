@@ -119,6 +119,8 @@ char linebuf[BUF_SZ];
 
 extern int generate_globals;
 
+extern int adjust_global_offset;
+
 /**
 Symbol Table 
 stores all symbols passed from lexer

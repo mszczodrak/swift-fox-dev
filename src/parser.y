@@ -244,12 +244,12 @@ global_variable: param_type IDENTIFIER array_part assign_value newlines
 			$$->cap_name 	= strdup($2->name);
 			$$->cap_name	= str_toupper($$->cap_name);
 
-			if (sfc_debug) {
-				printf("Global variable\n");
-				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tCAP_NAME\n");
-				printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", $$->type,
-				$$->name, $$->value, $$->init, $$->offset, $$->class_type, $$->cap_name);	
-			}
+//			if (sfc_debug) {
+//				printf("Global variable\n");
+//				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tCAP_NAME\n");
+//				printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", $$->type,
+//				$$->name, $$->value, $$->init, $$->offset, $$->class_type, $$->cap_name);	
+//			}
 			global_memory_size += (type_size($$->type) * $$->length);
 		}
 
@@ -1047,6 +1047,7 @@ find_variable(char *varname) {
 				vp->cap_name = NULL;
 			}
 			vp->used = 0;
+			vp->offset = -1;
 			vp->id = variable_id_counter;
 			variable_id_counter++;
 			return vp;

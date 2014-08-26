@@ -54,7 +54,7 @@ void print_variables(int class_type) {
 		return;
 	}
 
-	printf("ID\tTYPE\t\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tFULL_NAME\n");
+	printf("ID\tTYPE\t\tNAME\t\tVALUE\t\tINIT\tOFFSET\tUSED\tCLASS_TYPE\tFULL_NAME\n");
 
 	/* loop */
 	for(vp = vartab; vp < &vartab[NVARS]; vp++) {
@@ -67,9 +67,9 @@ void print_variables(int class_type) {
 			continue;
 		}
 
-		printf("%d \t%-10s \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n",
+		printf("%d \t%-10s \t%-10s \t%-10.1Lf \t%d \t%d \t%d \t%-10d \t%s\n",
 				vp->id, type_name(vp->type), vp->name, vp->value, vp->init,
-				vp->offset, vp->class_type, vp->cap_name);
+				vp->offset, vp->used, vp->class_type, vp->cap_name);
 	}
 
 	printf("\n");
@@ -84,16 +84,12 @@ void print_process_module(struct modtab *mp) {
 	}
 
 	printf("\tModule %s\n", mp->name);
-	printf("\t\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tFULL_NAME\n");
-
-//	while(mvar != NULL && mvar->vars != NULL) {
-//		mvar = mvar->vars;
-//	}
+	printf("\t\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tUSED\tCLASS_TYPE\tFULL_NAME\n");
 
 	for(; mvar != NULL; mvar = mvar->parent) {
-		printf("\t\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", mvar->var->type,
+		printf("\t\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%d \t%-10d \t%s\n", mvar->var->type,
 		mvar->var->name, mvar->var->value, mvar->var->init, mvar->var->offset,
-		mvar->var->class_type, mvar->var->cap_name);
+		mvar->var->used, mvar->var->class_type, mvar->var->cap_name);
 	}
 	printf("\n");
 }
