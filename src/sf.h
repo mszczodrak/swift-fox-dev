@@ -117,6 +117,8 @@ extern int yycolumn;
 
 char linebuf[BUF_SZ];
 
+extern int generate_globals;
+
 /**
 Symbol Table 
 stores all symbols passed from lexer

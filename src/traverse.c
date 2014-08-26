@@ -108,7 +108,11 @@ traverse_program(struct program* p, int f, int policy_counter){
 
 				switchGlobalToLocalDataStorage();
 
+				initLocalDataH();
 				traverse_processnodes(p->defcon, f);
+				finishLocalDataH();
+
+
 				traverse_statenodes(p->defstate, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
@@ -174,7 +178,7 @@ traverse_variable(struct variable* sh, int f) {
 		break;
 
 	case TREE_GENERATE_CODE:
-		addGlobalVariable(sh);
+		generateVariable(sh);
 		break;
 
 	default:

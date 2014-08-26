@@ -58,8 +58,15 @@ void setFennecExtra();
 void initDataStorageH();
 void initDataStorageValues();
 void initGlobalDataH();
+void initLocalDataH();
+
+void generateVariable(struct variable *sh);
 void addGlobalVariable(struct variable *sh);
+void addLocalVariable(struct variable *sh);
+void setVariableValue(struct variable *sh);
+
 void finishGlobalDataH();
+void finishLocalDataH();
 void finishDataStorageValues();
 void switchGlobalToLocalDataStorage();
 
