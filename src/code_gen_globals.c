@@ -162,7 +162,7 @@ void initVariableLookupH() {
 	fprintf(fp, "#ifndef _VARIABLE_LOOKUP_DATA_H_\n");
 	fprintf(fp, "#define _VARIABLE_LOOKUP_DATA_H_\n\n");
 
-	fprintf(fp, "nx_struct variable_lookup[%d] {\n", variable_cache);
+	fprintf(fp, "nx_struct variable_lookup_t variable_lookup[%d] {\n", variable_cache);
 
 	free(full_path);
 	fclose(fp);
@@ -283,7 +283,7 @@ void addGlobalVariable(struct variable *sh) {
 }
 
 
-void addLocalVariable(struct variable *sh) {
+void addLocalVariable(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
 	/* local struct */
 	char *full_path = get_sfc_path("", "local_data.h");
 	FILE *fp = fopen(full_path, "a");
@@ -296,12 +296,12 @@ void addLocalVariable(struct variable *sh) {
 
 	if (sh->class_type == TYPE_VARIABLE_LOCAL) {
 		if (sh->length > 1) {
-			fprintf(fp, "\tnx_%s %s[%d];\n", type_name(sh->type), 
-						sh->name,
+			fprintf(fp, "\tnx_%-10s %s_%s_%s[%d];\n", type_name(sh->type), 
+						current_process_gen->name, current_module_gen->name, sh->name,
 						sh->length);
 		} else {
-			fprintf(fp, "\tnx_%s %s;\n", type_name(sh->type), 
-						sh->name);
+			fprintf(fp, "\tnx_%-10s %s_%s_%s;\n", type_name(sh->type), 
+						current_process_gen->name, current_module_gen->name, sh->name);
 		}
 	}
 
@@ -311,17 +311,17 @@ void addLocalVariable(struct variable *sh) {
 }
 
 
-void generateVariable(struct variable *sh) {
+void generateVariable(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
 	if (generate_globals) {
 		addGlobalVariable(sh);
 	} else {
-		addLocalVariable(sh);
+		addLocalVariable(sh, current_process_gen, current_module_gen);
 	}
 
-	setVariableValue(sh);
+	setVariableValue(sh, current_process_gen, current_module_gen);
 }	
 
-void setVariableValue(struct variable *sh) {
+void setVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
 
 	/* global variables init */
 	char *full_path = get_sfc_path("", "data_storage_values.h");
@@ -333,8 +333,7 @@ void setVariableValue(struct variable *sh) {
 		exit(1);
 	}
 
-	if ((generate_globals && sh->used == 1) || 
-				sh->class_type == TYPE_VARIABLE_LOCAL) {
+	if ((generate_globals && sh->used == 1)) {
 		if (sh->length > 1) {
 			fprintf(fp, "\t\t.%-15s = {%Lf},\t/* %d */\n", sh->name,
 						sh->value, sh->offset);
@@ -344,8 +343,126 @@ void setVariableValue(struct variable *sh) {
 		}
 	}
 
+	if (sh->class_type == TYPE_VARIABLE_LOCAL) {
+		if (sh->length > 1) {
+			fprintf(fp, "\t\t.%s_%s_%-15s = {%Lf},\t/* %d */\n",
+						current_process_gen->name, current_module_gen->name,
+						sh->name, sh->value, sh->offset);
+		} else {
+			fprintf(fp, "\t\t.%s_%s_%-15s = %Lf,\t/* %d */\n",
+						current_process_gen->name, current_module_gen->name,
+						sh->name, sh->value, sh->offset);
+		}
+	}
+
 	free(full_path);
 	fclose(fp);
 	/* end of initializing global variables */
 }
+
+
+
+void setProcessLookupTable(struct confnode* c) {
+	/* variable_lookup struct */
+	char *full_path = get_sfc_path("", "variable_lookup.h");
+	FILE *fp = fopen(full_path, "a");
+	struct variables *mvar;
+	int i;
+	int vc;
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+/*
+
+	for( i = 0; i < conf_id_counter; i++ ) {
+		if (conftab[i].conf->app_var_num > 0) {
+			for (vc = 0, mvar = conftab[i].conf->app->variables; vc < conftab[i].conf->app_var_num && mvar != NULL; vc++) {
+				if (mvar->var->
+				fprintf(fp, "\t{%s,\t%d},\n", mvar->var->cap_name, mvar->var->offset);
+				mvar = mvar->vars;
+			}
+		}
+
+		if (conftab[i].conf->net_var_num > 0) {
+			fprintf(fp, "uint8_t %s_variable_name[%d] = {", conftab[i].conf->net_id_name, conftab[i].conf->net_var_num);
+			for (vc = 0, mvar = conftab[i].conf->net->variables; vc < conftab[i].conf->net_var_num && mvar != NULL; vc++) {
+				fprintf(fp, "%s", mvar->var->cap_name);
+				mvar = mvar->vars;
+				if ( mvar != NULL ) {
+					fprintf(fp, ", ");
+				}
+			}
+			fprintf(fp, "};\n");
+			fprintf(fp, "uint8_t %s_variable_offset[%d] = {", conftab[i].conf->net_id_name, conftab[i].conf->net_var_num);
+			for (vc = 0, mvar = conftab[i].conf->net->variables; vc < conftab[i].conf->net_var_num && mvar != NULL; vc++) {
+				fprintf(fp, "%d", mvar->var->offset);
+				mvar = mvar->vars;
+				if ( mvar != NULL ) {
+					fprintf(fp, ", ");
+				}
+			}
+			fprintf(fp, "};\n");
+		}
+
+
+		if (conftab[i].conf->am_var_num > 0) {
+			fprintf(fp, "uint8_t %s_variable_name[%d] = {", conftab[i].conf->am_id_name, conftab[i].conf->am_var_num);
+			for (vc = 0, mvar = conftab[i].conf->am->variables; vc < conftab[i].conf->am_var_num && mvar != NULL; vc++) {
+				fprintf(fp, "%s", mvar->var->cap_name);
+				mvar = mvar->vars;
+				if ( mvar != NULL ) {
+					fprintf(fp, ", ");
+				}
+			}
+			fprintf(fp, "};\n");
+			fprintf(fp, "uint8_t %s_variable_offset[%d] = {", conftab[i].conf->am_id_name, conftab[i].conf->am_var_num);
+			for (vc = 0, mvar = conftab[i].conf->am->variables; vc < conftab[i].conf->am_var_num && mvar != NULL; vc++) {
+				fprintf(fp, "%d", mvar->var->offset);
+				mvar = mvar->vars;
+				if ( mvar != NULL ) {
+					fprintf(fp, ", ");
+				}
+			}
+			fprintf(fp, "};\n");
+		}
+	}
+	fprintf(fp, "\n\n");
+
+*/
+
+//	mvar = c->app->variables;
+  //      while(mvar != NULL && mvar->vars != NULL) {
+//                mvar = mvar->vars;
+  //      }
+
+
+//	for (; mvar != NULL; mvar->parent) {
+//		printf("var name %s", mvar->var->name);
+//	}
+
+//	for (mvar = c->net->variables; mvar != NULL; mvar->parent) {
+//		printf("var name %s", mvar->var->name);
+//	}
+/*
+	if (sh->used == 1) {
+		if (sh->length > 1) {
+			fprintf(fp, "\tnx_%s %s[%d];\n", type_name(sh->type), 
+						sh->name,
+						sh->length);
+		} else {
+			fprintf(fp, "\tnx_%s %s;\n", type_name(sh->type), 
+						sh->name);
+		}
+	}
+*/
+
+	free(full_path);
+	fclose(fp);
+	/* end of adding variable lookup */
+}
+
 

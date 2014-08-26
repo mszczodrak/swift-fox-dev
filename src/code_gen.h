@@ -60,10 +60,10 @@ void initDataStorageValues();
 void initGlobalDataH();
 void initLocalDataH();
 
-void generateVariable(struct variable *sh);
+void generateVariable(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen);
 void addGlobalVariable(struct variable *sh);
-void addLocalVariable(struct variable *sh);
-void setVariableValue(struct variable *sh);
+void addLocalVariable(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen);
+void setVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen);
 
 void finishGlobalDataH();
 void finishLocalDataH();
@@ -92,5 +92,7 @@ void checkModuleParameters(struct modtab* mp);
 
 void initVariableLookupH();
 void finishVariableLookupH();
+
+void setProcessLookupTable(struct confnode* c);
 
 #endif

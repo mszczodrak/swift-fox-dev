@@ -40,6 +40,9 @@
 #include "utils.h"
 #include "dbg_utils.h"
 
+struct modtab *current_module_gen = NULL;
+struct confnode *current_process_gen = NULL;
+
 /** 
 AST (Abstract Syntax Tree) traversal; 
 main entry point 
@@ -187,7 +190,7 @@ traverse_variable(struct variable* sh, int f) {
 		break;
 
 	case TREE_GENERATE_CODE:
-		generateVariable(sh);
+		generateVariable(sh, current_process_gen, current_module_gen);
 		break;
 
 	default:
@@ -265,9 +268,17 @@ traverse_process(struct confnode* c, int f) {
         
 		case TREE_GENERATE_CODE:
 			print_process(c);
+
+			current_process_gen = c;
+			current_module_gen = c->app;
 			traverse_variables(c->app->variables, f);
+
+			current_module_gen = c->net;
 			traverse_variables(c->net->variables, f);
+
+			current_module_gen = c->am;
 			traverse_variables(c->am->variables, f);
+			setProcessLookupTable(c);
 			break;
 
 		default:
