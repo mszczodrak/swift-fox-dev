@@ -224,14 +224,15 @@ void addGlobalVariable(struct variable *sh) {
 		exit(1);
 	}
 
-	if (sh->length > 1) {
-		fprintf(fp, "\tnx_%s %s[%d];\n", type_name(sh->type), 
+	if (sh->used == 1) {
+		if (sh->length > 1) {
+			fprintf(fp, "\tnx_%s %s[%d];\n", type_name(sh->type), 
 						sh->name,
 						sh->length);
-
-	} else {
-		fprintf(fp, "\tnx_%s %s;\n", type_name(sh->type), 
+		} else {
+			fprintf(fp, "\tnx_%s %s;\n", type_name(sh->type), 
 						sh->name);
+		}
 	}
 
 	free(full_path);
@@ -290,7 +291,8 @@ void setVariableValue(struct variable *sh) {
 		exit(1);
 	}
 
-	if (generate_globals || sh->class_type == TYPE_VARIABLE_LOCAL) {
+	if ((generate_globals && sh->used == 1) || 
+				sh->class_type == TYPE_VARIABLE_LOCAL) {
 		if (sh->length > 1) {
 			fprintf(fp, "\t\t.%-15s = {%Lf},\t/* %d */\n", sh->name,
 						sh->value, sh->offset);
