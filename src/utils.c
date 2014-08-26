@@ -338,18 +338,18 @@ int updateModuleVariables(struct modtab *mp) {
 
 void updateProcessVariables(struct confnode* c) {
 	c->app_var_num = updateModuleVariables(c->app);
-	c->app_var_offset = variable_cache;
-	variable_cache += c->app_var_num;
+//	c->app_var_offset = variable_cache;
+//	variable_cache += c->app_var_num;
 	number_of_variables_in_cache += c->app_var_num;
 
 	c->net_var_num = updateModuleVariables(c->net);
-	c->net_var_offset = variable_cache;
-	variable_cache += c->net_var_num;
+//	c->net_var_offset = variable_cache;
+//	variable_cache += c->net_var_num;
 	number_of_variables_in_cache += c->net_var_num;
 
 	c->am_var_num = updateModuleVariables(c->am);
-	c->am_var_offset = variable_cache;
-	variable_cache += c->am_var_num;
+//	c->am_var_offset = variable_cache;
+//	variable_cache += c->am_var_num;
 	number_of_variables_in_cache += c->am_var_num;
 }
 

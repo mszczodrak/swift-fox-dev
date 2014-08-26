@@ -383,66 +383,55 @@ void setProcessLookupTable(struct confnode* c) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 				//fprintf(fp, "\t{ %s, \t%d},\n", mvar->var->cap_name, mvar->var->offset);
 				fprintf(fp, "\t{ %-15s, \t&data.global.%s_%s_%s\t},\n",
-						mvar->var->cap_name, conftab[i].conf->name, conftab[i].conf->app->name, mvar->var->name);
+						mvar->var->cap_name, conftab[i].conf->name,
+						conftab[i].conf->app->name, mvar->var->name);
 			} else {
 				fprintf(fp, "\t{ %-15s, \t&data.local.%s_%s_%s\t},\n",
-						mvar->var->cap_name, conftab[i].conf->name, conftab[i].conf->app->name, mvar->var->name);
+						mvar->var->cap_name, conftab[i].conf->name,
+						conftab[i].conf->app->name, mvar->var->name);
 			}
 			mvar = mvar->vars;
 		}
+
+		conftab[i].conf->app_var_offset = variable_cache;
+		variable_cache += conftab[i].conf->app_var_num;
 
 		for (vc = 0, mvar = conftab[i].conf->net->variables; vc < conftab[i].conf->net_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 				//fprintf(fp, "\t{ %s, \t%d},\n", mvar->var->cap_name, mvar->var->offset);
 				fprintf(fp, "\t{ %-15s, \t&data.global.%s_%s_%s\t},\n",
-						mvar->var->cap_name, conftab[i].conf->name, conftab[i].conf->net->name, mvar->var->name);
+						mvar->var->cap_name, conftab[i].conf->name,
+						conftab[i].conf->net->name, mvar->var->name);
 			} else {
 				fprintf(fp, "\t{ %-15s, \t&data.local.%s_%s_%s\t},\n",
-						mvar->var->cap_name, conftab[i].conf->name, conftab[i].conf->net->name, mvar->var->name);
+						mvar->var->cap_name, conftab[i].conf->name,
+						conftab[i].conf->net->name, mvar->var->name);
 			}
 			mvar = mvar->vars;
 		}
+
+		conftab[i].conf->net_var_offset = variable_cache;
+		variable_cache += conftab[i].conf->net_var_num;
 
 		for (vc = 0, mvar = conftab[i].conf->am->variables; vc < conftab[i].conf->am_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 				//fprintf(fp, "\t{ %s, \t%d},\n", mvar->var->cap_name, mvar->var->offset);
 				fprintf(fp, "\t{ %-15s, \t&data.global.%s_%s_%s\t},\n",
-						mvar->var->cap_name, conftab[i].conf->name, conftab[i].conf->am->name, mvar->var->name);
+						mvar->var->cap_name, conftab[i].conf->name,
+						conftab[i].conf->am->name, mvar->var->name);
 			} else {
 				fprintf(fp, "\t{ %-15s, \t&data.local.%s_%s_%s\t},\n",
-						mvar->var->cap_name, conftab[i].conf->name, conftab[i].conf->am->name, mvar->var->name);
+						mvar->var->cap_name, conftab[i].conf->name,
+						conftab[i].conf->am->name, mvar->var->name);
 			}
 			mvar = mvar->vars;
 		}
+
+		conftab[i].conf->am_var_offset = variable_cache;
+		variable_cache += conftab[i].conf->am_var_num;
+
 	}
 	fprintf(fp, "\n\n");
-
-
-//	mvar = c->app->variables;
-  //      while(mvar != NULL && mvar->vars != NULL) {
-//                mvar = mvar->vars;
-  //      }
-
-
-//	for (; mvar != NULL; mvar->parent) {
-//		printf("var name %s", mvar->var->name);
-//	}
-
-//	for (mvar = c->net->variables; mvar != NULL; mvar->parent) {
-//		printf("var name %s", mvar->var->name);
-//	}
-/*
-	if (sh->used == 1) {
-		if (sh->length > 1) {
-			fprintf(fp, "\tnx_%s %s[%d];\n", type_name(sh->type), 
-						sh->name,
-						sh->length);
-		} else {
-			fprintf(fp, "\tnx_%s %s;\n", type_name(sh->type), 
-						sh->name);
-		}
-	}
-*/
 
 	free(full_path);
 	fclose(fp);
