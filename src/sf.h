@@ -181,6 +181,8 @@ struct variable {
 	int			class_type;
 	/* variable id */
 	int			id;
+	/* is variable used */
+	int			used;
 } vartab[NVARS];
 
 

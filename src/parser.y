@@ -203,11 +203,6 @@ program: defined_global_variables defined_processes defined_states policies init
 
 defined_global_variables: global_variables
 		{
-
-//			while($1 != NULL && $1->vars != NULL) {
-//				$1 = $1->vars;
-//			}
-
 			$$ = $1;
 
 			if (sfc_debug) {
@@ -420,13 +415,6 @@ module: IDENTIFIER OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS
 			if ($3 != NULL) {
 				$3->parent = NULL;
 			}
-
-			//printf("MODULE  %s\n", $1->name);
-			//struct variables* v = $3;
-			//for (v = $3; v!=NULL; v = v->vars) {
-			//	printf("\t%s", v->var->name);
-			//}
-			//printf("\n");
 		}		
 	;
 
@@ -1058,6 +1046,7 @@ find_variable(char *varname) {
 			} else {
 				vp->cap_name = NULL;
 			}
+			vp->used = 0;
 			vp->id = variable_id_counter;
 			variable_id_counter++;
 			return vp;

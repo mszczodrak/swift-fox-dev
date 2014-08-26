@@ -306,6 +306,8 @@ int updateModuleVariables(struct modtab *mp) {
 			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
 		}
 
+		mvar->var->used = 1;
+
 		if (mvar != NULL) {
 			mvar = mvar->parent;
 		}
