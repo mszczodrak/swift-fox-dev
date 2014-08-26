@@ -231,7 +231,6 @@ traverse_processnodes(struct processnodes* c, int f) {
 	} else {
 		switch(f) {
 		case TREE_CHECK_SEMANTIC:
-			checkControlState();	
 			break;
 
 		default:

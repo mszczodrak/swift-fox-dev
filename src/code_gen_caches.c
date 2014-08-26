@@ -81,8 +81,8 @@ void define_processes() {
 	char *full_path = get_sfc_path("", "ff_processes.h");
 	FILE *fp = fopen(full_path, "w");
 	int i;
-	int vc;
-	struct variables *mvar;
+	//int vc;
+	//struct variables *mvar;
 
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write \
@@ -305,7 +305,7 @@ void generateCaches(int event_counter, int policy_counter) {
 	char *full_path = get_sfc_path("", "ff_caches.h");
 	FILE *fp = fopen(full_path, "w");
 
-	struct modtab *mp;
+	//struct modtab *mp;
 	int i;
 
 	define_modules();

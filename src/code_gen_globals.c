@@ -34,7 +34,6 @@
 #include "code_gen.h"
 #include "utils.h"
 
-
 int generate_globals = 1;
 
 void initDataStorageValues() {

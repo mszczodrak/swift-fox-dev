@@ -256,7 +256,7 @@ void generateFennecEngineP() {
 
         char *full_path = get_sfc_path("", "FennecEngineP.nc");
         FILE *fp = fopen(full_path, "w");
-	struct modtab *mp;
+	//struct modtab *mp;
 
         if (fp == NULL) {
                 fprintf(stderr, "You do not have a permission to write into file: %s\n", full_path);
@@ -289,7 +289,7 @@ void generateFennecEngineP() {
 	fprintf(fp,"\treturn call SplitControl.stop[module_id]();\n");
 	fprintf(fp,"}\n\n");
 
-	struct paramtype *pt;
+	//struct paramtype *pt;
 
 	/* Interfaces with Computations */
 

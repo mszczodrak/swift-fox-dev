@@ -437,17 +437,6 @@ adds configuration module
 /param module_name string with module name
 */
 
-void
-addConfModule(struct confnode *c, struct modtab **m, struct paramvalue **p, char *module_name ) {
-}
-
-/**
-checks control state
-*/
-void
-checkControlState(void) {
-}
-
 
 
 void
