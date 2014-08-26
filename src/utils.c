@@ -379,11 +379,8 @@ void setUniqueVariableIDs() {
 			continue;
 		}
 
-		printf("id %s\n", vartab[i].name);
-
 		for ( j = 0; j < i; j++ ) {
 			if (!strcmp(vartab[i].cap_name, vartab[j].cap_name) && (vartab[j].id != -1)) {
-				printf("skip\n");
 				skip = 1;
 				break;	
 			}

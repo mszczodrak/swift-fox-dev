@@ -39,7 +39,6 @@ void generateVariableConstants() {
 	char *full_path = get_sfc_path("", "variable_constants.h");
 	FILE *fp = fopen(full_path, "w");
 	int i;
-	int j;
 
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write \
