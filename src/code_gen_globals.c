@@ -57,7 +57,7 @@ void initDataStorageH() {
 	fprintf(fp, "\tnx_struct local_data local;\n");
 	fprintf(fp, "};\n\n");
 	
-	fprintf(fp, "#endif\n");
+	fprintf(fp, "#endif\n\n");
 
 	free(full_path);
 	fclose(fp);
@@ -119,7 +119,7 @@ void finishGlobalDataH() {
 	}
 
 	fprintf(fp, "};\n\n");
-	fprintf(fp, "#endif\n");
+	fprintf(fp, "#endif\n\n");
 
 	free(full_path);
 	fclose(fp);
@@ -161,7 +161,7 @@ void finishLocalDataH() {
 	}
 
 	fprintf(fp, "};\n\n");
-	fprintf(fp, "#endif\n");
+	fprintf(fp, "#endif\n\n");
 
 	free(full_path);
 	fclose(fp);
@@ -182,7 +182,7 @@ void finishDataStorageValues() {
 
 	fprintf(fp, "\t}\n");
 	fprintf(fp, "};\n\n");
-	fprintf(fp, "#endif\n");
+	fprintf(fp, "#endif\n\n");
 
 	free(full_path);
 	fclose(fp);
@@ -251,14 +251,15 @@ void addLocalVariable(struct variable *sh) {
 		exit(1);
 	}
 
-	if (sh->length > 1) {
-		fprintf(fp, "\tnx_%s %s[%d];\n", type_name(sh->type), 
+	if (sh->class_type == TYPE_VARIABLE_LOCAL) {
+		if (sh->length > 1) {
+			fprintf(fp, "\tnx_%s %s[%d];\n", type_name(sh->type), 
 						sh->name,
 						sh->length);
-
-	} else {
-		fprintf(fp, "\tnx_%s %s;\n", type_name(sh->type), 
+		} else {
+			fprintf(fp, "\tnx_%s %s;\n", type_name(sh->type), 
 						sh->name);
+		}
 	}
 
 	free(full_path);
@@ -289,13 +290,14 @@ void setVariableValue(struct variable *sh) {
 		exit(1);
 	}
 
-	if (sh->length > 1) {
-		fprintf(fp, "\t\t.%s = {%Lf},\n", sh->name,
-						sh->value);
-
-	} else {
-		fprintf(fp, "\t\t.%s = %Lf,\n", sh->name,
-						sh->value);
+	if (generate_globals || sh->class_type == TYPE_VARIABLE_LOCAL) {
+		if (sh->length > 1) {
+			fprintf(fp, "\t\t.%-15s = {%Lf},\t/* %d */\n", sh->name,
+						sh->value, sh->offset);
+		} else {
+			fprintf(fp, "\t\t.%-15s = %Lf,\t/* %d */\n", sh->name,
+						sh->value, sh->offset);
+		}
 	}
 
 	free(full_path);
