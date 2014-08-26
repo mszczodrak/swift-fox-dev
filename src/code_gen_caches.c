@@ -107,7 +107,7 @@ void define_processes() {
         fprintf(fp, "\n");
 
 	/* proc variables */
-
+/*
 	for( i = 0; i < conf_id_counter; i++ ) {
 		if (conftab[i].conf->app_var_num > 0) {
 			fprintf(fp, "uint8_t %s_variable_name[%d] = {", conftab[i].conf->app_id_name, conftab[i].conf->app_var_num);
@@ -173,7 +173,7 @@ void define_processes() {
 		}
 	}
 	fprintf(fp, "\n\n");
-
+*/
 
 	/* Generate Proceses */
 
@@ -189,32 +189,32 @@ void define_processes() {
 		fprintf(fp, "\t\t.application = %s,\n", conftab[i].conf->app_id_name);
 		fprintf(fp, "\t\t.application_module = %s,\n", conftab[i].conf->app->id_name);
 		if (conftab[i].conf->app_var_num > 0) {
-			fprintf(fp, "\t\t.application_variable_name = %s_variable_name,\n", conftab[i].conf->app_id_name);
-			fprintf(fp, "\t\t.application_variable_offset = %s_variable_offset,\n", conftab[i].conf->app_id_name);
+			fprintf(fp, "\t\t.application_variables_number = %d,\n", conftab[i].conf->app_var_num);
+			fprintf(fp, "\t\t.application_variables_offset = %d,\n", conftab[i].conf->app_var_offset);
 		} else {
-			fprintf(fp, "\t\t.application_variable_name = NULL,\n");
-			fprintf(fp, "\t\t.application_variable_offset = NULL,\n");
+			fprintf(fp, "\t\t.application_variables_number = 0,\n");
+			fprintf(fp, "\t\t.application_variables_offset = 0,\n");
 		}
 
 		fprintf(fp, "\t\t.network = %s,\n", conftab[i].conf->net_id_name);
 		fprintf(fp, "\t\t.network_module = %s,\n", conftab[i].conf->net->id_name);
 		if (conftab[i].conf->net_var_num > 0) {
-			fprintf(fp, "\t\t.network_variable_name = %s_variable_name,\n", conftab[i].conf->net_id_name);
-			fprintf(fp, "\t\t.network_variable_offset = %s_variable_offset,\n", conftab[i].conf->net_id_name);
+			fprintf(fp, "\t\t.network_variables_number = %d,\n", conftab[i].conf->net_var_num);
+			fprintf(fp, "\t\t.network_variables_offset = %d,\n", conftab[i].conf->net_var_offset);
 
 		} else {
-			fprintf(fp, "\t\t.network_variable_name = NULL,\n");
-			fprintf(fp, "\t\t.network_variable_offset = NULL,\n");
+			fprintf(fp, "\t\t.network_variables_number = 0,\n");
+			fprintf(fp, "\t\t.network_variables_offset = 0,\n");
 		}
 
 		fprintf(fp, "\t\t.am = %s,\n", conftab[i].conf->am->id_name);
 		fprintf(fp, "\t\t.am_module = %s,\n", conftab[i].conf->am->id_name);
 		if (conftab[i].conf->am_var_num > 0) {
-			fprintf(fp, "\t\t.am_variable_name = %s_variable_name,\n", conftab[i].conf->am_id_name);
-			fprintf(fp, "\t\t.am_variable_offset = %s_variable_offset,\n", conftab[i].conf->am_id_name);
+			fprintf(fp, "\t\t.am_variables_number = %d,\n", conftab[i].conf->am_var_num);
+			fprintf(fp, "\t\t.am_variables_offset = %d,\n", conftab[i].conf->am_var_offset);
 		} else {
-			fprintf(fp, "\t\t.am_variable_name = NULL,\n");
-			fprintf(fp, "\t\t.am_variable_offset = NULL,\n");
+			fprintf(fp, "\t\t.am_variables_number = 0,\n");
+			fprintf(fp, "\t\t.am_variables_offset = 0,\n");
 		}
 
 		fprintf(fp, "\t\t.am_level = %d\n", conftab[i].conf->am_inferior);

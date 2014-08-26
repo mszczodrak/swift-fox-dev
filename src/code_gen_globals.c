@@ -37,34 +37,8 @@
 
 int generate_globals = 1;
 
-void initDataStorageH() {
-	char *full_path = get_sfc_path("", "data_storage.h");
-	FILE *fp = fopen(full_path, "w");
-
-	if (fp == NULL) {
-		fprintf(stderr, "You do not have a permission to write \
-						into file: %s\n", full_path);
-		exit(1);
-	}
-
-	fprintf(fp, "#ifndef _FF_DATA_STORAGE_H_\n");
-	fprintf(fp, "#define _FF_DATA_STORAGE_H_\n\n");
-	fprintf(fp, "#include \"global_data.h\"\n");
-	fprintf(fp, "#include \"local_data.h\"\n\n");
-
-	fprintf(fp, "nx_struct data_storage {\n");
-	fprintf(fp, "\tnx_struct global_data global;\n");
-	fprintf(fp, "\tnx_struct local_data local;\n");
-	fprintf(fp, "};\n\n");
-	
-	fprintf(fp, "#endif\n\n");
-
-	free(full_path);
-	fclose(fp);
-}
-
 void initDataStorageValues() {
-	char *full_path = get_sfc_path("", "data_storage_values.h");
+	char *full_path = get_sfc_path("", "fennec_data_values.h");
 	FILE *fp = fopen(full_path, "w");
 
 	if (fp == NULL) {
@@ -75,9 +49,9 @@ void initDataStorageValues() {
 
 	fprintf(fp, "#ifndef _FF_DATA_STORAGE_VALUES_H_\n");
 	fprintf(fp, "#define _FF_DATA_STORAGE_VALUES_H_\n\n");
-	fprintf(fp, "#include \"data_storage.h\"\n\n");
+	fprintf(fp, "#include \"Fennec.h\"\n\n");
 
-	fprintf(fp, "nx_struct data_storage data {\n");
+	fprintf(fp, "nx_struct fennec_data ffdata = {\n");
 	fprintf(fp, "\t.global = {\n");
 	
 	free(full_path);
@@ -193,7 +167,7 @@ void finishLocalDataH() {
 
 void finishDataStorageValues() {
 	/* global variables init */
-	char *full_path = get_sfc_path("", "data_storage_values.h");
+	char *full_path = get_sfc_path("", "fennec_data_values.h");
 	FILE *fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
@@ -234,7 +208,7 @@ void finishVariableLookupH() {
 
 void switchGlobalToLocalDataStorage() {
 	/* global variables init */
-	char *full_path = get_sfc_path("", "data_storage_values.h");
+	char *full_path = get_sfc_path("", "fennec_data_values.h");
 	FILE *fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
@@ -324,7 +298,7 @@ void generateVariable(struct variable *sh, struct confnode* current_process_gen,
 void setVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
 
 	/* global variables init */
-	char *full_path = get_sfc_path("", "data_storage_values.h");
+	char *full_path = get_sfc_path("", "fennec_data_values.h");
 	FILE *fp = fopen(full_path, "a");
 
 	if (fp == NULL) {

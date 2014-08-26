@@ -108,7 +108,6 @@ traverse_program(struct program* p, int f, int policy_counter){
 				setFiles();
 
 				initCodeGeneration();
-				initDataStorageH();
 				initDataStorageValues();
 
 				initGlobalDataH();

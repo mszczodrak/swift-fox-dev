@@ -55,7 +55,6 @@ void initCodeGeneration();
 
 void setFennecExtra();
 
-void initDataStorageH();
 void initDataStorageValues();
 void initGlobalDataH();
 void initLocalDataH();
