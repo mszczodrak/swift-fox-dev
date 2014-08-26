@@ -45,6 +45,7 @@
 int adjust_global_offset = 0;
 int unique_variable_id = 0;
 int variable_cache = 0;
+int number_of_variables_in_cache = 0;
 
 /**
 converts type value (int) into string
@@ -339,14 +340,17 @@ void updateProcessVariables(struct confnode* c) {
 	c->app_var_num = updateModuleVariables(c->app);
 	c->app_var_offset = variable_cache;
 	variable_cache += c->app_var_num;
+	number_of_variables_in_cache += c->app_var_num;
 
 	c->net_var_num = updateModuleVariables(c->net);
 	c->net_var_offset = variable_cache;
 	variable_cache += c->net_var_num;
+	number_of_variables_in_cache += c->net_var_num;
 
 	c->am_var_num = updateModuleVariables(c->am);
 	c->am_var_offset = variable_cache;
 	variable_cache += c->am_var_num;
+	number_of_variables_in_cache += c->am_var_num;
 }
 
 void pruneUnusedGlobalVariable(struct variable *sh) {

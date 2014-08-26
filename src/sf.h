@@ -121,6 +121,7 @@ char linebuf[BUF_SZ];
 extern int generate_globals;
 
 extern int adjust_global_offset;
+extern int number_of_variables_in_cache;
 
 /**
 Symbol Table 

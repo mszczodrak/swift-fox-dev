@@ -41,8 +41,6 @@
 \param policy_counter number of policies found in Swift Fox program
 */
 
-
-
 void define_modules() {
 	char *full_path = get_sfc_path("", "ff_modules.h");
 	FILE *fp = fopen(full_path, "w");

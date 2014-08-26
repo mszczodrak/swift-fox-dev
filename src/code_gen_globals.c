@@ -162,7 +162,7 @@ void initVariableLookupH() {
 	fprintf(fp, "#ifndef _VARIABLE_LOOKUP_DATA_H_\n");
 	fprintf(fp, "#define _VARIABLE_LOOKUP_DATA_H_\n\n");
 
-	fprintf(fp, "nx_struct variable_lookup_t variable_lookup[%d] {\n", variable_cache);
+	fprintf(fp, "nx_struct variable_lookup_t variable_lookup[%d] {\n", number_of_variables_in_cache);
 
 	free(full_path);
 	fclose(fp);
@@ -376,63 +376,47 @@ void setProcessLookupTable(struct confnode* c) {
 		exit(1);
 	}
 
-/*
+
 
 	for( i = 0; i < conf_id_counter; i++ ) {
-		if (conftab[i].conf->app_var_num > 0) {
-			for (vc = 0, mvar = conftab[i].conf->app->variables; vc < conftab[i].conf->app_var_num && mvar != NULL; vc++) {
-				if (mvar->var->
-				fprintf(fp, "\t{%s,\t%d},\n", mvar->var->cap_name, mvar->var->offset);
-				mvar = mvar->vars;
+		for (vc = 0, mvar = conftab[i].conf->app->variables; vc < conftab[i].conf->app_var_num && mvar != NULL; vc++) {
+			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
+				//fprintf(fp, "\t{ %s, \t%d},\n", mvar->var->cap_name, mvar->var->offset);
+				fprintf(fp, "\t{ %-15s, \t&data.global.%s_%s_%s\t},\n",
+						mvar->var->cap_name, conftab[i].conf->name, conftab[i].conf->app->name, mvar->var->name);
+			} else {
+				fprintf(fp, "\t{ %-15s, \t&data.local.%s_%s_%s\t},\n",
+						mvar->var->cap_name, conftab[i].conf->name, conftab[i].conf->app->name, mvar->var->name);
 			}
+			mvar = mvar->vars;
 		}
 
-		if (conftab[i].conf->net_var_num > 0) {
-			fprintf(fp, "uint8_t %s_variable_name[%d] = {", conftab[i].conf->net_id_name, conftab[i].conf->net_var_num);
-			for (vc = 0, mvar = conftab[i].conf->net->variables; vc < conftab[i].conf->net_var_num && mvar != NULL; vc++) {
-				fprintf(fp, "%s", mvar->var->cap_name);
-				mvar = mvar->vars;
-				if ( mvar != NULL ) {
-					fprintf(fp, ", ");
-				}
+		for (vc = 0, mvar = conftab[i].conf->net->variables; vc < conftab[i].conf->net_var_num && mvar != NULL; vc++) {
+			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
+				//fprintf(fp, "\t{ %s, \t%d},\n", mvar->var->cap_name, mvar->var->offset);
+				fprintf(fp, "\t{ %-15s, \t&data.global.%s_%s_%s\t},\n",
+						mvar->var->cap_name, conftab[i].conf->name, conftab[i].conf->net->name, mvar->var->name);
+			} else {
+				fprintf(fp, "\t{ %-15s, \t&data.local.%s_%s_%s\t},\n",
+						mvar->var->cap_name, conftab[i].conf->name, conftab[i].conf->net->name, mvar->var->name);
 			}
-			fprintf(fp, "};\n");
-			fprintf(fp, "uint8_t %s_variable_offset[%d] = {", conftab[i].conf->net_id_name, conftab[i].conf->net_var_num);
-			for (vc = 0, mvar = conftab[i].conf->net->variables; vc < conftab[i].conf->net_var_num && mvar != NULL; vc++) {
-				fprintf(fp, "%d", mvar->var->offset);
-				mvar = mvar->vars;
-				if ( mvar != NULL ) {
-					fprintf(fp, ", ");
-				}
-			}
-			fprintf(fp, "};\n");
+			mvar = mvar->vars;
 		}
 
-
-		if (conftab[i].conf->am_var_num > 0) {
-			fprintf(fp, "uint8_t %s_variable_name[%d] = {", conftab[i].conf->am_id_name, conftab[i].conf->am_var_num);
-			for (vc = 0, mvar = conftab[i].conf->am->variables; vc < conftab[i].conf->am_var_num && mvar != NULL; vc++) {
-				fprintf(fp, "%s", mvar->var->cap_name);
-				mvar = mvar->vars;
-				if ( mvar != NULL ) {
-					fprintf(fp, ", ");
-				}
+		for (vc = 0, mvar = conftab[i].conf->am->variables; vc < conftab[i].conf->am_var_num && mvar != NULL; vc++) {
+			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
+				//fprintf(fp, "\t{ %s, \t%d},\n", mvar->var->cap_name, mvar->var->offset);
+				fprintf(fp, "\t{ %-15s, \t&data.global.%s_%s_%s\t},\n",
+						mvar->var->cap_name, conftab[i].conf->name, conftab[i].conf->am->name, mvar->var->name);
+			} else {
+				fprintf(fp, "\t{ %-15s, \t&data.local.%s_%s_%s\t},\n",
+						mvar->var->cap_name, conftab[i].conf->name, conftab[i].conf->am->name, mvar->var->name);
 			}
-			fprintf(fp, "};\n");
-			fprintf(fp, "uint8_t %s_variable_offset[%d] = {", conftab[i].conf->am_id_name, conftab[i].conf->am_var_num);
-			for (vc = 0, mvar = conftab[i].conf->am->variables; vc < conftab[i].conf->am_var_num && mvar != NULL; vc++) {
-				fprintf(fp, "%d", mvar->var->offset);
-				mvar = mvar->vars;
-				if ( mvar != NULL ) {
-					fprintf(fp, ", ");
-				}
-			}
-			fprintf(fp, "};\n");
+			mvar = mvar->vars;
 		}
 	}
 	fprintf(fp, "\n\n");
 
-*/
 
 //	mvar = c->app->variables;
   //      while(mvar != NULL && mvar->vars != NULL) {

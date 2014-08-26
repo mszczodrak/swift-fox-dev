@@ -279,6 +279,7 @@ traverse_process(struct confnode* c, int f) {
 			current_module_gen = c->am;
 			traverse_variables(c->am->variables, f);
 			setProcessLookupTable(c);
+			//print_process(c);
 			break;
 
 		default:
