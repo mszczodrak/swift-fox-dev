@@ -1045,6 +1045,7 @@ find_variable(char *varname) {
 			vp->used = 0;
 			vp->offset = -1;
 			vp->id = -1;
+			vp->gname = NULL;
 			return vp;
 		}
 		/* otherwise continue to next */

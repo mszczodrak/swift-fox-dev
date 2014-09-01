@@ -123,6 +123,7 @@ void finishGlobalDataMsgH() {
 	/* global struct */
 	char *full_path = get_sfc_path("", "global_data_msg.h");
 	FILE *fp = fopen(full_path, "a");
+	int i;
 
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write \
@@ -130,7 +131,44 @@ void finishGlobalDataMsgH() {
 		exit(1);
 	}
 
+	fprintf(fp, "};\n\n\n");
+
+	fprintf(fp, "nx_struct global_data_msg fennec_global_cache;\n\n\n");
+
+	fprintf(fp, "void globalDataSyncNetwork() {\n");
+	for( i = 0; i < NVARS; i++ ) {
+		if (vartab[i].length == 0) {
+			break;
+		}
+
+		if ((vartab[i].class_type != TYPE_VARIABLE_GLOBAL) ||
+			(vartab[i].used != 1) ||
+			(vartab[i].gname != NULL)) {
+			continue;
+		}
+
+		fprintf(fp, "\tfennec_global_data.%s = (%s) fennec_global_cache.%s;\n",
+			vartab[i].name, type_name(vartab[i].type), vartab[i].name);
+	}
+	fprintf(fp, "};\n\n\n");
+
+	fprintf(fp, "void globalDataSyncLocal() {\n");
+	for( i = 0; i < NVARS; i++ ) {
+		if (vartab[i].length == 0) {
+			break;
+		}
+
+		if ((vartab[i].class_type != TYPE_VARIABLE_GLOBAL) ||
+			(vartab[i].used != 1) ||
+			(vartab[i].gname != NULL)) {
+			continue;
+		}
+
+		fprintf(fp, "\tfennec_global_cache.%s = (nx_%s) fennec_global_data.%s;\n",
+			vartab[i].name, type_name(vartab[i].type), vartab[i].name);
+	}
 	fprintf(fp, "};\n\n");
+
 	fprintf(fp, "#endif\n\n");
 
 	free(full_path);
@@ -362,6 +400,7 @@ void generateVariable(struct variable *sh, struct confnode* current_process_gen,
 	setVariableValue(sh, current_process_gen, current_module_gen);
 }	
 
+
 void setVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
 
 	/* global variables init */
@@ -402,7 +441,6 @@ void setVariableValue(struct variable *sh, struct confnode* current_process_gen,
 }
 
 
-
 void setProcessLookupTable(struct confnode* c) {
 	/* variable_lookup struct */
 	char *full_path = get_sfc_path("", "variable_lookup.h");
@@ -416,7 +454,6 @@ void setProcessLookupTable(struct confnode* c) {
 						into file: %s\n", full_path);
 		exit(1);
 	}
-
 
 
 	for( i = 0; i < conf_id_counter; i++ ) {
@@ -472,5 +509,6 @@ void setProcessLookupTable(struct confnode* c) {
 	fclose(fp);
 	/* end of adding variable lookup */
 }
+
 
 
