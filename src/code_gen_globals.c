@@ -308,21 +308,21 @@ void setVariableValue(struct variable *sh, struct confnode* current_process_gen,
 
 	if ((generate_globals && sh->used == 1)) {
 		if (sh->length > 1) {
-			fprintf(fp, "\t\t.%-15s = {%Lf},\t/* %d */\n", sh->name,
+			fprintf(fp, "\t\t.%-30s = {%Lf},\t/* %d */\n", sh->name,
 						sh->value, sh->offset);
 		} else {
-			fprintf(fp, "\t\t.%-15s = %Lf,\t/* %d */\n", sh->name,
+			fprintf(fp, "\t\t.%-30s = %Lf,\t/* %d */\n", sh->name,
 						sh->value, sh->offset);
 		}
 	}
 
 	if (sh->class_type == TYPE_VARIABLE_LOCAL) {
 		if (sh->length > 1) {
-			fprintf(fp, "\t\t.%s_%s_%-15s = {%Lf},\t/* %d */\n",
+			fprintf(fp, "\t\t.%s_%s_%-30s = {%Lf},\t/* %d */\n",
 						current_process_gen->name, current_module_gen->name,
 						sh->name, sh->value, sh->offset);
 		} else {
-			fprintf(fp, "\t\t.%s_%s_%-15s = %Lf,\t/* %d */\n",
+			fprintf(fp, "\t\t.%s_%s_%-30s = %Lf,\t/* %d */\n",
 						current_process_gen->name, current_module_gen->name,
 						sh->name, sh->value, sh->offset);
 		}
