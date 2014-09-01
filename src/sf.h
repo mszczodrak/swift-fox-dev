@@ -178,6 +178,8 @@ struct variable {
 	char			*name;
 	/** full varibale name, per process, per module */
 	char			*cap_name;
+	/** name if the variable points to global */
+	char			*gname;
 	/** lenght of the variable - use for arrays */
 	int			length;
 	/* default variable value */

@@ -300,6 +300,7 @@ int updateModuleVariables(struct modtab *mp) {
 			mvar->var = find_variable(lvar->var->name);
 			memcpy(mvar->var, global_var, sizeof(struct variable));
 			mvar->var->name = lvar->var->name;
+			mvar->var->gname =  global_var->name;
 			mvar->var->cap_name = lvar->var->cap_name;
 		}
 
