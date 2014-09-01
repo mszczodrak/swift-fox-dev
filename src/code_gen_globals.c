@@ -215,7 +215,7 @@ void switchGlobalToLocalDataStorage() {
 		exit(1);
 	}
 
-	fprintf(fp, "};\n");
+	fprintf(fp, "};\n\n");
 
 	generate_globals = 0;
 
