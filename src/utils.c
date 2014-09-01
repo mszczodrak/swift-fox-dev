@@ -83,6 +83,15 @@ char * type_name(int type_value) {
 	case TYPE_DOUBLE:
 		return "double";
 
+	case TYPE_NXUINT8_T:
+		return "nx_uint8_t";
+
+	case TYPE_NXUINT16_T:
+		return "nx_uint16_t";
+
+	case TYPE_NXUINT32_T:
+		return "nx_uint32_t";
+
 	default:
 		return "";
 	}
@@ -117,6 +126,15 @@ int type_size(int type_value) {
 
 	case TYPE_DOUBLE:
 		return sizeof(double);
+
+	case TYPE_NXUINT8_T:
+		return sizeof(uint8_t);
+
+	case TYPE_NXUINT16_T:
+		return sizeof(uint16_t);
+
+	case TYPE_NXUINT32_T:
+		return sizeof(uint32_t);
 
 	default:
 		return 0;

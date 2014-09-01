@@ -111,8 +111,10 @@ traverse_program(struct program* p, int f, int policy_counter){
 				initDataStorageValues();
 
 				initGlobalDataH();
+				initGlobalDataMsgH();
 				traverse_variables(p->vars, f);
 				finishGlobalDataH();
+				finishGlobalDataMsgH();
 
 				switchGlobalToLocalDataStorage();
 

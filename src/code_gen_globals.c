@@ -50,7 +50,7 @@ void initDataStorageValues() {
 	fprintf(fp, "#define _FF_DATA_STORAGE_VALUES_H_\n\n");
 	fprintf(fp, "#include \"Fennec.h\"\n\n");
 
-	fprintf(fp, "nx_struct global_data fennec_global_data = {\n");
+	fprintf(fp, "struct global_data fennec_global_data = {\n");
 	
 	free(full_path);
 	fclose(fp);
@@ -71,7 +71,28 @@ void initGlobalDataH() {
 	fprintf(fp, "#ifndef _GLOBAL_DATA_H_\n");
 	fprintf(fp, "#define _GLOBAL_DATA_H_\n\n");
 
-	fprintf(fp, "nx_struct global_data {\n");
+	fprintf(fp, "struct global_data {\n");
+
+	free(full_path);
+	fclose(fp);
+	/* end of definig global variables */
+}
+
+void initGlobalDataMsgH() {
+	/* global struct */
+	char *full_path = get_sfc_path("", "global_data_msg.h");
+	FILE *fp = fopen(full_path, "w");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "#ifndef _GLOBAL_DATA_MSG_H_\n");
+	fprintf(fp, "#define _GLOBAL_DATA_MSG_H_\n\n");
+
+	fprintf(fp, "nx_struct global_data_msg {\n");
 
 	free(full_path);
 	fclose(fp);
@@ -82,6 +103,25 @@ void initGlobalDataH() {
 void finishGlobalDataH() {
 	/* global struct */
 	char *full_path = get_sfc_path("", "global_data.h");
+	FILE *fp = fopen(full_path, "a");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "};\n\n");
+	fprintf(fp, "#endif\n\n");
+
+	free(full_path);
+	fclose(fp);
+	/* end of definig global variables */
+}
+
+void finishGlobalDataMsgH() {
+	/* global struct */
+	char *full_path = get_sfc_path("", "global_data_msg.h");
 	FILE *fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
@@ -120,6 +160,7 @@ void initLocalDataH() {
 	/* end of definig local variables */
 }
 
+
 void initVariableLookupH() {
 	/* variable_lookup struct */
 	char *full_path = get_sfc_path("", "variable_lookup.h");
@@ -141,7 +182,6 @@ void initVariableLookupH() {
 	fclose(fp);
 	/* end of definig variable lookup data */
 }
-
 
 
 void finishLocalDataH() {
@@ -240,6 +280,34 @@ void addGlobalVariable(struct variable *sh) {
 
 	if (sh->used == 1) {
 		if (sh->length > 1) {
+			fprintf(fp, "\t%s %s[%d];\n", type_name(sh->type), 
+						sh->name,
+						sh->length);
+		} else {
+			fprintf(fp, "\t%s %s;\n", type_name(sh->type), 
+						sh->name);
+		}
+	}
+
+	free(full_path);
+	fclose(fp);
+	/* end of definig global variables */
+}
+
+
+void addGlobalVariableMsg(struct variable *sh) {
+	/* global struct */
+	char *full_path = get_sfc_path("", "global_data_msg.h");
+	FILE *fp = fopen(full_path, "a");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	if (sh->used == 1) {
+		if (sh->length > 1) {
 			fprintf(fp, "\tnx_%s %s[%d];\n", type_name(sh->type), 
 						sh->name,
 						sh->length);
@@ -286,6 +354,7 @@ void addLocalVariable(struct variable *sh, struct confnode* current_process_gen,
 void generateVariable(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
 	if (generate_globals) {
 		addGlobalVariable(sh);
+		addGlobalVariableMsg(sh);
 	} else {
 		addLocalVariable(sh, current_process_gen, current_module_gen);
 	}
@@ -354,11 +423,11 @@ void setProcessLookupTable(struct confnode* c) {
 		for (vc = 0, mvar = conftab[i].conf->app->variables; vc < conftab[i].conf->app_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 				//fprintf(fp, "\t{ %s, \t%d},\n", mvar->var->cap_name, mvar->var->offset);
-				fprintf(fp, "\t{ %-15s, \t&(fennec_global_data.%s_%s_%s)\t},\n",
+				fprintf(fp, "\t{ %-30s, \t&(fennec_global_data.%s_%s_%s)\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->app->name, mvar->var->name);
 			} else {
-				fprintf(fp, "\t{ %-15s, \t&(fennec_local_data.%s_%s_%s)\t},\n",
+				fprintf(fp, "\t{ %-30s, \t&(fennec_local_data.%s_%s_%s)\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->app->name, mvar->var->name);
 			}
@@ -371,11 +440,11 @@ void setProcessLookupTable(struct confnode* c) {
 		for (vc = 0, mvar = conftab[i].conf->net->variables; vc < conftab[i].conf->net_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 				//fprintf(fp, "\t{ %s, \t%d},\n", mvar->var->cap_name, mvar->var->offset);
-				fprintf(fp, "\t{ %-15s, \t&(fennec_global_data.%s_%s_%s)\t},\n",
+				fprintf(fp, "\t{ %-30s, \t&(fennec_global_data.%s_%s_%s)\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->net->name, mvar->var->name);
 			} else {
-				fprintf(fp, "\t{ %-15s, \t&(fennec_local_data.%s_%s_%s)\t},\n",
+				fprintf(fp, "\t{ %-30s, \t&(fennec_local_data.%s_%s_%s)\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->net->name, mvar->var->name);
 			}
@@ -388,11 +457,11 @@ void setProcessLookupTable(struct confnode* c) {
 		for (vc = 0, mvar = conftab[i].conf->am->variables; vc < conftab[i].conf->am_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 				//fprintf(fp, "\t{ %s, \t%d},\n", mvar->var->cap_name, mvar->var->offset);
-				fprintf(fp, "\t{ %-15s, \t&data.global.%s_%s_%s\t},\n",
+				fprintf(fp, "\t{ %-30s, \t&data.global.%s_%s_%s\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->am->name, mvar->var->name);
 			} else {
-				fprintf(fp, "\t{ %-15s, \t&data.local.%s_%s_%s\t},\n",
+				fprintf(fp, "\t{ %-30s, \t&data.local.%s_%s_%s\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->am->name, mvar->var->name);
 			}

@@ -76,6 +76,9 @@
 #define TYPE_INT8_T		25
 #define TYPE_INT16_T		26
 #define TYPE_INT32_T		27
+#define TYPE_NXUINT8_T		28
+#define TYPE_NXUINT16_T		29
+#define TYPE_NXUINT32_T		30
 
 #define PATH_SZ			256
 

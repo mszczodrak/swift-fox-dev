@@ -243,10 +243,27 @@ uint16_t	{
 #endif
 			return VARIABLE_TYPE;		}
 
-
 uint32_t	{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_UINT32_T;
+#endif
+			return VARIABLE_TYPE;		}
+
+nx_uint8_t		{
+#ifndef __DEBUG__
+			yylval.ival = TYPE_NXUINT8_T;
+#endif
+			return VARIABLE_TYPE;		}
+
+nx_uint16_t	{
+#ifndef __DEBUG__
+			yylval.ival = TYPE_NXUINT16_T;
+#endif
+			return VARIABLE_TYPE;		}
+
+nx_uint32_t	{
+#ifndef __DEBUG__
+			yylval.ival = TYPE_NXUINT32_T;
 #endif
 			return VARIABLE_TYPE;		}
 
@@ -261,7 +278,6 @@ double		{
 			yylval.ival = TYPE_DOUBLE;
 #endif
 			return VARIABLE_TYPE;		}
-
 
 int8_t         {
 #ifndef __DEBUG__
