@@ -50,8 +50,7 @@ void initDataStorageValues() {
 	fprintf(fp, "#define _FF_DATA_STORAGE_VALUES_H_\n\n");
 	fprintf(fp, "#include \"Fennec.h\"\n\n");
 
-	fprintf(fp, "nx_struct fennec_data ffdata = {\n");
-	fprintf(fp, "\t.global = {\n");
+	fprintf(fp, "nx_struct global_data fennec_global_data = {\n");
 	
 	free(full_path);
 	fclose(fp);
@@ -114,7 +113,7 @@ void initLocalDataH() {
 	fprintf(fp, "#ifndef _LOCAL_DATA_H_\n");
 	fprintf(fp, "#define _LOCAL_DATA_H_\n\n");
 
-	fprintf(fp, "nx_struct local_data {\n");
+	fprintf(fp, "struct local_data {\n");
 
 	free(full_path);
 	fclose(fp);
@@ -134,8 +133,9 @@ void initVariableLookupH() {
 
 	fprintf(fp, "#ifndef _VARIABLE_LOOKUP_DATA_H_\n");
 	fprintf(fp, "#define _VARIABLE_LOOKUP_DATA_H_\n\n");
+	fprintf(fp, "#include <Fennec.h>\n\n");
 
-	fprintf(fp, "nx_struct variable_lookup_t variable_lookup[%d] {\n", number_of_variables_in_cache);
+	fprintf(fp, "struct variable_reference variable_lookup[%d] = {\n", number_of_variables_in_cache);
 
 	free(full_path);
 	fclose(fp);
@@ -175,7 +175,6 @@ void finishDataStorageValues() {
 		exit(1);
 	}
 
-	fprintf(fp, "\t}\n");
 	fprintf(fp, "};\n\n");
 	fprintf(fp, "#endif\n\n");
 
@@ -216,11 +215,11 @@ void switchGlobalToLocalDataStorage() {
 		exit(1);
 	}
 
-	fprintf(fp, "\t},\n");
+	fprintf(fp, "};\n");
 
 	generate_globals = 0;
 
-	fprintf(fp, "\t.local = {\n");
+	fprintf(fp, "struct local_data fennec_local_data = {\n");
 
 	free(full_path);
 	fclose(fp);
@@ -269,11 +268,11 @@ void addLocalVariable(struct variable *sh, struct confnode* current_process_gen,
 
 	if (sh->class_type == TYPE_VARIABLE_LOCAL) {
 		if (sh->length > 1) {
-			fprintf(fp, "\tnx_%-10s %s_%s_%s[%d];\n", type_name(sh->type), 
+			fprintf(fp, "\t%-10s %s_%s_%s[%d];\n", type_name(sh->type), 
 						current_process_gen->name, current_module_gen->name, sh->name,
 						sh->length);
 		} else {
-			fprintf(fp, "\tnx_%-10s %s_%s_%s;\n", type_name(sh->type), 
+			fprintf(fp, "\t%-10s %s_%s_%s;\n", type_name(sh->type), 
 						current_process_gen->name, current_module_gen->name, sh->name);
 		}
 	}
@@ -308,21 +307,21 @@ void setVariableValue(struct variable *sh, struct confnode* current_process_gen,
 
 	if ((generate_globals && sh->used == 1)) {
 		if (sh->length > 1) {
-			fprintf(fp, "\t\t.%-30s = {%Lf},\t/* %d */\n", sh->name,
+			fprintf(fp, "\t.%-30s = {%Lf},\t/* %d */\n", sh->name,
 						sh->value, sh->offset);
 		} else {
-			fprintf(fp, "\t\t.%-30s = %Lf,\t/* %d */\n", sh->name,
+			fprintf(fp, "\t.%-30s = %Lf,\t/* %d */\n", sh->name,
 						sh->value, sh->offset);
 		}
 	}
 
 	if (sh->class_type == TYPE_VARIABLE_LOCAL) {
 		if (sh->length > 1) {
-			fprintf(fp, "\t\t.%s_%s_%-30s = {%Lf},\t/* %d */\n",
+			fprintf(fp, "\t.%s_%s_%-30s = {%Lf},\t/* %d */\n",
 						current_process_gen->name, current_module_gen->name,
 						sh->name, sh->value, sh->offset);
 		} else {
-			fprintf(fp, "\t\t.%s_%s_%-30s = %Lf,\t/* %d */\n",
+			fprintf(fp, "\t.%s_%s_%-30s = %Lf,\t/* %d */\n",
 						current_process_gen->name, current_module_gen->name,
 						sh->name, sh->value, sh->offset);
 		}
@@ -355,11 +354,11 @@ void setProcessLookupTable(struct confnode* c) {
 		for (vc = 0, mvar = conftab[i].conf->app->variables; vc < conftab[i].conf->app_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 				//fprintf(fp, "\t{ %s, \t%d},\n", mvar->var->cap_name, mvar->var->offset);
-				fprintf(fp, "\t{ %-15s, \t&data.global.%s_%s_%s\t},\n",
+				fprintf(fp, "\t{ %-15s, \t&(fennec_global_data.%s_%s_%s)\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->app->name, mvar->var->name);
 			} else {
-				fprintf(fp, "\t{ %-15s, \t&data.local.%s_%s_%s\t},\n",
+				fprintf(fp, "\t{ %-15s, \t&(fennec_local_data.%s_%s_%s)\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->app->name, mvar->var->name);
 			}
@@ -372,11 +371,11 @@ void setProcessLookupTable(struct confnode* c) {
 		for (vc = 0, mvar = conftab[i].conf->net->variables; vc < conftab[i].conf->net_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 				//fprintf(fp, "\t{ %s, \t%d},\n", mvar->var->cap_name, mvar->var->offset);
-				fprintf(fp, "\t{ %-15s, \t&data.global.%s_%s_%s\t},\n",
+				fprintf(fp, "\t{ %-15s, \t&(fennec_global_data.%s_%s_%s)\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->net->name, mvar->var->name);
 			} else {
-				fprintf(fp, "\t{ %-15s, \t&data.local.%s_%s_%s\t},\n",
+				fprintf(fp, "\t{ %-15s, \t&(fennec_local_data.%s_%s_%s)\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->net->name, mvar->var->name);
 			}
