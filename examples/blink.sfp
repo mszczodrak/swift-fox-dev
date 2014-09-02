@@ -1,8 +1,8 @@
 
-uint16_t global_rate = 3000
+uint16_t global_rate = 300
 
 process hello { 
-	blink(1, global_rate)
+	blink(1, 500)
 	nullNet()
 	nullAM() }
 
