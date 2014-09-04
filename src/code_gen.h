@@ -31,7 +31,6 @@
   * @author: Marcin K Szczodrak
   */
 
-
 #ifndef __CODE_GEN_H__
 #define __CODE_GEN_H__
 #define TEMP_CONF_FILE	"/tmp/tmp_conf_file_sfc"
