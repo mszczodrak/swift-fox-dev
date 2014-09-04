@@ -357,7 +357,6 @@ void generateVariable(struct variable *sh, struct confnode* current_process_gen,
 	setVariableValue(sh, current_process_gen, current_module_gen);
 }	
 
-
 void setVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
 
 	/* global variables init */
@@ -396,7 +395,6 @@ void setVariableValue(struct variable *sh, struct confnode* current_process_gen,
 	fclose(fp);
 	/* end of initializing global variables */
 }
-
 
 void setProcessesLookupTable() {
 	/* variable_lookup struct */
