@@ -6,20 +6,18 @@ uint16_t src_node = 0xFFFF
 uint16_t event_src = 3
 
 process network_state_ctrl ! {
-#	blink(2, 1024)
 	StateSync()
-	nullNet() 
-#	rebroadcast(3, 30, 50)
-#	*cc2420()
-	nullAM()
-#	# channel, power, lpl
+	rebroadcast(3, 30, 50)
+	*cc2420()
+	# channel, power, lpl
 }
 
-#process network_data_ctrl ! {
-#	DataSync()
-#	rebroadcast(3, 30, 50)
-#	*cc2420()
-#}
+process network_data_ctrl ! {
+	DataSync()
+	rebroadcast(3, 30, 50)
+	*cc2420()
+	# channel, power, lpl
+}
 
 #process txPowerControl {
 #	NetworkRadioSetup()

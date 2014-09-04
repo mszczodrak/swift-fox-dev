@@ -382,11 +382,11 @@ void setVariableValue(struct variable *sh, struct confnode* current_process_gen,
 
 	if (sh->class_type == TYPE_VARIABLE_LOCAL) {
 		if (sh->length > 1) {
-			fprintf(fp, "\t.%s_%s_%-50s = {%Lf},\t/* %d */\n",
+			fprintf(fp, "\t.%s_%s_%-40s = {%Lf},\t/* %d */\n",
 						current_process_gen->name, current_module_gen->name,
 						sh->name, sh->value, sh->offset);
 		} else {
-			fprintf(fp, "\t.%s_%s_%-50s = %Lf,\t/* %d */\n",
+			fprintf(fp, "\t.%s_%s_%-40s = %Lf,\t/* %d */\n",
 						current_process_gen->name, current_module_gen->name,
 						sh->name, sh->value, sh->offset);
 		}
