@@ -263,20 +263,18 @@ char *conf_module_name(char *conf, char *module) {
 int updateModuleVariables(struct modtab *mp) {
 	struct variables *lvar = mp->lib->variables;
 	struct variables *mvar = mp->variables;
-	struct variables *revar = NULL;
 	int number_of_variables = 0;
 
 	while(mvar != NULL && mvar->vars != NULL) {
 		mvar = mvar->vars;
 	}
 
-	revar = mvar;
-
 	while(lvar != NULL && lvar->vars != NULL) {
 		lvar = lvar->vars;
 	}
 
 	while (lvar != NULL) {
+		printf("loop lvar %s\n", lvar->var->name);
 		/* case when we use global variable */
 		if (mvar != NULL && mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 			/* this already points to global variable, so should
@@ -318,18 +316,20 @@ int updateModuleVariables(struct modtab *mp) {
 		/* case when mvar is missing, so copy the lvar */
 		if (mvar == NULL) {
 			mvar = malloc(sizeof(struct variables));
-			//mvar->vars = NULL;
-			//mvar->var = malloc(sizeof(struct variable));
 			mvar->var = find_variable(lvar->var->name);
 			mvar->parent = NULL;
-
 			mvar->vars = mp->variables;
+
+			if (mp->variables != NULL) {
+				mp->variables->parent = mvar;
+			}
 			mp->variables = mvar;
-			mvar->vars->parent = mvar;
 
 			memcpy(mvar->var, lvar->var, sizeof(struct variable));
 			mvar->var->offset = variable_memory_offset;
 			mvar->var->class_type = TYPE_VARIABLE_LOCAL;
+
+			printf("copy 4\n");
 			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
 		}
 
@@ -350,22 +350,24 @@ int updateModuleVariables(struct modtab *mp) {
 	}
 
 	/* Reverse order of variables.. this way they can be traversed in order */
-	mp->variables_end = revar;
 
 	return number_of_variables;
 }
 
 void updateProcessVariables(struct confnode* c) {
+	printf("up app\n");
 	c->app_var_num = updateModuleVariables(c->app);
 //	c->app_var_offset = variable_cache;
 //	variable_cache += c->app_var_num;
 	number_of_variables_in_cache += c->app_var_num;
 
+	printf("up net\n");
 	c->net_var_num = updateModuleVariables(c->net);
 //	c->net_var_offset = variable_cache;
 //	variable_cache += c->net_var_num;
 	number_of_variables_in_cache += c->net_var_num;
 
+	printf("up am\n");
 	c->am_var_num = updateModuleVariables(c->am);
 //	c->am_var_offset = variable_cache;
 //	variable_cache += c->am_var_num;

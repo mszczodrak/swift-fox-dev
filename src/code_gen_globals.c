@@ -459,10 +459,10 @@ void setProcessLookupTable(struct confnode* c) {
 	for( i = 0; i < conf_id_counter; i++ ) {
 		for (vc = 0, mvar = conftab[i].conf->app->variables; vc < conftab[i].conf->app_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
-				fprintf(fp, "\t{ %-30s, \t&(fennec_global_data.%-30s)\t},\n",
+				fprintf(fp, "\t{ %-20s, \t&(fennec_global_data.%s)\t},\n",
 						mvar->var->cap_name, mvar->var->gname);
 			} else {
-				fprintf(fp, "\t{ %-30s, \t&(fennec_local_data.%s_%s_%-30s)\t},\n",
+				fprintf(fp, "\t{ %-20s, \t&(fennec_local_data.%s_%s_%s)\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->app->name, mvar->var->name);
 			}
@@ -474,10 +474,10 @@ void setProcessLookupTable(struct confnode* c) {
 
 		for (vc = 0, mvar = conftab[i].conf->net->variables; vc < conftab[i].conf->net_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
-				fprintf(fp, "\t{ %-30s, \t&(fennec_global_data.%-30s)\t},\n",
+				fprintf(fp, "\t{ %-20s, \t&(fennec_global_data.%s)\t},\n",
 						mvar->var->cap_name, mvar->var->gname);
 			} else {
-				fprintf(fp, "\t{ %-30s, \t&(fennec_local_data.%s_%s_%-30s)\t},\n",
+				fprintf(fp, "\t{ %-20s, \t&(fennec_local_data.%s_%s_%s)\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->net->name, mvar->var->name);
 			}
@@ -489,10 +489,10 @@ void setProcessLookupTable(struct confnode* c) {
 
 		for (vc = 0, mvar = conftab[i].conf->am->variables; vc < conftab[i].conf->am_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
-				fprintf(fp, "\t{ %-30s, \t&(fennec_global_data.%-30s)\t},\n",
+				fprintf(fp, "\t{ %-20s, \t&(fennec_global_data.%s)\t},\n",
 						mvar->var->cap_name, mvar->var->gname);
 			} else {
-				fprintf(fp, "\t{ %-30s, \t&(fennec_local_data.%s_%s_%-30s)\t},\n",
+				fprintf(fp, "\t{ %-20s, \t&(fennec_local_data.%s_%s_%s)\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->am->name, mvar->var->name);
 			}
