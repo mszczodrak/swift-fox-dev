@@ -199,29 +199,6 @@ void initLocalDataH() {
 }
 
 
-void initVariableLookupH() {
-	/* variable_lookup struct */
-	char *full_path = get_sfc_path("", "variable_lookup.h");
-	FILE *fp = fopen(full_path, "w");
-
-	if (fp == NULL) {
-		fprintf(stderr, "You do not have a permission to write \
-						into file: %s\n", full_path);
-		exit(1);
-	}
-
-	fprintf(fp, "#ifndef _VARIABLE_LOOKUP_DATA_H_\n");
-	fprintf(fp, "#define _VARIABLE_LOOKUP_DATA_H_\n\n");
-	fprintf(fp, "#include <Fennec.h>\n\n");
-
-	fprintf(fp, "struct variable_reference variable_lookup[%d] = {\n", number_of_variables_in_cache);
-
-	free(full_path);
-	fclose(fp);
-	/* end of definig variable lookup data */
-}
-
-
 void finishLocalDataH() {
 	/* local struct */
 	char *full_path = get_sfc_path("", "local_data.h");
@@ -259,26 +236,6 @@ void finishDataStorageValues() {
 	free(full_path);
 	fclose(fp);
 	/* end of initializing global variables */
-}
-
-
-void finishVariableLookupH() {
-	/* variable_lookup struct */
-	char *full_path = get_sfc_path("", "variable_lookup.h");
-	FILE *fp = fopen(full_path, "a");
-
-	if (fp == NULL) {
-		fprintf(stderr, "You do not have a permission to write \
-						into file: %s\n", full_path);
-		exit(1);
-	}
-
-	fprintf(fp, "};\n\n");
-	fprintf(fp, "#endif\n\n");
-
-	free(full_path);
-	fclose(fp);
-	/* end of definig variable lookup data */
 }
 
 
@@ -441,10 +398,10 @@ void setVariableValue(struct variable *sh, struct confnode* current_process_gen,
 }
 
 
-void setProcessLookupTable(struct confnode* c) {
+void setProcessesLookupTable() {
 	/* variable_lookup struct */
 	char *full_path = get_sfc_path("", "variable_lookup.h");
-	FILE *fp = fopen(full_path, "a");
+	FILE *fp = fopen(full_path, "w");
 	struct variables *mvar;
 	int i;
 	int vc;
@@ -455,14 +412,20 @@ void setProcessLookupTable(struct confnode* c) {
 		exit(1);
 	}
 
+	fprintf(fp, "#ifndef _VARIABLE_LOOKUP_DATA_H_\n");
+	fprintf(fp, "#define _VARIABLE_LOOKUP_DATA_H_\n\n");
+	fprintf(fp, "#include <Fennec.h>\n\n");
+
+	fprintf(fp, "struct variable_reference variable_lookup[%d] = {\n", number_of_variables_in_cache);
+
 
 	for( i = 0; i < conf_id_counter; i++ ) {
 		for (vc = 0, mvar = conftab[i].conf->app->variables; vc < conftab[i].conf->app_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
-				fprintf(fp, "\t{ %-20s, \t&(fennec_global_data.%s)\t},\n",
+				fprintf(fp, "\t{ %-20s, &(fennec_global_data.%s)\t},\n",
 						mvar->var->cap_name, mvar->var->gname);
 			} else {
-				fprintf(fp, "\t{ %-20s, \t&(fennec_local_data.%s_%s_%s)\t},\n",
+				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s)\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->app->name, mvar->var->name);
 			}
@@ -474,10 +437,10 @@ void setProcessLookupTable(struct confnode* c) {
 
 		for (vc = 0, mvar = conftab[i].conf->net->variables; vc < conftab[i].conf->net_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
-				fprintf(fp, "\t{ %-20s, \t&(fennec_global_data.%s)\t},\n",
+				fprintf(fp, "\t{ %-20s, &(fennec_global_data.%s)\t},\n",
 						mvar->var->cap_name, mvar->var->gname);
 			} else {
-				fprintf(fp, "\t{ %-20s, \t&(fennec_local_data.%s_%s_%s)\t},\n",
+				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s)\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->net->name, mvar->var->name);
 			}
@@ -489,10 +452,10 @@ void setProcessLookupTable(struct confnode* c) {
 
 		for (vc = 0, mvar = conftab[i].conf->am->variables; vc < conftab[i].conf->am_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
-				fprintf(fp, "\t{ %-20s, \t&(fennec_global_data.%s)\t},\n",
+				fprintf(fp, "\t{ %-20s, &(fennec_global_data.%s)\t},\n",
 						mvar->var->cap_name, mvar->var->gname);
 			} else {
-				fprintf(fp, "\t{ %-20s, \t&(fennec_local_data.%s_%s_%s)\t},\n",
+				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s)\t},\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->am->name, mvar->var->name);
 			}
@@ -503,7 +466,8 @@ void setProcessLookupTable(struct confnode* c) {
 		variable_cache += conftab[i].conf->am_var_num;
 
 	}
-	fprintf(fp, "\n\n");
+	fprintf(fp, "};\n\n");
+	fprintf(fp, "#endif\n\n");
 
 	free(full_path);
 	fclose(fp);

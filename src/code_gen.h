@@ -90,10 +90,6 @@ void generateGlobals();
 
 void checkModuleParameters(struct modtab* mp);
 
-
-void initVariableLookupH();
-void finishVariableLookupH();
-
-void setProcessLookupTable(struct confnode* c);
+void setProcessesLookupTable();
 
 #endif

@@ -31,7 +31,6 @@
   * @author: Marcin K Szczodrak
   */
 
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -97,7 +96,6 @@ char * type_name(int type_value) {
 	}
 }
 
-
 int type_size(int type_value) {
 	switch(type_value) {
 	case TYPE_BOOL:
@@ -140,7 +138,6 @@ int type_size(int type_value) {
 		return 0;
 	}
 }
-
 
 /**
 converts local path within Fennec Fox library to a complete path 
@@ -217,7 +214,6 @@ int get_policy_mask(struct policy *p) {
 	return mask;
 }
 
-
 int check_path(char *path) {
 	struct stat st;
 	char temp_path[PATH_SZ];
@@ -258,8 +254,6 @@ char *conf_module_name(char *conf, char *module) {
 	return str_toupper(n);
 }
 
-
-
 int updateModuleVariables(struct modtab *mp) {
 	struct variables *lvar = mp->lib->variables;
 	struct variables *mvar = mp->variables;
@@ -274,7 +268,6 @@ int updateModuleVariables(struct modtab *mp) {
 	}
 
 	while (lvar != NULL) {
-		printf("loop lvar %s\n", lvar->var->name);
 		/* case when we use global variable */
 		if (mvar != NULL && mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 			/* this already points to global variable, so should
@@ -329,7 +322,6 @@ int updateModuleVariables(struct modtab *mp) {
 			mvar->var->offset = variable_memory_offset;
 			mvar->var->class_type = TYPE_VARIABLE_LOCAL;
 
-			printf("copy 4\n");
 			variable_memory_offset += (type_size(lvar->var->type) * lvar->var->length);
 		}
 
@@ -355,15 +347,12 @@ int updateModuleVariables(struct modtab *mp) {
 }
 
 void updateProcessVariables(struct confnode* c) {
-	printf("up app\n");
 	c->app_var_num = updateModuleVariables(c->app);
 	number_of_variables_in_cache += c->app_var_num;
 
-	printf("up net\n");
 	c->net_var_num = updateModuleVariables(c->net);
 	number_of_variables_in_cache += c->net_var_num;
 
-	printf("up am\n");
 	c->am_var_num = updateModuleVariables(c->am);
 	number_of_variables_in_cache += c->am_var_num;
 }

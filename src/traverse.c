@@ -139,10 +139,9 @@ traverse_program(struct program* p, int f, int policy_counter){
 				switchGlobalToLocalDataStorage();
 
 				initLocalDataH();
-				initVariableLookupH();
 				traverse_processnodes(p->defcon, f);
+				setProcessesLookupTable();
 				finishLocalDataH();
-				finishVariableLookupH();
 
 				traverse_statenodes(p->defstate, f);
 				traverse_policies(p->defpol, f);
@@ -290,8 +289,6 @@ traverse_process(struct confnode* c, int f) {
 
 			current_module_gen = c->am;
 			traverse_variables(c->am->variables, f);
-			setProcessLookupTable(c);
-			//print_process(c);
 			break;
 
 		default:
