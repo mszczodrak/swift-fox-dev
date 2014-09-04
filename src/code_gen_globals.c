@@ -133,9 +133,9 @@ void finishGlobalDataMsgH() {
 
 	fprintf(fp, "};\n\n\n");
 
-	fprintf(fp, "nx_struct global_data_msg fennec_global_cache;\n\n\n");
+	fprintf(fp, "nx_struct global_data_msg fennec_global_data_nx;\n\n\n");
 
-	fprintf(fp, "void globalDataSyncNetwork() {\n");
+	fprintf(fp, "void globalDataSyncWithNetwork() {\n");
 	for( i = 0; i < NVARS; i++ ) {
 		if (vartab[i].length == 0) {
 			break;
@@ -147,12 +147,12 @@ void finishGlobalDataMsgH() {
 			continue;
 		}
 
-		fprintf(fp, "\tfennec_global_data.%s = (%s) fennec_global_cache.%s;\n",
+		fprintf(fp, "\tfennec_global_data.%s = (%s) fennec_global_data_nx.%s;\n",
 			vartab[i].name, type_name(vartab[i].type), vartab[i].name);
 	}
 	fprintf(fp, "};\n\n\n");
 
-	fprintf(fp, "void globalDataSyncLocal() {\n");
+	fprintf(fp, "void globalDataSyncWithLocal() {\n");
 	for( i = 0; i < NVARS; i++ ) {
 		if (vartab[i].length == 0) {
 			break;
@@ -164,7 +164,7 @@ void finishGlobalDataMsgH() {
 			continue;
 		}
 
-		fprintf(fp, "\tfennec_global_cache.%s = (nx_%s) fennec_global_data.%s;\n",
+		fprintf(fp, "\tfennec_global_data_nx.%s = (nx_%s) fennec_global_data.%s;\n",
 			vartab[i].name, type_name(vartab[i].type), vartab[i].name);
 	}
 	fprintf(fp, "};\n\n");
