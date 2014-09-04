@@ -84,17 +84,37 @@ traverse_program(struct program* p, int f, int policy_counter){
 				zero the mapping structure 
 				*/
 				init_sem_evt();
-				
+
 				traverse_variables(p->vars, f);
 
 				if (adjust_global_offset > 0) {
 					print_variables(TYPE_VARIABLE_GLOBAL);
 				}
 
+		
+				if (sfc_debug) {
+					printf("traverse processnodes\n");
+				}
 				traverse_processnodes(p->defcon, f);
+
+				if (sfc_debug) {
+					printf("traverse statenodes\n");
+				}
 				traverse_statenodes(p->defstate, f);
+
+				if (sfc_debug) {
+					printf("traverse policies\n");
+				}
 				traverse_policies(p->defpol, f);
+
+				if (sfc_debug) {
+					printf("traverse initnode\n");
+				}
 				traverse_initnode(p->init, f);
+
+				if (sfc_debug) {
+					printf("traverse setUniqueVariableIDs\n");
+				}
 				setUniqueVariableIDs();
 				break;
 
@@ -210,7 +230,7 @@ configuration traversal
 
 void
 traverse_processnodes(struct processnodes* c, int f) {	
-	if (c != NULL){
+	if (c != NULL) {
 		switch (f) {
 		case TREE_TRAVERSE:
 			traverse_processnodes(c->confs, f);
@@ -227,14 +247,6 @@ traverse_processnodes(struct processnodes* c, int f) {
 			traverse_process(c->conf, f);
 			break;
 			
-		default:
-			break;
-		}
-	} else {
-		switch(f) {
-		case TREE_CHECK_SEMANTIC:
-			break;
-
 		default:
 			break;
 		}
