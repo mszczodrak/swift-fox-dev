@@ -5,6 +5,12 @@ uint16_t dest_node = 2
 uint16_t src_node = 0xFFFF
 uint16_t event_src = 3
 
+uint16_t v1 = 0
+uint16_t v2 = 0
+uint16_t v3 = 0
+uint16_t v4 = 0
+uint16_t v5 = 0
+
 process network_state_ctrl ! {
 	StateSync()
 	rebroadcast(3, 30, 50)
@@ -19,6 +25,12 @@ process network_data_ctrl ! {
 	# channel, power, lpl
 }
 
+process test_data_sync {
+	TestDataSync(5000, v1, v2, v3, v4, v5)
+	nullNet() 
+	nullAM()
+}
+
 #process txPowerControl {
 #	NetworkRadioSetup()
 #	nullNet()
@@ -29,7 +41,7 @@ process network_data_ctrl ! {
 process yellow {
 	blink(2, 1024)
 	nullNet() 
-	nullAM()
+	*nullAM()
 }
 
 #event tiMo { timerMilliE(850000, event_src)
@@ -37,7 +49,7 @@ process yellow {
 #	*cc2420()
 #}
 
-state idle { yellow }
+state idle { yellow test_data_sync}
 #state rssi_bootup { txPowerControl }
 
 #from idle goto rssi_bootup when tiMo
