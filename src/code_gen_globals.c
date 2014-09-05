@@ -167,7 +167,26 @@ void finishGlobalDataMsgH() {
 		fprintf(fp, "\tfennec_global_data_nx.%s = (nx_%s) fennec_global_data.%s;\n",
 			vartab[i].name, type_name(vartab[i].type), vartab[i].name);
 	}
-	fprintf(fp, "};\n\n");
+	fprintf(fp, "};\n\n\n");
+
+	fprintf(fp, "#if defined(FENNEC_TOS_PRINTF) || defined(FENNEC_COOJA_PRINTF)\n");
+	fprintf(fp, "void printfGlobalData() {\n");
+	for( i = 0; i < NVARS; i++ ) {
+		if (vartab[i].length == 0) {
+			break;
+		}
+
+		if ((vartab[i].class_type != TYPE_VARIABLE_GLOBAL) ||
+			(vartab[i].used != 1) ||
+			(vartab[i].gname != NULL)) {
+			continue;
+		}
+
+		fprintf(fp, "\tprintf(\"%s -> %%d\\n\", fennec_global_data_nx.%s);\n",
+				vartab[i].name, vartab[i].name);
+	}
+	fprintf(fp, "};\n");
+	fprintf(fp, "#endif\n\n");
 
 	fprintf(fp, "#endif\n\n");
 
