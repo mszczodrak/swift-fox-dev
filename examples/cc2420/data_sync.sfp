@@ -11,25 +11,25 @@ uint16_t v3 = 0
 uint16_t v4 = 0
 uint16_t v5 = 0
 
-process network_state_ctrl ! {
-	StateSync()
-	rebroadcast(3, 30, 50)
-	*cc2420()
-	# channel, power, lpl
-}
+#process network_state_ctrl ! {
+#	StateSync()
+#	rebroadcast(3, 30, 50)
+#	*cc2420()
+#	# channel, power, lpl
+#}
 
 process network_data_ctrl ! {
 	DataSync()
 	rebroadcast(3, 30, 50)
-	*cc2420()
+	cc2420()
 	# channel, power, lpl
 }
 
-process test_data_sync {
-	TestDataSync(5000, v1, v2, v3, v4, v5)
-	nullNet() 
-	nullAM()
-}
+#process test_data_sync {
+#	TestDataSync(5000, v1, v2, v3, v4, v5)
+#	nullNet() 
+#	*nullAM()
+#}
 
 #process txPowerControl {
 #	NetworkRadioSetup()
@@ -49,7 +49,9 @@ process yellow {
 #	*cc2420()
 #}
 
-state idle { yellow test_data_sync}
+state idle { yellow }
+#state idle { test_data_sync}
+#state idle { yellow test_data_sync}
 #state rssi_bootup { txPowerControl }
 
 #from idle goto rssi_bootup when tiMo
