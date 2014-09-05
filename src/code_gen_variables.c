@@ -52,7 +52,7 @@ void generateVariableConstants() {
 	for( i = 0; i < NVARS; i++ ) {
 		int skip = 0;
 		if (vartab[i].length == 0) {
-			break;
+			continue;
 		}
 
 		if (vartab[i].id == -1) {

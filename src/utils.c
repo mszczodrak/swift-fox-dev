@@ -326,7 +326,6 @@ int updateModuleVariables(struct modtab *mp) {
 		}
 
 		mvar->var->used = 1;
-		mvar->var->id = 0;
 		lvar->var->used = 1;
 
 		if (mvar != NULL) {
@@ -388,16 +387,12 @@ void setUniqueVariableIDs() {
 
 	for( i = 0; i < NVARS; i++ ) {
 		int skip = 0;
-		if (vartab[i].length == 0) {
-			break;
-		}
-
-		if (vartab[i].id == -1) {
+		if (vartab[i].used == 0) {
 			continue;
 		}
 
 		for ( j = 0; j < i; j++ ) {
-			if (!strcmp(vartab[i].cap_name, vartab[j].cap_name) && (vartab[j].id != -1)) {
+			if (!strcmp(vartab[i].cap_name, vartab[j].cap_name) && (vartab[j].id >= 0)) {
 				skip = 1;
 				break;	
 			}
