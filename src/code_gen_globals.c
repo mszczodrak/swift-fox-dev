@@ -182,8 +182,26 @@ void finishGlobalDataMsgH() {
 			continue;
 		}
 
-		fprintf(fp, "\tprintf(\"%s -> %%d\\n\", fennec_global_data_nx.%s);\n",
+		switch(vartab[i].type) {
+		case TYPE_BOOL:
+		case TYPE_UINT8_T:
+		case TYPE_UINT16_T:
+		case TYPE_UINT32_T:
+		case TYPE_NXUINT8_T:
+		case TYPE_NXUINT16_T:
+		case TYPE_NXUINT32_T:
+			fprintf(fp, "\tprintf(\"%s -> %%u\\n\", fennec_global_data_nx.%s);\n",
 				vartab[i].name, vartab[i].name);
+			break;
+		case TYPE_FLOAT:
+		case TYPE_DOUBLE:
+			fprintf(fp, "\tprintf(\"%s -> %%f\\n\", fennec_global_data_nx.%s);\n",
+				vartab[i].name, vartab[i].name);
+			break;
+		default:
+			fprintf(fp, "\tprintf(\"%s -> %%d\\n\", fennec_global_data_nx.%s);\n",
+				vartab[i].name, vartab[i].name);
+		}
 	}
 	fprintf(fp, "};\n");
 	fprintf(fp, "#endif\n\n");
