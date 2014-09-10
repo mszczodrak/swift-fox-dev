@@ -56,17 +56,16 @@ void setFennecExtra();
 
 void initDataStorageValues();
 void initGlobalDataH();
-void initGlobalDataMsgH();
 void initLocalDataH();
 
 void generateVariable(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen);
 void addGlobalVariable(struct variable *sh);
-void addGlobalVariableMsg(struct variable *sh);
 void addLocalVariable(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen);
 void setVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen);
 
+void globalDataMsgH();
+
 void finishGlobalDataH();
-void finishGlobalDataMsgH();
 void finishLocalDataH();
 void finishDataStorageValues();
 void switchGlobalToLocalDataStorage();

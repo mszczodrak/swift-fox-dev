@@ -78,28 +78,6 @@ void initGlobalDataH() {
 	/* end of definig global variables */
 }
 
-void initGlobalDataMsgH() {
-	/* global struct */
-	char *full_path = get_sfc_path("", "global_data_msg.h");
-	FILE *fp = fopen(full_path, "w");
-
-	if (fp == NULL) {
-		fprintf(stderr, "You do not have a permission to write \
-						into file: %s\n", full_path);
-		exit(1);
-	}
-
-	fprintf(fp, "#ifndef _GLOBAL_DATA_MSG_H_\n");
-	fprintf(fp, "#define _GLOBAL_DATA_MSG_H_\n\n");
-
-	fprintf(fp, "nx_struct global_data_msg {\n");
-
-	free(full_path);
-	fclose(fp);
-	/* end of definig global variables */
-}
-
-
 void finishGlobalDataH() {
 	/* global struct */
 	char *full_path = get_sfc_path("", "global_data.h");
@@ -119,11 +97,13 @@ void finishGlobalDataH() {
 	/* end of definig global variables */
 }
 
-void finishGlobalDataMsgH() {
+void globalDataMsgH() {
 	/* global struct */
 	char *full_path = get_sfc_path("", "global_data_msg.h");
-	FILE *fp = fopen(full_path, "a");
+	FILE *fp = fopen(full_path, "w");
 	int i;
+//	int global_number = 0;
+//	int byte_hist = 0;
 
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write \
@@ -131,9 +111,77 @@ void finishGlobalDataMsgH() {
 		exit(1);
 	}
 
+	fprintf(fp, "#ifndef _GLOBAL_DATA_MSG_H_\n");
+	fprintf(fp, "#define _GLOBAL_DATA_MSG_H_\n\n");
+
+	fprintf(fp, "nx_struct global_data_msg {\n");
+
+	for( i = 0; i < NVARS; i++ ) {
+		if (vartab[i].length == 0) {
+			break;
+		}
+
+		if ((vartab[i].class_type != TYPE_VARIABLE_GLOBAL) ||
+			(vartab[i].used != 1) ||
+			(vartab[i].gname != NULL)) {
+			continue;
+		}
+
+		if (vartab[i].length > 1) {
+			fprintf(fp, "\tnx_%s %s[%d];\n", type_name(vartab[i].type), 
+						vartab[i].name,
+						vartab[i].length);
+		} else {
+			fprintf(fp, "\tnx_%s %s;\n", type_name(vartab[i].type), 
+						vartab[i].name);
+		}
+	}
+
 	fprintf(fp, "};\n\n\n");
 
-	fprintf(fp, "nx_struct global_data_msg fennec_global_data_nx;\n\n\n");
+//	byte_hist = global_number / 8;
+//	if (global_number % 8 != 0) {
+//		byte_hist++;
+//	}
+
+//	//printf("%d %d\n", global_number, byte_hist);
+	fprintf(fp, "nx_struct global_data_msg fennec_global_data_nx;\n\n");
+
+	fprintf(fp, "struct variable_info global_data_info {\n");
+	for( i = 0; i < NVARS; i++ ) {
+		if (vartab[i].length == 0) {
+			break;
+		}
+
+		if ((vartab[i].class_type != TYPE_VARIABLE_GLOBAL) ||
+			(vartab[i].used != 1) ||
+			(vartab[i].gname != NULL)) {
+			continue;
+		}
+
+		fprintf(fp, "\t%s, \t%d, \t%d,\n", vartab[i].cap_name,
+				vartab[i].offset, 
+				(type_size(vartab[i].type) * vartab[i].length));
+	}
+
+	fprintf(fp, "};\n\n");
+/*
+	switch(byte_hist) {
+	case 1:
+		fprintf(fp, "nx_uint8_t global_data_history = 0;\n\n");
+		break;
+	case 2:
+		fprintf(fp, "nx_uint16_t global_data_history = 0;\n\n");
+		break;
+	case 3:
+	case 4:
+		fprintf(fp, "nx_uint32_t global_data_history = 0;\n\n");
+		break;
+	default:
+		(void)fprintf(stderr, "Too many global variables: %d", global_number);
+		exit(1);
+	}
+*/
 
 	fprintf(fp, "void globalDataSyncWithNetwork() {\n");
 	for( i = 0; i < NVARS; i++ ) {
@@ -327,34 +375,6 @@ void addGlobalVariable(struct variable *sh) {
 }
 
 
-void addGlobalVariableMsg(struct variable *sh) {
-	/* global struct */
-	char *full_path = get_sfc_path("", "global_data_msg.h");
-	FILE *fp = fopen(full_path, "a");
-
-	if (fp == NULL) {
-		fprintf(stderr, "You do not have a permission to write \
-						into file: %s\n", full_path);
-		exit(1);
-	}
-
-	if (sh->used == 1) {
-		if (sh->length > 1) {
-			fprintf(fp, "\tnx_%s %s[%d];\n", type_name(sh->type), 
-						sh->name,
-						sh->length);
-		} else {
-			fprintf(fp, "\tnx_%s %s;\n", type_name(sh->type), 
-						sh->name);
-		}
-	}
-
-	free(full_path);
-	fclose(fp);
-	/* end of definig global variables */
-}
-
-
 void addLocalVariable(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
 	/* local struct */
 	char *full_path = get_sfc_path("", "local_data.h");
@@ -386,7 +406,6 @@ void addLocalVariable(struct variable *sh, struct confnode* current_process_gen,
 void generateVariable(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
 	if (generate_globals) {
 		addGlobalVariable(sh);
-		addGlobalVariableMsg(sh);
 	} else {
 		addLocalVariable(sh, current_process_gen, current_module_gen);
 	}
