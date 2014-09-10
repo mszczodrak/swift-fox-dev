@@ -102,7 +102,7 @@ void globalDataMsgH() {
 	char *full_path = get_sfc_path("", "global_data_msg.h");
 	FILE *fp = fopen(full_path, "w");
 	int i;
-//	int global_number = 0;
+	int global_number = 0;
 //	int byte_hist = 0;
 
 	if (fp == NULL) {
@@ -135,6 +135,7 @@ void globalDataMsgH() {
 			fprintf(fp, "\tnx_%s %s;\n", type_name(vartab[i].type), 
 						vartab[i].name);
 		}
+		global_number++;
 	}
 
 	fprintf(fp, "};\n\n\n");
@@ -145,9 +146,11 @@ void globalDataMsgH() {
 //	}
 
 //	//printf("%d %d\n", global_number, byte_hist);
+	fprintf(fp, "#define NUMBER_OF_GLOBALS \t%d\n\n", global_number);
+
 	fprintf(fp, "nx_struct global_data_msg fennec_global_data_nx;\n\n");
 
-	fprintf(fp, "struct variable_info global_data_info {\n");
+	fprintf(fp, "struct variable_info global_data_info[NUMBER_OF_GLOBALS] = {\n");
 	for( i = 0; i < NVARS; i++ ) {
 		if (vartab[i].length == 0) {
 			break;
@@ -159,7 +162,7 @@ void globalDataMsgH() {
 			continue;
 		}
 
-		fprintf(fp, "\t%s, \t%d, \t%d,\n", vartab[i].cap_name,
+		fprintf(fp, "\t{ %s, \t%d, \t%d },\n", vartab[i].cap_name,
 				vartab[i].offset, 
 				(type_size(vartab[i].type) * vartab[i].length));
 	}
