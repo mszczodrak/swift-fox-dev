@@ -462,6 +462,7 @@ void setProcessesLookupTable() {
 	struct variables *mvar;
 	int i;
 	int vc;
+	char *cap_name;
 
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write \
@@ -479,10 +480,13 @@ void setProcessesLookupTable() {
 	for( i = 0; i < conf_id_counter; i++ ) {
 		for (vc = 0, mvar = conftab[i].conf->app->variables; vc < conftab[i].conf->app_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
-				fprintf(fp, "\t{ %-20s, &(fennec_global_data.%s)\t},\n",
-						mvar->var->cap_name, mvar->var->gname);
+				cap_name = strdup(mvar->var->gname);
+				cap_name = str_toupper(cap_name);
+				fprintf(fp, "\t{ %-20s, &(fennec_global_data.%s), %s },\n",
+						mvar->var->cap_name, mvar->var->gname,
+						cap_name);
 			} else {
-				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s)\t},\n",
+				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s), 0 },\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->app->name, mvar->var->name);
 			}
@@ -494,10 +498,13 @@ void setProcessesLookupTable() {
 
 		for (vc = 0, mvar = conftab[i].conf->net->variables; vc < conftab[i].conf->net_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
-				fprintf(fp, "\t{ %-20s, &(fennec_global_data.%s)\t},\n",
-						mvar->var->cap_name, mvar->var->gname);
+				cap_name = strdup(mvar->var->gname);
+				cap_name = str_toupper(cap_name);
+				fprintf(fp, "\t{ %-20s, &(fennec_global_data.%s), %s },\n",
+						mvar->var->cap_name, mvar->var->gname,
+						cap_name);
 			} else {
-				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s)\t},\n",
+				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s), 0 },\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->net->name, mvar->var->name);
 			}
@@ -509,10 +516,13 @@ void setProcessesLookupTable() {
 
 		for (vc = 0, mvar = conftab[i].conf->am->variables; vc < conftab[i].conf->am_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
-				fprintf(fp, "\t{ %-20s, &(fennec_global_data.%s)\t},\n",
-						mvar->var->cap_name, mvar->var->gname);
+				cap_name = strdup(mvar->var->gname);
+				cap_name = str_toupper(cap_name);
+				fprintf(fp, "\t{ %-20s, &(fennec_global_data.%s), %s },\n",
+						mvar->var->cap_name, mvar->var->gname,
+						cap_name);
 			} else {
-				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s)\t},\n",
+				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s), 0 },\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->am->name, mvar->var->name);
 			}
