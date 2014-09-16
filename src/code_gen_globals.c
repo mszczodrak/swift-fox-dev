@@ -486,7 +486,7 @@ void setProcessesLookupTable() {
 						mvar->var->cap_name, mvar->var->gname,
 						cap_name);
 			} else {
-				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s), 0 },\n",
+				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->app->name, mvar->var->name);
 			}
@@ -504,7 +504,7 @@ void setProcessesLookupTable() {
 						mvar->var->cap_name, mvar->var->gname,
 						cap_name);
 			} else {
-				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s), 0 },\n",
+				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->net->name, mvar->var->name);
 			}
@@ -522,7 +522,7 @@ void setProcessesLookupTable() {
 						mvar->var->cap_name, mvar->var->gname,
 						cap_name);
 			} else {
-				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s), 0 },\n",
+				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->am->name, mvar->var->name);
 			}
