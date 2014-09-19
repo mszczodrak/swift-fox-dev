@@ -11,6 +11,12 @@ uint16_t v3 = 0
 uint16_t v4 = 0
 uint16_t v5 = 0
 
+process yellow {
+	blink(2, 1024)
+	nullNet() 
+	*nullAM()
+}
+
 #process network_state_ctrl ! {
 #	StateSync()
 #	rebroadcast(3, 30, 50)
@@ -38,11 +44,6 @@ process test_data_sync {
 #	# channel, power, sleepInterval, sleepDelay, autoAck
 #}
 
-process yellow {
-	blink(2, 1024)
-	nullNet() 
-	*nullAM()
-}
 
 #event tiMo { timerMilliE(850000, event_src)
 #	nullNet()

@@ -237,11 +237,14 @@ void globalDataMsgH() {
 		case TYPE_BOOL:
 		case TYPE_UINT8_T:
 		case TYPE_UINT16_T:
-		case TYPE_UINT32_T:
 		case TYPE_NXUINT8_T:
 		case TYPE_NXUINT16_T:
-		case TYPE_NXUINT32_T:
 			fprintf(fp, "\tprintf(\"%s -> %%u\\n\", fennec_global_data_nx.%s);\n",
+				vartab[i].name, vartab[i].name);
+			break;
+		case TYPE_UINT32_T:
+		case TYPE_NXUINT32_T:
+			fprintf(fp, "\tprintf(\"%s -> %%lu\\n\", fennec_global_data_nx.%s);\n",
 				vartab[i].name, vartab[i].name);
 			break;
 		case TYPE_FLOAT:
