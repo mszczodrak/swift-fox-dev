@@ -17,13 +17,6 @@ process yellow {
 	*nullAM()
 }
 
-#process network_state_ctrl ! {
-#	StateSync()
-#	rebroadcast(3, 30, 50)
-#	*cc2420()
-#	# channel, power, lpl
-#}
-
 process network_data_ctrl ! {
 	DataSync()
 	rebroadcast(3, 30, 50)
@@ -37,25 +30,7 @@ process test_data_sync {
 	*nullAM()
 }
 
-#process txPowerControl {
-#	NetworkRadioSetup()
-#	nullNet()
-#	cc2420(radio_channel, radio_tx_power, 0, 20, 1)
-#	# channel, power, sleepInterval, sleepDelay, autoAck
-#}
-
-
-#event tiMo { timerMilliE(850000, event_src)
-#	nullNet()
-#	*cc2420()
-#}
-
-#state idle { yellow }
-#state idle { test_data_sync}
 state idle { yellow test_data_sync}
-#state rssi_bootup { txPowerControl }
-
-#from idle goto rssi_bootup when tiMo
 
 start idle
 
