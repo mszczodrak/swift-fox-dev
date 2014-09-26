@@ -5,6 +5,8 @@ uint16_t dest_node = 72
 uint16_t src_node = 0xFFFF
 uint8_t min_size = 4
 uint8_t good_etx = 90
+uint8_t num_to_check = 30
+uint16_t tx_delay = 4000
 
 process yellow {
 	blink(2, 1024)
@@ -13,9 +15,7 @@ process yellow {
 }
 
 process neighbors {
-        neighbor(min_size, good_etx, radio_tx_power, 6000)
-	#blink(2, 1024)
-        #neighbor(min_size, radio_tx_power, 6000)
+        neighbor(min_size, good_etx, num_to_check, radio_tx_power, tx_delay)
 	rebroadcast(0, 0, 0)
         cc2420(radio_channel, radio_tx_power, 0, 100, 1)
         # channel, power, sleepInterval, sleepDelay, autoAck
