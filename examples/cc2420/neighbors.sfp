@@ -4,6 +4,7 @@ uint8_t radio_channel = 26      # in    [11-26]
 uint16_t dest_node = 72
 uint16_t src_node = 0xFFFF
 uint8_t min_size = 4
+uint8_t good_etx = 90
 
 process yellow {
 	blink(2, 1024)
@@ -12,7 +13,7 @@ process yellow {
 }
 
 process neighbors {
-        neighbor(min_size, radio_tx_power, 6000)
+        neighbor(min_size, good_etx, radio_tx_power, 6000)
 	#blink(2, 1024)
         #neighbor(min_size, radio_tx_power, 6000)
 	rebroadcast(0, 0, 0)
