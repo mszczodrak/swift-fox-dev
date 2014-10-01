@@ -243,12 +243,6 @@ global_variable: param_type IDENTIFIER array_part assign_value newlines
 			$$->cap_name 	= strdup($2->name);
 			$$->cap_name	= str_toupper($$->cap_name);
 
-//			if (sfc_debug) {
-//				printf("Global variable\n");
-//				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\tCAP_NAME\n");
-//				printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%-10d \t%s\n", $$->type,
-//				$$->name, $$->value, $$->init, $$->offset, $$->class_type, $$->cap_name);	
-//			}
 			global_memory_size += (type_size($$->type) * $$->length);
 		}
 
@@ -677,9 +671,9 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_var
 
 			if (sfc_debug) {
 				struct variables *v = $7;
-				printf("\tTYPE\tNAME\t\tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\n");
+				printf("\t%-10s \t%-20s \tVALUE\t\tINIT\tOFFSET\tCLASS_TYPE\n", "TYPE", "NAME");
 				for (v = $7; v != NULL; v=v->vars) {
-					printf("\t%d \t%-10s \t%-10.1Lf \t%d \t%d \t%d\n", v->var->type,
+					printf("\t%-10d \t%-20s \t%-10.1Lf \t%d \t%d \t%d\n", v->var->type,
 					v->var->name, v->var->value, v->var->init, v->var->offset,
 					v->var->class_type);	
 				}
