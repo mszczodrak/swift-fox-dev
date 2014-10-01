@@ -485,11 +485,11 @@ void setProcessesLookupTable() {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 				cap_name = strdup(mvar->var->gname);
 				cap_name = str_toupper(cap_name);
-				fprintf(fp, "\t{ %-20s, &(fennec_global_data.%s), %s },\n",
+				fprintf(fp, "\t{ %-35s, &(fennec_global_data.%s), %s },\n",
 						mvar->var->cap_name, mvar->var->gname,
 						cap_name);
 			} else {
-				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
+				fprintf(fp, "\t{ %-35s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->app->name, mvar->var->name);
 			}
@@ -503,11 +503,11 @@ void setProcessesLookupTable() {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 				cap_name = strdup(mvar->var->gname);
 				cap_name = str_toupper(cap_name);
-				fprintf(fp, "\t{ %-20s, &(fennec_global_data.%s), %s },\n",
+				fprintf(fp, "\t{ %-35s, &(fennec_global_data.%s), %s },\n",
 						mvar->var->cap_name, mvar->var->gname,
 						cap_name);
 			} else {
-				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
+				fprintf(fp, "\t{ %-35s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->net->name, mvar->var->name);
 			}
@@ -521,11 +521,11 @@ void setProcessesLookupTable() {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 				cap_name = strdup(mvar->var->gname);
 				cap_name = str_toupper(cap_name);
-				fprintf(fp, "\t{ %-20s, &(fennec_global_data.%s), %s },\n",
+				fprintf(fp, "\t{ %-35s, &(fennec_global_data.%s), %s },\n",
 						mvar->var->cap_name, mvar->var->gname,
 						cap_name);
 			} else {
-				fprintf(fp, "\t{ %-20s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
+				fprintf(fp, "\t{ %-35s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
 						mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->am->name, mvar->var->name);
 			}
