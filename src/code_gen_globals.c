@@ -434,10 +434,10 @@ void setVariableValue(struct variable *sh, struct confnode* current_process_gen,
 
 	if ((generate_globals && sh->used == 1)) {
 		if (sh->length > 1) {
-			fprintf(fp, "\t.%-50s = {%-12Lf},\t/* %d */\n", sh->name,
+			fprintf(fp, "\t.%-50s = {%-15Lf},\t/* %d */\n", sh->name,
 						sh->value, sh->offset);
 		} else {
-			fprintf(fp, "\t.%-55s =  %-12Lf, \t/* %d */\n", sh->name,
+			fprintf(fp, "\t.%-55s =  %-15Lf, \t/* %d */\n", sh->name,
 						sh->value, sh->offset);
 		}
 	}
@@ -449,10 +449,10 @@ void setVariableValue(struct variable *sh, struct confnode* current_process_gen,
 		sprintf(full_var_name, "%s_%s_%s", current_process_gen->name,
 				current_module_gen->name, sh->name);
 		if (sh->length > 1) {
-			fprintf(fp, "\t.%-55s = {%-12Lf},\t/* %d */\n",
+			fprintf(fp, "\t.%-55s = {%-15Lf},\t/* %d */\n",
 				full_var_name, sh->value, sh->offset);
 		} else {
-			fprintf(fp, "\t.%-55s =  %-12Lf ,\t/* %d */\n",
+			fprintf(fp, "\t.%-55s =  %-15Lf ,\t/* %d */\n",
 				full_var_name, sh->value, sh->offset);
 		}
 	}
