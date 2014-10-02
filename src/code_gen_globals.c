@@ -366,11 +366,11 @@ void addGlobalVariable(struct variable *sh) {
 
 	if (sh->used == 1) {
 		if (sh->length > 1) {
-			fprintf(fp, "\t%s %s[%d];\n", type_name(sh->type), 
+			fprintf(fp, "\t%-10s %s[%d];\n", type_name(sh->type), 
 						sh->name,
 						sh->length);
 		} else {
-			fprintf(fp, "\t%s %s;\n", type_name(sh->type), 
+			fprintf(fp, "\t%-10s %s;\n", type_name(sh->type), 
 						sh->name);
 		}
 	}
@@ -434,23 +434,26 @@ void setVariableValue(struct variable *sh, struct confnode* current_process_gen,
 
 	if ((generate_globals && sh->used == 1)) {
 		if (sh->length > 1) {
-			fprintf(fp, "\t.%-50s = {%Lf},\t/* %d */\n", sh->name,
+			fprintf(fp, "\t.%-50s = {%-12Lf},\t/* %d */\n", sh->name,
 						sh->value, sh->offset);
 		} else {
-			fprintf(fp, "\t.%-50s = %Lf,\t/* %d */\n", sh->name,
+			fprintf(fp, "\t.%-55s =  %-12Lf, \t/* %d */\n", sh->name,
 						sh->value, sh->offset);
 		}
 	}
 
 	if (sh->class_type == TYPE_VARIABLE_LOCAL) {
+		char *full_var_name = malloc(strlen(current_process_gen->name) + 
+				strlen(current_module_gen->name) +
+				strlen(sh->name) + 3);
+		sprintf(full_var_name, "%s_%s_%s", current_process_gen->name,
+				current_module_gen->name, sh->name);
 		if (sh->length > 1) {
-			fprintf(fp, "\t.%s_%s_%-40s = {%Lf},\t/* %d */\n",
-						current_process_gen->name, current_module_gen->name,
-						sh->name, sh->value, sh->offset);
+			fprintf(fp, "\t.%-55s = {%-12Lf},\t/* %d */\n",
+				full_var_name, sh->value, sh->offset);
 		} else {
-			fprintf(fp, "\t.%s_%s_%-40s = %Lf,\t/* %d */\n",
-						current_process_gen->name, current_module_gen->name,
-						sh->name, sh->value, sh->offset);
+			fprintf(fp, "\t.%-55s =  %-12Lf ,\t/* %d */\n",
+				full_var_name, sh->value, sh->offset);
 		}
 	}
 
