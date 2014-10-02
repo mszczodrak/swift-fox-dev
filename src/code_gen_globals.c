@@ -421,10 +421,6 @@ void generateVariable(struct variable *sh, struct confnode* current_process_gen,
 
 void setVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
 
-//	if (current_module_gen != NULL && current_module_gen->duplicate) {
-//		return;
-//	}
-
 	/* global variables init */
 
 	char *full_path = get_sfc_path("", "fennec_data_values.h");
