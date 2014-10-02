@@ -469,6 +469,7 @@ void setProcessesLookupTable() {
 	struct variables *mvar;
 	int i;
 	int vc;
+	int j;
 	char *cap_name;
 
 	if (fp == NULL) {
@@ -483,21 +484,22 @@ void setProcessesLookupTable() {
 
 	fprintf(fp, "struct variable_reference variable_lookup[%d] = {\n", number_of_variables_in_cache);
 
-
+	j = 0;
 	for( i = 0; i < conf_id_counter; i++ ) {
 		for (vc = 0, mvar = conftab[i].conf->app->variables; vc < conftab[i].conf->app_var_num && mvar != NULL; vc++) {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 				cap_name = strdup(mvar->var->gname);
 				cap_name = str_toupper(cap_name);
-				fprintf(fp, "\t{ %-35s, &(fennec_global_data.%s), %s },\n",
-						mvar->var->cap_name, mvar->var->gname,
+				fprintf(fp, "/* %3d */   { %-35s, &(fennec_global_data.%s), %s },\n",
+						j, mvar->var->cap_name, mvar->var->gname,
 						cap_name);
 			} else {
-				fprintf(fp, "\t{ %-35s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
-						mvar->var->cap_name, conftab[i].conf->name,
+				fprintf(fp, "/* %3d */   { %-35s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
+						j, mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->app->name, mvar->var->name);
 			}
 			mvar = mvar->vars;
+			j++;
 		}
 
 		conftab[i].conf->app_var_offset = variable_cache;
@@ -507,15 +509,16 @@ void setProcessesLookupTable() {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 				cap_name = strdup(mvar->var->gname);
 				cap_name = str_toupper(cap_name);
-				fprintf(fp, "\t{ %-35s, &(fennec_global_data.%s), %s },\n",
-						mvar->var->cap_name, mvar->var->gname,
+				fprintf(fp, "/* %3d */   { %-35s, &(fennec_global_data.%s), %s },\n",
+						j, mvar->var->cap_name, mvar->var->gname,
 						cap_name);
 			} else {
-				fprintf(fp, "\t{ %-35s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
-						mvar->var->cap_name, conftab[i].conf->name,
+				fprintf(fp, "/* %3d */   { %-35s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
+						j, mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->net->name, mvar->var->name);
 			}
 			mvar = mvar->vars;
+			j++;
 		}
 
 		conftab[i].conf->net_var_offset = variable_cache;
@@ -525,15 +528,16 @@ void setProcessesLookupTable() {
 			if (mvar->var->class_type == TYPE_VARIABLE_GLOBAL) {
 				cap_name = strdup(mvar->var->gname);
 				cap_name = str_toupper(cap_name);
-				fprintf(fp, "\t{ %-35s, &(fennec_global_data.%s), %s },\n",
-						mvar->var->cap_name, mvar->var->gname,
+				fprintf(fp, "/* %3d */   { %-35s, &(fennec_global_data.%s), %s },\n",
+						j, mvar->var->cap_name, mvar->var->gname,
 						cap_name);
 			} else {
-				fprintf(fp, "\t{ %-35s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
-						mvar->var->cap_name, conftab[i].conf->name,
+				fprintf(fp, "/* %3d */   { %-35s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
+						j, mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->am->name, mvar->var->name);
 			}
 			mvar = mvar->vars;
+			j++;
 		}
 
 		conftab[i].conf->am_var_offset = variable_cache;
