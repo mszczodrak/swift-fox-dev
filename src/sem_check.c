@@ -105,9 +105,12 @@ checkState(struct statenode *s) {
 	for (conf_ptr = s->confs; conf_ptr != NULL; conf_ptr = conf_ptr->confs) {
 		int not_inferior = 0;
 		struct conf_ids *cp;
+		struct conftab *cn;
+
+		/* compare against other processes in the same state */
 		for(cp = conf_ptr; cp != NULL; cp = cp->confs) {
 			if (conf_ptr->conf->conf->am->lib == cp->conf->conf->am->lib) {
-				not_inferior += !(cp->conf->conf->am_inferior);
+				not_inferior += cp->conf->conf->am_dominant;
 			}
 
 			if (not_inferior > 1) {
@@ -118,6 +121,43 @@ checkState(struct statenode *s) {
 				exit(1);
 			}
 		}
+
+		/* compare against daemon processes */
+		for(cn = conftab; cn < &conftab[NCONFS] && cn->conf != NULL; cn++) {
+			if (cn->conf->daemon) {
+				if (cn->conf->am->lib == conf_ptr->conf->conf->am->lib) {
+					not_inferior += cn->conf->am_dominant;
+				}
+
+				if (not_inferior > 1) {
+					/* ambigious match of AM in the state */
+					(void)fprintf(stderr, "error: too many dominant AM modules %s in the state %s vs. daemon %s\n",
+					conf_ptr->conf->conf->am->lib->name, s->id->name, cn->conf->name);
+					/* terminate */
+					exit(1);
+				}
+			}
+		}
+
+		/* check against events */
+		for(i = 0; i < policy_counter; i++) {
+			if (poltab[i].policy->from == s->id) {
+				if (poltab[i].policy->event_confs->conf->conf->am->lib == 
+							conf_ptr->conf->conf->am->lib) {
+					not_inferior += poltab[i].policy->event_confs->conf->conf->am_dominant;
+				}
+
+				if (not_inferior > 1) {
+					/* ambigious match of AM in the state */
+					(void)fprintf(stderr, "error: too many dominant AM modules %s in the state %s vs. event %s\n",
+					conf_ptr->conf->conf->am->lib->name, s->id->name, poltab[i].policy->event_confs->conf->conf->name);
+					/* terminate */
+					exit(1);
+				}
+			}
+		}
+
+
 	}
 
 	/* OK, no problems found */

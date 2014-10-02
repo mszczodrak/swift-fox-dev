@@ -106,6 +106,8 @@ extern int conf_id_counter;
 extern int state_defined;
 extern int unique_variable_id;
 
+extern int policy_counter;
+
 extern int variable_memory_offset;
 extern int global_memory_size;
 
@@ -237,7 +239,7 @@ struct confnode {
 	char			*app_id_name;
 	char			*net_id_name;
 	char			*am_id_name;
-	int			am_inferior;			
+	int			am_dominant;			
 	int			counter;
 	char			*id_name;
 	int			daemon;

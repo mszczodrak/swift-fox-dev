@@ -337,7 +337,7 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 				yyerror("expecting am module");
 			}
 			$$->am			= $11;
-			$$->am_inferior		= $10;
+			$$->am_dominant		= $10;
 			$$->am->lib->used 	= 1;
 			//$$->am_var_num		= updateModuleVariables($11);
 

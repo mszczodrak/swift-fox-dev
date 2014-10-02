@@ -148,7 +148,7 @@ void define_processes() {
 			fprintf(fp, "\t\t.am_variables_offset = 0,\n");
 		}
 
-		fprintf(fp, "\t\t.am_level = %d\n", conftab[i].conf->am_inferior);
+		fprintf(fp, "\t\t.am_dominant = %d\n", conftab[i].conf->am_dominant);
 		fprintf(fp, "\t}\n");
 		if (i+1 < conf_id_counter) {
 			fprintf(fp, "\t,\n");
