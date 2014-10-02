@@ -293,6 +293,7 @@ int updateModuleVariables(struct modtab *mp) {
 			mvar->var->name = lvar->var->name;
 			mvar->var->gname =  global_var->name;
 			mvar->var->cap_name = lvar->var->cap_name;
+			mvar->var->global = 0;
 		}
 
 		/* case when we use a constant as a variable */

@@ -194,6 +194,8 @@ struct variable {
 	int			id;
 	/* is variable used */
 	int			used;
+	/* original global */
+	int			global;
 } vartab[NVARS];
 
 

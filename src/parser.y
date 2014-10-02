@@ -242,6 +242,7 @@ global_variable: param_type IDENTIFIER array_part assign_value newlines
 			$$->init	= 1;
 			$$->cap_name 	= strdup($2->name);
 			$$->cap_name	= str_toupper($$->cap_name);
+			$$->global	= 1;
 
 			global_memory_size += (type_size($$->type) * $$->length);
 		}
@@ -652,7 +653,7 @@ definition: USE module_type IDENTIFIER PATH OPEN_PARENTHESIS newlines module_var
 			
 			/* lookup */
 			struct symtab *sp = NULL;
-		
+
 			/* check for library re-declarations */
 			if ((sp = symlook($3->name)) != NULL && sp->type != TYPE_UNKNOWN)
 				/* failed */
@@ -1023,7 +1024,8 @@ find_variable(char *varname) {
 	/* loop */
 	for(vp = vartab; vp < &vartab[NVARS]; vp++) {
         	/* is it already here? */
-	        if (vp->name && (varname!=NULL) && !strcmp(vp->name, varname) && (vp->class_type == TYPE_VARIABLE_GLOBAL)) {
+	        if (vp->name && (varname!=NULL) && !strcmp(vp->name, varname) &&
+			(vp->class_type == TYPE_VARIABLE_GLOBAL) && vp->global) {
 	      		return vp;
 		}
 
@@ -1040,6 +1042,7 @@ find_variable(char *varname) {
 			vp->offset = -1;
 			vp->id = -1;
 			vp->gname = NULL;
+			vp->global = 0;
 			return vp;
 		}
 		/* otherwise continue to next */
