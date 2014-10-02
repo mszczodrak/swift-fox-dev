@@ -24,12 +24,12 @@ process yellow {
 }
 
 # daemon for state control
-#process system_control ! {
-#	StateSync()
-#	rebroadcast(3, 30, 50)
-#	*cc2420()
-#	# channel, power, lpl
-#}
+process system_control ! {
+	StateSync()
+	rebroadcast(3, 30, 50)
+	*cc2420()
+	# channel, power, lpl
+}
 
 # First process to setup the system
 process neighbors {
@@ -50,23 +50,23 @@ process count {
 }
 
 # event to start the bootup
-#event time_to_bootup { timerMilliE(491520, event_src)	# wait 8 minutes
-#	nullNet()
-#	*cc2420()
-#}
+event time_to_bootup { timerMilliE(491520, event_src)	# wait 8 minutes
+	nullNet()
+	*cc2420()
+}
 
 # event to switch to the app
-#event finished_radio_setup { timerMilliE(3686400, event_src)
-#	nullNet()
-#	*cc2420()
-#}
+event finished_radio_setup { timerMilliE(3686400, event_src)
+	nullNet()
+	*cc2420()
+}
 
 state idle { yellow }
 state setting_up { neighbors }
 state running_app { count }
 
-#from idle goto setting_up when time_to_bootup
-#from setting_up goto running_app when finished_radio_setup
+from idle goto setting_up when time_to_bootup
+from setting_up goto running_app when finished_radio_setup
 
 start idle
 

@@ -211,6 +211,7 @@ struct modtab {
         int            		type;
 	int			id;
 	char			*id_name;
+	int			duplicate;
         struct libtab   	*lib;
 	struct variables	*variables;
 } modtab[NMODS];

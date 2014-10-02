@@ -59,7 +59,7 @@ void define_modules() {
 	fprintf(fp, "#define __FF_MODULES_H__\n\n");
 
         for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-                if (mp->lib != NULL && mp->lib->path && mp->lib->used) {
+                if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->duplicate == 0) {
 			fprintf(fp, "/* %s module located at %s */\n", mp->lib->name, mp->lib->path);
                         fprintf(fp, "#define %s\t%d\n\n", mp->id_name, ++id_counter);
                 }

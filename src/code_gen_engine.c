@@ -62,7 +62,7 @@ void generateFennecEngineC() {
   	fprintf(fp, "FennecEngineP.Fennec -> FennecC;\n\n");
 
 	for(mp = modtab; mp < &modtab[NSYMS]; mp++) {
-		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_AM) {
+		if (mp->lib != NULL && mp->lib->path && mp->lib->used && mp->type == TYPE_AM && mp->duplicate == 0) {
 			fprintf(fp, "#define UQ_%s_QUEUE \"unique_%s_queue\"\n",
 					mp->id_name,
 					mp->lib->name);
@@ -256,7 +256,6 @@ void generateFennecEngineP() {
 
         char *full_path = get_sfc_path("", "FennecEngineP.nc");
         FILE *fp = fopen(full_path, "w");
-	//struct modtab *mp;
 
         if (fp == NULL) {
                 fprintf(stderr, "You do not have a permission to write into file: %s\n", full_path);

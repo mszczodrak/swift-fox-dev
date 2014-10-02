@@ -1058,6 +1058,7 @@ proc_module(char *s) {
 
         /* iterator */
         struct modtab *mp = NULL;
+	int duplicate = 0;
 
 	/* check if this is a know module */
 	if (sp == NULL) {
@@ -1074,13 +1075,15 @@ proc_module(char *s) {
 			mp->name = strdup(sp->lib->name);
 			mp->id = ++module_id_counter;
 			mp->id_name = conf_module_name(mp->name, "module");
+			mp->duplicate = duplicate;
 			for(c = mp->name; *c != '\0'; c++ ) {
 				*c = toupper(*c);
 			}
                         return mp;
                 }
 		if (strcmp(mp->lib->def, sp->name) == 0) {
-			return mp;
+			duplicate = 1;
+		//	return mp;
 		}
         }
         yyerror("modtab is full");
