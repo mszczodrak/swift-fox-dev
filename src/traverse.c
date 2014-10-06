@@ -91,6 +91,9 @@ traverse_program(struct program* p, int f, int policy_counter){
 					print_variables(TYPE_VARIABLE_GLOBAL);
 				}
 
+				if (adjust_cache_offset > 0) {
+					print_variables(TYPE_VARIABLE_CACHE);
+				}
 		
 				if (sfc_debug) {
 					printf("traverse processnodes\n");
@@ -134,8 +137,10 @@ traverse_program(struct program* p, int f, int policy_counter){
 				initCacheDataValues();
 
 				initGlobalDataH();
+				initCacheDataH();
 				traverse_variables(p->vars, f);
 				finishGlobalDataH();
+				finishCacheDataH();
 				globalDataMsgH();
 
 				switchGlobalToLocalDataStorage();
@@ -213,6 +218,7 @@ traverse_variable(struct variable* sh, int f) {
 
 	case TREE_CHECK_SEMANTIC:
 		pruneUnusedGlobalVariable(sh);
+		pruneUnusedCacheVariable(sh);
 		break;
 
 	case TREE_GENERATE_CODE:

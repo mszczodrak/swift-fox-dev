@@ -111,6 +111,7 @@ extern int policy_counter;
 
 extern int variable_memory_offset;
 extern int global_memory_size;
+extern int cache_memory_size;
 
 extern char *conf_state_suffix;
 
@@ -127,6 +128,7 @@ char linebuf[BUF_SZ];
 extern int generate_globals;
 
 extern int adjust_global_offset;
+extern int adjust_cache_offset;
 extern int number_of_variables_in_cache;
 
 /**

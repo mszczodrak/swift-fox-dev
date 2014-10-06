@@ -58,6 +58,7 @@ int module_id_counter	= 0;
 
 int variable_memory_offset = 0;
 int global_memory_size = 0;
+int cache_memory_size = 0;
 
 int active_state;
 
@@ -238,19 +239,20 @@ global_variable: param_type cached IDENTIFIER array_part assign_value newlines
 			$$ 		= find_variable($3->name);
 			$$->type 	= $1;
 			$$->length	= $4;
-			$$->offset	= global_memory_size;
 			$$->value	= $5;
 			if ($2) {
+				$$->offset	= global_memory_size;
 				$$->class_type	= TYPE_VARIABLE_GLOBAL;
+				global_memory_size += (type_size($$->type) * $$->length);
 			} else {
+				$$->offset	= cache_memory_size;
 				$$->class_type	= TYPE_VARIABLE_CACHE;
+				cache_memory_size += (type_size($$->type) * $$->length);
 			}
 			$$->init	= 1;
 			$$->cap_name 	= strdup($3->name);
 			$$->cap_name	= str_toupper($$->cap_name);
 			$$->global	= 1;
-
-			global_memory_size += (type_size($$->type) * $$->length);
 		}
 
 cached: CACHE
@@ -336,7 +338,6 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 			}
 			$$->app			= $6;
 			$$->app->lib->used 	= 1;
-			//$$->app_var_num		= updateModuleVariables($6);
 
 
 			/* link network module */
@@ -346,7 +347,6 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 			}
 			$$->net			= $8;
 			$$->net->lib->used 	= 1;
-			//$$->net_var_num		= updateModuleVariables($8);
 
 
 			/* link am module */
@@ -357,7 +357,6 @@ process: process_type IDENTIFIER process_level OPEN_BRACE newlines module newlin
 			$$->am			= $11;
 			$$->am_dominant		= $10;
 			$$->am->lib->used 	= 1;
-			//$$->am_var_num		= updateModuleVariables($11);
 
 
 			$2->value	= conf_id_counter;
@@ -466,8 +465,6 @@ parameter: CONSTANT
 				fprintf(stderr, "Variable %s is not global (or cache)\n", $1->name);
 				yyerror("undefined variable");
 			}
-			//$$			= malloc(sizeof(struct variable));
-			//memcpy($$, vp, sizeof(struct variable));
 			$$ = vp;
 
                 }
@@ -478,8 +475,6 @@ parameter: CONSTANT
 				fprintf(stderr, "Variable %s is not global (or cache)\n", $4->name);
 				yyerror("undefined variable");
 			}
-			//$$			= malloc(sizeof(struct variable));
-			//memcpy($$, vp, sizeof(struct variable));
 			$$ = vp;
                 }
         ;

@@ -97,10 +97,6 @@ void initCacheDataValues() {
 }
 
 
-
-
-
-
 void initGlobalDataH() {
 	/* global struct */
 	char *full_path = get_sfc_path("", "global_data.h");
@@ -141,13 +137,52 @@ void finishGlobalDataH() {
 	/* end of definig global variables */
 }
 
+void initCacheDataH() {
+	/* global struct */
+	char *full_path = get_sfc_path("", "cache_data.h");
+	FILE *fp = fopen(full_path, "w");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "#ifndef _CACHE_DATA_H_\n");
+	fprintf(fp, "#define _CACHE_DATA_H_\n\n");
+
+	fprintf(fp, "struct cache_data {\n");
+
+	free(full_path);
+	fclose(fp);
+	/* end of definig global variables */
+}
+
+void finishCacheDataH() {
+	/* global struct */
+	char *full_path = get_sfc_path("", "cache_data.h");
+	FILE *fp = fopen(full_path, "a");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "};\n\n");
+	fprintf(fp, "#endif\n\n");
+
+	free(full_path);
+	fclose(fp);
+	/* end of definig global variables */
+}
+
 void globalDataMsgH() {
 	/* global struct */
 	char *full_path = get_sfc_path("", "global_data_msg.h");
 	FILE *fp = fopen(full_path, "w");
 	int i;
 	int global_number = 0;
-//	int byte_hist = 0;
 
 	if (fp == NULL) {
 		fprintf(stderr, "You do not have a permission to write \
@@ -602,7 +637,17 @@ void setProcessesLookupTable() {
 				fprintf(fp, "/* %3d */   { %-35s, &(fennec_global_data.%s), %s },\n",
 						j, mvar->var->cap_name, mvar->var->gname,
 						cap_name);
-			} else {
+			}
+
+			if (mvar->var->class_type == TYPE_VARIABLE_CACHE) {
+				cap_name = strdup(mvar->var->gname);
+				cap_name = str_toupper(cap_name);
+				fprintf(fp, "/* %3d */   { %-35s, &(fennec_cache_data.%s), %s },\n",
+						j, mvar->var->cap_name, mvar->var->gname,
+						cap_name);
+			}
+
+			if (mvar->var->class_type == TYPE_VARIABLE_LOCAL) {
 				fprintf(fp, "/* %3d */   { %-35s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
 						j, mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->app->name, mvar->var->name);
@@ -621,7 +666,17 @@ void setProcessesLookupTable() {
 				fprintf(fp, "/* %3d */   { %-35s, &(fennec_global_data.%s), %s },\n",
 						j, mvar->var->cap_name, mvar->var->gname,
 						cap_name);
-			} else {
+			}
+
+			if (mvar->var->class_type == TYPE_VARIABLE_CACHE) {
+				cap_name = strdup(mvar->var->gname);
+				cap_name = str_toupper(cap_name);
+				fprintf(fp, "/* %3d */   { %-35s, &(fennec_cache_data.%s), %s },\n",
+						j, mvar->var->cap_name, mvar->var->gname,
+						cap_name);
+			}
+
+			if (mvar->var->class_type == TYPE_VARIABLE_LOCAL) {
 				fprintf(fp, "/* %3d */   { %-35s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
 						j, mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->net->name, mvar->var->name);
@@ -640,7 +695,17 @@ void setProcessesLookupTable() {
 				fprintf(fp, "/* %3d */   { %-35s, &(fennec_global_data.%s), %s },\n",
 						j, mvar->var->cap_name, mvar->var->gname,
 						cap_name);
-			} else {
+			}
+
+			if (mvar->var->class_type == TYPE_VARIABLE_CACHE) {
+				cap_name = strdup(mvar->var->gname);
+				cap_name = str_toupper(cap_name);
+				fprintf(fp, "/* %3d */   { %-35s, &(fennec_cache_data.%s), %s },\n",
+						j, mvar->var->cap_name, mvar->var->gname,
+						cap_name);
+			}
+
+			if (mvar->var->class_type == TYPE_VARIABLE_LOCAL) {
 				fprintf(fp, "/* %3d */   { %-35s, &(fennec_local_data.%s_%s_%s), UNKNOWN },\n",
 						j, mvar->var->cap_name, conftab[i].conf->name,
 						conftab[i].conf->am->name, mvar->var->name);

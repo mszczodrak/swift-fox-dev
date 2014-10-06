@@ -60,6 +60,7 @@ void initCacheDataValues();
 
 void initGlobalDataH();
 void initLocalDataH();
+void initCacheDataH();
 
 void generateVariable(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen);
 void addGlobalVariable(struct variable *sh);
@@ -73,6 +74,7 @@ void globalDataMsgH();
 
 void finishGlobalDataH();
 void finishLocalDataH();
+void finishCacheDataH();
 
 void finishGlobalDataValues();
 void finishLocalDataValues();
