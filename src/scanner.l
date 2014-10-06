@@ -198,7 +198,6 @@ or		{
 #ifndef __DEBUG__
 #endif
 			return CLOSE_BRACE;		}
-
 \(              {
 #ifndef __DEBUG__
 #endif
@@ -207,8 +206,6 @@ or		{
 #ifndef __DEBUG__
 #endif
 			return CLOSE_PARENTHESIS;		}
-
-
 "["              {
 #ifndef __DEBUG__
 #endif
@@ -225,7 +222,6 @@ or		{
 #ifndef __DEBUG__
 #endif
 			return EXCLAMATION;		}
-
 bool		{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_BOOL;
@@ -236,55 +232,46 @@ uint8_t		{
 			yylval.ival = TYPE_UINT8_T;
 #endif
 			return VARIABLE_TYPE;		}
-
 uint16_t	{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_UINT16_T;
 #endif
 			return VARIABLE_TYPE;		}
-
 uint32_t	{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_UINT32_T;
 #endif
 			return VARIABLE_TYPE;		}
-
 nx_uint8_t		{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_NXUINT8_T;
 #endif
 			return VARIABLE_TYPE;		}
-
 nx_uint16_t	{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_NXUINT16_T;
 #endif
 			return VARIABLE_TYPE;		}
-
 nx_uint32_t	{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_NXUINT32_T;
 #endif
 			return VARIABLE_TYPE;		}
-
 float		{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_FLOAT;
 #endif
 			return VARIABLE_TYPE;		}
-
 double		{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_DOUBLE;
 #endif
 			return VARIABLE_TYPE;		}
-
 int8_t         {
 #ifndef __DEBUG__
 			yylval.ival = TYPE_INT8_T;
 #endif
 			return VARIABLE_TYPE;           }
-
 int16_t        {
 #ifndef __DEBUG__
 			yylval.ival = TYPE_INT16_T;
@@ -295,13 +282,11 @@ int32_t	{
 			yylval.ival = TYPE_INT32_T;
 #endif
 			return VARIABLE_TYPE;		}
-
 {identifier}	{
 #ifndef __DEBUG__
 			yylval.symp = symlook(yytext);
 #endif
 			return IDENTIFIER;		}
-
 {path}		{
 #ifndef __DEBUG__
 			yylval.libp = liblook(yytext);
@@ -312,9 +297,6 @@ int32_t	{
 			yylval.ldval = atof(yytext);
 #endif
 			return CONSTANT;		}
-
-
-
 
 %%
 
