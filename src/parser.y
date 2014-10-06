@@ -255,11 +255,11 @@ global_variable: param_type cached IDENTIFIER array_part assign_value newlines
 
 cached: CACHE
 		{
-			$$ = 1;
+			$$ = 0;
 		}
 	|
 		{
-			$$ = 0;
+			$$ = 1;
 		}
 	;
 
