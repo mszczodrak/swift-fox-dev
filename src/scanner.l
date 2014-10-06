@@ -141,7 +141,7 @@ start		{
 #endif
 			return START;			}
 
-(at|@)           {
+(at)           {
 #ifndef __DEBUG__
 #endif
                         return AT;                   }
@@ -222,6 +222,10 @@ or		{
 #ifndef __DEBUG__
 #endif
 			return EXCLAMATION;		}
+"@"	{
+#ifndef __DEBUG__
+#endif
+			return CACHE;			}
 bool		{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_BOOL;

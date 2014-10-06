@@ -107,7 +107,7 @@ int sfc_debug = 0;
 %token EQ SOURCE LF 
 %token OPEN_BRACE CLOSE_BRACE OPEN_PARENTHESIS CLOSE_PARENTHESIS
 %token OPEN_SQUARE_BRACE CLOSE_SQUARE_BRACE STAR EXCLAMATION
-%token LEVEL AT 
+%token LEVEL AT CACHE
 %token U_INT_EIGHT U_INT_SIXTEEN U_INT_THIRTY_TWO FLOAT DOUBLE
 
 
@@ -141,6 +141,7 @@ int sfc_debug = 0;
 %type <ival> 	state_level
 %type <ival> 	process_level
 %type <ival> 	module_level
+%type <ival> 	cached
 %type <ival> 	array_part
 %type <ldval> 	assign_value
 %type <vars>	module_variables
@@ -208,6 +209,7 @@ defined_global_variables: global_variables
 				printf("\n");
 			}
 			print_variables(TYPE_VARIABLE_GLOBAL);
+			print_variables(TYPE_VARIABLE_CACHE);
 		}
 
 global_variables: global_variables global_variable
@@ -231,21 +233,36 @@ global_variables: global_variables global_variable
         ;
 
 
-global_variable: param_type IDENTIFIER array_part assign_value newlines 
+global_variable: param_type cached IDENTIFIER array_part assign_value newlines 
 		{
-			$$ 		= find_variable($2->name);
+			$$ 		= find_variable($3->name);
 			$$->type 	= $1;
-			$$->length	= $3;
+			$$->length	= $4;
 			$$->offset	= global_memory_size;
-			$$->value	= $4;
-			$$->class_type	= TYPE_VARIABLE_GLOBAL;
+			$$->value	= $5;
+			if ($2) {
+				$$->class_type	= TYPE_VARIABLE_GLOBAL;
+			} else {
+				$$->class_type	= TYPE_VARIABLE_CACHE;
+			}
 			$$->init	= 1;
-			$$->cap_name 	= strdup($2->name);
+			$$->cap_name 	= strdup($3->name);
 			$$->cap_name	= str_toupper($$->cap_name);
 			$$->global	= 1;
 
 			global_memory_size += (type_size($$->type) * $$->length);
 		}
+
+cached: CACHE
+		{
+			$$ = 1;
+		}
+	|
+		{
+			$$ = 0;
+		}
+	;
+
 
 array_part: OPEN_SQUARE_BRACE CONSTANT CLOSE_SQUARE_BRACE
 		{
@@ -445,8 +462,8 @@ parameter: CONSTANT
 	| IDENTIFIER
                 {
 			struct variable *vp	= find_variable($1->name);
-			if (vp->class_type != TYPE_VARIABLE_GLOBAL) {
-				fprintf(stderr, "Variable %s is not global\n", $1->name);
+			if ((vp->class_type != TYPE_VARIABLE_GLOBAL) && (vp->class_type != TYPE_VARIABLE_CACHE)) {
+				fprintf(stderr, "Variable %s is not global (or cache)\n", $1->name);
 				yyerror("undefined variable");
 			}
 			//$$			= malloc(sizeof(struct variable));
@@ -457,8 +474,8 @@ parameter: CONSTANT
 	| newlines COMMA newlines IDENTIFIER
                 {
 			struct variable *vp	= find_variable($4->name);
-			if (vp->class_type != TYPE_VARIABLE_GLOBAL) {
-				fprintf(stderr, "Variable %s is not global\n", $4->name);
+			if ((vp->class_type != TYPE_VARIABLE_GLOBAL) && (vp->class_type != TYPE_VARIABLE_CACHE)) {
+				fprintf(stderr, "Variable %s is not global (or cache)\n", $4->name);
 				yyerror("undefined variable");
 			}
 			//$$			= malloc(sizeof(struct variable));
@@ -1025,7 +1042,7 @@ find_variable(char *varname) {
 	for(vp = vartab; vp < &vartab[NVARS]; vp++) {
         	/* is it already here? */
 	        if (vp->name && (varname!=NULL) && !strcmp(vp->name, varname) &&
-			(vp->class_type == TYPE_VARIABLE_GLOBAL) && vp->global) {
+			(vp->class_type == TYPE_VARIABLE_GLOBAL || vp->class_type == TYPE_VARIABLE_CACHE) && vp->global) {
 	      		return vp;
 		}
 
