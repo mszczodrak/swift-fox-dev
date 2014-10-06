@@ -3,10 +3,8 @@ uint8_t radio_tx_power = 31     # in    [31, 27, 23, 19, 15, 11, 7, 3]
 uint8_t radio_channel = 26      # in    [11-26]
 
 # count app parameters
-uint16_t dest_node = 2
+uint16_t dest_node = 21
 uint16_t src_node = 0xFFFF
-
-uint16_t event_src = 3
 
 # * designates dominant module
 # ! designates daemon
