@@ -1,0 +1,9 @@
+#ifndef _FIXED_POWER_DISTRIBUTION_
+#define _FIXED_POWER_DISTRIBUTION_
+
+#define FIXED_TX_POWER_NUMBER_OF_NODES 	(139 + 1)
+
+uint8_t fixed_tx_power[FIXED_TX_POWER_NUMBER_OF_NODES] = {};
+
+
+#endif
