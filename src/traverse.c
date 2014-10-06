@@ -129,8 +129,6 @@ traverse_program(struct program* p, int f, int policy_counter){
 
 				initCodeGeneration();
 
-				initDataStorageValues();
-
 				initGlobalDataValues();
 				initLocalDataValues();
 				initCacheDataValues();
@@ -150,7 +148,6 @@ traverse_program(struct program* p, int f, int policy_counter){
 				traverse_statenodes(p->defstate, f);
 				traverse_policies(p->defpol, f);
 				traverse_initnode(p->init, f);
-				finishDataStorageValues();
 
 				finishGlobalDataValues();
 				finishLocalDataValues();

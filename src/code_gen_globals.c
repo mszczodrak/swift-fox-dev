@@ -36,26 +36,6 @@
 
 int generate_globals = 1;
 
-void initDataStorageValues() {
-	char *full_path = get_sfc_path("", "fennec_data_values.h");
-	FILE *fp = fopen(full_path, "w");
-
-	if (fp == NULL) {
-		fprintf(stderr, "You do not have a permission to write \
-						into file: %s\n", full_path);
-		exit(1);
-	}
-
-	fprintf(fp, "#ifndef _FF_DATA_STORAGE_VALUES_H_\n");
-	fprintf(fp, "#define _FF_DATA_STORAGE_VALUES_H_\n\n");
-	fprintf(fp, "#include \"Fennec.h\"\n\n");
-
-	fprintf(fp, "struct global_data fennec_global_data = {\n");
-	
-	free(full_path);
-	fclose(fp);
-}
-
 void initGlobalDataValues() {
 	char *full_path = get_sfc_path("", "global_data_values.h");
 	FILE *fp = fopen(full_path, "w");
@@ -351,25 +331,6 @@ void finishLocalDataH() {
 }
 
 
-void finishDataStorageValues() {
-	/* global variables init */
-	char *full_path = get_sfc_path("", "fennec_data_values.h");
-	FILE *fp = fopen(full_path, "a");
-
-	if (fp == NULL) {
-		fprintf(stderr, "You do not have a permission to write \
-						into file: %s\n", full_path);
-		exit(1);
-	}
-
-	fprintf(fp, "};\n\n");
-	fprintf(fp, "#endif\n\n");
-
-	free(full_path);
-	fclose(fp);
-	/* end of initializing global variables */
-}
-
 void finishGlobalDataValues() {
 	/* global variables init */
 	char *full_path = get_sfc_path("", "global_data_values.h");
@@ -428,8 +389,13 @@ void finishCacheDataValues() {
 }
 
 void switchGlobalToLocalDataStorage() {
-	/* global variables init */
-	char *full_path = get_sfc_path("", "fennec_data_values.h");
+	generate_globals = 0;
+}
+
+
+void addGlobalVariable(struct variable *sh) {
+	/* global struct */
+	char *full_path = get_sfc_path("", "global_data.h");
 	FILE *fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
@@ -438,21 +404,26 @@ void switchGlobalToLocalDataStorage() {
 		exit(1);
 	}
 
-	fprintf(fp, "};\n\n");
-
-	generate_globals = 0;
-
-	fprintf(fp, "struct local_data fennec_local_data = {\n");
+	if (sh->used == 1) {
+		if (sh->length > 1) {
+			fprintf(fp, "\t%-10s %s[%d];\n", type_name(sh->type), 
+						sh->name,
+						sh->length);
+		} else {
+			fprintf(fp, "\t%-10s %s;\n", type_name(sh->type), 
+						sh->name);
+		}
+	}
 
 	free(full_path);
 	fclose(fp);
-	/* end of initializing global variables */
+	/* end of definig global variables */
 }
 
 
-void addGlobalVariable(struct variable *sh) {
+void addCacheVariable(struct variable *sh) {
 	/* global struct */
-	char *full_path = get_sfc_path("", "global_data.h");
+	char *full_path = get_sfc_path("", "cache_data.h");
 	FILE *fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
@@ -508,19 +479,21 @@ void addLocalVariable(struct variable *sh, struct confnode* current_process_gen,
 
 void generateVariable(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
 	if (generate_globals) {
-		addGlobalVariable(sh);
+		if (sh->class_type == TYPE_VARIABLE_GLOBAL) {
+			addGlobalVariable(sh);
+			setGlobalVariableValue(sh, current_process_gen, current_module_gen);
+		} else {
+			addCacheVariable(sh);
+			setCacheVariableValue(sh, current_process_gen, current_module_gen);
+		}
 	} else {
 		addLocalVariable(sh, current_process_gen, current_module_gen);
+		setLocalVariableValue(sh, current_process_gen, current_module_gen);
 	}
-
-	setVariableValue(sh, current_process_gen, current_module_gen);
 }	
 
-void setVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
-
-	/* global variables init */
-
-	char *full_path = get_sfc_path("", "fennec_data_values.h");
+void setGlobalVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
+	char *full_path = get_sfc_path("", "global_data_values.h");
 	FILE *fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
@@ -529,7 +502,7 @@ void setVariableValue(struct variable *sh, struct confnode* current_process_gen,
 		exit(1);
 	}
 
-	if ((generate_globals && sh->used == 1)) {
+	if ((sh->class_type == TYPE_VARIABLE_GLOBAL) && (sh->used == 1)) {
 		if (sh->length > 1) {
 			fprintf(fp, "\t.%-50s = {%-15Lf},\t/* %d */\n", sh->name,
 						sh->value, sh->offset);
@@ -537,6 +510,45 @@ void setVariableValue(struct variable *sh, struct confnode* current_process_gen,
 			fprintf(fp, "\t.%-55s =  %-15Lf, \t/* %d */\n", sh->name,
 						sh->value, sh->offset);
 		}
+	}
+
+	free(full_path);
+	fclose(fp);
+}
+
+
+void setCacheVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
+	char *full_path = get_sfc_path("", "cache_data_values.h");
+	FILE *fp = fopen(full_path, "a");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	if ((sh->class_type == TYPE_VARIABLE_CACHE) && (sh->used == 1)) {
+		if (sh->length > 1) {
+			fprintf(fp, "\t.%-50s = {%-15Lf},\t/* %d */\n", sh->name,
+						sh->value, sh->offset);
+		} else {
+			fprintf(fp, "\t.%-55s =  %-15Lf, \t/* %d */\n", sh->name,
+						sh->value, sh->offset);
+		}
+	}
+
+	free(full_path);
+	fclose(fp);
+}
+
+void setLocalVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
+	char *full_path = get_sfc_path("", "local_data_values.h");
+	FILE *fp = fopen(full_path, "a");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
 	}
 
 	if (sh->class_type == TYPE_VARIABLE_LOCAL) {
@@ -556,8 +568,8 @@ void setVariableValue(struct variable *sh, struct confnode* current_process_gen,
 
 	free(full_path);
 	fclose(fp);
-	/* end of initializing global variables */
 }
+
 
 void setProcessesLookupTable() {
 	/* variable_lookup struct */

@@ -67,6 +67,11 @@ void addGlobalVariable(struct variable *sh);
 void addLocalVariable(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen);
 void setVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen);
 
+
+void setGlobalVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen);
+void setCacheVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen);
+void setLocalVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen);
+
 void globalDataMsgH();
 
 void finishGlobalDataH();
