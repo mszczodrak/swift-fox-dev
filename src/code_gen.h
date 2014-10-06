@@ -55,6 +55,10 @@ void initCodeGeneration();
 void setFennecExtra();
 
 void initDataStorageValues();
+void initGlobalDataValues();
+void initLocalDataValues();
+void initCacheDataValues();
+
 void initGlobalDataH();
 void initLocalDataH();
 
@@ -68,6 +72,11 @@ void globalDataMsgH();
 void finishGlobalDataH();
 void finishLocalDataH();
 void finishDataStorageValues();
+
+void finishGlobalDataValues();
+void finishLocalDataValues();
+void finishCacheDataValues();
+
 void switchGlobalToLocalDataStorage();
 
 void generateVariableConstants();

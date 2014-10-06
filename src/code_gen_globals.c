@@ -56,6 +56,70 @@ void initDataStorageValues() {
 	fclose(fp);
 }
 
+void initGlobalDataValues() {
+	char *full_path = get_sfc_path("", "global_data_values.h");
+	FILE *fp = fopen(full_path, "w");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "#ifndef _FF_GLOBAL_DATA_VALUES_H_\n");
+	fprintf(fp, "#define _FF_GLOBAL_DATA_VALUES_H_\n\n");
+	fprintf(fp, "#include \"Fennec.h\"\n\n");
+
+	fprintf(fp, "struct global_data fennec_global_data = {\n");
+	
+	free(full_path);
+	fclose(fp);
+}
+
+void initLocalDataValues() {
+	char *full_path = get_sfc_path("", "local_data_values.h");
+	FILE *fp = fopen(full_path, "w");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "#ifndef _FF_LOCAL_DATA_VALUES_H_\n");
+	fprintf(fp, "#define _FF_LOCAL_DATA_VALUES_H_\n\n");
+	fprintf(fp, "#include \"Fennec.h\"\n\n");
+
+	fprintf(fp, "struct local_data fennec_local_data = {\n");
+	
+	free(full_path);
+	fclose(fp);
+}
+
+void initCacheDataValues() {
+	char *full_path = get_sfc_path("", "cache_data_values.h");
+	FILE *fp = fopen(full_path, "w");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "#ifndef _FF_CACHE_DATA_VALUES_H_\n");
+	fprintf(fp, "#define _FF_CACHE_DATA_VALUES_H_\n\n");
+	fprintf(fp, "#include \"Fennec.h\"\n\n");
+
+	fprintf(fp, "struct cache_data fennec_cache_data = {\n");
+	
+	free(full_path);
+	fclose(fp);
+}
+
+
+
+
+
 
 void initGlobalDataH() {
 	/* global struct */
@@ -140,12 +204,6 @@ void globalDataMsgH() {
 
 	fprintf(fp, "};\n\n\n");
 
-//	byte_hist = global_number / 8;
-//	if (global_number % 8 != 0) {
-//		byte_hist++;
-//	}
-
-//	//printf("%d %d\n", global_number, byte_hist);
 	fprintf(fp, "#define NUMBER_OF_GLOBALS \t%d\n\n", global_number);
 
 	fprintf(fp, "nx_struct global_data_msg fennec_global_data_nx;\n\n");
@@ -168,23 +226,6 @@ void globalDataMsgH() {
 	}
 
 	fprintf(fp, "};\n\n");
-/*
-	switch(byte_hist) {
-	case 1:
-		fprintf(fp, "nx_uint8_t global_data_history = 0;\n\n");
-		break;
-	case 2:
-		fprintf(fp, "nx_uint16_t global_data_history = 0;\n\n");
-		break;
-	case 3:
-	case 4:
-		fprintf(fp, "nx_uint32_t global_data_history = 0;\n\n");
-		break;
-	default:
-		(void)fprintf(stderr, "Too many global variables: %d", global_number);
-		exit(1);
-	}
-*/
 
 	fprintf(fp, "void globalDataSyncWithNetwork() {\n");
 	for( i = 0; i < NVARS; i++ ) {
@@ -329,6 +370,62 @@ void finishDataStorageValues() {
 	/* end of initializing global variables */
 }
 
+void finishGlobalDataValues() {
+	/* global variables init */
+	char *full_path = get_sfc_path("", "global_data_values.h");
+	FILE *fp = fopen(full_path, "a");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "};\n\n");
+	fprintf(fp, "#endif\n\n");
+
+	free(full_path);
+	fclose(fp);
+	/* end of initializing global variables */
+}
+
+void finishLocalDataValues() {
+	/* global variables init */
+	char *full_path = get_sfc_path("", "local_data_values.h");
+	FILE *fp = fopen(full_path, "a");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "};\n\n");
+	fprintf(fp, "#endif\n\n");
+
+	free(full_path);
+	fclose(fp);
+	/* end of initializing global variables */
+}
+
+void finishCacheDataValues() {
+	/* global variables init */
+	char *full_path = get_sfc_path("", "cache_data_values.h");
+	FILE *fp = fopen(full_path, "a");
+
+	if (fp == NULL) {
+		fprintf(stderr, "You do not have a permission to write \
+						into file: %s\n", full_path);
+		exit(1);
+	}
+
+	fprintf(fp, "};\n\n");
+	fprintf(fp, "#endif\n\n");
+
+	free(full_path);
+	fclose(fp);
+	/* end of initializing global variables */
+}
 
 void switchGlobalToLocalDataStorage() {
 	/* global variables init */
