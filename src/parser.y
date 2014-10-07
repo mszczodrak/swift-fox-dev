@@ -284,6 +284,10 @@ assign_value: RELOP CONSTANT
 				$$ = 0;
 			}
 		}
+	|
+		{
+			$$ = 0;
+		}
 	; 
 
 
@@ -784,25 +788,6 @@ module_variable: param_type IDENTIFIER assign_value newlines
 			$$->type	= $4;
 			$$->value	= $6;
 			$$->init	= 1;
-			$$->length	= 1;
-			$$->class_type	= TYPE_VARIABLE_DEFAULT;
-		}
-	| param_type IDENTIFIER
-		{
-			$$		= find_variable($2->name);
-			$$->type	= $1;
-			$$->value	= 0;
-			$$->init	= 0;
-			$$->length	= 1;
-			$$->class_type	= TYPE_VARIABLE_DEFAULT;
-
-		}
-	| newlines COMMA newlines param_type IDENTIFIER
-		{
-			$$		= find_variable($5->name);
-			$$->type	= $4;
-			$$->value	= 0;
-			$$->init	= 0;
 			$$->length	= 1;
 			$$->class_type	= TYPE_VARIABLE_DEFAULT;
 		}
