@@ -14,6 +14,7 @@ uint8_t num_to_check = 40
 uint16_t tx_delay = 3500
 
 uint16_t event_src = 3
+uint16_t data = 0
 
 # * designates dominant module
 # ! designates daemon
@@ -32,6 +33,13 @@ process system_control ! {
 	cc2420()
 	# channel, power, lpl
 }
+
+process get_data {
+	fixSensorData(30, 1024, src_node, data)
+	nullNet()
+	nullAM()
+}
+
 
 # First process to setup the system
 process neighbors {
@@ -63,12 +71,12 @@ event finished_radio_setup { timerMilliE(3686400, event_src)
 	cc2420()
 }
 
-state idle { yellow }
-state setting_up { neighbors }
-state running_app { count }
+state idle { get_data }
+#state setting_up { neighbors }
+#state running_app { count }
 
-from idle goto setting_up when time_to_bootup
-from setting_up goto running_app when finished_radio_setup
+#from idle goto setting_up when time_to_bootup
+#from setting_up goto running_app when finished_radio_setup
 
 start idle
 
