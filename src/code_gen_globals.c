@@ -49,6 +49,7 @@ void initGlobalDataValues() {
 	fprintf(fp, "#ifndef _FF_GLOBAL_DATA_VALUES_H_\n");
 	fprintf(fp, "#define _FF_GLOBAL_DATA_VALUES_H_\n\n");
 	fprintf(fp, "#include \"Fennec.h\"\n\n");
+	fprintf(fp, "#include \"global_data.h\"\n\n");
 
 	fprintf(fp, "struct global_data fennec_global_data = {\n");
 	
@@ -69,6 +70,7 @@ void initLocalDataValues() {
 	fprintf(fp, "#ifndef _FF_LOCAL_DATA_VALUES_H_\n");
 	fprintf(fp, "#define _FF_LOCAL_DATA_VALUES_H_\n\n");
 	fprintf(fp, "#include \"Fennec.h\"\n\n");
+	fprintf(fp, "#include \"local_data.h\"\n\n");
 
 	fprintf(fp, "struct local_data fennec_local_data = {\n");
 	
@@ -89,6 +91,7 @@ void initCacheDataValues() {
 	fprintf(fp, "#ifndef _FF_CACHE_DATA_VALUES_H_\n");
 	fprintf(fp, "#define _FF_CACHE_DATA_VALUES_H_\n\n");
 	fprintf(fp, "#include \"Fennec.h\"\n\n");
+	fprintf(fp, "#include \"cache_data.h\"\n\n");
 
 	fprintf(fp, "struct cache_data fennec_cache_data = {\n");
 	
@@ -192,6 +195,7 @@ void globalDataMsgH() {
 
 	fprintf(fp, "#ifndef _GLOBAL_DATA_MSG_H_\n");
 	fprintf(fp, "#define _GLOBAL_DATA_MSG_H_\n\n");
+	fprintf(fp, "#include \"global_data.h\"\n\n");
 
 	fprintf(fp, "nx_struct global_data_msg {\n");
 
