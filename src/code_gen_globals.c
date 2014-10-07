@@ -78,8 +78,8 @@ void initLocalDataValues() {
 	fclose(fp);
 }
 
-void initCacheDataValues() {
-	char *full_path = get_sfc_path("", "cache_data_values.h");
+void initSharedDataValues() {
+	char *full_path = get_sfc_path("", "shared_data_values.h");
 	FILE *fp = fopen(full_path, "w");
 
 	if (fp == NULL) {
@@ -88,12 +88,12 @@ void initCacheDataValues() {
 		exit(1);
 	}
 
-	fprintf(fp, "#ifndef _FF_CACHE_DATA_VALUES_H_\n");
-	fprintf(fp, "#define _FF_CACHE_DATA_VALUES_H_\n\n");
+	fprintf(fp, "#ifndef _FF_SHARED_DATA_VALUES_H_\n");
+	fprintf(fp, "#define _FF_SHARED_DATA_VALUES_H_\n\n");
 	fprintf(fp, "#include \"Fennec.h\"\n\n");
-	fprintf(fp, "#include \"cache_data.h\"\n\n");
+	fprintf(fp, "#include \"shared_data.h\"\n\n");
 
-	fprintf(fp, "struct cache_data fennec_cache_data = {\n");
+	fprintf(fp, "struct shared_data fennec_shared_data = {\n");
 	
 	free(full_path);
 	fclose(fp);
@@ -140,9 +140,9 @@ void finishGlobalDataH() {
 	/* end of definig global variables */
 }
 
-void initCacheDataH() {
+void initSharedDataH() {
 	/* global struct */
-	char *full_path = get_sfc_path("", "cache_data.h");
+	char *full_path = get_sfc_path("", "shared_data.h");
 	FILE *fp = fopen(full_path, "w");
 
 	if (fp == NULL) {
@@ -151,19 +151,19 @@ void initCacheDataH() {
 		exit(1);
 	}
 
-	fprintf(fp, "#ifndef _CACHE_DATA_H_\n");
-	fprintf(fp, "#define _CACHE_DATA_H_\n\n");
+	fprintf(fp, "#ifndef _SHARED_DATA_H_\n");
+	fprintf(fp, "#define _SHARED_DATA_H_\n\n");
 
-	fprintf(fp, "struct cache_data {\n");
+	fprintf(fp, "struct shared_data {\n");
 
 	free(full_path);
 	fclose(fp);
 	/* end of definig global variables */
 }
 
-void finishCacheDataH() {
+void finishSharedDataH() {
 	/* global struct */
-	char *full_path = get_sfc_path("", "cache_data.h");
+	char *full_path = get_sfc_path("", "shared_data.h");
 	FILE *fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
@@ -408,9 +408,9 @@ void finishLocalDataValues() {
 	/* end of initializing global variables */
 }
 
-void finishCacheDataValues() {
+void finishSharedDataValues() {
 	/* global variables init */
-	char *full_path = get_sfc_path("", "cache_data_values.h");
+	char *full_path = get_sfc_path("", "shared_data_values.h");
 	FILE *fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
@@ -460,9 +460,9 @@ void addGlobalVariable(struct variable *sh) {
 }
 
 
-void addCacheVariable(struct variable *sh) {
+void addSharedVariable(struct variable *sh) {
 	/* global struct */
-	char *full_path = get_sfc_path("", "cache_data.h");
+	char *full_path = get_sfc_path("", "shared_data.h");
 	FILE *fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
@@ -522,8 +522,8 @@ void generateVariable(struct variable *sh, struct confnode* current_process_gen,
 			addGlobalVariable(sh);
 			setGlobalVariableValue(sh, current_process_gen, current_module_gen);
 		} else {
-			addCacheVariable(sh);
-			setCacheVariableValue(sh, current_process_gen, current_module_gen);
+			addSharedVariable(sh);
+			setSharedVariableValue(sh, current_process_gen, current_module_gen);
 		}
 	} else {
 		addLocalVariable(sh, current_process_gen, current_module_gen);
@@ -556,8 +556,8 @@ void setGlobalVariableValue(struct variable *sh, struct confnode* current_proces
 }
 
 
-void setCacheVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
-	char *full_path = get_sfc_path("", "cache_data_values.h");
+void setSharedVariableValue(struct variable *sh, struct confnode* current_process_gen, struct modtab* current_module_gen) {
+	char *full_path = get_sfc_path("", "shared_data_values.h");
 	FILE *fp = fopen(full_path, "a");
 
 	if (fp == NULL) {
@@ -566,7 +566,7 @@ void setCacheVariableValue(struct variable *sh, struct confnode* current_process
 		exit(1);
 	}
 
-	if ((sh->class_type == TYPE_VARIABLE_CACHE) && (sh->used == 1)) {
+	if ((sh->class_type == TYPE_VARIABLE_SHARED) && (sh->used == 1)) {
 		if (sh->length > 1) {
 			fprintf(fp, "\t.%-50s = {%-15Lf},\t/* %d */\n", sh->name,
 						sh->value, sh->offset);
@@ -643,10 +643,10 @@ void setProcessesLookupTable() {
 						cap_name);
 			}
 
-			if (mvar->var->class_type == TYPE_VARIABLE_CACHE) {
+			if (mvar->var->class_type == TYPE_VARIABLE_SHARED) {
 				cap_name = strdup(mvar->var->gname);
 				cap_name = str_toupper(cap_name);
-				fprintf(fp, "/* %3d */   { %-35s, &(fennec_cache_data.%s), %s },\n",
+				fprintf(fp, "/* %3d */   { %-35s, &(fennec_shared_data.%s), %s },\n",
 						j, mvar->var->cap_name, mvar->var->gname,
 						cap_name);
 			}
@@ -672,10 +672,10 @@ void setProcessesLookupTable() {
 						cap_name);
 			}
 
-			if (mvar->var->class_type == TYPE_VARIABLE_CACHE) {
+			if (mvar->var->class_type == TYPE_VARIABLE_SHARED) {
 				cap_name = strdup(mvar->var->gname);
 				cap_name = str_toupper(cap_name);
-				fprintf(fp, "/* %3d */   { %-35s, &(fennec_cache_data.%s), %s },\n",
+				fprintf(fp, "/* %3d */   { %-35s, &(fennec_shared_data.%s), %s },\n",
 						j, mvar->var->cap_name, mvar->var->gname,
 						cap_name);
 			}
@@ -701,10 +701,10 @@ void setProcessesLookupTable() {
 						cap_name);
 			}
 
-			if (mvar->var->class_type == TYPE_VARIABLE_CACHE) {
+			if (mvar->var->class_type == TYPE_VARIABLE_SHARED) {
 				cap_name = strdup(mvar->var->gname);
 				cap_name = str_toupper(cap_name);
-				fprintf(fp, "/* %3d */   { %-35s, &(fennec_cache_data.%s), %s },\n",
+				fprintf(fp, "/* %3d */   { %-35s, &(fennec_shared_data.%s), %s },\n",
 						j, mvar->var->cap_name, mvar->var->gname,
 						cap_name);
 			}

@@ -66,7 +66,7 @@
 #define TYPE_VARIABLE_GLOBAL	15
 #define TYPE_VARIABLE_LOCAL	16
 #define TYPE_VARIABLE_DEFAULT	17
-#define TYPE_VARIABLE_CACHE	18
+#define TYPE_VARIABLE_SHARED	18
 
 #define TYPE_BOOL		19
 #define TYPE_UINT8_T		20
@@ -111,7 +111,7 @@ extern int policy_counter;
 
 extern int variable_memory_offset;
 extern int global_memory_size;
-extern int cache_memory_size;
+extern int shared_memory_size;
 
 extern char *conf_state_suffix;
 
@@ -128,7 +128,7 @@ char linebuf[BUF_SZ];
 extern int generate_globals;
 
 extern int adjust_global_offset;
-extern int adjust_cache_offset;
+extern int adjust_shared_offset;
 extern int number_of_variables_in_cache;
 
 /**

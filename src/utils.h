@@ -58,7 +58,7 @@ int updateModuleVariables(struct modtab *mp);
 void updateProcessVariables(struct confnode* c);
 
 void pruneUnusedGlobalVariable(struct variable *sh);
-void pruneUnusedCacheVariable(struct variable *sh);
+void pruneUnusedSharedVariable(struct variable *sh);
 
 void setUniqueVariableIDs();
 

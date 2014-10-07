@@ -225,7 +225,7 @@ or		{
 "@"	{
 #ifndef __DEBUG__
 #endif
-			return CACHE;			}
+			return MALPA;			}
 bool		{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_BOOL;

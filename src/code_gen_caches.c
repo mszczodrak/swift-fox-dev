@@ -250,8 +250,8 @@ void generateCaches(int event_counter, int policy_counter) {
 	}
 
 	fprintf(fp, "/* Swift Fox generated code for Fennec Fox caches.h */\n");
-	fprintf(fp, "#ifndef __FF_CACHES_H__\n");
-	fprintf(fp, "#define __FF_CACHES_H__\n\n");
+	fprintf(fp, "#ifndef __FF_SHAREDS_H__\n");
+	fprintf(fp, "#define __FF_SHAREDS_H__\n\n");
 
 
 	fprintf(fp, "#define NUMBER_OF_EVENTS\t\t%d\n", event_id_counter);

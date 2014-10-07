@@ -42,7 +42,7 @@
 #include "parser.h"
 
 int adjust_global_offset = 0;
-int adjust_cache_offset = 0;
+int adjust_shared_offset = 0;
 int unique_variable_id = 0;
 int variable_cache = 0;
 int number_of_variables_in_cache = 0;
@@ -270,7 +270,7 @@ int updateModuleVariables(struct modtab *mp) {
 
 	while (lvar != NULL) {
 		/* case when we use global variable */
-		if (mvar != NULL && ((mvar->var->class_type == TYPE_VARIABLE_GLOBAL) || (mvar->var->class_type == TYPE_VARIABLE_CACHE))) {
+		if (mvar != NULL && ((mvar->var->class_type == TYPE_VARIABLE_GLOBAL) || (mvar->var->class_type == TYPE_VARIABLE_SHARED))) {
 			/* this already points to global variable, so should
 			 * be fine; just check if the type matches */
 			if (mvar->var->type != lvar->var->type) {
@@ -381,13 +381,13 @@ void pruneUnusedGlobalVariable(struct variable *sh) {
 	global_memory_size -= offset;
 }
 
-void pruneUnusedCacheVariable(struct variable *sh) {
+void pruneUnusedSharedVariable(struct variable *sh) {
 	int offset;
-	if (sh->class_type != TYPE_VARIABLE_CACHE) {
+	if (sh->class_type != TYPE_VARIABLE_SHARED) {
 		return;
 	}
 
-	sh->offset -= adjust_cache_offset;
+	sh->offset -= adjust_shared_offset;
 
 	if (sh->used == 1) {
 		return;
@@ -400,8 +400,8 @@ void pruneUnusedCacheVariable(struct variable *sh) {
 	sh->offset = -1;
 
 	offset = (type_size(sh->type) * sh->length);
-	adjust_cache_offset += offset;
-	cache_memory_size -= offset;
+	adjust_shared_offset += offset;
+	shared_memory_size -= offset;
 }
 
 void setUniqueVariableIDs() {

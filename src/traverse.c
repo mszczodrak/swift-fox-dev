@@ -91,8 +91,8 @@ traverse_program(struct program* p, int f, int policy_counter){
 					print_variables(TYPE_VARIABLE_GLOBAL);
 				}
 
-				if (adjust_cache_offset > 0) {
-					print_variables(TYPE_VARIABLE_CACHE);
+				if (adjust_shared_offset > 0) {
+					print_variables(TYPE_VARIABLE_SHARED);
 				}
 		
 				if (sfc_debug) {
@@ -134,13 +134,13 @@ traverse_program(struct program* p, int f, int policy_counter){
 
 				initGlobalDataValues();
 				initLocalDataValues();
-				initCacheDataValues();
+				initSharedDataValues();
 
 				initGlobalDataH();
-				initCacheDataH();
+				initSharedDataH();
 				traverse_variables(p->vars, f);
 				finishGlobalDataH();
-				finishCacheDataH();
+				finishSharedDataH();
 				globalDataMsgH();
 
 				switchGlobalToLocalDataStorage();
@@ -156,7 +156,7 @@ traverse_program(struct program* p, int f, int policy_counter){
 
 				finishGlobalDataValues();
 				finishLocalDataValues();
-				finishCacheDataValues();
+				finishSharedDataValues();
 
 				finishCodeGeneration(policy_counter);
 				break;
@@ -218,7 +218,7 @@ traverse_variable(struct variable* sh, int f) {
 
 	case TREE_CHECK_SEMANTIC:
 		pruneUnusedGlobalVariable(sh);
-		pruneUnusedCacheVariable(sh);
+		pruneUnusedSharedVariable(sh);
 		break;
 
 	case TREE_GENERATE_CODE:
