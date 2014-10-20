@@ -246,7 +246,8 @@ void globalDataMsgH() {
 
 	fprintf(fp, "};\n\n");
 
-	fprintf(fp, "void globalDataSyncWithNetwork() {\n");
+	fprintf(fp, "void globalDataSyncWithNetwork(uint8_t var_id) {\n");
+	fprintf(fp, "\tswitch(var_id) {\n");
 	for( i = 0; i < NVARS; i++ ) {
 		if (vartab[i].length == 0) {
 			break;
@@ -257,13 +258,16 @@ void globalDataMsgH() {
 			(vartab[i].gname != NULL)) {
 			continue;
 		}
-
-		fprintf(fp, "\tfennec_global_data.%s = (%s) fennec_global_data_nx.%s;\n",
+		fprintf(fp, "\tcase %s:\n", vartab[i].cap_name);
+		fprintf(fp, "\t\tfennec_global_data.%s = (%s) fennec_global_data_nx.%s;\n",
 			vartab[i].name, type_name(vartab[i].type), vartab[i].name);
+		fprintf(fp, "\t\tbreak;\n\n");
 	}
+	fprintf(fp, "\t};\n");
 	fprintf(fp, "};\n\n\n");
 
-	fprintf(fp, "void globalDataSyncWithLocal() {\n");
+	fprintf(fp, "void globalDataSyncWithLocal(uint8_t var_id) {\n");
+	fprintf(fp, "\tswitch(var_id) {\n");
 	for( i = 0; i < NVARS; i++ ) {
 		if (vartab[i].length == 0) {
 			break;
@@ -275,9 +279,12 @@ void globalDataMsgH() {
 			continue;
 		}
 
-		fprintf(fp, "\tfennec_global_data_nx.%s = (nx_%s) fennec_global_data.%s;\n",
+		fprintf(fp, "\tcase %s:\n", vartab[i].cap_name);
+		fprintf(fp, "\t\tfennec_global_data_nx.%s = (nx_%s) fennec_global_data.%s;\n",
 			vartab[i].name, type_name(vartab[i].type), vartab[i].name);
+		fprintf(fp, "\t\tbreak;\n\n");
 	}
+	fprintf(fp, "\t};\n");
 	fprintf(fp, "};\n\n\n");
 
 	fprintf(fp, "#if defined(FENNEC_TOS_PRINTF) || defined(FENNEC_COOJA_PRINTF)\n");
@@ -299,24 +306,25 @@ void globalDataMsgH() {
 		case TYPE_UINT16_T:
 		case TYPE_NXUINT8_T:
 		case TYPE_NXUINT16_T:
-			fprintf(fp, "\tprintf(\"%s -> %%u\\n\", fennec_global_data_nx.%s);\n",
+			fprintf(fp, "\tprintf(\"%s -> %%u  |  \", fennec_global_data_nx.%s);\n",
 				vartab[i].name, vartab[i].name);
 			break;
 		case TYPE_UINT32_T:
 		case TYPE_NXUINT32_T:
-			fprintf(fp, "\tprintf(\"%s -> %%lu\\n\", fennec_global_data_nx.%s);\n",
+			fprintf(fp, "\tprintf(\"%s -> %%lu  |  \", fennec_global_data_nx.%s);\n",
 				vartab[i].name, vartab[i].name);
 			break;
 		case TYPE_FLOAT:
 		case TYPE_DOUBLE:
-			fprintf(fp, "\tprintf(\"%s -> %%f\\n\", fennec_global_data_nx.%s);\n",
+			fprintf(fp, "\tprintf(\"%s -> %%f  |  \", fennec_global_data_nx.%s);\n",
 				vartab[i].name, vartab[i].name);
 			break;
 		default:
-			fprintf(fp, "\tprintf(\"%s -> %%d\\n\", fennec_global_data_nx.%s);\n",
+			fprintf(fp, "\tprintf(\"%s -> %%d  |  \", fennec_global_data_nx.%s);\n",
 				vartab[i].name, vartab[i].name);
 		}
 	}
+	fprintf(fp, "\tprintf(\"\\n\");\n");
 	fprintf(fp, "};\n");
 	fprintf(fp, "#endif\n\n");
 

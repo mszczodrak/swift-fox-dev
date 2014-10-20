@@ -5,17 +5,11 @@ uint16_t dest_node = 2
 uint16_t src_node = 0xFFFF
 uint16_t event_src = 3
 
-uint16_t v1 = 0
-uint16_t v2 = 0
-uint16_t v3 = 0
-uint16_t v4 = 0
-uint16_t v5 = 0
-
-process yellow {
-	blink(2, 1024)
-	nullNet() 
-	*nullAM()
-}
+uint16_t @v1 = 0
+uint16_t @v2 = 0
+uint16_t @v3 = 0
+uint16_t @v4 = 0
+uint16_t @v5 = 0
 
 process network_data_ctrl ! {
 	DataSync()
@@ -27,10 +21,10 @@ process network_data_ctrl ! {
 process test_data_sync {
 	TestDataSync(5000, v1, v2, v3, v4, v5)
 	nullNet() 
-	*nullAM()
+	nullAM()
 }
 
-state idle { yellow test_data_sync}
+state idle { test_data_sync}
 
 start idle
 
