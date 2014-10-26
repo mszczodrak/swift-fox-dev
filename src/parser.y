@@ -1093,9 +1093,7 @@ proc_module(char *s) {
 /* store policy */
 int
 proc_policy(struct policy *p) {
-
 	poltab[policy_counter].policy = p;
-
 //	poltab[policy_counter].src_conf = &p->from->value;
 //	poltab[policy_counter].event_mask = &p->mask_r;
 //	poltab[policy_counter].dst_conf = &p->to->value;
