@@ -64,7 +64,7 @@ whitespace	{delim}+
 letter		[A-Za-z]
 digit		[0-9]
 number		(-)*[1-9]{digit}*
-floating	{number}\.{digit}+		
+floating	{digit}+\.{digit}+		
 newline		\n
 identifier	({letter}|_)({letter}|{digit}|_)*
 hex		0x([A-Fa-f]|{digit})+
