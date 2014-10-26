@@ -406,19 +406,19 @@ to_conf_err:
 	exit(1);
 }
 
-void copy_events(struct conf_ids *dest, struct conf_ids *from) {
+void copy_events(struct conf_ids **dest, struct conf_ids *from) {
 	while(from != NULL) {
-		dest = malloc(sizeof(struct conf_ids));
-		if (dest == NULL) {
+		*dest = malloc(sizeof(struct conf_ids));
+		if (*dest == NULL) {
 			fprintf(stderr, "copy_events: malloc returned NULL\n");
 		}
-		dest->conf = malloc(sizeof(struct conf_id));
-		if (dest->conf == NULL) {
+		(*dest)->conf = malloc(sizeof(struct conf_id));
+		if ((*dest)->conf == NULL) {
 			fprintf(stderr, "copy_events: malloc returned NULL\n");
 		}
 
-		memcpy(dest->conf, from->conf, sizeof(struct conf_id));	
-		dest = dest->confs;
+		memcpy((*dest)->conf, from->conf, sizeof(struct conf_id));	
+		dest = &(*dest)->confs;
 		from = from->confs;
 	}
 }
@@ -439,12 +439,12 @@ updateStatesWithEvents(struct policy *p) {
 			cids = statetab[i].state->confs;
 
 			if (cids == NULL) {
-				copy_events(statetab[i].state->confs, p->event_confs);
+				copy_events(&(statetab[i].state->confs), p->event_confs);
 			} else {
 				while(cids->confs != NULL) {
 					cids = cids->confs;
 				}
-				copy_events(cids->confs, p->event_confs);
+				copy_events(&(cids->confs), p->event_confs);
 			}
 		}
 	}	
