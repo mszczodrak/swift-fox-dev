@@ -252,6 +252,14 @@ void generateFennecEngineC() {
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
+      		fprintf(fp, "%s_%s.SubPacketTimeStampMilli -> %sC.PacketTimeStampMilli;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->name,
+					conftab[i].conf->am->lib->name);
+      		fprintf(fp, "%s_%s.SubPacketTimeStamp32khz -> %sC.PacketTimeStamp32khz;\n",
+					conftab[i].conf->id->name,
+					conftab[i].conf->net->lib->name,
+					conftab[i].conf->am->lib->name);
 		fprintf(fp, "\n");
 	}
 
