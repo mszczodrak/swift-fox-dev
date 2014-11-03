@@ -180,11 +180,6 @@ void generateFennecEngineC() {
 					conftab[i].conf->app->lib->name, 
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name);
-      		fprintf(fp, "%s_%s.SubPacketTimeSyncOffset -> %s_%s.PacketTimeSyncOffset;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->app->lib->name, 
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name);
 
 		fprintf(fp, "\n");
 
@@ -245,10 +240,6 @@ void generateFennecEngineC() {
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
       		fprintf(fp, "%s_%s.SubPacketRSSI -> %sC.PacketRSSI;\n",
-					conftab[i].conf->id->name,
-					conftab[i].conf->net->lib->name,
-					conftab[i].conf->am->lib->name);
-      		fprintf(fp, "%s_%s.SubPacketTimeSyncOffset -> %sC.PacketTimeSyncOffset;\n",
 					conftab[i].conf->id->name,
 					conftab[i].conf->net->lib->name,
 					conftab[i].conf->am->lib->name);
