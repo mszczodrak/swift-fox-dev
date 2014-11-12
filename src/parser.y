@@ -142,6 +142,7 @@ int sfc_debug = 0;
 %type <ival> 	state_level
 %type <ival> 	process_level
 %type <ival> 	module_level
+%type <ival> 	fast_switch
 %type <ival> 	global	
 %type <ival> 	array_part
 %type <ldval> 	assign_value
@@ -614,17 +615,18 @@ policies: policies policy
 		}		
 	;
 
-policy: FROM IDENTIFIER GOTO IDENTIFIER WHEN conf_ids newlines
+policy: fast_switch FROM IDENTIFIER GOTO IDENTIFIER WHEN conf_ids newlines
 		{
 			/* policy node */
 			$$ 		= calloc(1, sizeof(struct policy));
 
 			/* link child nodes */
-			$$->from	= $2;
-			$$->to		= $4;
+			$$->from	= $3;
+			$$->to		= $5;
 
-			$$->event_confs	= $6; 
+			$$->event_confs	= $7; 
 			$$->counter	= policy_counter;
+			$$->fast	= $1;
 
 			if (proc_policy($$)) {
 				fprintf(stderr, "Failed to store policy\n");
@@ -632,6 +634,17 @@ policy: FROM IDENTIFIER GOTO IDENTIFIER WHEN conf_ids newlines
 			}
 			++policy_counter;
 		}
+	;
+
+fast_switch: TILDE
+		{
+			$$ = 1;
+		}
+	|
+		{
+			$$ = 0;
+		}
+	;
 
 
 initial_process: START IDENTIFIER newlines

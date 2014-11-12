@@ -306,6 +306,8 @@ struct policy {
 	struct conf_ids		*event_confs;
 	/** policy counter, and this policy number */
 	int 			counter;
+	/** light/fast switch policy */
+	int			fast;
 };
 
 struct policies {
