@@ -226,6 +226,10 @@ or		{
 #ifndef __DEBUG__
 #endif
 			return MALPA;			}
+"~"	{
+#ifndef __DEBUG__
+#endif
+			return TILDE;			}
 bool		{
 #ifndef __DEBUG__
 			yylval.ival = TYPE_BOOL;
