@@ -575,12 +575,20 @@ conf_ids: conf_ids newlines conf_id
 			$$->conf	= $3;
 
 		}
+	| conf_ids AND newlines conf_id
+		{
+			/* states set */
+			$$		= calloc(1, sizeof(struct conf_ids));
+			
+			/* link the child nodes */
+			$$->confs	= $1;
+			$$->conf	= $4;
+		}
 	| 	
 		{ 
 			$$ = NULL; 
 		}			
 	;
-
 
 
 conf_id: IDENTIFIER
@@ -591,9 +599,6 @@ conf_id: IDENTIFIER
 			$$->conf	= conflook($1);	
 		}
 	;
-
-
-
 
 
 policies: policies policy 

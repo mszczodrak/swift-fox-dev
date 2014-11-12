@@ -1,5 +1,5 @@
 BUILT_SOURCES = parser.h
-AM_YFLAGS = -d
+AM_YFLAGS = -d -v --report-file=yacc.log --graph=automaton.graph
 
 AM_CFLAGS= -g -O3 -Wall -Wunused-but-set-variable
 
