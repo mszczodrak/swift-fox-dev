@@ -160,6 +160,13 @@ void define_processes() {
 	fclose(fp);
 }
 
+void post_order_processes_confs(FILE *fp, struct conf_ids *conf_ptr) {
+	if (conf_ptr == NULL) {
+		return;
+	}
+	post_order_processes_confs(fp, conf_ptr->confs);
+	fprintf(fp, "\t&processes[%s],\n", conf_ptr->conf->conf->id_name);
+}
 
 void define_states() {
 	char *full_path = get_sfc_path("", "ff_states.h");
@@ -195,9 +202,10 @@ void define_states() {
 	for( i = 0; i < state_id_counter; i++ ) {
 		fprintf(fp, "struct network_process* state_%s_processes[] = {\n", 
 				statetab[i].state->id->name);
-		for( conf_ptr = statetab[i].state->confs; conf_ptr; conf_ptr = conf_ptr->confs ) {
-			fprintf(fp, "\t&processes[%s],\n", conf_ptr->conf->conf->id_name);
-		}
+		post_order_processes_confs(fp, statetab[i].state->confs);
+//		for( conf_ptr = statetab[i].state->confs; conf_ptr; conf_ptr = conf_ptr->confs ) {
+//			fprintf(fp, "\t&processes[%s],\n", conf_ptr->conf->conf->id_name);
+//		}
 		fprintf(fp, "\tNULL\n");
 		fprintf(fp, "};\n\n");
 	}
