@@ -12,14 +12,14 @@ uint16_t @v4 = 0
 uint16_t @v5 = 0
 
 process network_data_ctrl ! {
-	DataSync()
+	BEDS()
 	rebroadcast(3, 30, 50)
 	cc2420()
 	# channel, power, lpl
 }
 
 process test_data_sync {
-	TestDataSync(5000, v1, v2, v3, v4, v5)
+	TestDataSync(120000, v1, v2, v3, v4, v5)
 	nullNet() 
 	nullAM()
 }
