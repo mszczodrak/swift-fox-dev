@@ -171,7 +171,7 @@ void post_order_processes_confs(FILE *fp, struct conf_ids *conf_ptr) {
 void define_states() {
 	char *full_path = get_sfc_path("", "ff_states.h");
 	FILE *fp = fopen(full_path, "w");
-	struct conf_ids *conf_ptr;
+	//struct conf_ids *conf_ptr;
 	int i;
 
 	if (fp == NULL) {
