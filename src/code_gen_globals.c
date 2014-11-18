@@ -306,6 +306,46 @@ void globalDataMsgH() {
 		case TYPE_UINT16_T:
 		case TYPE_NXUINT8_T:
 		case TYPE_NXUINT16_T:
+			fprintf(fp, "\tprintf(\"%s -> %%u  |  \", fennec_global_data.%s);\n",
+				vartab[i].name, vartab[i].name);
+			break;
+		case TYPE_UINT32_T:
+		case TYPE_NXUINT32_T:
+			fprintf(fp, "\tprintf(\"%s -> %%lu  |  \", fennec_global_data.%s);\n",
+				vartab[i].name, vartab[i].name);
+			break;
+		case TYPE_FLOAT:
+		case TYPE_DOUBLE:
+			fprintf(fp, "\tprintf(\"%s -> %%f  |  \", fennec_global_data.%s);\n",
+				vartab[i].name, vartab[i].name);
+			break;
+		default:
+			fprintf(fp, "\tprintf(\"%s -> %%d  |  \", fennec_global_data.%s);\n",
+				vartab[i].name, vartab[i].name);
+		}
+	}
+	fprintf(fp, "\tprintf(\"\\n\");\n");
+	fprintf(fp, "};\n\n");
+
+
+	fprintf(fp, "void printfGlobalDataNx() {\n");
+	for( i = 0; i < NVARS; i++ ) {
+		if (vartab[i].length == 0) {
+			break;
+		}
+
+		if ((vartab[i].class_type != TYPE_VARIABLE_GLOBAL) ||
+			(vartab[i].used != 1) ||
+			(vartab[i].gname != NULL)) {
+			continue;
+		}
+
+		switch(vartab[i].type) {
+		case TYPE_BOOL:
+		case TYPE_UINT8_T:
+		case TYPE_UINT16_T:
+		case TYPE_NXUINT8_T:
+		case TYPE_NXUINT16_T:
 			fprintf(fp, "\tprintf(\"%s -> %%u  |  \", fennec_global_data_nx.%s);\n",
 				vartab[i].name, vartab[i].name);
 			break;
@@ -326,6 +366,7 @@ void globalDataMsgH() {
 	}
 	fprintf(fp, "\tprintf(\"\\n\");\n");
 	fprintf(fp, "};\n");
+
 	fprintf(fp, "#endif\n\n");
 
 	fprintf(fp, "#endif\n\n");
