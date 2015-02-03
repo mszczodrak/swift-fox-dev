@@ -187,12 +187,13 @@ program: defined_global_variables defined_processes defined_states policies init
 			$$		= calloc(1, sizeof(struct program));
 			
 			/* link the node appropriately */
-			$2->parent	= NULL;  
+			if ($2 != NULL) 
+				$2->parent = NULL;  
 			if ($3 != NULL )
 				$3->parent = NULL;
 			if ($4 != NULL ) 
 				$4->parent = NULL;
-			
+		
 			/* init */
 			$$->vars	= $1;
 			$$->defcon	= $2;
@@ -305,6 +306,10 @@ defined_processes: processes process
 			$$->confs	= $1;
 			$$->conf	= $2;
 		}	
+	|
+		{
+			$$ = NULL;
+		}
 	;
 
 processes: processes process
